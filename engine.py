@@ -844,37 +844,54 @@ def render_dashboard(state):
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
   :root {{
-    --bg: #0a0e17; --bg2: #0d1220; --card: #131a2a; --card2: #161e33; --border: #232d42;
-    --text: #e9edf5; --muted: #8b94a8; --accent: #6366f1; --accent2: #818cf8;
+    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47;
+    --text: #edf1f9; --muted: #8b94a8; --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee;
     --green: #22c55e; --yellow: #eab308; --red: #ef4444;
   }}
   * {{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }}
+  html, body {{
+    overflow-x: hidden; width: 100%; max-width: 100vw;
+  }}
   html {{ scroll-behavior: smooth; }}
   body {{
-    background: radial-gradient(1200px 600px at 20% -10%, #161f38 0%, var(--bg) 55%);
+    background:
+      radial-gradient(900px 480px at 12% -8%, rgba(124,127,242,0.16) 0%, transparent 60%),
+      radial-gradient(700px 420px at 100% 0%, rgba(34,211,238,0.10) 0%, transparent 55%),
+      var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     margin: 0; padding: 0; line-height: 1.55; -webkit-font-smoothing: antialiased;
   }}
-  .wrap {{ max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }}
+  .wrap {{ max-width: 1080px; width: 100%; margin: 0 auto; padding: 28px 20px 60px; }}
   .topbar {{
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     margin-bottom: 24px; flex-wrap: wrap;
   }}
   h1 {{
-    font-size: clamp(20px, 5vw, 26px); margin: 0; font-weight: 700; letter-spacing: -.01em;
+    font-size: clamp(20px, 5vw, 27px); margin: 0; font-weight: 800; letter-spacing: -.01em;
     display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(100deg, var(--text) 30%, var(--accent2) 65%, var(--accent3) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% auto; animation: shimmer 6s ease-in-out infinite;
   }}
   .subtitle {{ color: var(--muted); font-size: 12.5px; margin-top: 4px; }}
   .stats {{
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-    gap: 12px; margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px; margin-bottom: 20px; width: 100%;
   }}
   .stat-card {{
     background: linear-gradient(160deg, var(--card2), var(--card));
     border: 1px solid var(--border); border-radius: 14px;
-    padding: 14px 16px; min-width: 0;
+    padding: 14px 16px; min-width: 0; position: relative; overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }}
+  .stat-card::before {{
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    opacity: .0; transition: opacity .25s ease;
+  }}
+  .stat-card:hover {{ transform: translateY(-3px); border-color: rgba(124,127,242,.5); box-shadow: 0 10px 24px -12px rgba(124,127,242,.35); }}
+  .stat-card:hover::before {{ opacity: 1; }}
   .stat-card .label {{
     color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -883,35 +900,71 @@ def render_dashboard(state):
   .card {{
     background: linear-gradient(160deg, var(--card2), var(--card));
     border: 1px solid var(--border); border-radius: 16px;
-    padding: 20px; margin-bottom: 20px;
-    box-shadow: 0 8px 24px -12px rgba(0,0,0,.5);
+    padding: 20px; margin-bottom: 20px; width: 100%;
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,.55);
+    animation: fadeInUp .5s cubic-bezier(.16,.8,.4,1) both;
+    transition: border-color .3s ease, box-shadow .3s ease;
   }}
-  .card > table, .card > .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; display: block; }}
+  .card:hover {{ border-color: rgba(124,127,242,.35); box-shadow: 0 12px 32px -14px rgba(124,127,242,.25), 0 8px 24px -12px rgba(0,0,0,.55); }}
+  .card:nth-of-type(1) {{ animation-delay: .02s; }}
+  .card:nth-of-type(2) {{ animation-delay: .06s; }}
+  .card:nth-of-type(3) {{ animation-delay: .10s; }}
+  .card:nth-of-type(4) {{ animation-delay: .14s; }}
+  .card:nth-of-type(5) {{ animation-delay: .18s; }}
+  .card:nth-of-type(6) {{ animation-delay: .22s; }}
+  .card:nth-of-type(n+7) {{ animation-delay: .26s; }}
+  .card > table, .card > .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; display: block; max-width: 100%; }}
   .card h2 {{ font-size: 15px; margin: 0 0 4px; color: var(--text); font-weight: 650; display: flex; align-items: center; gap: 8px; }}
   .card .desc {{ color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }}
-  .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; }}
+  .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; max-width: 100%; }}
   table {{ border-collapse: collapse; width: 100%; font-size: 13px; min-width: 480px; }}
   th {{ text-align: left; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }}
   td {{ padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }}
   tr:last-child td {{ border-bottom: none; }}
-  tr:hover td {{ background: rgba(255,255,255,0.02); }}
+  tr {{ transition: background .2s ease; }}
+  tr:hover td {{ background: rgba(124,127,242,0.06); }}
   .mono {{ font-family: ui-monospace, "SF Mono", Menlo, monospace; }}
   .why {{ color: var(--muted); max-width: 420px; }}
-  .dot {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; box-shadow: 0 0 8px currentColor; }}
-  .thresholds {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; font-size: 13px; color: var(--muted); }}
-  .thresholds > div {{ background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }}
+  .dot {{
+    display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px;
+    box-shadow: 0 0 8px currentColor; animation: pulse 2.4s ease-in-out infinite;
+  }}
+  .thresholds {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 12px; font-size: 13px; color: var(--muted); width: 100%; }}
+  .thresholds > div {{
+    background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+    transition: transform .25s ease, border-color .25s ease;
+  }}
+  .thresholds > div:hover {{ transform: translateY(-2px); border-color: rgba(124,127,242,.4); }}
   .thresholds b {{ color: var(--text); display: block; font-size: 17px; margin-top: 2px; }}
-  .tag {{ display: inline-block; font-size: 10px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 6px; margin-left: 4px; font-weight: 600; }}
+  .tag {{
+    display: inline-block; font-size: 10px; background: linear-gradient(120deg, var(--accent), var(--accent3));
+    color: white; padding: 2px 7px; border-radius: 6px; margin-left: 4px; font-weight: 700;
+  }}
   .log-entry {{ font-size: 13px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--border); }}
   .log-entry:last-child {{ border-bottom: none; }}
   .log-ts {{ color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; font-weight: 600; }}
   .model-status {{
-    font-size: 13px; padding: 12px 14px; background: rgba(99,102,241,0.12);
-    border: 1px solid rgba(99,102,241,.4); border-radius: 10px; margin-bottom: 14px;
+    font-size: 13px; padding: 12px 14px; background: rgba(124,127,242,0.12);
+    border: 1px solid rgba(124,127,242,.4); border-radius: 10px; margin-bottom: 14px;
   }}
   canvas {{ max-width: 100%; }}
   ::-webkit-scrollbar {{ height: 8px; width: 8px; }}
   ::-webkit-scrollbar-thumb {{ background: var(--border); border-radius: 8px; }}
+  @keyframes fadeInUp {{
+    from {{ opacity: 0; transform: translateY(10px); }}
+    to {{ opacity: 1; transform: translateY(0); }}
+  }}
+  @keyframes shimmer {{
+    0%, 100% {{ background-position: 0% 50%; }}
+    50% {{ background-position: 100% 50%; }}
+  }}
+  @keyframes pulse {{
+    0%, 100% {{ opacity: 1; }}
+    50% {{ opacity: .55; }}
+  }}
+  @media (prefers-reduced-motion: reduce) {{
+    *, *::before, *::after {{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }}
+  }}
   @media (max-width: 640px) {{
     .wrap {{ padding: 18px 14px 48px; }}
     .card {{ padding: 16px; border-radius: 14px; }}
@@ -1009,10 +1062,10 @@ def render_dashboard(state):
   <div class="card">
     <h2>Soovituste ajalugu (uusimad enne)</h2>
     <div class="desc">🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</div>
-    <table>
+    <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       {history_rows or '<tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>'}
-    </table>
+    </table></div>
   </div>
 
   <div class="card">
