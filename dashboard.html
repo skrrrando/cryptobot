@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Cryptobot Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
   :root {
     --bg: #0b0f19; --card: #131a2a; --border: #232d42; --text: #e5e9f0;
@@ -47,13 +48,48 @@
 </head>
 <body>
   <h1>🤖 Cryptobot Dashboard</h1>
-  <div class="subtitle">Uuendatud 15.07.2026 13:44 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
+  <div class="subtitle">Uuendatud 15.07.2026 14:04 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
 
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">–</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">0</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Tulemuste kokkuvõte - kui kasulik see päriselt on</h2>
+    <div class="desc">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</div>
+    <div class="stats" style="margin-bottom:0">
+      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:#22c55e">0</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:#ef4444">0</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">–</div></div>
+      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:#22c55e">–</div></div>
+      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:#ef4444">–</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💰 Virtuaalne portfell (mängu raha, mitte päris)</h2>
+    <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt 5% praegusest saldost, ja "müüb" 24h pärast automaatselt maha. Algsaldo $1000. See EI OLE päris raha ega päris kauplemine.</div>
+    <div class="stats" style="margin-bottom:14px">
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:#22c55e">$1000.00</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:#22c55e">+0.0%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">0✅ / 0❌</div></div>
+    </div>
+    <canvas id="portfolioChart" height="70"></canvas>
+    <div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>
+    <h2 style="margin-top:20px">Avatud positsioonid</h2>
+    <table>
+      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
+      <tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
+    </table>
+    <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
+    <table>
+      <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
+      <tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi kauplust suletud.</td></tr>
+    </table>
   </div>
 
   <div class="card">
@@ -115,6 +151,9 @@
     <table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>15.07 14:04</td><td>0</td><td>0</td>
+        <td>-</td>
+        <td>-</td></tr>
         <tr><td>15.07 13:44</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
