@@ -27,7 +27,8 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
     padding: 20px; margin-bottom: 24px; overflow-x: auto;
   }
-  .card h2 { font-size: 15px; margin: 0 0 14px; color: var(--text); }
+  .card h2 { font-size: 15px; margin: 0 0 4px; color: var(--text); }
+  .card .desc { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
   table { border-collapse: collapse; width: 100%; font-size: 13px; }
   th { text-align: left; color: var(--muted); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
   td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -37,21 +38,61 @@
   .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
   .thresholds { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
   .thresholds b { color: var(--text); }
+  .tag { display: inline-block; font-size: 10px; background: var(--accent); color: white; padding: 1px 6px; border-radius: 6px; margin-left: 4px; }
+  .log-entry { font-size: 13px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .log-entry:last-child { border-bottom: none; }
+  .log-ts { color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; }
+  .model-status { font-size: 13px; padding: 10px 14px; background: rgba(99,102,241,0.12); border: 1px solid var(--accent); border-radius: 8px; margin-bottom: 14px; }
 </style>
 </head>
 <body>
   <h1>🤖 Cryptobot Dashboard</h1>
-  <div class="subtitle">Uuendatud 15.07.2026 13:15 UTC · V1 (momentum + trend + veebiotsingu hype-kinnitus, kohandub tagasiside põhjal)</div>
+  <div class="subtitle">Uuendatud 15.07.2026 13:44 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
 
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">–</div></div>
-    <div class="stat-card"><div class="label">Käivitusi kokku</div><div class="value">1</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">0</div></div>
   </div>
 
   <div class="card">
-    <h2>Praegused mudeli lävendid (kohandatud automaatselt tagasiside põhjal)</h2>
+    <h2>Õppiv mudel</h2>
+    <div class="desc">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida ma algul arvasin.</div>
+    <div class="model-status">Mudel õpib (0/15 tulemust) - skoor põhineb veel ainult käsitsi reeglitel</div>
+    <table>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=0)</th></tr>
+      
+        <tr><td>Momentum (hinnaliikumine)</td><td class="mono">+1.60</td>
+        <td>toetab tabamist</td><td class="mono">–</td></tr>
+        <tr><td>Trendi kinnitus</td><td class="mono">+1.10</td>
+        <td>toetab tabamist</td><td class="mono">–</td></tr>
+        <tr><td>Likviidsus</td><td class="mono">+1.00</td>
+        <td>toetab tabamist</td><td class="mono">–</td></tr>
+        <tr><td>Meemi/trend-kategooria</td><td class="mono">-0.70</td>
+        <td>vähendab tabamist</td><td class="mono">–</td></tr>
+        <tr><td>Volatiilsus</td><td class="mono">-0.80</td>
+        <td>vähendab tabamist</td><td class="mono">–</td></tr>
+        <tr><td>Veebi hype-kinnitus</td><td class="mono">+1.20</td>
+        <td>toetab tabamist</td><td class="mono">–</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Tabamusprotsent üle aja</h2>
+    <div class="desc">Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.</div>
+    <canvas id="hitRateChart" height="80"></canvas>
+    <div style="color:var(--muted)">Vaja on vähemalt paar lahendatud tulemust, enne kui graafik ilmub.</div>
+  </div>
+
+  <div class="card">
+    <h2>Õpipäevik</h2>
+    <div class="desc">Mida süsteem viimati enda kohta õppis, tavakeeles.</div>
+    <div style="color:var(--muted)">Veel pole midagi õppida olnud - vajab lahendatud tulemusi.</div>
+  </div>
+
+  <div class="card">
+    <h2>Praegused riski-lävendid (kohandatud automaatselt tagasiside põhjal)</h2>
     <div class="thresholds">
       <div>Skanni lävi: <b>65</b></div>
       <div>🟢 roheline tabamuslävi: <b>60</b></div>
@@ -62,6 +103,7 @@
 
   <div class="card">
     <h2>Soovituste ajalugu (uusimad enne)</h2>
+    <div class="desc">🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</div>
     <table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       <tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>
@@ -73,6 +115,9 @@
     <table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>15.07 13:44</td><td>0</td><td>0</td>
+        <td>-</td>
+        <td>-</td></tr>
         <tr><td>15.07 13:15</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
