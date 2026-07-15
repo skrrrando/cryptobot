@@ -1041,7 +1041,7 @@ def render_dashboard(state):
       <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'#22c55e' if pf['balance']>=pf['starting_balance'] else '#ef4444'}">${pf['balance']:.2f}</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'#22c55e' if pf_return_pct>=0 else '#ef4444'}">{pf_return_pct:+.1f}%</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">{len(pf_open)}/{pf['max_open_positions']}</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">{pf_wins}✅ / {pf_losses}❌</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value" style="background:none;-webkit-text-fill-color:initial;color:var(--text)">{pf_wins}✅ / {pf_losses}❌</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     {portfolio_chart_script if portfolio_chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>'}
