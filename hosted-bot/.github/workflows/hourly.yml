@@ -1,0 +1,36 @@
+name: Cryptobot hourly scan
+
+on:
+  schedule:
+    # GitHub Actions cron is always UTC. 0 * * * * = every hour, on the hour, UTC.
+    - cron: "0 * * * *"
+  workflow_dispatch: {}   # lets you click "Run workflow" manually in the Actions tab
+
+permissions:
+  contents: write   # needed so the workflow can commit the updated data/dashboard back
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run cryptobot scan
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 fetch_and_run.py
+
+      - name: Commit updated state + dashboard
+        run: |
+          git config user.name "cryptobot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ dashboard.html
+          git diff --staged --quiet || git commit -m "Hourly scan update [skip ci]"
+          git push
