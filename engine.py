@@ -52,6 +52,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 STATE_PATH = os.path.join(DATA_DIR, "state.json")
 WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
 DASHBOARD_PATH = os.path.join(BASE_DIR, "dashboard.html")
+INDEX_PATH = os.path.join(BASE_DIR, "index.html")  # same content - lets GitHub Pages serve a clean root URL
 
 HISTORY_KEEP = 48  # keep last 48 hourly snapshots per instrument (~2 days)
 
@@ -980,6 +981,8 @@ def render_dashboard(state):
 </body>
 </html>"""
     with open(DASHBOARD_PATH, "w") as f:
+        f.write(html)
+    with open(INDEX_PATH, "w") as f:
         f.write(html)
 
 
