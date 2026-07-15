@@ -381,7 +381,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
             emoji = {"green": "🟢", "yellow": "🟡", "red": "🔴"}[a["risk"]]
             lines.append(f"{emoji} {a['instrument']}: {a['score']}/100 - {a['why']}")
     else:
-        lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - uusi signaale ei olnud (vaadati {len(candidates)} kandidaati).")
+        wl = load_watchlist()
+        lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - kontrolliti {len(wl)} tokenit, ükski ei ületanud praegu läve ({state['thresholds']['screen_score']}/100). Bot töötab, lihtsalt hetkel pole miski silma jäänud.")
     if followup_notes:
         lines.append("Tagasivaade: " + "; ".join(followup_notes))
     if threshold_notes:
