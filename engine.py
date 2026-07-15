@@ -1,31 +1,47 @@
 #!/usr/bin/env python3
 """
-Cryptobot scoring engine.
+Cryptobot scoring engine - v2 (self-learning).
 
 Two-stage pipeline, run once per hour by the scheduled task:
 
   1. `screen`   - input: freshly fetched tickers (from Crypto.com) for the
                   watchlist. Computes a momentum+trend score per token,
-                  applies noise filtering (needs >=1 prior snapshot to
-                  confirm a trend), and outputs the top candidates that are
-                  worth a closer (WebSearch) look.
+                  applies noise filtering (needs history to confirm a trend),
+                  and outputs the top candidates worth a closer look. Also
+                  does small epsilon-greedy "exploration": occasionally lets
+                  a slightly-below-threshold token through anyway, tagged,
+                  purely so the model keeps learning near the boundary
+                  instead of only ever confirming its own priors.
 
   2. `finalize` - input: the candidates from step 1 plus short hype notes
-                  gathered via WebSearch for each candidate, plus current
-                  prices for any recommendations that are due for a 24h/7d
-                  follow-up check. Computes final 0-100 score + risk label
-                  + "why" explanation, applies cooldown/dedup so the same
-                  token isn't re-alerted every hour for no reason, logs new
-                  recommendations, scores due follow-ups, nudges the
-                  adaptive thresholds, (re)writes dashboard.html, and
-                  prints a short chat summary (this is the notification).
+                  gathered via WebSearch, plus current prices for any
+                  recommendations due for a 24h/7d follow-up check. Computes
+                  a final 0-100 score that blends the hand-written heuristic
+                  with a small online-learned logistic-regression model (pure
+                  Python, no dependencies), applies cooldown/dedup, logs new
+                  recommendations (storing the exact feature vector used, so
+                  it can be trained on later), resolves due follow-ups,
+                  trains the model one step per resolved outcome, nudges the
+                  adaptive risk thresholds, computes feature/outcome
+                  correlations, (re)writes dashboard.html, and prints the
+                  chat summary (the notification).
+
+The self-learning part: every scored recommendation stores the feature
+vector that produced it. When we later find out whether it actually worked
+(24h/7d price check), we do one step of online logistic-regression training
+(gradient ascent on log-likelihood) so the model's weights shift toward
+whatever actually predicted success - not just what we assumed would.
+Progress is logged in plain language in state["model"]["learning_log"] so
+it's visible on the dashboard, not just a black box.
 
 All state lives in data/state.json (persisted in the user's project folder,
 NOT the ephemeral session scratchpad) so history/learning survives across
 hourly runs.
 """
 import json
+import math
 import os
+import random
 import sys
 import time
 import argparse
@@ -39,6 +55,28 @@ DASHBOARD_PATH = os.path.join(BASE_DIR, "dashboard.html")
 
 HISTORY_KEEP = 48  # keep last 48 hourly snapshots per instrument (~2 days)
 
+# Feature order matters - it's the order weights/x vectors are stored in.
+FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility", "hype_bonus"]
+
+# Initial weights: a reasonable hand-set prior (mirrors the original heuristic
+# direction) that then gets refined by real evidence via train_step().
+INITIAL_WEIGHTS = {
+    "bias": -0.4,
+    "momentum": 1.6,
+    "trend_bonus": 1.1,
+    "liquidity": 1.0,
+    "is_meme": -0.7,
+    "volatility": -0.8,
+    "hype_bonus": 1.2,
+}
+
+MODEL_MIN_TRAINING = 15   # need this many resolved outcomes before the model influences the score
+LEARNING_RATE = 0.08
+L2_LAMBDA = 0.015         # small ridge penalty - shrinks weights that aren't earning their keep back toward 0,
+                          # so noise features don't drift just from finite-sample luck
+EXPLORE_EPSILON = 0.15    # chance to let a near-miss candidate through anyway, for learning
+EXPLORE_MARGIN = 10       # how far below the screen threshold still counts as "near"
+
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
     "alerted": {},          # instrument -> {last_score, last_ts, last_risk}
@@ -47,6 +85,13 @@ DEFAULT_STATE = {
         "green_hit_bar": 60,
         "yellow_hit_bar": 65,
         "red_hit_bar": 75
+    },
+    "adjustment_checkpoint": 0,  # len(completed) at last threshold adjustment - prevents re-applying
+                                 # the same historical evidence over and over on every run (see adapt_thresholds)
+    "model": {
+        "weights": dict(INITIAL_WEIGHTS),
+        "n_updates": 0,
+        "learning_log": []   # [{ts, text}], plain-language "what I just learned"
     },
     "pending_followups": [],   # awaiting 24h and/or 7d outcome check
     "completed": [],          # followups fully resolved (both checks done or expired)
@@ -76,11 +121,25 @@ def save_json(path, data):
     os.replace(tmp, path)
 
 
+def _deep_default(v):
+    return json.loads(json.dumps(v))
+
+
 def load_state():
     st = load_json(STATE_PATH, DEFAULT_STATE)
     for k, v in DEFAULT_STATE.items():
-        st.setdefault(k, json.loads(json.dumps(v)))
+        st.setdefault(k, _deep_default(v))
+    # in case an older state.json exists without the model block
+    st["model"].setdefault("weights", dict(INITIAL_WEIGHTS))
+    for fn in FEATURE_NAMES:
+        st["model"]["weights"].setdefault(fn, INITIAL_WEIGHTS[fn])
+    st["model"].setdefault("n_updates", 0)
+    st["model"].setdefault("learning_log", [])
     return st
+
+
+def save_state(state):
+    save_json(STATE_PATH, state)
 
 
 def load_watchlist():
@@ -95,6 +154,92 @@ def load_watchlist():
 
 def clamp(x, lo, hi):
     return max(lo, min(hi, x))
+
+
+# ---------------------------------------------------------------------------
+# Online logistic-regression model (pure Python, no dependencies)
+# ---------------------------------------------------------------------------
+
+def sigmoid(z):
+    if z < -60:
+        return 0.0
+    if z > 60:
+        return 1.0
+    return 1.0 / (1.0 + math.exp(-z))
+
+
+def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus):
+    liq_map = {"low": 0.0, "medium": 0.5, "high": 1.0}
+    return {
+        "bias": 1.0,
+        "momentum": momentum_score_ / 100.0,
+        "trend_bonus": clamp((trend_bonus_ + 5) / 20.0, 0, 1),
+        "liquidity": liq_map.get(liquidity, 0.0),
+        "is_meme": 1.0 if category in ("meme", "unknown") else 0.0,
+        "volatility": clamp(abs(change_24h) / 0.30, 0, 1),
+        "hype_bonus": clamp((hype_bonus + 30) / 60.0, 0, 1),
+    }
+
+
+def model_predict(weights, features):
+    z = sum(weights.get(k, 0.0) * features.get(k, 0.0) for k in FEATURE_NAMES)
+    return sigmoid(z)
+
+
+def train_step(state, features, hit):
+    """One step of online logistic-regression training (gradient ascent on
+    log-likelihood). Logs a plain-language note if weights moved meaningfully."""
+    weights = state["model"]["weights"]
+    old_weights = dict(weights)
+    p = model_predict(weights, features)
+    y = 1.0 if hit else 0.0
+    error = y - p
+    for k in FEATURE_NAMES:
+        reg = 0.0 if k == "bias" else L2_LAMBDA * weights[k]  # don't regularize the bias term
+        weights[k] = weights[k] + LEARNING_RATE * (error * features.get(k, 0.0) - reg)
+    state["model"]["n_updates"] += 1
+
+    moved = {k: weights[k] - old_weights[k] for k in FEATURE_NAMES if abs(weights[k] - old_weights[k]) >= 0.02}
+    if moved:
+        biggest = max(moved, key=lambda k: abs(moved[k]))
+        direction = "tugevam" if moved[biggest] > 0 else "nõrgem"
+        note = (f"Tulemus ({'tabas' if hit else 'ei tabanud'}, ennustus oli {p:.0%}) muutis kaalu "
+                f"'{biggest}' {direction}maks ({old_weights[biggest]:.2f} -> {weights[biggest]:.2f}).")
+        state["model"]["learning_log"].append({"ts": now_ts(), "text": note})
+        state["model"]["learning_log"] = state["model"]["learning_log"][-80:]
+
+
+def pearson_r(xs, ys):
+    n = len(xs)
+    if n < 5:
+        return None
+    mx = sum(xs) / n
+    my = sum(ys) / n
+    cov = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    vx = sum((x - mx) ** 2 for x in xs)
+    vy = sum((y - my) ** 2 for y in ys)
+    if vx <= 0 or vy <= 0:
+        return None
+    return cov / math.sqrt(vx * vy)
+
+
+def feature_correlations(state):
+    """Correlation between each raw feature and actual outcome (hit=1/0),
+    computed over every resolved 24h result we have. Tells us, mathematically,
+    which parts of the score actually predict success."""
+    rows = []
+    for rec in state["completed"] + state["pending_followups"]:
+        if rec.get("result_24h") and rec.get("features"):
+            rows.append((rec["features"], 1.0 if rec["result_24h"]["hit"] else 0.0))
+    out = {}
+    if len(rows) >= 5:
+        for fn in FEATURE_NAMES:
+            if fn == "bias":
+                continue
+            xs = [r[0].get(fn, 0.0) for r in rows]
+            ys = [r[1] for r in rows]
+            out[fn] = pearson_r(xs, ys)
+    return out, len(rows)
 
 
 # ---------------------------------------------------------------------------
@@ -142,7 +287,9 @@ def screen(tickers_raw_path, out_path):
     tickers = load_json(tickers_raw_path, [])
 
     candidates = []
+    near_misses = []
     ts = now_ts()
+    threshold = state["thresholds"]["screen_score"]
 
     for t in tickers:
         inst = t["instrument_name"]
@@ -165,32 +312,44 @@ def screen(tickers_raw_path, out_path):
         raw_score = clamp(m_score + bonus, 0, 100)
         category = watchlist_cat.get(inst, "unknown")
 
-        if raw_score >= state["thresholds"]["screen_score"]:
-            candidates.append({
-                "instrument": inst,
-                "price": price,
-                "change_24h": change_24h,
-                "volume_value": volume_value,
-                "category": category,
-                "momentum_score": m_score,
-                "trend_bonus": bonus,
-                "trend_note": trend_note,
-                "raw_score": raw_score,
-                "liquidity": liquidity_bucket(volume_value)
-            })
+        entry = {
+            "instrument": inst,
+            "price": price,
+            "change_24h": change_24h,
+            "volume_value": volume_value,
+            "category": category,
+            "momentum_score": m_score,
+            "trend_bonus": bonus,
+            "trend_note": trend_note,
+            "raw_score": raw_score,
+            "liquidity": liquidity_bucket(volume_value),
+            "exploration": False,
+        }
+
+        if raw_score >= threshold:
+            candidates.append(entry)
+        elif raw_score >= threshold - EXPLORE_MARGIN:
+            near_misses.append(entry)
+
+    # Epsilon-greedy exploration: occasionally let a near-miss through anyway,
+    # purely so the model keeps learning near the decision boundary instead
+    # of only ever confirming what it already believes.
+    explored = []
+    for entry in near_misses:
+        if random.random() < EXPLORE_EPSILON:
+            entry["exploration"] = True
+            explored.append(entry)
 
     candidates.sort(key=lambda c: c["raw_score"], reverse=True)
+    all_out = (candidates + explored)[:10]
     save_state(state)
-    save_json(out_path, candidates[:10])  # cap: only deep-dive the top 10
-    print(f"STAGE1: {len(tickers)} jälgitavat, {len(candidates)} ületas läve "
-          f"({state['thresholds']['screen_score']}), top {min(10, len(candidates))} saadetud edasi.")
-    for c in candidates[:10]:
+    save_json(out_path, all_out)
+    print(f"STAGE1: {len(tickers)} jälgitavat, {len(candidates)} ületas läve ({threshold}), "
+          f"{len(explored)} valiti eksperimentaalselt õppimiseks, {len(all_out)} saadetud edasi.")
+    for c in all_out:
+        tag = " [EXPLORE]" if c["exploration"] else ""
         print(f"  - {c['instrument']}: raw_score={c['raw_score']} "
-              f"({c['momentum_score']}+{c['trend_bonus']}) [{c['category']}/{c['liquidity']}]")
-
-
-def save_state(state):
-    save_json(STATE_PATH, state)
+              f"({c['momentum_score']}+{c['trend_bonus']}) [{c['category']}/{c['liquidity']}]{tag}")
 
 
 # ---------------------------------------------------------------------------
@@ -253,7 +412,8 @@ def should_alert(state, inst, final_score, risk):
 
 def process_followups(state, current_prices):
     """current_prices: {instrument: price}. Check pending recs that are due
-    for their 24h or 7d outcome check."""
+    for their 24h or 7d outcome check, and train the model on each 24h
+    result as soon as it resolves."""
     still_pending = []
     resolved_notes = []
     for rec in state["pending_followups"]:
@@ -263,15 +423,15 @@ def process_followups(state, current_prices):
 
         if not rec.get("result_24h") and age_h >= 24 and price_now:
             ret = (price_now - rec["price_at_call"]) / rec["price_at_call"] * 100
-            bar = state["thresholds"].get(rec["risk"] + "_hit_bar", 65)
-            rec["result_24h"] = {"price": price_now, "return_pct": round(ret, 2),
-                                  "hit": ret * 100 >= (bar - 100) if False else ret >= 3}
+            hit = ret >= 3
+            rec["result_24h"] = {"price": price_now, "return_pct": round(ret, 2), "hit": hit}
             resolved_notes.append(f"{inst} 24h: {ret:+.1f}%")
+            if rec.get("features"):
+                train_step(state, rec["features"], hit)
 
         if not rec.get("result_7d") and age_h >= 24 * 7 and price_now:
             ret = (price_now - rec["price_at_call"]) / rec["price_at_call"] * 100
-            rec["result_7d"] = {"price": price_now, "return_pct": round(ret, 2),
-                                 "hit": ret >= 8}
+            rec["result_7d"] = {"price": price_now, "return_pct": round(ret, 2), "hit": ret >= 8}
             resolved_notes.append(f"{inst} 7d: {ret:+.1f}%")
 
         if rec.get("result_24h") and rec.get("result_7d"):
@@ -284,17 +444,29 @@ def process_followups(state, current_prices):
 
 
 def adapt_thresholds(state):
-    """Simple, explainable adaptive control loop: look at hit-rate per risk
-    bucket among completed recs (using the 7d result when available, else
-    24h). If a bucket is underperforming, require a higher score next time
-    (raise its hit bar / raise screen threshold slightly). If it's
-    overperforming, loosen slightly. Only acts once there's enough sample
-    size to mean something."""
+    """Simple, explainable adaptive control loop on top of the learned model:
+    look at hit-rate per risk bucket among RECENT completed recs (7d result
+    when available, else 24h; last 40 records so it can track a changing
+    market regime instead of being anchored to all-time history).
+    Underperforming buckets get stricter; overperforming buckets get looser.
+
+    Only acts once there's enough sample size to mean something, AND only
+    when there is genuinely NEW evidence since the last adjustment (tracked
+    via adjustment_checkpoint) - otherwise this would re-apply the exact same
+    historical average as a fresh nudge on every single run and the
+    thresholds would ratchet to their clamp limits within a day for no
+    reason. One batch of new evidence -> at most one adjustment step.
+    """
     completed = state["completed"]
     if len(completed) < 20:
         return None
+    if len(completed) <= state.get("adjustment_checkpoint", 0):
+        return None  # no new resolved evidence since we last adjusted
+    state["adjustment_checkpoint"] = len(completed)
+
+    recent = completed[-40:]
     by_risk = {"green": [], "yellow": [], "red": []}
-    for rec in completed:
+    for rec in recent:
         result = rec.get("result_7d") or rec.get("result_24h")
         if result:
             by_risk.setdefault(rec["risk"], []).append(result["hit"])
@@ -333,24 +505,39 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     followup_notes = process_followups(state, current_prices)
     threshold_notes = adapt_thresholds(state) or []
 
+    n_updates = state["model"]["n_updates"]
+    model_ready = n_updates >= MODEL_MIN_TRAINING
+
     alerts = []
-    all_scored = []
     ts = now_ts()
 
     for c in candidates:
         inst = c["instrument"]
         note = hype_notes.get(inst)
         bonus, forced_risk, why_hype = hype_adjustment(note)
-        final_score = clamp(c["raw_score"] + bonus, 0, 100)
+        heuristic_score = clamp(c["raw_score"] + bonus, 0, 100)
         risk = risk_label(c["category"], c["liquidity"], c["change_24h"], forced_risk)
+
+        features = build_features(c["momentum_score"], c["trend_bonus"], c["liquidity"],
+                                   c["category"], c["change_24h"], bonus)
+        model_p = model_predict(state["model"]["weights"], features)
+
+        if model_ready:
+            final_score = round(0.5 * heuristic_score + 0.5 * (model_p * 100), 1)
+            model_note = f" Mudel (treenitud {n_updates} tulemuse pealt) hindab tabamise tõenäosuseks {model_p:.0%}."
+        else:
+            final_score = heuristic_score
+            model_note = f" Mudel alles õpib ({n_updates}/{MODEL_MIN_TRAINING} tulemust kogutud enne kui see skoori mõjutama hakkab)."
+
+        explore_note = " [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]" if c.get("exploration") else ""
 
         why = (f"Momentum {c['momentum_score']}/100 (24h {c['change_24h']*100:+.1f}%), "
                f"{c['trend_note']}. Likviidsus: {c['liquidity']} "
-               f"(maht ${c['volume_value']:,.0f}). {why_hype}")
+               f"(maht ${c['volume_value']:,.0f}). {why_hype}{model_note}{explore_note}")
 
-        entry = {"instrument": inst, "score": final_score, "risk": risk,
-                 "why": why, "price": c["price"], "category": c["category"]}
-        all_scored.append(entry)
+        entry = {"instrument": inst, "score": final_score, "risk": risk, "why": why,
+                 "price": c["price"], "category": c["category"], "features": features,
+                 "exploration": c.get("exploration", False)}
 
         if should_alert(state, inst, final_score, risk):
             alerts.append(entry)
@@ -359,7 +546,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
             state["next_id"] += 1
             state["pending_followups"].append({
                 "id": rec_id, "instrument": inst, "ts": ts, "score": final_score,
-                "risk": risk, "why": why, "price_at_call": c["price"],
+                "risk": risk, "why": why, "price_at_call": c["price"], "features": features,
+                "exploration": c.get("exploration", False),
                 "result_24h": None, "result_7d": None
             })
 
@@ -379,7 +567,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - {len(alerts)} uut/muutunud signaali:")
         for a in alerts[:8]:
             emoji = {"green": "🟢", "yellow": "🟡", "red": "🔴"}[a["risk"]]
-            lines.append(f"{emoji} {a['instrument']}: {a['score']}/100 - {a['why']}")
+            tag = " 🧪" if a.get("exploration") else ""
+            lines.append(f"{emoji}{tag} {a['instrument']}: {a['score']}/100 - {a['why']}")
     else:
         wl = load_watchlist()
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - kontrolliti {len(wl)} tokenit, ükski ei ületanud praegu läve ({state['thresholds']['screen_score']}/100). Bot töötab, lihtsalt hetkel pole miski silma jäänud.")
@@ -398,14 +587,40 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
 # Dashboard
 # ---------------------------------------------------------------------------
 
+FEATURE_LABELS = {
+    "momentum": "Momentum (hinnaliikumine)",
+    "trend_bonus": "Trendi kinnitus",
+    "liquidity": "Likviidsus",
+    "is_meme": "Meemi/trend-kategooria",
+    "volatility": "Volatiilsus",
+    "hype_bonus": "Veebi hype-kinnitus",
+}
+
+
 def render_dashboard(state):
     completed = state["completed"]
     pending = state["pending_followups"]
     run_log = list(reversed(state["run_log"][-30:]))
+    model = state["model"]
+    thresholds = state["thresholds"]
 
-    total_hits_24h = [r["result_24h"]["hit"] for r in completed if r.get("result_24h")]
-    total_hits_24h += [r["result_24h"]["hit"] for r in pending if r.get("result_24h")]
-    hit_rate_24h = (sum(total_hits_24h) / len(total_hits_24h) * 100) if total_hits_24h else None
+    total_hits_24h_records = [r for r in (completed + pending) if r.get("result_24h")]
+    total_hits_24h_records.sort(key=lambda r: r["ts"])
+    hit_rate_24h = None
+    if total_hits_24h_records:
+        hits = [1 if r["result_24h"]["hit"] else 0 for r in total_hits_24h_records]
+        hit_rate_24h = sum(hits) / len(hits) * 100
+
+    # rolling hit-rate (window of 10) for the chart
+    rolling_labels, rolling_values = [], []
+    window = 10
+    for i in range(len(total_hits_24h_records)):
+        chunk = total_hits_24h_records[max(0, i - window + 1):i + 1]
+        hr = sum(1 if r["result_24h"]["hit"] else 0 for r in chunk) / len(chunk) * 100
+        rolling_labels.append(datetime.fromtimestamp(total_hits_24h_records[i]["ts"], tz=timezone.utc).strftime("%d.%m"))
+        rolling_values.append(round(hr, 1))
+
+    correlations, corr_n = feature_correlations(state)
 
     def risk_dot(risk):
         color = {"green": "#22c55e", "yellow": "#eab308", "red": "#ef4444"}.get(risk, "#94a3b8")
@@ -419,10 +634,11 @@ def render_dashboard(state):
         r24_txt = f"{r24['return_pct']:+.1f}% {'✅' if r24['hit'] else '❌'}" if r24 else "ootel"
         r7_txt = f"{r7['return_pct']:+.1f}% {'✅' if r7['hit'] else '❌'}" if r7 else "ootel"
         dt = datetime.fromtimestamp(r["ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        explore_tag = ' <span class="tag">EXPLORE</span>' if r.get("exploration") else ""
         history_rows += f"""
         <tr>
           <td>{dt}</td>
-          <td class="mono">{r['instrument']}</td>
+          <td class="mono">{r['instrument']}{explore_tag}</td>
           <td>{r['score']}</td>
           <td>{risk_dot(r['risk'])}</td>
           <td>{r24_txt}</td>
@@ -438,7 +654,55 @@ def render_dashboard(state):
         <td>{'; '.join(rl['followups_resolved']) or '-'}</td>
         <td>{'; '.join(rl['threshold_adjustments']) or '-'}</td></tr>"""
 
-    thresholds = state["thresholds"]
+    weight_rows = ""
+    for fn in FEATURE_NAMES:
+        if fn == "bias":
+            continue
+        w = model["weights"].get(fn, 0.0)
+        direction = "toetab tabamist" if w > 0.05 else ("vähendab tabamist" if w < -0.05 else "neutraalne")
+        corr = correlations.get(fn)
+        corr_txt = f"{corr:+.2f}" if corr is not None else "–"
+        weight_rows += f"""
+        <tr><td>{FEATURE_LABELS.get(fn, fn)}</td><td class="mono">{w:+.2f}</td>
+        <td>{direction}</td><td class="mono">{corr_txt}</td></tr>"""
+
+    learning_log_rows = ""
+    for entry in reversed(model["learning_log"][-25:]):
+        dt = datetime.fromtimestamp(entry["ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        learning_log_rows += f'<div class="log-entry"><span class="log-ts">{dt}</span> {entry["text"]}</div>'
+
+    chart_script = ""
+    if len(rolling_values) >= 2:
+        chart_script = f"""
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+        <script>
+          const ctx = document.getElementById('hitRateChart');
+          new Chart(ctx, {{
+            type: 'line',
+            data: {{
+              labels: {json.dumps(rolling_labels)},
+              datasets: [{{
+                label: 'Libisev tabamusprotsent (10 viimase pealt)',
+                data: {json.dumps(rolling_values)},
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99,102,241,0.15)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 2
+              }}]
+            }},
+            options: {{
+              responsive: true,
+              scales: {{ y: {{ min: 0, max: 100, ticks: {{ color: '#8b94a8' }} }},
+                         x: {{ ticks: {{ color: '#8b94a8' }} }} }},
+              plugins: {{ legend: {{ labels: {{ color: '#e5e9f0' }} }} }}
+            }}
+          }});
+        </script>"""
+
+    model_status = (f"Mudel aktiivne (treenitud {model['n_updates']} tulemuse pealt, mõjutab 50% lõppskoorist)"
+                     if model["n_updates"] >= MODEL_MIN_TRAINING
+                     else f"Mudel õpib ({model['n_updates']}/{MODEL_MIN_TRAINING} tulemust) - skoor põhineb veel ainult käsitsi reeglitel")
 
     html = f"""<!DOCTYPE html>
 <html lang="et">
@@ -469,7 +733,8 @@ def render_dashboard(state):
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
     padding: 20px; margin-bottom: 24px; overflow-x: auto;
   }}
-  .card h2 {{ font-size: 15px; margin: 0 0 14px; color: var(--text); }}
+  .card h2 {{ font-size: 15px; margin: 0 0 4px; color: var(--text); }}
+  .card .desc {{ color: var(--muted); font-size: 12px; margin-bottom: 14px; }}
   table {{ border-collapse: collapse; width: 100%; font-size: 13px; }}
   th {{ text-align: left; color: var(--muted); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }}
   td {{ padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }}
@@ -479,21 +744,49 @@ def render_dashboard(state):
   .dot {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }}
   .thresholds {{ display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }}
   .thresholds b {{ color: var(--text); }}
+  .tag {{ display: inline-block; font-size: 10px; background: var(--accent); color: white; padding: 1px 6px; border-radius: 6px; margin-left: 4px; }}
+  .log-entry {{ font-size: 13px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); }}
+  .log-entry:last-child {{ border-bottom: none; }}
+  .log-ts {{ color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; }}
+  .model-status {{ font-size: 13px; padding: 10px 14px; background: rgba(99,102,241,0.12); border: 1px solid var(--accent); border-radius: 8px; margin-bottom: 14px; }}
 </style>
 </head>
 <body>
   <h1>🤖 Cryptobot Dashboard</h1>
-  <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V1 (momentum + trend + veebiotsingu hype-kinnitus, kohandub tagasiside põhjal)</div>
+  <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
 
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">{len(pending)}</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
-    <div class="stat-card"><div class="label">Käivitusi kokku</div><div class="value">{len(state['run_log'])}</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
   </div>
 
   <div class="card">
-    <h2>Praegused mudeli lävendid (kohandatud automaatselt tagasiside põhjal)</h2>
+    <h2>Õppiv mudel</h2>
+    <div class="desc">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida ma algul arvasin.</div>
+    <div class="model-status">{model_status}</div>
+    <table>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n={corr_n})</th></tr>
+      {weight_rows or '<tr><td colspan="4" style="color:var(--muted)">Veel andmeid pole.</td></tr>'}
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Tabamusprotsent üle aja</h2>
+    <div class="desc">Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.</div>
+    <canvas id="hitRateChart" height="80"></canvas>
+    {chart_script if chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar lahendatud tulemust, enne kui graafik ilmub.</div>'}
+  </div>
+
+  <div class="card">
+    <h2>Õpipäevik</h2>
+    <div class="desc">Mida süsteem viimati enda kohta õppis, tavakeeles.</div>
+    {learning_log_rows or '<div style="color:var(--muted)">Veel pole midagi õppida olnud - vajab lahendatud tulemusi.</div>'}
+  </div>
+
+  <div class="card">
+    <h2>Praegused riski-lävendid (kohandatud automaatselt tagasiside põhjal)</h2>
     <div class="thresholds">
       <div>Skanni lävi: <b>{thresholds['screen_score']}</b></div>
       <div>🟢 roheline tabamuslävi: <b>{thresholds['green_hit_bar']}</b></div>
@@ -504,6 +797,7 @@ def render_dashboard(state):
 
   <div class="card">
     <h2>Soovituste ajalugu (uusimad enne)</h2>
+    <div class="desc">🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</div>
     <table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       {history_rows or '<tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>'}
