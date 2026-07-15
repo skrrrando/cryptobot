@@ -77,6 +77,16 @@ L2_LAMBDA = 0.015         # small ridge penalty - shrinks weights that aren't ea
 EXPLORE_EPSILON = 0.15    # chance to let a near-miss candidate through anyway, for learning
 EXPLORE_MARGIN = 10       # how far below the screen threshold still counts as "near"
 
+# Virtual paper-trading portfolio - play money only, never touches anything real.
+# Rule: when an alert fires (and there's room + cash), "buy" a position sized as
+# a % of current balance; automatically "sell" it at the 24h mark (same moment
+# the 24h follow-up outcome is already being checked), realizing whatever the
+# actual price move was. This is a simple, transparent day-trade-style
+# simulation - not a recommendation for how to actually trade.
+PORTFOLIO_START_BALANCE = 1000.0
+PORTFOLIO_POSITION_PCT = 0.05   # 5% of current balance per trade
+PORTFOLIO_MAX_OPEN = 5          # at most 5 positions open at once (~25% max exposure)
+
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
     "alerted": {},          # instrument -> {last_score, last_ts, last_risk}
@@ -96,7 +106,16 @@ DEFAULT_STATE = {
     "pending_followups": [],   # awaiting 24h and/or 7d outcome check
     "completed": [],          # followups fully resolved (both checks done or expired)
     "run_log": [],            # short history of each run (for the dashboard)
-    "next_id": 1
+    "next_id": 1,
+    "portfolio": {
+        "starting_balance": PORTFOLIO_START_BALANCE,
+        "balance": PORTFOLIO_START_BALANCE,
+        "position_size_pct": PORTFOLIO_POSITION_PCT,
+        "max_open_positions": PORTFOLIO_MAX_OPEN,
+        "open_positions": [],    # [{id, instrument, entry_price, size_usd, entry_ts, risk, score}]
+        "closed_trades": [],     # [{...same + exit_price, exit_ts, pnl_usd, pnl_pct}]
+        "balance_history": [{"ts": 0, "balance": PORTFOLIO_START_BALANCE}],
+    }
 }
 
 
@@ -135,6 +154,9 @@ def load_state():
         st["model"]["weights"].setdefault(fn, INITIAL_WEIGHTS[fn])
     st["model"].setdefault("n_updates", 0)
     st["model"].setdefault("learning_log", [])
+    st.setdefault("portfolio", _deep_default(DEFAULT_STATE["portfolio"]))
+    for k, v in DEFAULT_STATE["portfolio"].items():
+        st["portfolio"].setdefault(k, v)
     return st
 
 
@@ -240,6 +262,50 @@ def feature_correlations(state):
             ys = [r[1] for r in rows]
             out[fn] = pearson_r(xs, ys)
     return out, len(rows)
+
+
+# ---------------------------------------------------------------------------
+# Virtual paper-trading portfolio (play money only)
+# ---------------------------------------------------------------------------
+
+def maybe_open_position(state, rec_id, instrument, price, ts, risk, score):
+    """Called when a real alert fires. Opens a virtual position sized as a %
+    of current balance, if there's room (max open positions) and cash. If
+    not, the alert still stands - it just isn't "traded" in the simulation."""
+    pf = state["portfolio"]
+    if len(pf["open_positions"]) >= pf["max_open_positions"]:
+        return False
+    size_usd = pf["balance"] * pf["position_size_pct"]
+    if size_usd < 1.0 or size_usd > pf["balance"]:
+        return False
+    pf["balance"] -= size_usd
+    pf["open_positions"].append({
+        "id": rec_id, "instrument": instrument, "entry_price": price,
+        "size_usd": round(size_usd, 2), "entry_ts": ts, "risk": risk, "score": score
+    })
+    return True
+
+
+def close_position(state, rec_id, exit_price, exit_ts):
+    """Called when that same recommendation's 24h result resolves. Closes the
+    matching virtual position (if one was opened) and realizes the P&L."""
+    pf = state["portfolio"]
+    match = next((p for p in pf["open_positions"] if p["id"] == rec_id), None)
+    if not match:
+        return
+    pf["open_positions"].remove(match)
+    pnl_pct = (exit_price - match["entry_price"]) / match["entry_price"]
+    pnl_usd = match["size_usd"] * pnl_pct
+    pf["balance"] += match["size_usd"] + pnl_usd
+    pf["closed_trades"].append({
+        "id": rec_id, "instrument": match["instrument"], "entry_price": match["entry_price"],
+        "exit_price": exit_price, "size_usd": match["size_usd"], "entry_ts": match["entry_ts"],
+        "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct * 100, 2),
+        "risk": match["risk"], "score": match["score"]
+    })
+    pf["closed_trades"] = pf["closed_trades"][-300:]
+    pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
+    pf["balance_history"] = pf["balance_history"][-500:]
 
 
 # ---------------------------------------------------------------------------
@@ -428,6 +494,7 @@ def process_followups(state, current_prices):
             resolved_notes.append(f"{inst} 24h: {ret:+.1f}%")
             if rec.get("features"):
                 train_step(state, rec["features"], hit)
+            close_position(state, rec["id"], price_now, now_ts())
 
         if not rec.get("result_7d") and age_h >= 24 * 7 and price_now:
             ret = (price_now - rec["price_at_call"]) / rec["price_at_call"] * 100
@@ -540,14 +607,16 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
                  "exploration": c.get("exploration", False)}
 
         if should_alert(state, inst, final_score, risk):
-            alerts.append(entry)
-            state["alerted"][inst] = {"last_score": final_score, "last_ts": ts, "last_risk": risk}
             rec_id = state["next_id"]
             state["next_id"] += 1
+            traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score)
+            entry["traded"] = traded
+            alerts.append(entry)
+            state["alerted"][inst] = {"last_score": final_score, "last_ts": ts, "last_risk": risk}
             state["pending_followups"].append({
                 "id": rec_id, "instrument": inst, "ts": ts, "score": final_score,
                 "risk": risk, "why": why, "price_at_call": c["price"], "features": features,
-                "exploration": c.get("exploration", False),
+                "exploration": c.get("exploration", False), "traded": traded,
                 "result_24h": None, "result_7d": None
             })
 
@@ -568,7 +637,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         for a in alerts[:8]:
             emoji = {"green": "🟢", "yellow": "🟡", "red": "🔴"}[a["risk"]]
             tag = " 🧪" if a.get("exploration") else ""
-            lines.append(f"{emoji}{tag} {a['instrument']}: {a['score']}/100 - {a['why']}")
+            trade_tag = " 💰" if a.get("traded") else ""
+            lines.append(f"{emoji}{tag}{trade_tag} {a['instrument']}: {a['score']}/100 - {a['why']}")
     else:
         wl = load_watchlist()
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - kontrolliti {len(wl)} tokenit, ükski ei ületanud praegu läve ({state['thresholds']['screen_score']}/100). Bot töötab, lihtsalt hetkel pole miski silma jäänud.")
@@ -622,6 +692,27 @@ def render_dashboard(state):
 
     correlations, corr_n = feature_correlations(state)
 
+    # Plain profit/loss breakdown (separate from the "hit" bar) - how many
+    # resolved signals were simply above vs below their entry price, and by
+    # how much on average. This is the "kui kasulik see päriselt on" view.
+    returns_24h = [r["result_24h"]["return_pct"] for r in total_hits_24h_records]
+    n_profit = sum(1 for x in returns_24h if x > 0)
+    n_loss = sum(1 for x in returns_24h if x <= 0)
+    avg_return = sum(returns_24h) / len(returns_24h) if returns_24h else None
+    best = max(total_hits_24h_records, key=lambda r: r["result_24h"]["return_pct"]) if total_hits_24h_records else None
+    worst = min(total_hits_24h_records, key=lambda r: r["result_24h"]["return_pct"]) if total_hits_24h_records else None
+
+    # Virtual paper-trading portfolio
+    pf = state["portfolio"]
+    pf_return_pct = (pf["balance"] - pf["starting_balance"]) / pf["starting_balance"] * 100
+    pf_closed = list(reversed(pf["closed_trades"][-40:]))
+    pf_open = pf["open_positions"]
+    pf_wins = sum(1 for t in pf["closed_trades"] if t["pnl_usd"] > 0)
+    pf_losses = sum(1 for t in pf["closed_trades"] if t["pnl_usd"] <= 0)
+    pf_chart_labels = [datetime.fromtimestamp(h["ts"], tz=timezone.utc).strftime("%d.%m %H:%M") if h["ts"] else "algus"
+                        for h in pf["balance_history"]]
+    pf_chart_values = [h["balance"] for h in pf["balance_history"]]
+
     def risk_dot(risk):
         color = {"green": "#22c55e", "yellow": "#eab308", "red": "#ef4444"}.get(risk, "#94a3b8")
         return f'<span class="dot" style="background:{color}"></span>{risk}'
@@ -674,7 +765,6 @@ def render_dashboard(state):
     chart_script = ""
     if len(rolling_values) >= 2:
         chart_script = f"""
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
         <script>
           const ctx = document.getElementById('hitRateChart');
           new Chart(ctx, {{
@@ -704,11 +794,52 @@ def render_dashboard(state):
                      if model["n_updates"] >= MODEL_MIN_TRAINING
                      else f"Mudel õpib ({model['n_updates']}/{MODEL_MIN_TRAINING} tulemust) - skoor põhineb veel ainult käsitsi reeglitel")
 
+    portfolio_chart_script = ""
+    if len(pf_chart_values) >= 2:
+        portfolio_chart_script = f"""
+        <script>
+          const ctx2 = document.getElementById('portfolioChart');
+          new Chart(ctx2, {{
+            type: 'line',
+            data: {{
+              labels: {json.dumps(pf_chart_labels)},
+              datasets: [{{
+                label: 'Virtuaalne saldo ($)',
+                data: {json.dumps(pf_chart_values)},
+                borderColor: {json.dumps('#22c55e' if pf['balance'] >= pf['starting_balance'] else '#ef4444')},
+                backgroundColor: {json.dumps('rgba(34,197,94,0.12)' if pf['balance'] >= pf['starting_balance'] else 'rgba(239,68,68,0.12)')},
+                tension: 0.25, fill: true, pointRadius: 2
+              }}]
+            }},
+            options: {{
+              responsive: true,
+              scales: {{ y: {{ ticks: {{ color: '#8b94a8' }} }}, x: {{ ticks: {{ color: '#8b94a8' }} }} }},
+              plugins: {{ legend: {{ labels: {{ color: '#e5e9f0' }} }} }}
+            }}
+          }});
+        </script>"""
+
+    pf_open_rows = ""
+    for p in pf_open:
+        dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        pf_open_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>${p['size_usd']:.2f}</td>
+        <td class="mono">{p['entry_price']:.6g}</td><td>{risk_dot(p['risk'])}</td></tr>"""
+
+    pf_closed_rows = ""
+    for t in pf_closed:
+        dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        pnl_color = "#22c55e" if t["pnl_usd"] > 0 else "#ef4444"
+        pf_closed_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>${t['size_usd']:.2f}</td>
+        <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td><td>{risk_dot(t['risk'])}</td></tr>"""
+
     html = f"""<!DOCTYPE html>
 <html lang="et">
 <head>
 <meta charset="UTF-8">
 <title>Cryptobot Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
   :root {{
     --bg: #0b0f19; --card: #131a2a; --border: #232d42; --text: #e5e9f0;
@@ -760,6 +891,41 @@ def render_dashboard(state):
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Tulemuste kokkuvõte - kui kasulik see päriselt on</h2>
+    <div class="desc">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</div>
+    <div class="stats" style="margin-bottom:0">
+      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:#22c55e">{n_profit}</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:#ef4444">{n_loss}</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">{f'{avg_return:+.1f}%' if avg_return is not None else '–'}</div></div>
+      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:#22c55e">{f"{best['instrument']} {best['result_24h']['return_pct']:+.1f}%" if best else '–'}</div></div>
+      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:#ef4444">{f"{worst['instrument']} {worst['result_24h']['return_pct']:+.1f}%" if worst else '–'}</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💰 Virtuaalne portfell (mängu raha, mitte päris)</h2>
+    <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt {PORTFOLIO_POSITION_PCT*100:.0f}% praegusest saldost, ja "müüb" 24h pärast automaatselt maha. Algsaldo ${pf['starting_balance']:.0f}. See EI OLE päris raha ega päris kauplemine.</div>
+    <div class="stats" style="margin-bottom:14px">
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'#22c55e' if pf['balance']>=pf['starting_balance'] else '#ef4444'}">${pf['balance']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'#22c55e' if pf_return_pct>=0 else '#ef4444'}">{pf_return_pct:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">{len(pf_open)}/{pf['max_open_positions']}</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">{pf_wins}✅ / {pf_losses}❌</div></div>
+    </div>
+    <canvas id="portfolioChart" height="70"></canvas>
+    {portfolio_chart_script if portfolio_chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>'}
+    <h2 style="margin-top:20px">Avatud positsioonid</h2>
+    <table>
+      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
+      {pf_open_rows or '<tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
+    </table>
+    <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
+    <table>
+      <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
+      {pf_closed_rows or '<tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi kauplust suletud.</td></tr>'}
+    </table>
   </div>
 
   <div class="card">
