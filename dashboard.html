@@ -2,53 +2,97 @@
 <html lang="et">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cryptobot Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
   :root {
-    --bg: #0b0f19; --card: #131a2a; --border: #232d42; --text: #e5e9f0;
-    --muted: #8b94a8; --accent: #6366f1;
+    --bg: #0a0e17; --bg2: #0d1220; --card: #131a2a; --card2: #161e33; --border: #232d42;
+    --text: #e9edf5; --muted: #8b94a8; --accent: #6366f1; --accent2: #818cf8;
+    --green: #22c55e; --yellow: #eab308; --red: #ef4444;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
   body {
-    background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    margin: 0; padding: 32px; line-height: 1.5;
+    background: radial-gradient(1200px 600px at 20% -10%, #161f38 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    margin: 0; padding: 0; line-height: 1.55; -webkit-font-smoothing: antialiased;
   }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
-  .stats { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin-bottom: 24px; flex-wrap: wrap;
+  }
+  h1 {
+    font-size: clamp(20px, 5vw, 26px); margin: 0; font-weight: 700; letter-spacing: -.01em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .subtitle { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
   .stat-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px 20px; min-width: 140px;
+    background: linear-gradient(160deg, var(--card2), var(--card));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; min-width: 0;
   }
-  .stat-card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
-  .stat-card .value { font-size: 26px; font-weight: 600; margin-top: 4px; }
+  .stat-card .label {
+    color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stat-card .value { font-size: clamp(18px, 4vw, 24px); font-weight: 700; margin-top: 6px; letter-spacing: -.02em; }
   .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 20px; margin-bottom: 24px; overflow-x: auto;
+    background: linear-gradient(160deg, var(--card2), var(--card));
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px; margin-bottom: 20px;
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,.5);
   }
-  .card h2 { font-size: 15px; margin: 0 0 4px; color: var(--text); }
-  .card .desc { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; }
-  th { text-align: left; color: var(--muted); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .card > table, .card > .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; display: block; }
+  .card h2 { font-size: 15px; margin: 0 0 4px; color: var(--text); font-weight: 650; display: flex; align-items: center; gap: 8px; }
+  .card .desc { color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 480px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
-  .mono { font-family: ui-monospace, monospace; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
   .why { color: var(--muted); max-width: 420px; }
-  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
-  .thresholds { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
-  .thresholds b { color: var(--text); }
-  .tag { display: inline-block; font-size: 10px; background: var(--accent); color: white; padding: 1px 6px; border-radius: 6px; margin-left: 4px; }
-  .log-entry { font-size: 13px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; box-shadow: 0 0 8px currentColor; }
+  .thresholds { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; font-size: 13px; color: var(--muted); }
+  .thresholds > div { background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .thresholds b { color: var(--text); display: block; font-size: 17px; margin-top: 2px; }
+  .tag { display: inline-block; font-size: 10px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 6px; margin-left: 4px; font-weight: 600; }
+  .log-entry { font-size: 13px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--border); }
   .log-entry:last-child { border-bottom: none; }
-  .log-ts { color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; }
-  .model-status { font-size: 13px; padding: 10px 14px; background: rgba(99,102,241,0.12); border: 1px solid var(--accent); border-radius: 8px; margin-bottom: 14px; }
+  .log-ts { color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; font-weight: 600; }
+  .model-status {
+    font-size: 13px; padding: 12px 14px; background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,.4); border-radius: 10px; margin-bottom: 14px;
+  }
+  canvas { max-width: 100%; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+  @media (max-width: 640px) {
+    .wrap { padding: 18px 14px 48px; }
+    .card { padding: 16px; border-radius: 14px; }
+    .stats { gap: 8px; }
+    .stat-card { padding: 12px 12px; border-radius: 12px; }
+    table { font-size: 12.5px; }
+    .why { max-width: 220px; }
+  }
 </style>
 </head>
 <body>
-  <h1>🤖 Cryptobot Dashboard</h1>
-  <div class="subtitle">Uuendatud 15.07.2026 14:04 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>🤖 Cryptobot Dashboard</h1>
+      <div class="subtitle">Uuendatud 15.07.2026 14:49 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
+    </div>
+  </div>
 
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">0</div></div>
@@ -81,22 +125,22 @@
     <canvas id="portfolioChart" height="70"></canvas>
     <div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
-    <table>
+    <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
       <tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
-    </table>
+    </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
-    <table>
+    <div class="table-scroll"><table>
       <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
       <tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi kauplust suletud.</td></tr>
-    </table>
+    </table></div>
   </div>
 
   <div class="card">
     <h2>Õppiv mudel</h2>
     <div class="desc">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida ma algul arvasin.</div>
     <div class="model-status">Mudel õpib (0/15 tulemust) - skoor põhineb veel ainult käsitsi reeglitel</div>
-    <table>
+    <div class="table-scroll"><table>
       <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=0)</th></tr>
       
         <tr><td>Momentum (hinnaliikumine)</td><td class="mono">+1.60</td>
@@ -111,7 +155,7 @@
         <td>vähendab tabamist</td><td class="mono">–</td></tr>
         <tr><td>Veebi hype-kinnitus</td><td class="mono">+1.20</td>
         <td>toetab tabamist</td><td class="mono">–</td></tr>
-    </table>
+    </table></div>
   </div>
 
   <div class="card">
@@ -148,7 +192,7 @@
 
   <div class="card">
     <h2>Käivituste logi</h2>
-    <table>
+    <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
         <tr><td>15.07 14:04</td><td>0</td><td>0</td>
@@ -160,7 +204,8 @@
         <tr><td>15.07 13:15</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
-    </table>
+    </table></div>
   </div>
+</div>
 </body>
 </html>
