@@ -40,30 +40,52 @@ def http_get_json(url, timeout=15):
         return json.loads(resp.read().decode())
 
 
-def fetch_ticker(instrument):
-    """Call Crypto.com's public get-tickers endpoint for a single instrument.
-    Returns a dict shaped like engine.py expects, or None on failure."""
-    url = f"{CRYPTO_COM_TICKER_URL}?instrument_name={instrument}"
-    try:
-        raw = http_get_json(url)
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as e:
-        print(f"WARN: failed to fetch {instrument}: {e}", file=sys.stderr)
-        return None
+def _candidate_instrument_names(symbol):
+    """watchlist.json stores plain symbols like 'BTCUSD' (no separator), but
+    Crypto.com's real instrument names never look like that. Spot pairs are
+    'BASE_QUOTE' (e.g. BTC_USD or, for some coins, only BTC_USDT exists, not
+    BTC_USD). Perpetual futures are 'BASEQUOTE-PERP' (e.g. BTCUSD-PERP, no
+    underscore). This was a real, confirmed bug: EVERY fetch was silently
+    returning nothing because 'BTCUSD' itself isn't a valid instrument_name
+    on Crypto.com at all - try the real formats in order and use whichever
+    one the API actually recognizes."""
+    if symbol.endswith("USD"):
+        base = symbol[:-3]
+        return [f"{base}_USD", f"{base}_USDT", f"{symbol}-PERP"]
+    return [symbol]
 
-    data = (raw.get("result") or {}).get("data") or []
-    if not data:
-        return None
-    d = data[0]
-    try:
-        return {
-            "instrument_name": d.get("i", instrument),
-            "last": d.get("a"),
-            "change": d.get("c"),
-            "volume_value": d.get("vv"),
-        }
-    except Exception as e:
-        print(f"WARN: could not parse ticker for {instrument}: {e}", file=sys.stderr)
-        return None
+
+def fetch_ticker(symbol):
+    """Call Crypto.com's public get-tickers endpoint for a watchlist symbol
+    (e.g. 'BTCUSD'). Returns a dict shaped like engine.py expects (keyed by
+    the ORIGINAL watchlist symbol, regardless of which real Crypto.com
+    instrument name actually had data), or None if none of the candidate
+    formats resolved to anything."""
+    tried = []
+    for real_name in _candidate_instrument_names(symbol):
+        tried.append(real_name)
+        url = f"{CRYPTO_COM_TICKER_URL}?instrument_name={real_name}"
+        try:
+            raw = http_get_json(url)
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):
+            continue
+        data = (raw.get("result") or {}).get("data") or []
+        if not data:
+            continue
+        d = data[0]
+        try:
+            if d.get("a") is None or d.get("c") is None:
+                continue
+            return {
+                "instrument_name": symbol,  # keep the watchlist's own key, not Crypto.com's real name
+                "last": d.get("a"),
+                "change": d.get("c"),
+                "volume_value": d.get("vv"),
+            }
+        except Exception:
+            continue
+    print(f"WARN: no working Crypto.com instrument found for {symbol} (tried {tried})", file=sys.stderr)
+    return None
 
 
 def fetch_all_tickers(instruments):
