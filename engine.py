@@ -34,6 +34,30 @@ whatever actually predicted success - not just what we assumed would.
 Progress is logged in plain language in state["model"]["learning_log"] so
 it's visible on the dashboard, not just a black box.
 
+The math behind "how the money is actually made" (v3):
+  - Momentum is volatility-normalized (Sharpe-style): a % move is scored
+    relative to the instrument's OWN recent noise level, not in isolation,
+    via the square-root-of-time rule (hourly stdev -> expected 24h stdev).
+    A 5% day is a strong signal on a calm major and a shrug on a meme coin
+    that does that every afternoon.
+  - Trend confirmation uses closed-form OLS regression (slope + R^2) over
+    the recent price/volume history instead of a brittle "every hour must
+    be higher than the last" check, so one noisy tick no longer erases an
+    otherwise real trend.
+  - A simple single-factor (CAPM-style) alpha term compares each token's
+    move to BTC's move in the same run: r_token = beta*r_BTC + alpha (beta
+    fixed at 1 for simplicity/transparency). Most altcoins are just
+    leveraged BTC-beta in disguise; this rewards genuine idiosyncratic
+    strength over "it went up because everything went up."
+  - The heuristic/model blend uses actuarial credibility weighting
+    (Z = n / (n + k)) instead of a hard on/off switch at a training-count
+    threshold, so the model's influence grows smoothly with evidence.
+  - Virtual position sizing uses a fractional Kelly criterion
+    (f* = p - (1-p)/b, quarter-Kelly, clamped) once the model has earned
+    enough evidence to be trusted with sizing - bigger, well-founded edges
+    get bigger (but bounded) bets instead of everything getting the same
+    flat 5%.
+
 All state lives in data/state.json (persisted in the user's project folder,
 NOT the ephemeral session scratchpad) so history/learning survives across
 hourly runs.
@@ -55,9 +79,11 @@ DASHBOARD_PATH = os.path.join(BASE_DIR, "dashboard.html")
 INDEX_PATH = os.path.join(BASE_DIR, "index.html")  # same content - lets GitHub Pages serve a clean root URL
 
 HISTORY_KEEP = 48  # keep last 48 hourly snapshots per instrument (~2 days)
+VOL_WINDOW = 24     # snapshots used for the rolling volatility estimate (~1 day at hourly cadence)
+TREND_WINDOW = 6    # snapshots used for the OLS trend fit (~6h at hourly cadence)
 
 # Feature order matters - it's the order weights/x vectors are stored in.
-FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility", "hype_bonus"]
+FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility", "hype_bonus", "alpha"]
 
 # Initial weights: a reasonable hand-set prior (mirrors the original heuristic
 # direction) that then gets refined by real evidence via train_step().
@@ -69,9 +95,14 @@ INITIAL_WEIGHTS = {
     "is_meme": -0.7,
     "volatility": -0.8,
     "hype_bonus": 1.2,
+    "alpha": 0.9,   # prior: genuine outperformance vs. BTC predicts follow-through better than raw noise
 }
 
-MODEL_MIN_TRAINING = 15   # need this many resolved outcomes before the model influences the score
+MODEL_MIN_TRAINING = 15   # need this many resolved outcomes before the model is trusted for POSITION SIZING (Kelly)
+CREDIBILITY_K = 25        # actuarial credibility constant for SCORE BLENDING: Z = n/(n+k), grows smoothly
+                          # instead of jumping from 0% to 50% model-influence at one exact data point
+CREDIBILITY_CAP = 0.65    # even with unlimited data, the hand-written heuristic keeps >=35% say -
+                          # it encodes real domain priors (liquidity, scam keywords) the model may never see enough of
 LEARNING_RATE = 0.08
 L2_LAMBDA = 0.015         # small ridge penalty - shrinks weights that aren't earning their keep back toward 0,
                           # so noise features don't drift just from finite-sample luck
@@ -80,13 +111,28 @@ EXPLORE_MARGIN = 10       # how far below the screen threshold still counts as "
 
 # Virtual paper-trading portfolio - play money only, never touches anything real.
 # Rule: when an alert fires (and there's room + cash), "buy" a position sized as
-# a % of current balance; automatically "sell" it at the 24h mark (same moment
+# a % of current balance (flat, or Kelly-sized once the model has earned trust -
+# see kelly_position_pct); automatically "sell" it at the 24h mark (same moment
 # the 24h follow-up outcome is already being checked), realizing whatever the
 # actual price move was. This is a simple, transparent day-trade-style
 # simulation - not a recommendation for how to actually trade.
 PORTFOLIO_START_BALANCE = 1000.0
-PORTFOLIO_POSITION_PCT = 0.05   # 5% of current balance per trade
-PORTFOLIO_MAX_OPEN = 5          # at most 5 positions open at once (~25% max exposure)
+PORTFOLIO_POSITION_PCT = 0.05   # 5% of current balance - the flat fallback before Kelly sizing kicks in
+PORTFOLIO_MAX_OPEN = 5          # at most 5 positions open at once (~25% max exposure at flat sizing)
+PORTFOLIO_CATEGORY_CAP = {"meme": 2}   # never more than 2/5 open slots in high-variance meme names at
+                                        # once, however good they score - basic diversification so one
+                                        # hype wave rolling over can't wipe the whole simulated book
+
+# Fractional Kelly criterion for position sizing: f* = p - (1-p)/b (p = model's
+# win probability for this trade, b = historical avg-win/avg-loss payoff ratio).
+# Using a QUARTER of full Kelly is a standard practitioner compromise - full
+# Kelly maximizes long-run growth rate in theory, but its variance is brutal
+# (it will happily size a position at 40%+ of the bankroll on a good edge);
+# quarter-Kelly keeps roughly 3/4 of the growth rate with a fraction of the
+# drawdown risk.
+KELLY_FRACTION = 0.25
+KELLY_MIN_PCT = 0.01   # never below 1% - keep participating/learning even on a marginal edge
+KELLY_MAX_PCT = 0.15   # never above 15% on one idea, however confident the model looks
 
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
@@ -191,16 +237,18 @@ def sigmoid(z):
     return 1.0 / (1.0 + math.exp(-z))
 
 
-def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus):
+def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus, alpha_val=0.0):
     liq_map = {"low": 0.0, "medium": 0.5, "high": 1.0}
     return {
         "bias": 1.0,
         "momentum": momentum_score_ / 100.0,
-        "trend_bonus": clamp((trend_bonus_ + 5) / 20.0, 0, 1),
+        "trend_bonus": clamp((trend_bonus_ + 8) / 28.0, 0, 1),
         "liquidity": liq_map.get(liquidity, 0.0),
         "is_meme": 1.0 if category in ("meme", "unknown") else 0.0,
         "volatility": clamp(abs(change_24h) / 0.30, 0, 1),
         "hype_bonus": clamp((hype_bonus + 30) / 60.0, 0, 1),
+        # alpha_val is a fraction (0.03 = 3pp outperformance vs BTC); -10pp..+15pp -> 0..1
+        "alpha": clamp((alpha_val * 100 + 10) / 25.0, 0, 1),
     }
 
 
@@ -230,6 +278,19 @@ def train_step(state, features, hit):
                 f"'{biggest}' {direction}maks ({old_weights[biggest]:.2f} -> {weights[biggest]:.2f}).")
         state["model"]["learning_log"].append({"ts": now_ts(), "text": note})
         state["model"]["learning_log"] = state["model"]["learning_log"][-80:]
+
+
+def model_credibility(n_updates):
+    """How much weight the learned model earns in the blended final score.
+    Classic actuarial credibility formula (Z = n / (n + k)): grows smoothly
+    with the amount of resolved evidence instead of jumping straight from 0%
+    to 50% the instant a fixed training-count threshold is crossed. Capped
+    below 1.0 - the hand-written heuristic encodes real domain knowledge
+    (scam keywords, liquidity floors) the model may never see enough of to
+    learn on its own, so it always keeps some say."""
+    if n_updates <= 0:
+        return 0.0
+    return clamp(n_updates / (n_updates + CREDIBILITY_K), 0.0, CREDIBILITY_CAP)
 
 
 def pearson_r(xs, ys):
@@ -269,20 +330,73 @@ def feature_correlations(state):
 # Virtual paper-trading portfolio (play money only)
 # ---------------------------------------------------------------------------
 
-def maybe_open_position(state, rec_id, instrument, price, ts, risk, score):
-    """Called when a real alert fires. Opens a virtual position sized as a %
-    of current balance, if there's room (max open positions) and cash. If
-    not, the alert still stands - it just isn't "traded" in the simulation."""
+def payoff_ratio(state):
+    """b in the Kelly formula: average win size / average loss size
+    (magnitudes, in % return) over every resolved 24h outcome so far.
+    Falls back to 1.0 (breakeven-odds assumption) until there are at least a
+    few of each so the ratio isn't just noise from one lucky/unlucky trade."""
+    wins, losses = [], []
+    for rec in state["completed"] + state["pending_followups"]:
+        r = rec.get("result_24h")
+        if not r:
+            continue
+        (wins if r["hit"] else losses).append(r["return_pct"] if r["hit"] else abs(r["return_pct"]))
+    if len(wins) < 3 or len(losses) < 3:
+        return 1.0
+    avg_win = sum(wins) / len(wins)
+    avg_loss = sum(losses) / len(losses)
+    if avg_loss <= 0:
+        return 1.0
+    return avg_win / avg_loss
+
+
+def kelly_position_pct(win_prob, b, base_pct):
+    """Fractional Kelly criterion: f* = p - (1-p)/b is the bankroll fraction
+    that maximizes long-run geometric growth for a bet with win probability p
+    and payoff ratio b. We only ever use a quarter of that (KELLY_FRACTION)
+    and clamp it to [KELLY_MIN_PCT, KELLY_MAX_PCT] - full Kelly is
+    notoriously violent in practice (it will happily suggest 40%+ of the
+    bankroll on a strong-looking edge). If the math says there's no edge
+    (f* <= 0, or p<=0.5) we fall back to the flat base_pct rather than
+    sizing to zero - an alert that clears every other bar still deserves a
+    baseline-sized look."""
+    if win_prob <= 0.5 or b <= 0:
+        return base_pct
+    f_star = win_prob - (1 - win_prob) / b
+    if f_star <= 0:
+        return base_pct
+    return clamp(f_star * KELLY_FRACTION, KELLY_MIN_PCT, KELLY_MAX_PCT)
+
+
+def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, category="unknown", win_prob=None):
+    """Called when a real alert fires. Opens a virtual position if there's
+    room (both the overall cap AND the per-category diversification cap) and
+    cash. Sized via fractional Kelly once the model has earned enough
+    evidence to be trusted with it (win_prob passed in); otherwise falls
+    back to the flat PORTFOLIO_POSITION_PCT, same as before. If no position
+    opens, the alert still stands - it just isn't "traded" in the
+    simulation."""
     pf = state["portfolio"]
     if len(pf["open_positions"]) >= pf["max_open_positions"]:
         return False
-    size_usd = pf["balance"] * pf["position_size_pct"]
+    cat_cap = PORTFOLIO_CATEGORY_CAP.get(category)
+    if cat_cap is not None:
+        cat_open = sum(1 for p in pf["open_positions"] if p.get("category") == category)
+        if cat_open >= cat_cap:
+            return False
+
+    size_pct = pf["position_size_pct"]
+    if win_prob is not None:
+        size_pct = kelly_position_pct(win_prob, payoff_ratio(state), pf["position_size_pct"])
+
+    size_usd = pf["balance"] * size_pct
     if size_usd < 1.0 or size_usd > pf["balance"]:
         return False
     pf["balance"] -= size_usd
     pf["open_positions"].append({
         "id": rec_id, "instrument": instrument, "entry_price": price,
-        "size_usd": round(size_usd, 2), "entry_ts": ts, "risk": risk, "score": score
+        "size_usd": round(size_usd, 2), "size_pct": round(size_pct * 100, 2),
+        "entry_ts": ts, "risk": risk, "score": score, "category": category
     })
     return True
 
@@ -302,7 +416,7 @@ def close_position(state, rec_id, exit_price, exit_ts):
         "id": rec_id, "instrument": match["instrument"], "entry_price": match["entry_price"],
         "exit_price": exit_price, "size_usd": match["size_usd"], "entry_ts": match["entry_ts"],
         "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct * 100, 2),
-        "risk": match["risk"], "score": match["score"]
+        "risk": match["risk"], "score": match["score"], "category": match.get("category", "unknown")
     })
     pf["closed_trades"] = pf["closed_trades"][-300:]
     pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
@@ -310,32 +424,191 @@ def close_position(state, rec_id, exit_price, exit_ts):
 
 
 # ---------------------------------------------------------------------------
+# Portfolio performance math (Sharpe, drawdown, profit factor, expectancy)
+# ---------------------------------------------------------------------------
+
+def sharpe_ratio(returns_pct):
+    """Annualized Sharpe ratio of the trade-return series (mean / stdev of
+    returns, scaled by sqrt(365)). Trades resolve on a ~24h cadence (matched
+    to the follow-up check), so treating the series like daily returns and
+    applying the standard sqrt(365) annualization is a reasonable, clearly-
+    labeled approximation - not a claim of true day-by-day granularity."""
+    n = len(returns_pct)
+    if n < 5:
+        return None
+    mean_r = sum(returns_pct) / n
+    var = sum((r - mean_r) ** 2 for r in returns_pct) / (n - 1)
+    std_r = math.sqrt(var)
+    if std_r <= 0:
+        return None
+    return (mean_r / std_r) * math.sqrt(365)
+
+
+def max_drawdown_pct(balance_series):
+    """Largest peak-to-trough decline in the balance curve, as a % of the
+    peak at the time - the standard way to size up 'how bad did this feel
+    along the way', independent of where the balance ended up."""
+    peak = None
+    worst = 0.0
+    for b in balance_series:
+        if peak is None or b > peak:
+            peak = b
+        if peak and peak > 0:
+            worst = max(worst, (peak - b) / peak)
+    return worst * 100
+
+
+def profit_factor(closed_trades):
+    """Gross profit / gross loss. >1 means the winners outweigh the losers
+    in dollar terms (not just in count) - the number professional trading
+    desks actually watch, since a high win RATE with tiny wins and rare huge
+    losses can still be a net loser."""
+    gains = sum(t["pnl_usd"] for t in closed_trades if t["pnl_usd"] > 0)
+    losses = -sum(t["pnl_usd"] for t in closed_trades if t["pnl_usd"] <= 0)
+    if losses <= 0:
+        return None
+    return gains / losses
+
+
+def expectancy_pct(closed_trades):
+    """Average P&L per trade, in %. The single number that answers 'is
+    doing this, on average, worth it' - positive expectancy is the whole
+    point of any of the rest of this math."""
+    if not closed_trades:
+        return None
+    return sum(t["pnl_pct"] for t in closed_trades) / len(closed_trades)
+
+
+# ---------------------------------------------------------------------------
 # Stage 1: screen
 # ---------------------------------------------------------------------------
 
-def momentum_score(change_24h):
-    """Map 24h % change (fractional, e.g. 0.05 = +5%) to a 0-100 score.
-    0% -> 50, +30% -> 100, -30% -> 0."""
+def realized_volatility(history):
+    """Rolling stdev of hour-over-hour returns from up to the last VOL_WINDOW
+    snapshots (sample stdev, Bessel-corrected). This is the token's OWN
+    recent noise level, used to judge whether today's move is actually
+    unusual for it. Returns None if there isn't enough history yet (a
+    brand-new listing falls back to the plain, unnormalized momentum
+    mapping - see momentum_score)."""
+    if len(history) < 3:
+        return None
+    prices = [h["price"] for h in history[-VOL_WINDOW:]]
+    rets = [(prices[i] - prices[i - 1]) / prices[i - 1]
+            for i in range(1, len(prices)) if prices[i - 1] > 0]
+    if len(rets) < 2:
+        return None
+    mean_r = sum(rets) / len(rets)
+    var = sum((r - mean_r) ** 2 for r in rets) / (len(rets) - 1)
+    return math.sqrt(var)
+
+
+def momentum_score(change_24h, hourly_vol=None):
+    """Map 24h % change to a 0-100 score, blended half-and-half with a
+    volatility-normalized (Sharpe-style) version once there's enough history
+    to estimate the token's own noise level.
+
+    Plain mapping: 0% -> 50, +30% -> 100, -30% -> 0 (same as v1, kept as a
+    floor so a brand-new token with no history still scores sensibly).
+
+    Risk-adjusted half: scale the hourly volatility up to an expected 24h
+    volatility via the square-root-of-time rule (expected_24h ~= hourly *
+    sqrt(24), valid for an approximately random-walk return series), then
+    express the actual 24h move as a z-score against that. A +5% day on a
+    token that normally barely moves is a much stronger signal than the
+    same +5% on something that does that every afternoon - this is the same
+    idea as a Sharpe ratio (return per unit of the asset's own risk),
+    applied one day at a time instead of over a whole track record."""
     pct = clamp(change_24h, -0.30, 0.30)
-    return round((pct + 0.30) / 0.60 * 100, 1)
+    base = (pct + 0.30) / 0.60 * 100
+
+    if hourly_vol and hourly_vol > 1e-6:
+        expected_24h_vol = hourly_vol * math.sqrt(24)
+        z = change_24h / expected_24h_vol
+        risk_adjusted = clamp(50 + z * 12, 0, 100)  # z=0 -> 50, +-~4.2 sigma saturates the scale
+        return round(0.5 * base + 0.5 * risk_adjusted, 1)
+    return round(base, 1)
+
+
+def linreg_slope_r2(ys):
+    """Closed-form ordinary-least-squares fit of ys against the index
+    0..n-1 (pure Python, no numpy needed for a handful of points). Returns
+    (slope, r_squared). R^2 measures how well the points actually line up
+    (1.0 = perfect line, 0.0 = scatter) - it's the "trust this trend" dial,
+    continuous instead of a single noisy tick flipping a yes/no switch."""
+    n = len(ys)
+    if n < 2:
+        return 0.0, 0.0
+    xs = list(range(n))
+    mx = sum(xs) / n
+    my = sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    if sxx == 0:
+        return 0.0, 0.0
+    slope = sxy / sxx
+    if n < 3:
+        return slope, 0.0
+    syy = sum((y - my) ** 2 for y in ys)
+    if syy <= 0:
+        return slope, 1.0 if abs(slope) < 1e-12 else 0.0
+    r2 = clamp((sxy ** 2) / (sxx * syy), 0, 1)
+    return slope, r2
 
 
 def trend_bonus(history):
-    """Look at up to the last 3 snapshots. If price AND volume have been
-    rising each step (not just a single-hour spike), award a confirmation
-    bonus. This is the main noise filter: a lone spike gets no bonus."""
+    """Fit a straight line (OLS) through the last TREND_WINDOW price points
+    (normalized to % change from the window start, so slope is dimensionless)
+    and through volume the same way. A confirmed uptrend needs a positive
+    price slope AND a high R^2 (the points genuinely line up, not scattered)
+    AND rising volume (participation, not a thin illiquid wobble). Bonus
+    strength scales continuously with R^2 instead of being all-or-nothing -
+    one noisy hour can no longer erase an otherwise real multi-hour trend,
+    which is what the old strict-monotonic check was doing."""
     if len(history) < 2:
         return 0, "uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks"
-    recent = history[-3:]
+
+    recent = history[-TREND_WINDOW:]
     prices = [h["price"] for h in recent]
     vols = [h["volume_value"] for h in recent]
-    price_rising = all(prices[i] <= prices[i + 1] for i in range(len(prices) - 1))
-    vol_rising = all(vols[i] <= vols[i + 1] * 1.05 for i in range(len(vols) - 1))  # allow small noise
-    if len(recent) >= 3 and price_rising and vol_rising:
-        return 15, f"trend kinnitatud - hind ja maht tõusnud järjest {len(recent)} tunni jooksul"
-    if len(recent) >= 2 and prices[-1] > prices[0]:
-        return 5, "nõrk kinnitus - hind tõusuteel, aga vähe andmepunkte"
-    return -5, "ühekordne hüpe, trend ei ole veel kinnitatud (võib olla müra)"
+
+    p0 = prices[0] if prices[0] else 1e-9
+    norm_prices = [(p - p0) / p0 for p in prices]
+    price_slope, price_r2 = linreg_slope_r2(norm_prices)
+
+    v0 = vols[0] if vols[0] else 1e-9
+    norm_vols = [(v - v0) / v0 for v in vols]
+    vol_slope, _ = linreg_slope_r2(norm_vols)
+
+    n = len(recent)
+    if n >= 4 and price_slope > 0 and price_r2 >= 0.5 and vol_slope > 0:
+        bonus = round(8 + price_r2 * 12, 1)  # 8..20, scaled by how clean the fit is
+        return bonus, f"trend kinnitatud (OLS R²={price_r2:.2f} üle {n} tunni, hind+maht mõlemad tõusuteel)"
+    if price_slope > 0 and price_r2 >= 0.3:
+        return 5.0, f"nõrk kinnitus - hind tõusuteel (R²={price_r2:.2f}), aga veel ebakindel"
+    if price_slope < 0 and price_r2 >= 0.5:
+        return -8.0, f"langustrend kinnitatud (R²={price_r2:.2f}) - ettevaatust"
+    return -2.0, "ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²)"
+
+
+def alpha_bonus(change_24h, btc_change):
+    """Single-factor (CAPM-style) alpha: r_token = beta*r_BTC + alpha, with
+    beta fixed at 1 for transparency (a simple, explainable baseline rather
+    than a fitted beta that would need its own history to estimate
+    reliably). Most altcoins are largely leveraged BTC-beta in disguise; this
+    isolates and rewards the part of the move BTC does NOT already explain -
+    genuine idiosyncratic strength - instead of crediting a token for simply
+    riding the whole market up. Returns (bonus_points, alpha_fraction, note)."""
+    if btc_change is None:
+        return 0.0, 0.0, "BTC võrdlust pole saadaval selles käivituses"
+    alpha = change_24h - btc_change
+    bonus = clamp(alpha * 100, -10, 15)
+    if alpha > 0.03:
+        note = f"alpha {alpha*100:+.1f}pp üle BTC-turu ({btc_change*100:+.1f}%) - reaalne oma jõud, mitte lihtsalt BTC laine"
+    elif alpha < -0.03:
+        note = f"alpha {alpha*100:+.1f}pp alla BTC-turu ({btc_change*100:+.1f}%) - nõrgem kui turg tervikuna"
+    else:
+        note = f"liigub suuresti koos BTC-turuga ({btc_change*100:+.1f}%), vähe oma alphat"
+    return round(bonus, 1), alpha, note
 
 
 def liquidity_bucket(volume_value):
@@ -358,6 +631,18 @@ def screen(tickers_raw_path, out_path):
     ts = now_ts()
     threshold = state["thresholds"]["screen_score"]
 
+    # Market benchmark for the alpha term: BTC's own 24h move in this same
+    # run. Every altcoin's "how much of this move is genuinely its own" gets
+    # measured against this one number (see alpha_bonus).
+    btc_change = None
+    for t in tickers:
+        if t.get("instrument_name") == "BTCUSD":
+            try:
+                btc_change = float(t["change"])
+            except (KeyError, ValueError, TypeError):
+                btc_change = None
+            break
+
     for t in tickers:
         inst = t["instrument_name"]
         try:
@@ -368,15 +653,20 @@ def screen(tickers_raw_path, out_path):
             continue
 
         hist = state["history"].setdefault(inst, [])
-        m_score = momentum_score(change_24h)
+        hourly_vol = realized_volatility(hist)
+        m_score = momentum_score(change_24h, hourly_vol)
         bonus, trend_note = trend_bonus(hist)
+        if inst == "BTCUSD":
+            a_bonus, alpha_frac, alpha_note = 0.0, 0.0, "BTC ise on turu võrdlusalus"
+        else:
+            a_bonus, alpha_frac, alpha_note = alpha_bonus(change_24h, btc_change)
 
         # append this snapshot to history now (so next run can see it)
         hist.append({"ts": ts, "price": price, "change_24h": change_24h,
                       "volume_value": volume_value})
         state["history"][inst] = hist[-HISTORY_KEEP:]
 
-        raw_score = clamp(m_score + bonus, 0, 100)
+        raw_score = clamp(m_score + bonus + a_bonus, 0, 100)
         category = watchlist_cat.get(inst, "unknown")
 
         entry = {
@@ -388,6 +678,9 @@ def screen(tickers_raw_path, out_path):
             "momentum_score": m_score,
             "trend_bonus": bonus,
             "trend_note": trend_note,
+            "alpha_bonus": a_bonus,
+            "alpha_pct": alpha_frac,
+            "alpha_note": alpha_note,
             "raw_score": raw_score,
             "liquidity": liquidity_bucket(volume_value),
             "exploration": False,
@@ -416,7 +709,7 @@ def screen(tickers_raw_path, out_path):
     for c in all_out:
         tag = " [EXPLORE]" if c["exploration"] else ""
         print(f"  - {c['instrument']}: raw_score={c['raw_score']} "
-              f"({c['momentum_score']}+{c['trend_bonus']}) [{c['category']}/{c['liquidity']}]{tag}")
+              f"({c['momentum_score']}+{c['trend_bonus']}+{c['alpha_bonus']}) [{c['category']}/{c['liquidity']}]{tag}")
 
 
 # ---------------------------------------------------------------------------
@@ -587,20 +880,24 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         risk = risk_label(c["category"], c["liquidity"], c["change_24h"], forced_risk)
 
         features = build_features(c["momentum_score"], c["trend_bonus"], c["liquidity"],
-                                   c["category"], c["change_24h"], bonus)
+                                   c["category"], c["change_24h"], bonus, c.get("alpha_pct", 0.0))
         model_p = model_predict(state["model"]["weights"], features)
 
-        if model_ready:
-            final_score = round(0.5 * heuristic_score + 0.5 * (model_p * 100), 1)
-            model_note = f" Mudel (treenitud {n_updates} tulemuse pealt) hindab tabamise tõenäosuseks {model_p:.0%}."
+        # Credibility-weighted blend (Z = n/(n+k)): the model's say grows
+        # smoothly with evidence instead of jumping from 0% to 50% the
+        # instant a fixed training-count is crossed.
+        credibility = model_credibility(n_updates)
+        final_score = round((1 - credibility) * heuristic_score + credibility * (model_p * 100), 1)
+        if credibility >= 0.05:
+            model_note = (f" Mudel (treenitud {n_updates} tulemuse pealt, praegu {credibility:.0%} "
+                           f"kaaluga lõppskooris) hindab tabamise tõenäosuseks {model_p:.0%}.")
         else:
-            final_score = heuristic_score
-            model_note = f" Mudel alles õpib ({n_updates}/{MODEL_MIN_TRAINING} tulemust kogutud enne kui see skoori mõjutama hakkab)."
+            model_note = f" Mudel alles õpib ({n_updates} tulemust kogutud, mõju hetkel alla 5%)."
 
         explore_note = " [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]" if c.get("exploration") else ""
 
         why = (f"Momentum {c['momentum_score']}/100 (24h {c['change_24h']*100:+.1f}%), "
-               f"{c['trend_note']}. Likviidsus: {c['liquidity']} "
+               f"{c['trend_note']}. {c.get('alpha_note', '')} Likviidsus: {c['liquidity']} "
                f"(maht ${c['volume_value']:,.0f}). {why_hype}{model_note}{explore_note}")
 
         entry = {"instrument": inst, "score": final_score, "risk": risk, "why": why,
@@ -610,7 +907,12 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         if should_alert(state, inst, final_score, risk):
             rec_id = state["next_id"]
             state["next_id"] += 1
-            traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score)
+            # Kelly sizing only once the model has earned the same minimum
+            # evidence bar it always needed before being trusted at all -
+            # sizing real (virtual) money is a higher bar than just display.
+            win_prob = model_p if model_ready else None
+            traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score,
+                                          category=c["category"], win_prob=win_prob)
             entry["traded"] = traded
             alerts.append(entry)
             state["alerted"][inst] = {"last_score": final_score, "last_ts": ts, "last_risk": risk}
@@ -661,12 +963,13 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
 # ---------------------------------------------------------------------------
 
 FEATURE_LABELS = {
-    "momentum": "Momentum (hinnaliikumine)",
-    "trend_bonus": "Trendi kinnitus",
+    "momentum": "Momentum (riskiga kohandatud)",
+    "trend_bonus": "Trendi kinnitus (OLS R²)",
     "liquidity": "Likviidsus",
     "is_meme": "Meemi/trend-kategooria",
     "volatility": "Volatiilsus",
     "hype_bonus": "Veebi hype-kinnitus",
+    "alpha": "Alpha (BTC-suhteline üleliikumine)",
 }
 
 
@@ -715,6 +1018,12 @@ def render_dashboard(state):
     pf_chart_labels = [datetime.fromtimestamp(h["ts"], tz=timezone.utc).strftime("%d.%m %H:%M") if h["ts"] else "algus"
                         for h in pf["balance_history"]]
     pf_chart_values = [h["balance"] for h in pf["balance_history"]]
+
+    # Real quant performance metrics - the "kas see matemaatika päriselt teenib raha" view.
+    pf_sharpe = sharpe_ratio([t["pnl_pct"] for t in pf["closed_trades"]])
+    pf_drawdown = max_drawdown_pct(pf_chart_values)
+    pf_profit_factor = profit_factor(pf["closed_trades"])
+    pf_expectancy = expectancy_pct(pf["closed_trades"])
 
     def risk_dot(risk):
         color = {"green": "#22c55e", "yellow": "#eab308", "red": "#ef4444"}.get(risk, "#94a3b8")
@@ -825,8 +1134,9 @@ def render_dashboard(state):
     pf_open_rows = ""
     for p in pf_open:
         dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        size_pct_txt = f"{p['size_pct']:.1f}%" if "size_pct" in p else "–"
         pf_open_rows += f"""
-        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>${p['size_usd']:.2f}</td>
+        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>${p['size_usd']:.2f} <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">{size_pct_txt}</span></td>
         <td class="mono">{p['entry_price']:.6g}</td><td>{risk_dot(p['risk'])}</td></tr>"""
 
     pf_closed_rows = ""
@@ -1013,7 +1323,7 @@ def render_dashboard(state):
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
+      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V3 (riskiga momentum + OLS trend + BTC-alpha + veebi hype + õppiv mudel + Kelly-panustamine)</div>
     </div>
   </div>
 
@@ -1022,6 +1332,19 @@ def render_dashboard(state):
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📐 Metoodika - kuidas skoor ja panuse suurus arvutatakse</h2>
+    <div class="desc">Iga number sellel lehel tuleb ühest neist viiest arvutusest.</div>
+    <div class="table-scroll"><table>
+      <tr><th>Mõõdik</th><th>Idee</th><th>Miks see loeb</th></tr>
+      <tr><td class="mono">Riskiga momentum</td><td>24h liikumine jagatuna tokeni enda tavapärase kõikumisega (Sharpe-loogika, √24h-reegel)</td><td>5% tõus rahulikul BTC-l ≠ 5% tõus meemikoinil, mis teeb seda iga päev</td></tr>
+      <tr><td class="mono">OLS trend + R²</td><td>Sirge joon läbi viimaste tundide hinna/mahu, R² = kui hästi punktid joonel püsivad</td><td>üks müratund enam ei kustuta terve trendi kinnitust</td></tr>
+      <tr><td class="mono">Alpha vs BTC</td><td>r_token − r_BTC (lihtsustatud CAPM, beeta=1)</td><td>enamik altcoine on lihtsalt BTC laine - see leiab pärisliku oma jõu</td></tr>
+      <tr><td class="mono">Credibility segamine</td><td>Z = n/(n+{CREDIBILITY_K}) - mudeli mõju kasvab sujuvalt kogemuse kasvades</td><td>skoor ei hüppa ühe andmepunkti pealt 15 protsendipunkti</td></tr>
+      <tr><td class="mono">Veerand-Kelly</td><td>f* = p − (1−p)/b, kasutusel ¼ ulatuses, {KELLY_MIN_PCT*100:.0f}–{KELLY_MAX_PCT*100:.0f}% piirides</td><td>suurem, tõestatud edge → suurem (aga piiratud) panus, mitte alati sama 5%</td></tr>
+    </table></div>
   </div>
 
   <div class="card">
@@ -1038,12 +1361,16 @@ def render_dashboard(state):
 
   <div class="card">
     <h2>💰 Virtuaalne portfell (mängu raha, mitte päris)</h2>
-    <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt {PORTFOLIO_POSITION_PCT*100:.0f}% praegusest saldost, ja "müüb" 24h pärast automaatselt maha. Algsaldo ${pf['starting_balance']:.0f}. See EI OLE päris raha ega päris kauplemine.</div>
+    <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. Suurus on kas fikseeritud {PORTFOLIO_POSITION_PCT*100:.0f}% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi ({KELLY_MIN_PCT*100:.0f}–{KELLY_MAX_PCT*100:.0f}% vahemikus, sõltuvalt mudeli enesekindlusest ja ajaloolisest võidu/kaotuse suhtest). Algsaldo ${pf['starting_balance']:.0f}. See EI OLE päris raha ega päris kauplemine.</div>
     <div class="stats" style="margin-bottom:14px">
       <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'#22c55e' if pf['balance']>=pf['starting_balance'] else '#ef4444'}">${pf['balance']:.2f}</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'#22c55e' if pf_return_pct>=0 else '#ef4444'}">{pf_return_pct:+.1f}%</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">{len(pf_open)}/{pf['max_open_positions']}</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value" style="background:none;-webkit-text-fill-color:initial;color:var(--text)">{pf_wins}✅ / {pf_losses}❌</div></div>
+      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">{f'{pf_sharpe:.2f}' if pf_sharpe is not None else '–'}</div></div>
+      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:#ef4444">{f'-{pf_drawdown:.1f}%' if pf_drawdown else '0.0%'}</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f'{pf_profit_factor:.2f}' if pf_profit_factor is not None else '–'}</div></div>
+      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:{'#22c55e' if (pf_expectancy or 0)>=0 else '#ef4444'}">{f'{pf_expectancy:+.2f}%' if pf_expectancy is not None else '–'}</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     {portfolio_chart_script if portfolio_chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>'}
