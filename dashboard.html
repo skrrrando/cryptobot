@@ -174,12 +174,12 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 20.07.2026 18:01 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
+      <div class="subtitle">Uuendatud 20.07.2026 18:51 UTC · V2 (momentum + trend + veebi hype-kinnitus + isikliku õppiva mudeliga)</div>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">0</div></div>
+    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">5</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">–</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">0</div></div>
@@ -201,9 +201,9 @@
     <h2>💰 Virtuaalne portfell (mängu raha, mitte päris)</h2>
     <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt 5% praegusest saldost, ja "müüb" 24h pärast automaatselt maha. Algsaldo $1000. See EI OLE päris raha ega päris kauplemine.</div>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:#22c55e">$1000.00</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:#22c55e">+0.0%</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:#ef4444">$773.78</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:#ef4444">-22.6%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">5/5</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value" style="background:none;-webkit-text-fill-color:initial;color:var(--text)">0✅ / 0❌</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
@@ -211,7 +211,17 @@
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
-      <tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
+      
+        <tr><td>20.07 18:51</td><td class="mono">NEARUSD</td><td>$50.00</td>
+        <td class="mono">1.9696</td><td><span class="dot" style="background:#eab308"></span>yellow</td></tr>
+        <tr><td>20.07 18:51</td><td class="mono">ONDOUSD</td><td>$47.50</td>
+        <td class="mono">0.35754</td><td><span class="dot" style="background:#eab308"></span>yellow</td></tr>
+        <tr><td>20.07 18:51</td><td class="mono">BONKUSD</td><td>$45.12</td>
+        <td class="mono">3.042e-06</td><td><span class="dot" style="background:#ef4444"></span>red</td></tr>
+        <tr><td>20.07 18:51</td><td class="mono">FARTCOINUSD</td><td>$42.87</td>
+        <td class="mono">0.13994</td><td><span class="dot" style="background:#ef4444"></span>red</td></tr>
+        <tr><td>20.07 18:51</td><td class="mono">VIRTUALUSD</td><td>$40.73</td>
+        <td class="mono">0.6539</td><td><span class="dot" style="background:#ef4444"></span>red</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
@@ -270,7 +280,52 @@
     <div class="desc">🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</div>
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
-      <tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>
+      
+        <tr>
+          <td>20.07 18:51</td>
+          <td class="mono">NEARUSD <span class="tag">EXPLORE</span></td>
+          <td>55.2</td>
+          <td><span class="dot" style="background:#eab308"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 55.2/100 (24h +3.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $89,893). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
+        <tr>
+          <td>20.07 18:51</td>
+          <td class="mono">ONDOUSD <span class="tag">EXPLORE</span></td>
+          <td>56.2</td>
+          <td><span class="dot" style="background:#eab308"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 56.2/100 (24h +3.7%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $20,953). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
+        <tr>
+          <td>20.07 18:51</td>
+          <td class="mono">BONKUSD <span class="tag">EXPLORE</span></td>
+          <td>63.6</td>
+          <td><span class="dot" style="background:#ef4444"></span>red</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 63.6/100 (24h +8.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $47,324). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
+        <tr>
+          <td>20.07 18:51</td>
+          <td class="mono">FARTCOINUSD <span class="tag">EXPLORE</span></td>
+          <td>62.3</td>
+          <td><span class="dot" style="background:#ef4444"></span>red</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 62.3/100 (24h +7.4%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $5,328). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
+        <tr>
+          <td>20.07 18:51</td>
+          <td class="mono">VIRTUALUSD <span class="tag">EXPLORE</span></td>
+          <td>63.6</td>
+          <td><span class="dot" style="background:#ef4444"></span>red</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 63.6/100 (24h +8.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $20,165). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
     </table></div>
   </div>
 
@@ -279,6 +334,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>20.07 18:51</td><td>5</td><td>5</td>
+        <td>-</td>
+        <td>-</td></tr>
         <tr><td>20.07 18:01</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
@@ -364,9 +422,6 @@
         <td>-</td>
         <td>-</td></tr>
         <tr><td>18.07 13:12</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>18.07 11:02</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
     </table></div>
