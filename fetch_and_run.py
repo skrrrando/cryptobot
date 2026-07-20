@@ -8,10 +8,15 @@ exact same engine.py scoring logic (screen -> finalize) unchanged.
 What's different from the Cowork version:
   - Market data comes straight from Crypto.com's public REST API (no auth
     needed for tickers).
-  - There is NO live web-search hype check here (GitHub Actions can't call
-    Claude's WebSearch tool). Scoring is momentum + trend + liquidity/scam
-    heuristics only. hype_notes.json is always empty - engine.py already
-    handles that gracefully (just skips the hype bonus/explanation bit).
+  - The hype/sentiment check is NOT a live WebSearch (GitHub Actions can't
+    call Claude's WebSearch tool) - instead it queries CoinGecko's free public
+    API (no key required) for each Stage-1 candidate: real community
+    sentiment-vote percentages, plus CoinGecko's own curated `public_notice`/
+    `additional_notices` fields (their scam/delisting/caution flags). This is
+    a genuine, structured signal rather than an approximation, just sourced
+    differently than the Cowork path's news-search summaries. Symbols with no
+    known CoinGecko listing (or on any API hiccup) fall back to "not found",
+    same graceful degradation engine.py already handles.
   - Notification goes out via Telegram instead of a Cowork chat message.
   - State/dashboard files are committed back to the repo by the GitHub Actions
     workflow (see .github/workflows/hourly.yml), not by this script.
@@ -30,6 +35,33 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
 
 CRYPTO_COM_TICKER_URL = "https://api.crypto.com/exchange/v1/public/get-tickers"
+COINGECKO_COIN_URL = "https://api.coingecko.com/api/v3/coins/{id}"
+
+# watchlist symbol -> CoinGecko coin id, resolved once via CoinGecko's /search
+# endpoint (picking the highest-market-cap-rank exact ticker match for each
+# symbol) so the hourly run never needs to do that lookup itself - CoinGecko's
+# free tier rate-limits hard (a handful of req/min) and a live search per
+# candidate on top of the detail call would burn through that budget fast.
+# Extend this manually if watchlist.json grows with a new symbol.
+SYMBOL_TO_COINGECKO_ID = {
+    "BTCUSD": "bitcoin", "ETHUSD": "ethereum", "SOLUSD": "solana", "XRPUSD": "ripple",
+    "ADAUSD": "cardano", "DOGEUSD": "dogecoin", "AVAXUSD": "avalanche-2", "LINKUSD": "chainlink",
+    "DOTUSD": "polkadot", "LTCUSD": "litecoin", "BCHUSD": "bitcoin-cash", "ATOMUSD": "cosmos",
+    "NEARUSD": "near", "ARBUSD": "arbitrum", "OPUSD": "optimism", "SUIUSD": "sui",
+    "APTUSD": "aptos", "INJUSD": "injective-protocol", "RUNEUSD": "thorchain",
+    "HBARUSD": "hedera-hashgraph", "ICPUSD": "internet-computer", "FILUSD": "filecoin",
+    "RENDERUSD": "render-token", "TIAUSD": "celestia", "TAOUSD": "bittensor",
+    "ONDOUSD": "ondo-finance", "AAVEUSD": "aave", "UNIUSD": "uniswap",
+    "PEPEUSD": "pepe", "WIFUSD": "dogwifcoin", "BONKUSD": "bonk", "SHIBUSD": "shiba-inu",
+    "FLOKIUSD": "floki", "GOATUSD": "goatseus-maximus", "PNUTUSD": "peanut-the-squirrel",
+    "MOODENGUSD": "moo-deng", "FARTCOINUSD": "fartcoin", "PENGUUSD": "pudgy-penguins",
+    "TRUMPUSD": "official-trump", "MELANIAUSD": "melania-meme", "POPCATUSD": "popcat",
+    "TURBOUSD": "turbo", "ARKMUSD": "arkham", "VIRTUALUSD": "virtual-protocol", "AIXBTUSD": "aixbt",
+}
+
+HYPE_SLEEP_SECONDS = 2.5  # CoinGecko's free tier rate-limits hard; only called for
+                          # up to ~10 Stage-1 candidates per run, so this stays well
+                          # inside an hourly job's time budget
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -98,6 +130,51 @@ def fetch_all_tickers(instruments):
     return out
 
 
+def fetch_hype_note(symbol):
+    """Real hype/sentiment check for one Stage-1 candidate, sourced from
+    CoinGecko's free public API instead of a live web search (not available
+    here). Returns the same shape engine.hype_adjustment() expects:
+    {"found": bool, "sentiment": "positive"/"neutral"/"negative"/"warning",
+    "summary": str}. Falls back to {"found": False} on anything unexpected -
+    unmapped symbol, timeout, rate limit, malformed response - so a flaky
+    API call degrades to "no fresh info" (engine.py's existing, already-
+    tested behavior) rather than crashing the whole run."""
+    coingecko_id = SYMBOL_TO_COINGECKO_ID.get(symbol)
+    if not coingecko_id:
+        return {"found": False}
+
+    url = (COINGECKO_COIN_URL.format(id=coingecko_id) +
+           "?localization=false&tickers=false&market_data=false"
+           "&community_data=true&developer_data=false")
+    try:
+        d = http_get_json(url, timeout=15)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as e:
+        print(f"WARN: CoinGecko lookup failed for {symbol} ({coingecko_id}): {e}", file=sys.stderr)
+        return {"found": False}
+
+    rank = d.get("market_cap_rank")
+    rank_txt = f"turu positsioon #{rank}" if rank else "turu positsioon reastamata (väga väike/uus token)"
+
+    notices = [n for n in ([d.get("public_notice")] + list(d.get("additional_notices") or [])) if n]
+    if notices:
+        text = " ".join(str(n) for n in notices)[:250]
+        return {"found": True, "sentiment": "warning", "summary": f"CoinGecko hoiatus: {text}"}
+
+    up = d.get("sentiment_votes_up_percentage")
+    down = d.get("sentiment_votes_down_percentage")
+    if up is None:
+        return {"found": False}
+
+    if up >= 65:
+        sentiment = "positive"
+    elif up <= 35:
+        sentiment = "negative"
+    else:
+        sentiment = "neutral"
+    summary = f"CoinGecko kogukonna hääletus: {up:.0f}% positiivne / {(down or 0):.0f}% negatiivne, {rank_txt}."
+    return {"found": True, "sentiment": sentiment, "summary": summary}
+
+
 def send_telegram(text):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
         print("WARN: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set, skipping send. "
@@ -126,10 +203,19 @@ def main():
     candidates_path = os.path.join(DATA_DIR, "candidates.json")
     engine.screen(tickers_path, candidates_path)
 
-    # No live hype-check here (no WebSearch available in GitHub Actions) -
-    # always pass an empty notes file, engine.py handles that gracefully.
+    # Real hype/sentiment check for just the Stage-1 candidates (not all 45
+    # watched instruments) via CoinGecko - see fetch_hype_note() docstring
+    # for why this replaces the Cowork version's live WebSearch step.
+    candidates = engine.load_json(candidates_path, [])
+    hype_notes = {}
+    for c in candidates:
+        inst = c["instrument"]
+        hype_notes[inst] = fetch_hype_note(inst)
+        time.sleep(HYPE_SLEEP_SECONDS)
     hype_notes_path = os.path.join(DATA_DIR, "hype_notes.json")
-    engine.save_json(hype_notes_path, {})
+    engine.save_json(hype_notes_path, hype_notes)
+    n_found = sum(1 for n in hype_notes.values() if n.get("found"))
+    print(f"Hype-kontroll: {n_found}/{len(hype_notes)} kandidaadi kohta leidus CoinGecko andmeid.")
 
     # Resolve any due 24h/7d followups using fresh prices for those instruments.
     state = engine.load_state()
