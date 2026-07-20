@@ -1026,8 +1026,15 @@ def render_dashboard(state):
     pf_expectancy = expectancy_pct(pf["closed_trades"])
 
     def risk_dot(risk):
-        color = {"green": "#22c55e", "yellow": "#eab308", "red": "#ef4444"}.get(risk, "#94a3b8")
+        color = {"green": "#0ca30c", "yellow": "#fab219", "red": "#f4756f"}.get(risk, "#9a94b8")
         return f'<span class="dot" style="background:{color}"></span>{risk}'
+
+    def info_badge(desc):
+        """Small '?' badge next to a card heading - hover (desktop) or tap
+        (mobile, via a click-toggle handled by the shared script at the
+        bottom of the page) reveals the explanation, keeping the card itself
+        uncluttered."""
+        return f'<span class="info" tabindex="0">?<span class="info-pop">{desc}</span></span>'
 
     history_rows = ""
     all_recs = sorted(completed + pending, key=lambda r: r["ts"], reverse=True)[:60]
@@ -1142,10 +1149,18 @@ def render_dashboard(state):
     pf_closed_rows = ""
     for t in pf_closed:
         dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
-        pnl_color = "#22c55e" if t["pnl_usd"] > 0 else "#ef4444"
+        pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
         pf_closed_rows += f"""
         <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>${t['size_usd']:.2f}</td>
         <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td><td>{risk_dot(t['risk'])}</td></tr>"""
+
+    portfolio_desc = (
+        "Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, "
+        '"ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. '
+        f"Suurus on kas fikseeritud {PORTFOLIO_POSITION_PCT*100:.0f}% (kuni mudel on piisavalt treenitud) "
+        f"või pärast seda veerand-Kelly kriteeriumi järgi ({KELLY_MIN_PCT*100:.0f}–{KELLY_MAX_PCT*100:.0f}% vahemikus). "
+        f"Algsaldo ${pf['starting_balance']:.0f}."
+    )
 
     html = f"""<!DOCTYPE html>
 <html lang="et">
@@ -1155,12 +1170,16 @@ def render_dashboard(state):
 <meta name="theme-color" content="#080b13">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Cryptobot Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
   :root {{
     --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47;
-    --text: #edf1f9; --muted: #8b94a8; --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee;
-    --pink: #ec4899; --green: #22c55e; --yellow: #eab308; --red: #ef4444;
+    --text: #f1eefb; --text2: #c7c2e0; --muted: #9a94b8;
+    --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee; --pink: #ec4899;
+    --good: #0ca30c; --warning: #fab219; --critical: #f4756f;
   }}
   * {{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }}
   html, body {{
@@ -1169,12 +1188,11 @@ def render_dashboard(state):
   html {{ scroll-behavior: smooth; min-height: 100%; }}
   body {{
     background:
-      radial-gradient(900px 480px at 12% -8%, rgba(124,127,242,0.18) 0%, transparent 60%),
-      radial-gradient(700px 420px at 100% 0%, rgba(34,211,238,0.12) 0%, transparent 55%),
-      radial-gradient(600px 500px at 90% 60%, rgba(236,72,153,0.08) 0%, transparent 55%),
+      radial-gradient(900px 480px at 12% -8%, rgba(124,127,242,0.13) 0%, transparent 60%),
+      radial-gradient(700px 420px at 100% 0%, rgba(34,211,238,0.08) 0%, transparent 55%),
       var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     margin: 0; padding: 0; line-height: 1.55; -webkit-font-smoothing: antialiased;
     min-height: 100vh; min-height: 100dvh;
   }}
@@ -1188,122 +1206,112 @@ def render_dashboard(state):
     display: flex; align-items: center; gap: 12px;
   }}
   h1 .title-text {{
-    background: linear-gradient(100deg, var(--text) 30%, var(--accent2) 65%, var(--accent3) 100%);
+    background: linear-gradient(100deg, var(--text) 30%, var(--accent2) 70%, var(--accent3) 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    background-size: 200% auto; animation: shimmer 6s ease-in-out infinite;
   }}
   .logo-badge {{
     display: inline-flex; align-items: center; justify-content: center;
     width: 42px; height: 42px; border-radius: 13px; font-size: 21px; flex-shrink: 0;
     background: linear-gradient(140deg, var(--accent), var(--accent3) 60%, var(--pink) 120%);
-    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 18px -4px rgba(124,127,242,.6);
-    animation: glowpulse 3.2s ease-in-out infinite;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 18px -4px rgba(124,127,242,.55);
   }}
-  .subtitle {{ color: var(--muted); font-size: 12.5px; margin-top: 4px; }}
+  .subtitle {{ color: var(--muted); font-size: 12.5px; margin-top: 4px; font-weight: 500; }}
+  .method-btn {{
+    background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--border);
+    color: var(--text2); font: inherit; font-size: 12.5px; font-weight: 700;
+    padding: 9px 15px; border-radius: 10px; cursor: pointer; flex-shrink: 0;
+    transition: border-color .2s ease, color .2s ease, transform .2s ease;
+  }}
+  .method-btn:hover, .method-btn.open {{ border-color: rgba(124,127,242,.55); color: var(--text); transform: translateY(-1px); }}
+  .method-panel {{
+    display: none; margin: 0 0 20px; background: linear-gradient(160deg, var(--card2), var(--card));
+    border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px;
+  }}
+  .method-panel.open {{ display: block; }}
+  .method-panel .desc {{ color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }}
   .stats {{
     display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px; margin-bottom: 20px; width: 100%;
+    gap: 10px; margin-bottom: 20px; width: 100%;
   }}
   .stat-card {{
     background: linear-gradient(160deg, var(--card2), var(--card));
     border: 1px solid var(--border); border-radius: 14px;
     padding: 14px 16px; min-width: 0; position: relative; overflow: hidden;
-    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }}
-  .stat-card::before {{
-    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent3));
-    opacity: .0; transition: opacity .25s ease;
+    transition: transform .2s ease, border-color .2s ease;
   }}
   .stat-card::after {{
-    content: ""; position: absolute; width: 90px; height: 90px; border-radius: 50%;
-    top: -45px; right: -35px; filter: blur(22px); opacity: .35; pointer-events: none;
+    content: ""; position: absolute; width: 80px; height: 80px; border-radius: 50%;
+    top: -40px; right: -30px; filter: blur(24px); opacity: .22; pointer-events: none;
     background: var(--accent);
   }}
-  .stat-card:nth-child(4n+1)::after {{ background: var(--accent); }}
-  .stat-card:nth-child(4n+2)::after {{ background: var(--accent3); }}
-  .stat-card:nth-child(4n+3)::after {{ background: var(--pink); }}
-  .stat-card:nth-child(4n+4)::after {{ background: var(--green); }}
-  .stat-card:hover {{ transform: translateY(-3px); border-color: rgba(124,127,242,.5); box-shadow: 0 10px 24px -12px rgba(124,127,242,.35); }}
-  .stat-card:hover::before {{ opacity: 1; }}
+  .stat-card:hover {{ transform: translateY(-2px); border-color: rgba(124,127,242,.4); }}
   .stat-card .label {{
-    color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative;
   }}
   .stat-card .value {{
-    font-size: clamp(18px, 4vw, 24px); font-weight: 800; margin-top: 6px; letter-spacing: -.02em;
-    position: relative;
-    background: linear-gradient(100deg, var(--text), var(--accent2));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-size: clamp(18px, 4vw, 23px); font-weight: 800; margin-top: 6px; letter-spacing: -.02em;
+    position: relative; color: var(--text);
   }}
   .card {{
     background: linear-gradient(160deg, var(--card2), var(--card));
     border: 1px solid var(--border); border-radius: 16px;
-    padding: 20px; margin-bottom: 20px; width: 100%;
-    box-shadow: 0 8px 24px -12px rgba(0,0,0,.55);
-    animation: fadeInUp .5s cubic-bezier(.16,.8,.4,1) both;
-    transition: border-color .3s ease, box-shadow .3s ease;
+    padding: 20px; margin-bottom: 16px; width: 100%;
+    animation: fadeInUp .4s cubic-bezier(.16,.8,.4,1) both;
   }}
-  .card:hover {{ border-color: rgba(124,127,242,.35); box-shadow: 0 12px 32px -14px rgba(124,127,242,.25), 0 8px 24px -12px rgba(0,0,0,.55); }}
-  .card:nth-of-type(1) {{ animation-delay: .02s; }}
-  .card:nth-of-type(2) {{ animation-delay: .06s; }}
-  .card:nth-of-type(3) {{ animation-delay: .10s; }}
-  .card:nth-of-type(4) {{ animation-delay: .14s; }}
-  .card:nth-of-type(5) {{ animation-delay: .18s; }}
-  .card:nth-of-type(6) {{ animation-delay: .22s; }}
-  .card:nth-of-type(n+7) {{ animation-delay: .26s; }}
   .card > table, .card > .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; display: block; max-width: 100%; }}
-  .card h2 {{ font-size: 15px; margin: 0 0 4px; color: var(--text); font-weight: 650; display: flex; align-items: center; gap: 8px; }}
+  .card h2 {{ font-size: 14.5px; margin: 0 0 12px; color: var(--text); font-weight: 700; display: flex; align-items: center; gap: 7px; letter-spacing: -.005em; }}
   .card .desc {{ color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }}
+  .info {{
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(124,127,242,0.15); border: 1px solid rgba(124,127,242,0.4);
+    color: var(--accent2); font-size: 10px; font-weight: 800; cursor: help; user-select: none;
+  }}
+  .info .info-pop {{
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 40;
+    width: max-content; max-width: min(300px, 78vw);
+    background: #1c2440; border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--text2);
+    line-height: 1.55; box-shadow: 0 14px 30px -10px rgba(0,0,0,.7);
+    opacity: 0; visibility: hidden; transform: translateY(-4px); pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+  }}
+  .info:hover .info-pop, .info:focus .info-pop, .info.open .info-pop {{
+    opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+  }}
   .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; max-width: 100%; }}
-  table {{ border-collapse: collapse; width: 100%; font-size: 13px; min-width: 480px; }}
-  th {{ text-align: left; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }}
-  td {{ padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }}
+  table {{ border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 480px; }}
+  th {{ text-align: left; color: var(--muted); font-weight: 700; padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; }}
+  td {{ padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }}
   tr:last-child td {{ border-bottom: none; }}
-  tr {{ transition: background .2s ease; }}
-  tr:hover td {{ background: rgba(124,127,242,0.06); }}
-  .mono {{ font-family: ui-monospace, "SF Mono", Menlo, monospace; }}
+  .mono {{ font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--text); }}
   .why {{ color: var(--muted); max-width: 420px; }}
   .dot {{
-    display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px;
-    box-shadow: 0 0 8px currentColor; animation: pulse 2.4s ease-in-out infinite;
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
   }}
-  .thresholds {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 12px; font-size: 13px; color: var(--muted); width: 100%; }}
+  .thresholds {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 10px; font-size: 13px; color: var(--muted); width: 100%; }}
   .thresholds > div {{
     background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
-    transition: transform .25s ease, border-color .25s ease;
   }}
-  .thresholds > div:hover {{ transform: translateY(-2px); border-color: rgba(124,127,242,.4); }}
-  .thresholds b {{ color: var(--text); display: block; font-size: 17px; margin-top: 2px; }}
+  .thresholds b {{ color: var(--text); display: block; font-size: 17px; margin-top: 2px; font-weight: 700; }}
   .tag {{
     display: inline-block; font-size: 10px; background: linear-gradient(120deg, var(--accent), var(--accent3));
     color: white; padding: 2px 7px; border-radius: 6px; margin-left: 4px; font-weight: 700;
   }}
   .log-entry {{ font-size: 13px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--border); }}
   .log-entry:last-child {{ border-bottom: none; }}
-  .log-ts {{ color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; font-weight: 600; }}
+  .log-ts {{ color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; font-weight: 700; }}
   .model-status {{
-    font-size: 13px; padding: 12px 14px; background: rgba(124,127,242,0.12);
-    border: 1px solid rgba(124,127,242,.4); border-radius: 10px; margin-bottom: 14px;
+    font-size: 13px; padding: 12px 14px; background: rgba(124,127,242,0.10);
+    border: 1px solid rgba(124,127,242,.35); border-radius: 10px; margin-bottom: 14px; color: var(--text2);
   }}
   canvas {{ max-width: 100%; }}
   ::-webkit-scrollbar {{ height: 8px; width: 8px; }}
   ::-webkit-scrollbar-thumb {{ background: var(--border); border-radius: 8px; }}
   @keyframes fadeInUp {{
-    from {{ opacity: 0; transform: translateY(10px); }}
+    from {{ opacity: 0; transform: translateY(8px); }}
     to {{ opacity: 1; transform: translateY(0); }}
-  }}
-  @keyframes shimmer {{
-    0%, 100% {{ background-position: 0% 50%; }}
-    50% {{ background-position: 100% 50%; }}
-  }}
-  @keyframes pulse {{
-    0%, 100% {{ opacity: 1; }}
-    50% {{ opacity: .55; }}
-  }}
-  @keyframes glowpulse {{
-    0%, 100% {{ box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 18px -4px rgba(124,127,242,.6); }}
-    50% {{ box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 26px -2px rgba(124,127,242,.9); }}
   }}
   @media (prefers-reduced-motion: reduce) {{
     *, *::before, *::after {{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }}
@@ -1313,7 +1321,7 @@ def render_dashboard(state):
     .card {{ padding: 16px; border-radius: 14px; }}
     .stats {{ gap: 8px; }}
     .stat-card {{ padding: 12px 12px; border-radius: 12px; }}
-    table {{ font-size: 12.5px; }}
+    table {{ font-size: 12px; }}
     .why {{ max-width: 220px; }}
   }}
 </style>
@@ -1323,19 +1331,12 @@ def render_dashboard(state):
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V3 (riskiga momentum + OLS trend + BTC-alpha + veebi hype + õppiv mudel + Kelly-panustamine)</div>
+      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V3</div>
     </div>
+    <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
 
-  <div class="stats">
-    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">{len(pending)}</div></div>
-    <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
-    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
-  </div>
-
-  <div class="card">
-    <h2>📐 Metoodika - kuidas skoor ja panuse suurus arvutatakse</h2>
+  <div class="method-panel" id="methodPanel">
     <div class="desc">Iga number sellel lehel tuleb ühest neist viiest arvutusest.</div>
     <div class="table-scroll"><table>
       <tr><th>Mõõdik</th><th>Idee</th><th>Miks see loeb</th></tr>
@@ -1347,30 +1348,35 @@ def render_dashboard(state):
     </table></div>
   </div>
 
+  <div class="stats">
+    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">{len(pending)}</div></div>
+    <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
+    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
+  </div>
+
   <div class="card">
-    <h2>Tulemuste kokkuvõte - kui kasulik see päriselt on</h2>
-    <div class="desc">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</div>
+    <h2>Tulemuste kokkuvõte{info_badge("Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.")}</h2>
     <div class="stats" style="margin-bottom:0">
-      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:#22c55e">{n_profit}</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:#ef4444">{n_loss}</div></div>
+      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">{n_profit}</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">{n_loss}</div></div>
       <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">{f'{avg_return:+.1f}%' if avg_return is not None else '–'}</div></div>
-      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:#22c55e">{f"{best['instrument']} {best['result_24h']['return_pct']:+.1f}%" if best else '–'}</div></div>
-      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:#ef4444">{f"{worst['instrument']} {worst['result_24h']['return_pct']:+.1f}%" if worst else '–'}</div></div>
+      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">{f"{best['instrument']} {best['result_24h']['return_pct']:+.1f}%" if best else '–'}</div></div>
+      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">{f"{worst['instrument']} {worst['result_24h']['return_pct']:+.1f}%" if worst else '–'}</div></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>💰 Virtuaalne portfell (mängu raha, mitte päris)</h2>
-    <div class="desc">Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. Suurus on kas fikseeritud {PORTFOLIO_POSITION_PCT*100:.0f}% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi ({KELLY_MIN_PCT*100:.0f}–{KELLY_MAX_PCT*100:.0f}% vahemikus, sõltuvalt mudeli enesekindlusest ja ajaloolisest võidu/kaotuse suhtest). Algsaldo ${pf['starting_balance']:.0f}. See EI OLE päris raha ega päris kauplemine.</div>
+    <h2>💰 Virtuaalne portfell{info_badge(portfolio_desc)}</h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'#22c55e' if pf['balance']>=pf['starting_balance'] else '#ef4444'}">${pf['balance']:.2f}</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'#22c55e' if pf_return_pct>=0 else '#ef4444'}">{pf_return_pct:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'var(--good)' if pf['balance']>=pf['starting_balance'] else 'var(--critical)'}">${pf['balance']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'var(--good)' if pf_return_pct>=0 else 'var(--critical)'}">{pf_return_pct:+.1f}%</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">{len(pf_open)}/{pf['max_open_positions']}</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value" style="background:none;-webkit-text-fill-color:initial;color:var(--text)">{pf_wins}✅ / {pf_losses}❌</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">{pf_wins}✅ / {pf_losses}❌</div></div>
       <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">{f'{pf_sharpe:.2f}' if pf_sharpe is not None else '–'}</div></div>
-      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:#ef4444">{f'-{pf_drawdown:.1f}%' if pf_drawdown else '0.0%'}</div></div>
+      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">{f'-{pf_drawdown:.1f}%' if pf_drawdown else '0.0%'}</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f'{pf_profit_factor:.2f}' if pf_profit_factor is not None else '–'}</div></div>
-      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:{'#22c55e' if (pf_expectancy or 0)>=0 else '#ef4444'}">{f'{pf_expectancy:+.2f}%' if pf_expectancy is not None else '–'}</div></div>
+      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:{'var(--good)' if (pf_expectancy or 0)>=0 else 'var(--critical)'}">{f'{pf_expectancy:+.2f}%' if pf_expectancy is not None else '–'}</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     {portfolio_chart_script if portfolio_chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>'}
@@ -1387,8 +1393,7 @@ def render_dashboard(state):
   </div>
 
   <div class="card">
-    <h2>Õppiv mudel</h2>
-    <div class="desc">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida ma algul arvasin.</div>
+    <h2>Õppiv mudel{info_badge("Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.")}</h2>
     <div class="model-status">{model_status}</div>
     <div class="table-scroll"><table>
       <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n={corr_n})</th></tr>
@@ -1397,20 +1402,18 @@ def render_dashboard(state):
   </div>
 
   <div class="card">
-    <h2>Tabamusprotsent üle aja</h2>
-    <div class="desc">Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.</div>
+    <h2>Tabamusprotsent üle aja{info_badge("Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.")}</h2>
     <canvas id="hitRateChart" height="80"></canvas>
     {chart_script if chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar lahendatud tulemust, enne kui graafik ilmub.</div>'}
   </div>
 
   <div class="card">
-    <h2>Õpipäevik</h2>
-    <div class="desc">Mida süsteem viimati enda kohta õppis, tavakeeles.</div>
+    <h2>Õpipäevik{info_badge("Mida süsteem viimati enda kohta õppis, tavakeeles.")}</h2>
     {learning_log_rows or '<div style="color:var(--muted)">Veel pole midagi õppida olnud - vajab lahendatud tulemusi.</div>'}
   </div>
 
   <div class="card">
-    <h2>Praegused riski-lävendid (kohandatud automaatselt tagasiside põhjal)</h2>
+    <h2>Riski-lävendid{info_badge("Kohandatakse automaatselt tagasiside põhjal.")}</h2>
     <div class="thresholds">
       <div>Skanni lävi: <b>{thresholds['screen_score']}</b></div>
       <div>🟢 roheline tabamuslävi: <b>{thresholds['green_hit_bar']}</b></div>
@@ -1420,8 +1423,7 @@ def render_dashboard(state):
   </div>
 
   <div class="card">
-    <h2>Soovituste ajalugu (uusimad enne)</h2>
-    <div class="desc">🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</div>
+    <h2>Soovituste ajalugu{info_badge("Uusimad enne. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.")}</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       {history_rows or '<tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>'}
@@ -1436,6 +1438,28 @@ def render_dashboard(state):
     </table></div>
   </div>
 </div>
+<script>
+  document.querySelectorAll('.info').forEach(function(b) {{
+    b.addEventListener('click', function(e) {{
+      e.stopPropagation();
+      var wasOpen = b.classList.contains('open');
+      document.querySelectorAll('.info.open').forEach(function(o) {{ o.classList.remove('open'); }});
+      if (!wasOpen) b.classList.add('open');
+    }});
+  }});
+  var methodBtn = document.getElementById('methodBtn');
+  var methodPanel = document.getElementById('methodPanel');
+  if (methodBtn && methodPanel) {{
+    methodBtn.addEventListener('click', function(e) {{
+      e.stopPropagation();
+      methodBtn.classList.toggle('open');
+      methodPanel.classList.toggle('open');
+    }});
+  }}
+  document.addEventListener('click', function() {{
+    document.querySelectorAll('.info.open').forEach(function(o) {{ o.classList.remove('open'); }});
+  }});
+</script>
 </body>
 </html>"""
     with open(DASHBOARD_PATH, "w") as f:
