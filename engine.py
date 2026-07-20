@@ -647,6 +647,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.append("Tagasivaade: " + "; ".join(followup_notes))
     if threshold_notes:
         lines.append("Mudel kohandus: " + "; ".join(threshold_notes))
+    if alerts:
+        lines.append("Dashboard: https://skrrrando.github.io/cryptobot/")
 
     summary = "\n".join(lines)
     with open(out_summary_path, "w") as f:
