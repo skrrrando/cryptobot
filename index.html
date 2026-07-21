@@ -167,7 +167,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 21.07.2026 17:18 UTC · V3</div>
+      <div class="subtitle">Uuendatud 21.07.2026 19:20 UTC · V3</div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -185,78 +185,107 @@
   </div>
 
   <div class="stats">
-    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">57</div></div>
+    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">61</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
-    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">–</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">0</div></div>
+    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">17%</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">6</div></div>
   </div>
 
   <div class="card">
     <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
     <div class="stats" style="margin-bottom:0">
-      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">0</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">0</div></div>
-      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">–</div></div>
-      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">–</div></div>
-      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">–</div></div>
+      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">3</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">3</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">+1.9%</div></div>
+      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">ONDOUSD +12.5%</div></div>
+      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">NEARUSD -1.3%</div></div>
     </div>
   </div>
 
   <div class="card">
     <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$773.78</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-22.6%</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">5/5</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">0✅ / 0❌</div></div>
-      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">–</div></div>
-      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">0.0%</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">–</div></div>
-      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">–</div></div>
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$819.14</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-18.1%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">4/5</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">3✅ / 2❌</div></div>
+      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">8.15</div></div>
+      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-17.7%</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">6.38</div></div>
+      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+2.44%</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
-    <div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>
+    
+        <script>
+          const ctx2 = document.getElementById('portfolioChart');
+          new Chart(ctx2, {
+            type: 'line',
+            data: {
+              labels: ["algus", "21.07 19:20", "21.07 19:20", "21.07 19:20", "21.07 19:20", "21.07 19:20"],
+              datasets: [{
+                label: 'Virtuaalne saldo ($)',
+                data: [1000.0, 823.12, 876.55, 921.82, 964.28, 1005.69],
+                borderColor: "#ef4444",
+                backgroundColor: "rgba(239,68,68,0.12)",
+                tension: 0.25, fill: true, pointRadius: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: { y: { ticks: { color: '#8b94a8' } }, x: { ticks: { color: '#8b94a8' } } },
+              plugins: { legend: { labels: { color: '#e5e9f0' } } }
+            }
+          });
+        </script>
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
       
-        <tr><td>20.07 18:51</td><td class="mono">NEARUSD</td><td>$50.00 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">–</span></td>
-        <td class="mono">1.9696</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>20.07 18:51</td><td class="mono">ONDOUSD</td><td>$47.50 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">–</span></td>
-        <td class="mono">0.35754</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>20.07 18:51</td><td class="mono">BONKUSD</td><td>$45.12 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">–</span></td>
-        <td class="mono">3.042e-06</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>20.07 18:51</td><td class="mono">FARTCOINUSD</td><td>$42.87 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">–</span></td>
-        <td class="mono">0.13994</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>20.07 18:51</td><td class="mono">VIRTUALUSD</td><td>$40.73 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">–</span></td>
-        <td class="mono">0.6539</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">ONDOUSD</td><td>$50.28 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
+        <td class="mono">0.40216</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">HBARUSD</td><td>$47.77 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
+        <td class="mono">0.069549</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">BCHUSD</td><td>$45.38 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
+        <td class="mono">223.81</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">OPUSD</td><td>$43.11 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
+        <td class="mono">0.0972</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
-      <tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi kauplust suletud.</td></tr>
+      
+        <tr><td>21.07 19:20</td><td class="mono">VIRTUALUSD</td><td>$40.73</td>
+        <td style="color:#0ca30c">+1.7% ($+0.68)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">FARTCOINUSD</td><td>$42.87</td>
+        <td style="color:#f4756f">-0.9% ($-0.40)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">BONKUSD</td><td>$45.12</td>
+        <td style="color:#0ca30c">+0.3% ($+0.15)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">ONDOUSD</td><td>$47.50</td>
+        <td style="color:#0ca30c">+12.5% ($+5.93)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <tr><td>21.07 19:20</td><td class="mono">NEARUSD</td><td>$50.00</td>
+        <td style="color:#f4756f">-1.3% ($-0.66)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
     </table></div>
   </div>
 
   <div class="card">
     <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel õpib (0/15 tulemust) - skoor põhineb veel ainult käsitsi reeglitel</div>
+    <div class="model-status">Mudel õpib (6/15 tulemust) - skoor põhineb veel ainult käsitsi reeglitel</div>
     <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=0)</th></tr>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=6)</th></tr>
       
-        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+1.60</td>
+        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+1.45</td>
+        <td>toetab tabamist</td><td class="mono">-0.38</td></tr>
+        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+1.04</td>
         <td>toetab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+1.10</td>
+        <tr><td>Likviidsus</td><td class="mono">+0.99</td>
         <td>toetab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Likviidsus</td><td class="mono">+1.00</td>
+        <tr><td>Meemi/trend-kategooria</td><td class="mono">-0.88</td>
+        <td>vähendab tabamist</td><td class="mono">-0.63</td></tr>
+        <tr><td>Volatiilsus</td><td class="mono">-0.84</td>
+        <td>vähendab tabamist</td><td class="mono">-0.37</td></tr>
+        <tr><td>Veebi hype-kinnitus</td><td class="mono">+1.08</td>
         <td>toetab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Meemi/trend-kategooria</td><td class="mono">-0.70</td>
-        <td>vähendab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Volatiilsus</td><td class="mono">-0.80</td>
-        <td>vähendab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Veebi hype-kinnitus</td><td class="mono">+1.20</td>
-        <td>toetab tabamist</td><td class="mono">–</td></tr>
-        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.90</td>
+        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.89</td>
         <td>toetab tabamist</td><td class="mono">–</td></tr>
     </table></div>
   </div>
@@ -264,12 +293,36 @@
   <div class="card">
     <h2>Tabamusprotsent üle aja<span class="info" tabindex="0">?<span class="info-pop">Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.</span></span></h2>
     <canvas id="hitRateChart" height="80"></canvas>
-    <div style="color:var(--muted)">Vaja on vähemalt paar lahendatud tulemust, enne kui graafik ilmub.</div>
+    
+        <script>
+          const ctx = document.getElementById('hitRateChart');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07"],
+              datasets: [{
+                label: 'Libisev tabamusprotsent (10 viimase pealt)',
+                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7],
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99,102,241,0.15)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: { y: { min: 0, max: 100, ticks: { color: '#8b94a8' } },
+                         x: { ticks: { color: '#8b94a8' } } },
+              plugins: { legend: { labels: { color: '#e5e9f0' } } }
+            }
+          });
+        </script>
   </div>
 
   <div class="card">
     <h2>Õpipäevik<span class="info" tabindex="0">?<span class="info-pop">Mida süsteem viimati enda kohta õppis, tavakeeles.</span></span></h2>
-    <div style="color:var(--muted)">Veel pole midagi õppida olnud - vajab lahendatud tulemusi.</div>
+    <div class="log-entry"><span class="log-ts">21.07 19:20</span> Tulemus (ei tabanud, ennustus oli 53%) muutis kaalu 'bias' nõrgemmaks (-0.59 -> -0.63).</div><div class="log-entry"><span class="log-ts">21.07 19:20</span> Tulemus (ei tabanud, ennustus oli 56%) muutis kaalu 'bias' nõrgemmaks (-0.54 -> -0.59).</div><div class="log-entry"><span class="log-ts">21.07 19:20</span> Tulemus (ei tabanud, ennustus oli 59%) muutis kaalu 'bias' nõrgemmaks (-0.49 -> -0.54).</div><div class="log-entry"><span class="log-ts">21.07 19:20</span> Tulemus (ei tabanud, ennustus oli 62%) muutis kaalu 'bias' nõrgemmaks (-0.44 -> -0.49).</div><div class="log-entry"><span class="log-ts">21.07 19:20</span> Tulemus (ei tabanud, ennustus oli 78%) muutis kaalu 'bias' nõrgemmaks (-0.40 -> -0.46).</div>
   </div>
 
   <div class="card">
@@ -287,6 +340,42 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       
+        <tr>
+          <td>21.07 19:20</td>
+          <td class="mono">ONDOUSD</td>
+          <td>98.3</td>
+          <td><span class="dot" style="background:#fab219"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 68.5/100 (24h +13.2%), trend kinnitatud (OLS R²=0.57 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +11.3pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $159,337). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #41. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</td>
+        </tr>
+        <tr>
+          <td>21.07 19:20</td>
+          <td class="mono">HBARUSD</td>
+          <td>97.3</td>
+          <td><span class="dot" style="background:#fab219"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 66.4/100 (24h +5.2%), trend kinnitatud (OLS R²=0.75 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.4pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $514,990). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #30. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</td>
+        </tr>
+        <tr>
+          <td>21.07 19:20</td>
+          <td class="mono">BCHUSD</td>
+          <td>69.9</td>
+          <td><span class="dot" style="background:#fab219"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 60.5/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.72), aga veel ebakindel. liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $88,641). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 83%.</td>
+        </tr>
+        <tr>
+          <td>21.07 19:20</td>
+          <td class="mono">OPUSD <span class="tag">EXPLORE</span></td>
+          <td>63.1</td>
+          <td><span class="dot" style="background:#fab219"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 58.5/100 (24h +4.6%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $28,389). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 79%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+        </tr>
         <tr>
           <td>21.07 17:18</td>
           <td class="mono">TAOUSD</td>
@@ -751,7 +840,7 @@
           <td class="mono">GOATUSD <span class="tag">EXPLORE</span></td>
           <td>55.5</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>-0.8% ❌</td>
           <td>ootel</td>
           <td class="why">Momentum 55.5/100 (24h +3.3%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $10,403). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
         </tr>
@@ -760,7 +849,7 @@
           <td class="mono">NEARUSD <span class="tag">EXPLORE</span></td>
           <td>55.2</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>-1.3% ❌</td>
           <td>ootel</td>
           <td class="why">Momentum 55.2/100 (24h +3.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $89,893). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
         </tr>
@@ -769,7 +858,7 @@
           <td class="mono">ONDOUSD <span class="tag">EXPLORE</span></td>
           <td>56.2</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>+12.5% ✅</td>
           <td>ootel</td>
           <td class="why">Momentum 56.2/100 (24h +3.7%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $20,953). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
         </tr>
@@ -778,7 +867,7 @@
           <td class="mono">BONKUSD <span class="tag">EXPLORE</span></td>
           <td>63.6</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>+0.3% ❌</td>
           <td>ootel</td>
           <td class="why">Momentum 63.6/100 (24h +8.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $47,324). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
         </tr>
@@ -787,18 +876,9 @@
           <td class="mono">FARTCOINUSD <span class="tag">EXPLORE</span></td>
           <td>62.3</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>-0.9% ❌</td>
           <td>ootel</td>
           <td class="why">Momentum 62.3/100 (24h +7.4%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $5,328). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
-        </tr>
-        <tr>
-          <td>20.07 18:51</td>
-          <td class="mono">VIRTUALUSD <span class="tag">EXPLORE</span></td>
-          <td>63.6</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
-          <td>ootel</td>
-          <td class="why">Momentum 63.6/100 (24h +8.1%), uus jälgimine, ajalugu veel liiga lühike trendi kinnitamiseks. Likviidsus: low (maht $20,165). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0/15 tulemust kogutud enne kui see skoori mõjutama hakkab). [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
         </tr>
     </table></div>
   </div>
@@ -808,6 +888,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>21.07 19:20</td><td>8</td><td>4</td>
+        <td>NEARUSD 24h: -1.3%; ONDOUSD 24h: +12.5%; BONKUSD 24h: +0.3%; FARTCOINUSD 24h: -0.9%; VIRTUALUSD 24h: +1.7%; GOATUSD 24h: -0.8%</td>
+        <td>-</td></tr>
         <tr><td>21.07 17:18</td><td>10</td><td>1</td>
         <td>-</td>
         <td>-</td></tr>
@@ -893,9 +976,6 @@
         <td>-</td>
         <td>-</td></tr>
         <tr><td>19.07 15:57</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>19.07 14:54</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
     </table></div>
