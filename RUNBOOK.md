@@ -8,7 +8,16 @@ See on käsiraamat, mida ajastatud ülesanne (scheduled task) iga tund täpselt 
 - `watchlist.json` — jälgitavad tokenid (major + meme/trend kategooriad). Vabalt muudetav.
 - `data/state.json` — kogu ajalugu, ootel/lõpetatud soovitused, adaptiivsed lävendid, portfell, kill-switch. EI kustutata kunagi, ainult uuendatakse.
 - `data/instrument_map.json` — watchlisti sümbol → börsi päris instrumendinimi (uuendatakse igal käivitusel; LiveBroker vajab orderite jaoks).
+- `data/candles_latest.json` — 24h jagu 15m OHLCV küünlaid iga instrumendi kohta (transient, gitignore'itud). Volatiilsus ja trend arvutatakse nendelt (96 punkti), hetktõmmised on varuvariant.
+- `data/book_notes.json` — orderiraamatu imbalance + spread Stage-1 kandidaatidele (transient). Lai spread (>1%) annab skooritrahvi; imbalance on mudeli tunnus.
+- `data/market_regime.json` — Fear & Greed indeks (transient). Mudeli tunnus `market_fng` + hoiatus summary's äärmuste (≤25 / ≥75) puhul.
 - `dashboard.html` — visuaalne ülevaade, genereeritakse iga käivituse lõpus uuesti.
+
+## Positsioonihaldus (V5)
+- **Osaline kasumivõtt**: +8% juures müüakse pool positsiooni (kasum pangas), teine pool jookseb edasi.
+- **Trailing stop**: kui tipp on ≥ +4% sisenemisest, järgneb stop 3% kaugusel tipust (ainult ülespoole). Live-režiimis cancel+replace päris stop-order.
+- **Vahetusloogika**: täis raamatu korral vahetatakse nõrgim ≥1% miinuses positsioon välja, kui uus kandidaat on ≥12 punkti tugevam (max 1/tunnis).
+- **Täis-treening**: iga 20 uue lahendatud tulemuse järel treenitakse mudel nullist kogu ajaloo peal uuesti (150 epohhi) - stabiilsemad kaalud kui ainult ükshaaval õppides.
 
 ## Iga tunni sammud (mida agent teeb)
 

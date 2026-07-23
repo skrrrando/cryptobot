@@ -35,7 +35,15 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
 
 CRYPTO_COM_TICKER_URL = "https://api.crypto.com/exchange/v1/public/get-tickers"
+CRYPTO_COM_CANDLE_URL = "https://api.crypto.com/exchange/v1/public/get-candlestick"
+CRYPTO_COM_BOOK_URL = "https://api.crypto.com/exchange/v1/public/get-book"
+FNG_URL = "https://api.alternative.me/fng/?limit=1"
 COINGECKO_COIN_URL = "https://api.coingecko.com/api/v3/coins/{id}"
+
+CANDLE_TIMEFRAME = "15m"
+CANDLE_COUNT = 96   # 24h of 15m candles - engine uses these for volatility
+                    # (96 return samples) and trend (24 points over 6h)
+                    # instead of the 6..24 sparse hourly snapshots
 
 # watchlist symbol -> CoinGecko coin id, resolved once via CoinGecko's /search
 # endpoint (picking the highest-market-cap-rank exact ticker match for each
@@ -131,6 +139,72 @@ def fetch_all_tickers(instruments):
     return out
 
 
+def fetch_candles(real_name):
+    """24h of 15m OHLCV candles for one real exchange instrument. Returns a
+    list of {t,o,h,l,c,v} dicts (oldest first) or None on any failure -
+    engine.py falls back to hourly-snapshot math when candles are missing."""
+    url = (f"{CRYPTO_COM_CANDLE_URL}?instrument_name={real_name}"
+           f"&timeframe={CANDLE_TIMEFRAME}&count={CANDLE_COUNT}")
+    try:
+        raw = http_get_json(url)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):
+        return None
+    data = (raw.get("result") or {}).get("data") or []
+    out = []
+    for d in data:
+        try:
+            out.append({"t": d["t"], "o": float(d["o"]), "h": float(d["h"]),
+                        "l": float(d["l"]), "c": float(d["c"]), "v": float(d["v"])})
+        except (KeyError, ValueError, TypeError):
+            continue
+    return out or None
+
+
+def fetch_book_note(real_name, depth=10):
+    """Order book snapshot -> two numbers the engine can use: notional
+    imbalance of the top levels (-1 = all sell pressure, +1 = all buy
+    pressure) and the bid/ask spread in %. Thin/wide books are where market
+    orders get hurt - the engine penalizes them before opening anything."""
+    url = f"{CRYPTO_COM_BOOK_URL}?instrument_name={real_name}&depth={depth}"
+    try:
+        raw = http_get_json(url)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):
+        return None
+    data = (raw.get("result") or {}).get("data") or []
+    if not data:
+        return None
+    d = data[0]
+    try:
+        bids = [(float(p), float(q)) for p, q, *_ in (d.get("bids") or [])]
+        asks = [(float(p), float(q)) for p, q, *_ in (d.get("asks") or [])]
+        if not bids or not asks:
+            return None
+        bid_notional = sum(p * q for p, q in bids)
+        ask_notional = sum(p * q for p, q in asks)
+        total = bid_notional + ask_notional
+        if total <= 0:
+            return None
+        imbalance = (bid_notional - ask_notional) / total
+        mid = (bids[0][0] + asks[0][0]) / 2
+        spread_pct = (asks[0][0] - bids[0][0]) / mid * 100 if mid > 0 else None
+        return {"imbalance": round(imbalance, 3), "spread_pct": round(spread_pct, 4)}
+    except (ValueError, TypeError, IndexError):
+        return None
+
+
+def fetch_market_regime():
+    """Crypto Fear & Greed index (free, one number 0-100). Market-wide mood:
+    momentum behaves differently in panic vs greed phases, so the model gets
+    this as a feature and learns what it is worth. Returns dict or {}."""
+    try:
+        raw = http_get_json(FNG_URL)
+        d = (raw.get("data") or [{}])[0]
+        return {"value": int(d["value"]), "classification": d.get("value_classification", "")}
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError,
+            ValueError, KeyError, TypeError, IndexError):
+        return {}
+
+
 def fetch_hype_note(symbol):
     """Real hype/sentiment check for one Stage-1 candidate, sourced from
     CoinGecko's free public API instead of a live web search (not available
@@ -208,8 +282,26 @@ def main():
                       for t in tickers if t.get("real_instrument")}
     engine.save_json(os.path.join(DATA_DIR, "instrument_map.json"), instrument_map)
 
+    # 15m OHLCV candles for every watched instrument - real intra-hour data
+    # for volatility/trend instead of one snapshot per hour.
+    candles = {}
+    for symbol, real_name in instrument_map.items():
+        cd = fetch_candles(real_name)
+        if cd:
+            candles[symbol] = cd
+        time.sleep(0.12)
+    candles_path = os.path.join(DATA_DIR, "candles_latest.json")
+    engine.save_json(candles_path, candles)
+    print(f"Fetched candles for {len(candles)}/{len(instrument_map)} instruments.")
+
+    # Market-wide mood (Fear & Greed) - one call per run.
+    regime = fetch_market_regime()
+    engine.save_json(os.path.join(DATA_DIR, "market_regime.json"), regime)
+    if regime:
+        print(f"Turu meeleolu: {regime.get('classification')} ({regime.get('value')}/100)")
+
     candidates_path = os.path.join(DATA_DIR, "candidates.json")
-    engine.screen(tickers_path, candidates_path)
+    engine.screen(tickers_path, candidates_path, candles_path=candles_path)
 
     # Real hype/sentiment check for just the Stage-1 candidates (not all 45
     # watched instruments) via CoinGecko - see fetch_hype_note() docstring
@@ -224,6 +316,21 @@ def main():
     engine.save_json(hype_notes_path, hype_notes)
     n_found = sum(1 for n in hype_notes.values() if n.get("found"))
     print(f"Hype-kontroll: {n_found}/{len(hype_notes)} kandidaadi kohta leidus CoinGecko andmeid.")
+
+    # Order book snapshot for each Stage-1 candidate (thin-book guard +
+    # buy/sell pressure feature for the model).
+    book_notes = {}
+    for c in candidates:
+        inst = c["instrument"]
+        real = instrument_map.get(inst)
+        if not real:
+            continue
+        note = fetch_book_note(real)
+        if note:
+            book_notes[inst] = note
+        time.sleep(0.12)
+    book_notes_path = os.path.join(DATA_DIR, "book_notes.json")
+    engine.save_json(book_notes_path, book_notes)
 
     # Fresh prices for everything the finalize step manages: pending 24h/7d
     # followups AND open portfolio positions (stop-loss checks need a price
@@ -243,7 +350,8 @@ def main():
     engine.save_json(current_prices_path, current_prices)
 
     summary_path = os.path.join(DATA_DIR, "summary_latest.txt")
-    engine.finalize(candidates_path, hype_notes_path, current_prices_path, summary_path)
+    engine.finalize(candidates_path, hype_notes_path, current_prices_path, summary_path,
+                    candles_path=candles_path, book_path=book_notes_path)
 
     with open(summary_path) as f:
         summary = f.read()

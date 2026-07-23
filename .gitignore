@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+# transient per-run data - re-fetched every hour, would bloat git history
+data/candles_latest.json
+data/book_notes.json
+data/market_regime.json

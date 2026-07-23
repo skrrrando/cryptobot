@@ -85,7 +85,8 @@ VOL_WINDOW = 24     # snapshots used for the rolling volatility estimate (~1 day
 TREND_WINDOW = 6    # snapshots used for the OLS trend fit (~6h at hourly cadence)
 
 # Feature order matters - it's the order weights/x vectors are stored in.
-FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility", "hype_bonus", "alpha"]
+FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility",
+                 "hype_bonus", "alpha", "book_imbalance", "market_fng"]
 
 # Initial weights: a reasonable hand-set prior (mirrors the original heuristic
 # direction) that then gets refined by real evidence via train_step().
@@ -98,6 +99,8 @@ INITIAL_WEIGHTS = {
     "volatility": -0.8,
     "hype_bonus": 1.2,
     "alpha": 0.9,   # prior: genuine outperformance vs. BTC predicts follow-through better than raw noise
+    "book_imbalance": 0.5,  # prior: visible buy pressure in the order book supports follow-through
+    "market_fng": 0.0,      # no prior - let the data decide what market mood is worth
 }
 
 MODEL_MIN_TRAINING = 15   # need this many resolved outcomes before the model is trusted for POSITION SIZING (Kelly)
@@ -150,6 +153,20 @@ SWAP_LOSER_MAX_RETURN_PCT = -1.0   # holding must be at least this far under wat
 SWAP_MIN_HOLD_HOURS = 2
 SWAP_MAX_PER_RUN = 1
 
+# Upside management. Old behavior was asymmetric: protected below (-8% stop)
+# but blind above - a position could ride +15% and give it all back before
+# the fixed 24h exit. Two mechanisms fix that:
+#   - Partial take-profit: at +TAKE_PROFIT_PCT sell TAKE_PROFIT_FRACTION of
+#     the position (bank real profit), let the rest keep running.
+#   - Trailing stop: once the high-water mark is +TRAIL_ARM_PCT above entry,
+#     the stop starts following TRAIL_DIST_PCT below the highest price seen,
+#     locking in gains instead of waiting passively for the 24h bell.
+# The 24h exit still closes whatever remains.
+TAKE_PROFIT_PCT = 8.0
+TAKE_PROFIT_FRACTION = 0.5
+TRAIL_ARM_PCT = 4.0
+TRAIL_DIST_PCT = 3.0
+
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
     "alerted": {},          # instrument -> {last_score, last_ts, last_risk}
@@ -164,6 +181,7 @@ DEFAULT_STATE = {
     "model": {
         "weights": dict(INITIAL_WEIGHTS),
         "n_updates": 0,
+        "last_full_retrain_n": 0,   # resolved-outcome count at the last full batch retrain
         "learning_log": []   # [{ts, text}], plain-language "what I just learned"
     },
     "pending_followups": [],   # awaiting 24h and/or 7d outcome check
@@ -226,6 +244,7 @@ def load_state():
     for fn in FEATURE_NAMES:
         st["model"]["weights"].setdefault(fn, INITIAL_WEIGHTS[fn])
     st["model"].setdefault("n_updates", 0)
+    st["model"].setdefault("last_full_retrain_n", 0)
     st["model"].setdefault("learning_log", [])
     st.setdefault("portfolio", _deep_default(DEFAULT_STATE["portfolio"]))
     for k, v in DEFAULT_STATE["portfolio"].items():
@@ -266,7 +285,8 @@ def sigmoid(z):
     return 1.0 / (1.0 + math.exp(-z))
 
 
-def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus, alpha_val=0.0):
+def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus,
+                   alpha_val=0.0, book_imbalance=0.0, fng_value=None):
     liq_map = {"low": 0.0, "medium": 0.5, "high": 1.0}
     return {
         "bias": 1.0,
@@ -278,6 +298,10 @@ def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24
         "hype_bonus": clamp((hype_bonus + 30) / 60.0, 0, 1),
         # alpha_val is a fraction (0.03 = 3pp outperformance vs BTC); -10pp..+15pp -> 0..1
         "alpha": clamp((alpha_val * 100 + 10) / 25.0, 0, 1),
+        # order book notional imbalance -1..+1 -> 0..1 (0.5 = balanced/unknown)
+        "book_imbalance": clamp((book_imbalance + 1) / 2, 0, 1),
+        # Fear & Greed 0..100 -> 0..1 (0.5 = neutral/unknown)
+        "market_fng": (fng_value / 100.0) if fng_value is not None else 0.5,
     }
 
 
@@ -307,6 +331,58 @@ def train_step(state, features, hit):
                 f"'{biggest}' {direction}maks ({old_weights[biggest]:.2f} -> {weights[biggest]:.2f}).")
         state["model"]["learning_log"].append({"ts": now_ts(), "text": note})
         state["model"]["learning_log"] = state["model"]["learning_log"][-80:]
+
+
+RETRAIN_EVERY = 20     # full batch retrain after this many NEW resolved outcomes
+RETRAIN_EPOCHS = 150
+
+
+def full_retrain(state):
+    """Periodic full batch retraining alongside the per-outcome online steps.
+
+    Online learning (one gradient step per result, in arrival order) is
+    cheap but noisy: with less than ~100 samples the weights depend on the
+    ORDER outcomes happened to arrive in, and one weird streak can drag
+    them somewhere a full look at the data wouldn't. So after every
+    RETRAIN_EVERY new resolved outcomes, refit from the prior on the ENTIRE
+    resolved history: multiple shuffled epochs (fixed seed, deterministic)
+    with a decaying learning rate and the same L2 penalty. The batch result
+    replaces the online-accumulated weights; online learning then continues
+    from this better-calibrated base until the next full retrain."""
+    rows = [(r["features"], 1.0 if r["result_24h"]["hit"] else 0.0)
+            for r in state["completed"] + state["pending_followups"]
+            if r.get("result_24h") and r.get("features")]
+    n = len(rows)
+    if n < RETRAIN_EVERY or n - state["model"].get("last_full_retrain_n", 0) < RETRAIN_EVERY:
+        return None
+
+    weights = dict(INITIAL_WEIGHTS)
+    rng = random.Random(42)
+    order = list(range(n))
+    for epoch in range(RETRAIN_EPOCHS):
+        rng.shuffle(order)
+        lr = LEARNING_RATE * (1 - 0.9 * epoch / RETRAIN_EPOCHS)  # decay to 10%
+        for i in order:
+            feats, y = rows[i]
+            p = model_predict(weights, feats)
+            error = y - p
+            for k in FEATURE_NAMES:
+                reg = 0.0 if k == "bias" else L2_LAMBDA * weights[k]
+                weights[k] = weights[k] + lr * (error * feats.get(k, 0.0) - reg)
+
+    correct = sum(1 for feats, y in rows
+                  if (model_predict(weights, feats) >= 0.5) == (y == 1.0))
+    old_weights = state["model"]["weights"]
+    biggest = max(FEATURE_NAMES, key=lambda k: abs(weights.get(k, 0) - old_weights.get(k, 0)))
+    state["model"]["weights"] = weights
+    state["model"]["last_full_retrain_n"] = n
+    note = (f"Täis-treening: mudel treeniti nullist uuesti kogu {n} tulemuse peal "
+            f"({RETRAIN_EPOCHS} epohhi, segatud järjekord) - stabiilsemad kaalud kui "
+            f"ükshaaval õppides. Treeningtäpsus {correct / n:.0%}, suurim muutus "
+            f"'{biggest}' ({old_weights.get(biggest, 0):+.2f} -> {weights.get(biggest, 0):+.2f}).")
+    state["model"]["learning_log"].append({"ts": now_ts(), "text": note})
+    state["model"]["learning_log"] = state["model"]["learning_log"][-80:]
+    return note
 
 
 def model_credibility(n_updates):
@@ -591,22 +667,114 @@ def maybe_swap_position(state, rec_id, instrument, price, ts, risk, score, brk,
     return note, opened
 
 
-def check_stop_losses(state, current_prices, brk):
-    """Once per run, for every open position: did the stop-loss trigger?
-    Paper mode simulates the fill at the stop level; live mode checks the
-    real resting order's status (and market-sells as a backstop if the
-    resting order was never successfully placed). Returns notes for the
-    summary message."""
+def _book_partial_close(state, pos, fraction, fill, exit_ts, reason):
+    """Realize a FRACTION of a position (partial take-profit): the sold part
+    becomes its own closed trade, the position shrinks proportionally and
+    stays open. P&L for the sold part is net of both sides' fees."""
+    pf = state["portfolio"]
+    part_size = round(pos["size_usd"] * fraction, 2)
+    pnl_usd = fill["proceeds_usd"] - part_size
+    pnl_pct = pnl_usd / part_size * 100 if part_size else 0.0
+    pf["balance"] += fill["proceeds_usd"]
+    pf["closed_trades"].append({
+        "id": pos["id"], "instrument": pos["instrument"], "entry_price": pos["entry_price"],
+        "exit_price": fill["price"], "size_usd": part_size, "entry_ts": pos["entry_ts"],
+        "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct, 2),
+        "entry_fee_usd": round(pos.get("entry_fee_usd", 0.0) * fraction, 4),
+        "exit_fee_usd": round(fill["fee_usd"], 4),
+        "exit_reason": reason, "mode": pos.get("mode", "paper"), "partial": True,
+        "risk": pos["risk"], "score": pos["score"], "category": pos.get("category", "unknown")
+    })
+    pf["closed_trades"] = pf["closed_trades"][-300:]
+    pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
+    pf["balance_history"] = pf["balance_history"][-500:]
+    remain = 1 - fraction
+    pos["quantity"] *= remain
+    pos["size_usd"] = round(pos["size_usd"] * remain, 2)
+    pos["entry_fee_usd"] = round(pos.get("entry_fee_usd", 0.0) * remain, 4)
+    pos["partial_taken"] = True
+
+
+def manage_positions(state, current_prices, candles_all, brk):
+    """Once per run, for every open position, in this order:
+      1. update the high-water mark (uses the last hour's candle HIGH when
+         available, not just the once-an-hour snapshot price);
+      2. partial take-profit at +TAKE_PROFIT_PCT (sell half, bank it);
+      3. trailing stop: once armed (+TRAIL_ARM_PCT), raise the stop to
+         TRAIL_DIST_PCT below the high-water mark - never lowered;
+      4. stop trigger check - paper simulates (candle-LOW aware, so an
+         intra-hour dip through the stop counts); live checks/replaces the
+         real resting order on the exchange.
+    Returns notes for the summary message."""
     pf = state["portfolio"]
     notes = []
     for pos in list(pf["open_positions"]):
-        fill = brk.check_stop_order(pos, current_prices.get(pos["instrument"]))
-        if not fill:
-            continue
-        _book_close(state, pos, fill["price"], fill["proceeds_usd"], fill["fee_usd"],
-                    now_ts(), "stop_loss")
-        t = pf["closed_trades"][-1]
-        notes.append(f"🛑 STOP-LOSS: {pos['instrument']} suleti {t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})")
+        if "quantity" not in pos:
+            continue  # legacy pre-broker position - only the 24h timer applies
+        inst = pos["instrument"]
+        cp = current_prices.get(inst)
+        cd = candles_all.get(inst) or []
+        hour_high = max((c["h"] for c in cd[-4:] if c.get("h")), default=None)
+        hour_low = min((c["l"] for c in cd[-4:] if c.get("l")), default=None)
+
+        highs = [x for x in (cp, hour_high) if x is not None]
+        if highs:
+            pos["high_water"] = max(pos.get("high_water", pos["entry_price"]), *highs)
+        entry = pos["entry_price"]
+        hw = pos.get("high_water", entry)
+        stop_needs_replace = False
+
+        # 2) partial take-profit
+        if cp and not pos.get("partial_taken"):
+            unreal_pct = (cp - entry) / entry * 100
+            if unreal_pct >= TAKE_PROFIT_PCT:
+                sell_qty = pos["quantity"] * TAKE_PROFIT_FRACTION
+                try:
+                    fill = brk.sell(inst, sell_qty, cp)
+                except broker_mod.BrokerError as e:
+                    fill = None
+                    print(f"WARN: take-profit sell {inst} failed: {e}", file=sys.stderr)
+                if fill:
+                    _book_partial_close(state, pos, TAKE_PROFIT_FRACTION, fill, now_ts(), "take_profit")
+                    t = pf["closed_trades"][-1]
+                    notes.append(f"💰 KASUMIVÕTT: {inst} pool positsioonist müüdud {t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f}), teine pool jookseb edasi")
+                    stop_needs_replace = True  # resting stop covers the old, larger quantity
+
+        # 3) trailing stop (never moves down)
+        raised_this_run = False
+        if hw >= entry * (1 + TRAIL_ARM_PCT / 100):
+            new_stop = hw * (1 - TRAIL_DIST_PCT / 100)
+            if new_stop > pos.get("stop_price", 0):
+                pos["stop_price"] = new_stop
+                pos["trailing"] = True
+                stop_needs_replace = True
+                raised_this_run = True
+
+        if stop_needs_replace and brk.mode == "live":
+            if pos.get("stop_order_id"):
+                brk.cancel_order(inst, pos["stop_order_id"])
+            pos["stop_order_id"] = brk.place_stop_loss(inst, pos["quantity"], pos["stop_price"])
+
+        # 4) stop trigger check. Paper mode counts the intra-hour candle LOW
+        # as a trigger too (a dip through the stop mid-hour is a real fill) -
+        # EXCEPT against a stop that was only just raised this run: that
+        # hour's low may well have happened BEFORE the high that raised the
+        # stop, and we can't know the order within the hour. A freshly
+        # raised stop is only compared against the current price; from the
+        # next run onward the candle low counts normally.
+        if raised_this_run:
+            lows = [cp] if cp is not None else []
+        else:
+            lows = [x for x in (cp, hour_low) if x is not None]
+        trigger_price = min(lows) if lows else None
+        fill = brk.check_stop_order(pos, trigger_price)
+        if fill:
+            reason = "trailing_stop" if pos.get("trailing") and pos["stop_price"] > entry else "stop_loss"
+            _book_close(state, pos, fill["price"], fill["proceeds_usd"], fill["fee_usd"],
+                        now_ts(), reason)
+            t = pf["closed_trades"][-1]
+            label = "📈🛑 TRAILING-STOP (kasum lukus)" if reason == "trailing_stop" else "🛑 STOP-LOSS"
+            notes.append(f"{label}: {inst} suleti {t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})")
     return notes
 
 
@@ -733,6 +901,54 @@ def realized_volatility(history):
     return math.sqrt(var)
 
 
+def candle_hourly_vol(candles):
+    """Realized volatility from 15m candle closes, scaled up to hourly via
+    the square-root-of-time rule (sqrt(4) - four 15m bars per hour). With
+    ~96 return samples per day this is a far better noise estimate than the
+    6..24 sparse hourly snapshots realized_volatility() has to work with.
+    Returns None if there aren't enough candles (caller falls back)."""
+    closes = [c["c"] for c in candles if c.get("c")]
+    if len(closes) < 20:
+        return None
+    rets = [(closes[i] - closes[i - 1]) / closes[i - 1]
+            for i in range(1, len(closes)) if closes[i - 1] > 0]
+    if len(rets) < 10:
+        return None
+    mean_r = sum(rets) / len(rets)
+    var = sum((r - mean_r) ** 2 for r in rets) / (len(rets) - 1)
+    return math.sqrt(var) * math.sqrt(4)
+
+
+def trend_bonus_from_candles(candles):
+    """Same contract as trend_bonus() (bonus, note) but fitted on the last
+    6h of 15m closes - 24 real data points instead of 6 hourly snapshots,
+    so one odd hour can't fake or hide a trend. Returns None when there
+    aren't enough candles (caller falls back to snapshot math)."""
+    recent = [c for c in candles if c.get("c")][-24:]
+    if len(recent) < 12:
+        return None
+    closes = [c["c"] for c in recent]
+    vols = [c.get("v", 0.0) for c in recent]
+
+    p0 = closes[0] if closes[0] else 1e-9
+    norm_prices = [(p - p0) / p0 for p in closes]
+    price_slope, price_r2 = linreg_slope_r2(norm_prices)
+
+    v0 = vols[0] if vols[0] else 1e-9
+    norm_vols = [(v - v0) / v0 for v in vols]
+    vol_slope, _ = linreg_slope_r2(norm_vols)
+
+    n = len(recent)
+    if price_slope > 0 and price_r2 >= 0.5 and vol_slope > 0:
+        bonus = round(8 + price_r2 * 12, 1)
+        return bonus, f"trend kinnitatud küünaldelt (OLS R²={price_r2:.2f}, {n}×15m punkti / 6h, hind+maht tõusuteel)"
+    if price_slope > 0 and price_r2 >= 0.3:
+        return 5.0, f"nõrk kinnitus küünaldelt - hind tõusuteel (R²={price_r2:.2f}), aga veel ebakindel"
+    if price_slope < 0 and price_r2 >= 0.5:
+        return -8.0, f"langustrend kinnitatud küünaldelt (R²={price_r2:.2f}) - ettevaatust"
+    return -2.0, "küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²)"
+
+
 def momentum_score(change_24h, hourly_vol=None):
     """Map 24h % change to a 0-100 score, blended half-and-half with a
     volatility-normalized (Sharpe-style) version once there's enough history
@@ -850,12 +1066,17 @@ def liquidity_bucket(volume_value):
     return "low"
 
 
-def screen(tickers_raw_path, out_path):
+def screen(tickers_raw_path, out_path, candles_path=None):
     """Stage 1. tickers_raw_path: JSON list of Crypto.com ticker dicts
-    (as returned by get_tickers), one per watched instrument."""
+    (as returned by get_tickers), one per watched instrument. candles_path
+    (optional): {instrument: [{t,o,h,l,c,v}, ...]} of 15m candles - when
+    present, volatility and trend come from real intra-hour data instead of
+    sparse hourly snapshots; when absent everything falls back to the old
+    snapshot math, so the Cowork/manual path keeps working unchanged."""
     state = load_state()
     watchlist_cat = load_watchlist()
     tickers = load_json(tickers_raw_path, [])
+    candles_all = load_json(candles_path, {}) if candles_path else {}
 
     candidates = []
     near_misses = []
@@ -884,9 +1105,16 @@ def screen(tickers_raw_path, out_path):
             continue
 
         hist = state["history"].setdefault(inst, [])
-        hourly_vol = realized_volatility(hist)
+        cd = candles_all.get(inst)
+        hourly_vol = candle_hourly_vol(cd) if cd else None
+        if hourly_vol is None:
+            hourly_vol = realized_volatility(hist)
         m_score = momentum_score(change_24h, hourly_vol)
-        bonus, trend_note = trend_bonus(hist)
+        candle_trend = trend_bonus_from_candles(cd) if cd else None
+        if candle_trend is not None:
+            bonus, trend_note = candle_trend
+        else:
+            bonus, trend_note = trend_bonus(hist)
         if inst == "BTCUSD":
             a_bonus, alpha_frac, alpha_note = 0.0, 0.0, "BTC ise on turu võrdlusalus"
         else:
@@ -1088,19 +1316,27 @@ def adapt_thresholds(state):
     return notes
 
 
-def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_path):
+def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_path,
+             candles_path=None, book_path=None):
     state = load_state()
     candidates = load_json(candidates_path, [])
     hype_notes = load_json(hype_notes_path, {})
     current_prices = load_json(current_prices_path, {})
+    candles_all = load_json(candles_path, {}) if candles_path else {}
+    book_notes = load_json(book_path, {}) if book_path else {}
+    regime = load_json(os.path.join(DATA_DIR, "market_regime.json"), {})
+    fng_value = regime.get("value")
 
     brk = broker_mod.get_broker()
     state["portfolio"]["mode"] = brk.mode
     reconcile_notes = brk.reconcile(state)
-    stop_notes = check_stop_losses(state, current_prices, brk)
+    stop_notes = manage_positions(state, current_prices, candles_all, brk)
     followup_notes = process_followups(state, current_prices, brk)
+    retrain_note = full_retrain(state)
     killswitch_notes = update_killswitch(state, brk)
     threshold_notes = adapt_thresholds(state) or []
+    if retrain_note:
+        threshold_notes = threshold_notes + [retrain_note]
 
     n_updates = state["model"]["n_updates"]
     model_ready = n_updates >= MODEL_MIN_TRAINING
@@ -1114,11 +1350,33 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         inst = c["instrument"]
         note = hype_notes.get(inst)
         bonus, forced_risk, why_hype = hype_adjustment(note)
-        heuristic_score = clamp(c["raw_score"] + bonus, 0, 100)
+
+        # Order book check: thin/wide books are where market orders get hurt,
+        # and top-of-book imbalance is real-time buy/sell pressure.
+        book = book_notes.get(inst) or {}
+        imbalance = book.get("imbalance", 0.0)
+        spread_pct = book.get("spread_pct")
+        book_adj = 0
+        if spread_pct is None:
+            book_note = "orderiraamatu andmeid pole selles käivituses"
+        elif spread_pct > 1.0:
+            book_adj = -12
+            book_note = f"HOIATUS: õhuke raamat (spread {spread_pct:.2f}%) - turuorder saab siin valusalt pihta"
+        elif imbalance >= 0.3:
+            book_adj = 6
+            book_note = f"ostusurve raamatus (imbalance {imbalance:+.2f}, spread {spread_pct:.2f}%)"
+        elif imbalance <= -0.3:
+            book_adj = -6
+            book_note = f"müügisurve raamatus (imbalance {imbalance:+.2f}, spread {spread_pct:.2f}%)"
+        else:
+            book_note = f"raamat tasakaalus (imbalance {imbalance:+.2f}, spread {spread_pct:.2f}%)"
+
+        heuristic_score = clamp(c["raw_score"] + bonus + book_adj, 0, 100)
         risk = risk_label(c["category"], c["liquidity"], c["change_24h"], forced_risk)
 
         features = build_features(c["momentum_score"], c["trend_bonus"], c["liquidity"],
-                                   c["category"], c["change_24h"], bonus, c.get("alpha_pct", 0.0))
+                                   c["category"], c["change_24h"], bonus, c.get("alpha_pct", 0.0),
+                                   book_imbalance=imbalance, fng_value=fng_value)
         model_p = model_predict(state["model"]["weights"], features)
 
         # Credibility-weighted blend (Z = n/(n+k)): the model's say grows
@@ -1136,7 +1394,7 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
 
         why = (f"Momentum {c['momentum_score']}/100 (24h {c['change_24h']*100:+.1f}%), "
                f"{c['trend_note']}. {c.get('alpha_note', '')} Likviidsus: {c['liquidity']} "
-               f"(maht ${c['volume_value']:,.0f}). {why_hype}{model_note}{explore_note}")
+               f"(maht ${c['volume_value']:,.0f}). {book_note}. {why_hype}{model_note}{explore_note}")
 
         entry = {"instrument": inst, "score": final_score, "risk": risk, "why": why,
                  "price": c["price"], "category": c["category"], "features": features,
@@ -1189,6 +1447,10 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.extend(swap_notes)
     if reconcile_notes:
         lines.extend(reconcile_notes)
+    if fng_value is not None and (fng_value <= 25 or fng_value >= 75):
+        mood = "äärmuslik HIRM - turg paanikas, momentum petlik" if fng_value <= 25 \
+            else "äärmuslik AHNUS - turg ülekuumenenud, ettevaatust"
+        lines.append(f"🌡️ Turu meeleolu: {regime.get('classification', '')} ({fng_value}/100) - {mood}")
     if alerts:
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - {len(alerts)} uut/muutunud signaali:")
         for a in alerts[:8]:
@@ -1224,10 +1486,15 @@ FEATURE_LABELS = {
     "volatility": "Volatiilsus",
     "hype_bonus": "Veebi hype-kinnitus",
     "alpha": "Alpha (BTC-suhteline üleliikumine)",
+    "book_imbalance": "Orderiraamatu ostu/müügisurve",
+    "market_fng": "Turu meeleolu (Fear & Greed)",
 }
 
 
 def render_dashboard(state):
+    regime = load_json(os.path.join(DATA_DIR, "market_regime.json"), {})
+    fng_txt = (f"{regime['value']} · {regime.get('classification', '')}"
+               if regime.get("value") is not None else "–")
     completed = state["completed"]
     pending = state["pending_followups"]
     run_log = list(reversed(state["run_log"][-30:]))
@@ -1401,6 +1668,10 @@ def render_dashboard(state):
         dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         size_pct_txt = f"{p['size_pct']:.1f}%" if "size_pct" in p else "–"
         stop_txt = f"{p['stop_price']:.6g}" if p.get("stop_price") else "–"
+        if p.get("trailing"):
+            stop_txt += ' <span class="tag" style="background:#22d3ee">järgneb</span>'
+        if p.get("partial_taken"):
+            stop_txt += ' <span class="tag" style="background:#22c55e">TP½ võetud</span>'
         pf_open_rows += f"""
         <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>${p['size_usd']:.2f} <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">{size_pct_txt}</span></td>
         <td class="mono">{p['entry_price']:.6g}</td><td class="mono">{stop_txt}</td><td>{risk_dot(p['risk'])}</td></tr>"""
@@ -1410,7 +1681,9 @@ def render_dashboard(state):
         dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
         reason_tag = {"stop_loss": ' <span class="tag" style="background:#f4756f">SL</span>',
-                      "swap": ' <span class="tag" style="background:#f59e0b">SWAP</span>'}.get(t.get("exit_reason"), "")
+                      "swap": ' <span class="tag" style="background:#f59e0b">SWAP</span>',
+                      "take_profit": ' <span class="tag" style="background:#22c55e">TP½</span>',
+                      "trailing_stop": ' <span class="tag" style="background:#22d3ee">TSL</span>'}.get(t.get("exit_reason"), "")
         live_tag = ' <span class="tag" style="background:#dc2626">LIVE</span>' if t.get("mode") == "live" else ""
         pf_closed_rows += f"""
         <tr><td>{dt}</td><td class="mono">{t['instrument']}{reason_tag}{live_tag}</td><td>${t['size_usd']:.2f}</td>
@@ -1657,6 +1930,7 @@ def render_dashboard(state):
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">{f'{hit_rate_24h:.0f}%' if hit_rate_24h is not None else '–'}</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">{model['n_updates']}</div></div>
+    <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">{fng_txt}</div></div>
   </div>
 
   <div class="card">
@@ -1794,15 +2068,19 @@ if __name__ == "__main__":
     s1 = sub.add_parser("screen")
     s1.add_argument("--tickers", required=True)
     s1.add_argument("--out", required=True)
+    s1.add_argument("--candles", default=None)
 
     s2 = sub.add_parser("finalize")
     s2.add_argument("--candidates", required=True)
     s2.add_argument("--hype-notes", required=True)
     s2.add_argument("--current-prices", required=True)
     s2.add_argument("--out-summary", required=True)
+    s2.add_argument("--candles", default=None)
+    s2.add_argument("--book", default=None)
 
     args = ap.parse_args()
     if args.cmd == "screen":
-        screen(args.tickers, args.out)
+        screen(args.tickers, args.out, candles_path=args.candles)
     elif args.cmd == "finalize":
-        finalize(args.candidates, args.hype_notes, args.current_prices, args.out_summary)
+        finalize(args.candidates, args.hype_notes, args.current_prices, args.out_summary,
+                 candles_path=args.candles, book_path=args.book)
