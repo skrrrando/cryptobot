@@ -167,6 +167,15 @@ TAKE_PROFIT_FRACTION = 0.5
 TRAIL_ARM_PCT = 4.0
 TRAIL_DIST_PCT = 3.0
 
+# Go-live readiness criteria (mirrors RUNBOOK.md "Go-live checklist" exactly -
+# this is a REPORTING feature only, never touches TRADING_MODE itself. The
+# switch to live money stays a deliberate manual step on GitHub; this just
+# tells you, honestly, when the paper track record has earned it.
+GO_LIVE_MIN_PROFIT_FACTOR = 1.3
+GO_LIVE_MAX_DRAWDOWN_PCT = 15.0
+GO_LIVE_MIN_CLOSED_TRADES = 60
+GO_LIVE_MIN_EXPECTANCY_PCT = 0.0
+
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
     "alerted": {},          # instrument -> {last_score, last_ts, last_risk}
@@ -186,6 +195,8 @@ DEFAULT_STATE = {
     },
     "pending_followups": [],   # awaiting 24h and/or 7d outcome check
     "completed": [],          # followups fully resolved (both checks done or expired)
+    "go_live_alert_sent": False,      # one-time celebratory Telegram alert, fires once when all criteria first met
+    "go_live_last_progress_day": "",  # UTC date string - throttles the daily progress line to once/day
     "run_log": [],            # short history of each run (for the dashboard)
     "next_id": 1,
     "portfolio": {
@@ -252,6 +263,8 @@ def load_state():
     st.setdefault("killswitch", _deep_default(DEFAULT_STATE["killswitch"]))
     for k, v in DEFAULT_STATE["killswitch"].items():
         st["killswitch"].setdefault(k, v)
+    st.setdefault("go_live_alert_sent", False)
+    st.setdefault("go_live_last_progress_day", "")
     return st
 
 
@@ -869,6 +882,69 @@ def profit_factor(closed_trades):
     return gains / losses
 
 
+def go_live_readiness(state):
+    """Check the RUNBOOK go-live criteria against the current paper track
+    record. Purely informational - returns (criteria dict, all_met bool).
+    Never touches TRADING_MODE; the switch to real money stays a deliberate
+    manual step in GitHub. This just answers 'have I actually earned it, by
+    the numbers I said mattered' instead of 'does it feel like it's working'."""
+    pf = state["portfolio"]
+    closed = pf["closed_trades"]
+    n_trades = len(closed)
+    pf_factor = profit_factor(closed)
+    balances = [h["balance"] for h in pf["balance_history"]]
+    drawdown = max_drawdown_pct(balances) if balances else 0.0
+    expectancy = expectancy_pct(closed)
+
+    criteria = {
+        "profit_factor": {"label": "Profit factor", "value": pf_factor,
+                          "target_txt": f"> {GO_LIVE_MIN_PROFIT_FACTOR}",
+                          "value_txt": f"{pf_factor:.2f}" if pf_factor is not None else "–",
+                          "met": pf_factor is not None and pf_factor > GO_LIVE_MIN_PROFIT_FACTOR},
+        "drawdown": {"label": "Max langus", "value": drawdown,
+                    "target_txt": f"< {GO_LIVE_MAX_DRAWDOWN_PCT:.0f}%",
+                    "value_txt": f"{drawdown:.1f}%",
+                    "met": drawdown < GO_LIVE_MAX_DRAWDOWN_PCT},
+        "n_trades": {"label": "Suletud kauplusi", "value": n_trades,
+                    "target_txt": f">= {GO_LIVE_MIN_CLOSED_TRADES}",
+                    "value_txt": str(n_trades),
+                    "met": n_trades >= GO_LIVE_MIN_CLOSED_TRADES},
+        "expectancy": {"label": "Oodatav väärtus/kauplus", "value": expectancy,
+                      "target_txt": "> 0%",
+                      "value_txt": f"{expectancy:+.2f}%" if expectancy is not None else "–",
+                      "met": expectancy is not None and expectancy > GO_LIVE_MIN_EXPECTANCY_PCT},
+    }
+    all_met = all(c["met"] for c in criteria.values())
+    return criteria, all_met
+
+
+def go_live_readiness_notes(state):
+    """Telegram-facing notes for the current run: a one-time celebratory
+    alert the moment ALL criteria are first met (with a reminder that
+    flipping TRADING_MODE is still a deliberate manual GitHub step), plus a
+    compact once-a-day progress line otherwise so you get a regular pulse
+    without needing to check the dashboard or build a two-way Telegram bot."""
+    criteria, all_met = go_live_readiness(state)
+    notes = []
+    if all_met:
+        if not state.get("go_live_alert_sent"):
+            state["go_live_alert_sent"] = True
+            lines = ["🎯 GO-LIVE VALMIDUS SAAVUTATUD - kõik RUNBOOK kriteeriumid on täidetud:"]
+            for c in criteria.values():
+                lines.append(f"  ✅ {c['label']}: {c['value_txt']} ({c['target_txt']})")
+            lines.append("See on ikkagi Sinu enda otsus - live-režiim lülitub käsitsi GitHubis "
+                        "(RUNBOOK.md 'Go-live checklist'), mitte automaatselt.")
+            notes.append("\n".join(lines))
+    else:
+        state["go_live_alert_sent"] = False  # allow re-alerting if it regresses and re-qualifies later
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        if state.get("go_live_last_progress_day") != today:
+            state["go_live_last_progress_day"] = today
+            parts = [f"{c['label']} {c['value_txt']} {'✅' if c['met'] else '⏳'}" for c in criteria.values()]
+            notes.append("📊 Go-live valmidus: " + ", ".join(parts))
+    return notes
+
+
 def expectancy_pct(closed_trades):
     """Average P&L per trade, in %. The single number that answers 'is
     doing this, on average, worth it' - positive expectancy is the whole
@@ -1433,6 +1509,10 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     })
     state["run_log"] = state["run_log"][-200:]
 
+    # Computed BEFORE save_state() - it sets go_live_alert_sent /
+    # go_live_last_progress_day flags on state that must be persisted.
+    readiness_notes = go_live_readiness_notes(state)
+
     save_state(state)
     render_dashboard(state)
 
@@ -1451,6 +1531,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         mood = "äärmuslik HIRM - turg paanikas, momentum petlik" if fng_value <= 25 \
             else "äärmuslik AHNUS - turg ülekuumenenud, ettevaatust"
         lines.append(f"🌡️ Turu meeleolu: {regime.get('classification', '')} ({fng_value}/100) - {mood}")
+    if readiness_notes:
+        lines.extend(readiness_notes)
     if alerts:
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - {len(alerts)} uut/muutunud signaali:")
         for a in alerts[:8]:
@@ -1549,6 +1631,15 @@ def render_dashboard(state):
     pf_drawdown = max_drawdown_pct(pf_chart_values)
     pf_profit_factor = profit_factor(pf["closed_trades"])
     pf_expectancy = expectancy_pct(pf["closed_trades"])
+
+    readiness_criteria, readiness_all_met = go_live_readiness(state)
+    readiness_rows = ""
+    for c in readiness_criteria.values():
+        mark = "✅" if c["met"] else "⏳"
+        row_color = "var(--good)" if c["met"] else "var(--muted)"
+        readiness_rows += f"""
+        <tr><td>{c['label']}</td><td class="mono" style="color:{row_color}">{c['value_txt']}</td>
+        <td class="mono">{c['target_txt']}</td><td style="text-align:center">{mark}</td></tr>"""
 
     def risk_dot(risk):
         color = {"green": "#0ca30c", "yellow": "#fab219", "red": "#f4756f"}.get(risk, "#9a94b8")
@@ -1968,6 +2059,15 @@ def render_dashboard(state):
     <div class="table-scroll"><table>
       <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
       {pf_closed_rows or '<tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi kauplust suletud.</td></tr>'}
+    </table></div>
+  </div>
+
+  <div class="card" style="{'border-color:var(--good)' if readiness_all_met else ''}">
+    <h2>🎯 Go-live valmidus{info_badge("RUNBOOK.md checklisti neli kriteeriumi. Ainult info - live-režiimi lülitamine jääb alati käsitsi GitHubi sammuks, see kaart lihtsalt ütleb ausalt, millal number seda õigustab.")}</h2>
+    {'<div class="model-status" style="border-color:var(--good);background:rgba(34,197,94,0.10)">✅ Kõik kriteeriumid täidetud - vaata RUNBOOK.md "Go-live checklist" järgmisi samme.</div>' if readiness_all_met else ''}
+    <div class="table-scroll"><table>
+      <tr><th>Kriteerium</th><th>Praegu</th><th>Vajalik</th><th>Staatus</th></tr>
+      {readiness_rows}
     </table></div>
   </div>
 
