@@ -110,6 +110,7 @@ def fetch_ticker(symbol):
                 continue
             return {
                 "instrument_name": symbol,  # keep the watchlist's own key, not Crypto.com's real name
+                "real_instrument": real_name,  # the exchange's actual name - LiveBroker orders need this
                 "last": d.get("a"),
                 "change": d.get("c"),
                 "volume_value": d.get("vv"),
@@ -200,6 +201,13 @@ def main():
     engine.save_json(tickers_path, tickers)
     print(f"Fetched {len(tickers)}/{len(instruments)} tickers from Crypto.com.")
 
+    # watchlist symbol -> real exchange instrument name, refreshed each run.
+    # LiveBroker reads this file to place orders under the name the exchange
+    # actually recognizes (BTC_USD / BTC_USDT / ...-PERP).
+    instrument_map = {t["instrument_name"]: t["real_instrument"]
+                      for t in tickers if t.get("real_instrument")}
+    engine.save_json(os.path.join(DATA_DIR, "instrument_map.json"), instrument_map)
+
     candidates_path = os.path.join(DATA_DIR, "candidates.json")
     engine.screen(tickers_path, candidates_path)
 
@@ -217,11 +225,17 @@ def main():
     n_found = sum(1 for n in hype_notes.values() if n.get("found"))
     print(f"Hype-kontroll: {n_found}/{len(hype_notes)} kandidaadi kohta leidus CoinGecko andmeid.")
 
-    # Resolve any due 24h/7d followups using fresh prices for those instruments.
+    # Fresh prices for everything the finalize step manages: pending 24h/7d
+    # followups AND open portfolio positions (stop-loss checks need a price
+    # every run, not just when a followup is due). Reuse this run's ticker
+    # fetch where possible; only re-fetch what wasn't in the watchlist pull.
     state = engine.load_state()
-    due_instruments = {rec["instrument"] for rec in state["pending_followups"]}
-    current_prices = {}
-    for inst in due_instruments:
+    needed = ({rec["instrument"] for rec in state["pending_followups"]}
+              | {p["instrument"] for p in state["portfolio"]["open_positions"]})
+    current_prices = {t["instrument_name"]: float(t["last"])
+                      for t in tickers
+                      if t["instrument_name"] in needed and t["last"] is not None}
+    for inst in needed - set(current_prices):
         t = fetch_ticker(inst)
         if t and t["last"] is not None:
             current_prices[inst] = float(t["last"])

@@ -4,7 +4,13 @@ on:
   schedule:
     # GitHub Actions cron is always UTC. 0 * * * * = every hour, on the hour, UTC.
     - cron: "0 * * * *"
-  workflow_dispatch: {}   # lets you click "Run workflow" manually in the Actions tab
+  workflow_dispatch:   # lets you click "Run workflow" manually in the Actions tab
+    inputs:
+      killswitch_reset:
+        description: "Lähtesta kill-switch selle käivitusega"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write   # needed so the workflow can commit the updated data/dashboard back
@@ -25,6 +31,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          KILLSWITCH_RESET: ${{ (github.event.inputs.killswitch_reset == 'true') && '1' || '' }}
         run: python3 fetch_and_run.py
 
       - name: Commit updated state + dashboard

@@ -71,6 +71,8 @@ import time
 import argparse
 from datetime import datetime, timezone
 
+import broker as broker_mod
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 STATE_PATH = os.path.join(DATA_DIR, "state.json")
@@ -159,9 +161,19 @@ DEFAULT_STATE = {
         "balance": PORTFOLIO_START_BALANCE,
         "position_size_pct": PORTFOLIO_POSITION_PCT,
         "max_open_positions": PORTFOLIO_MAX_OPEN,
-        "open_positions": [],    # [{id, instrument, entry_price, size_usd, entry_ts, risk, score}]
-        "closed_trades": [],     # [{...same + exit_price, exit_ts, pnl_usd, pnl_pct}]
+        "mode": "paper",         # which broker mode the last run used (paper/live)
+        "open_positions": [],    # [{id, instrument, entry_price, quantity, size_usd, entry_fee_usd, entry_ts, risk, score, mode, stop_price, stop_order_id}]
+        "closed_trades": [],     # [{...same + exit_price, exit_ts, pnl_usd, pnl_pct, exit_fee_usd, exit_reason}]
         "balance_history": [{"ts": 0, "balance": PORTFOLIO_START_BALANCE}],
+    },
+    "killswitch": {
+        # Safety brake: when active, the bot stops OPENING new positions
+        # (existing ones are still managed and closed normally) until reset.
+        # Reset: run once with env KILLSWITCH_RESET=1, or edit this block.
+        "active": False,
+        "reason": "",
+        "ts": 0,
+        "consec_failures": 0   # consecutive failed live orders
     }
 }
 
@@ -204,6 +216,9 @@ def load_state():
     st.setdefault("portfolio", _deep_default(DEFAULT_STATE["portfolio"]))
     for k, v in DEFAULT_STATE["portfolio"].items():
         st["portfolio"].setdefault(k, v)
+    st.setdefault("killswitch", _deep_default(DEFAULT_STATE["killswitch"]))
+    for k, v in DEFAULT_STATE["killswitch"].items():
+        st["killswitch"].setdefault(k, v)
     return st
 
 
@@ -368,15 +383,26 @@ def kelly_position_pct(win_prob, b, base_pct):
     return clamp(f_star * KELLY_FRACTION, KELLY_MIN_PCT, KELLY_MAX_PCT)
 
 
-def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, category="unknown", win_prob=None):
-    """Called when a real alert fires. Opens a virtual position if there's
-    room (both the overall cap AND the per-category diversification cap) and
-    cash. Sized via fractional Kelly once the model has earned enough
-    evidence to be trusted with it (win_prob passed in); otherwise falls
-    back to the flat PORTFOLIO_POSITION_PCT, same as before. If no position
-    opens, the alert still stands - it just isn't "traded" in the
-    simulation."""
+def _record_order_failure(state, what):
+    """Count consecutive failed orders toward the kill-switch (live mode's
+    'the API is misbehaving, stop before it gets expensive' brake)."""
+    ks = state["killswitch"]
+    ks["consec_failures"] = ks.get("consec_failures", 0) + 1
+    print(f"WARN: order failed ({what}), consecutive failures: {ks['consec_failures']}", file=sys.stderr)
+
+
+def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
+                        category="unknown", win_prob=None):
+    """Called when a real alert fires. Opens a position THROUGH THE BROKER
+    (paper simulation or real exchange order - same code path) if there's
+    room (overall cap AND per-category diversification cap), cash, and the
+    kill-switch is not engaged. Sized via fractional Kelly once the model
+    has earned enough evidence (win_prob passed in); otherwise the flat
+    PORTFOLIO_POSITION_PCT. A stop-loss is attached immediately: a real
+    resting order in live mode, a simulated per-run check in paper mode."""
     pf = state["portfolio"]
+    if state["killswitch"].get("active"):
+        return False
     if len(pf["open_positions"]) >= pf["max_open_positions"]:
         return False
     cat_cap = PORTFOLIO_CATEGORY_CAP.get(category)
@@ -392,35 +418,157 @@ def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, categ
     size_usd = pf["balance"] * size_pct
     if size_usd < 1.0 or size_usd > pf["balance"]:
         return False
+
+    try:
+        fill = brk.buy(instrument, size_usd, price)
+    except broker_mod.BrokerError as e:
+        fill = None
+        print(f"WARN: buy {instrument} failed: {e}", file=sys.stderr)
+    if not fill:
+        _record_order_failure(state, f"buy {instrument}")
+        return False
+    state["killswitch"]["consec_failures"] = 0
+
+    stop_price = fill["price"] * (1 - broker_mod.STOP_LOSS_PCT)
+    stop_order_id = brk.place_stop_loss(instrument, fill["quantity"], stop_price)
+
     pf["balance"] -= size_usd
     pf["open_positions"].append({
-        "id": rec_id, "instrument": instrument, "entry_price": price,
+        "id": rec_id, "instrument": instrument, "entry_price": fill["price"],
+        "quantity": fill["quantity"], "entry_fee_usd": fill["fee_usd"],
         "size_usd": round(size_usd, 2), "size_pct": round(size_pct * 100, 2),
-        "entry_ts": ts, "risk": risk, "score": score, "category": category
+        "entry_ts": ts, "risk": risk, "score": score, "category": category,
+        "mode": brk.mode, "stop_price": stop_price, "stop_order_id": stop_order_id
     })
     return True
 
 
-def close_position(state, rec_id, exit_price, exit_ts):
-    """Called when that same recommendation's 24h result resolves. Closes the
-    matching virtual position (if one was opened) and realizes the P&L."""
+def _book_close(state, match, exit_price, proceeds_usd, exit_fee_usd, exit_ts, reason):
+    """Shared bookkeeping for every way a position can close (24h timer,
+    stop-loss, reconcile). P&L is NET of both sides' fees + slippage - the
+    number that would actually land in the account."""
     pf = state["portfolio"]
-    match = next((p for p in pf["open_positions"] if p["id"] == rec_id), None)
-    if not match:
-        return
     pf["open_positions"].remove(match)
-    pnl_pct = (exit_price - match["entry_price"]) / match["entry_price"]
-    pnl_usd = match["size_usd"] * pnl_pct
-    pf["balance"] += match["size_usd"] + pnl_usd
+    pnl_usd = proceeds_usd - match["size_usd"]
+    pnl_pct = pnl_usd / match["size_usd"] * 100 if match["size_usd"] else 0.0
+    pf["balance"] += proceeds_usd
     pf["closed_trades"].append({
-        "id": rec_id, "instrument": match["instrument"], "entry_price": match["entry_price"],
+        "id": match["id"], "instrument": match["instrument"], "entry_price": match["entry_price"],
         "exit_price": exit_price, "size_usd": match["size_usd"], "entry_ts": match["entry_ts"],
-        "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct * 100, 2),
+        "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct, 2),
+        "entry_fee_usd": match.get("entry_fee_usd", 0.0), "exit_fee_usd": round(exit_fee_usd, 4),
+        "exit_reason": reason, "mode": match.get("mode", "paper"),
         "risk": match["risk"], "score": match["score"], "category": match.get("category", "unknown")
     })
     pf["closed_trades"] = pf["closed_trades"][-300:]
     pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
     pf["balance_history"] = pf["balance_history"][-500:]
+
+
+def close_position(state, rec_id, exit_price, exit_ts, brk, reason="24h"):
+    """Called when that same recommendation's 24h result resolves. Sells the
+    matching position (if one was opened and hasn't already been stopped
+    out) through the broker and realizes the NET P&L."""
+    pf = state["portfolio"]
+    match = next((p for p in pf["open_positions"] if p["id"] == rec_id), None)
+    if not match:
+        return
+
+    if "quantity" not in match:
+        # Legacy position opened before the broker layer existed - close it
+        # the old way (price-based, no fees) so history stays consistent.
+        pf["open_positions"].remove(match)
+        pnl_pct = (exit_price - match["entry_price"]) / match["entry_price"]
+        pnl_usd = match["size_usd"] * pnl_pct
+        pf["balance"] += match["size_usd"] + pnl_usd
+        pf["closed_trades"].append({
+            "id": rec_id, "instrument": match["instrument"], "entry_price": match["entry_price"],
+            "exit_price": exit_price, "size_usd": match["size_usd"], "entry_ts": match["entry_ts"],
+            "exit_ts": exit_ts, "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct * 100, 2),
+            "exit_reason": reason, "mode": "paper",
+            "risk": match["risk"], "score": match["score"], "category": match.get("category", "unknown")
+        })
+        pf["closed_trades"] = pf["closed_trades"][-300:]
+        pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
+        pf["balance_history"] = pf["balance_history"][-500:]
+        return
+
+    if match.get("stop_order_id"):
+        brk.cancel_order(match["instrument"], match["stop_order_id"])
+    try:
+        fill = brk.sell(match["instrument"], match["quantity"], exit_price)
+    except broker_mod.BrokerError as e:
+        fill = None
+        print(f"WARN: sell {match['instrument']} failed: {e}", file=sys.stderr)
+    if not fill:
+        # Keep the position open; next hourly run will retry the close.
+        _record_order_failure(state, f"sell {match['instrument']}")
+        return
+    state["killswitch"]["consec_failures"] = 0
+    _book_close(state, match, fill["price"], fill["proceeds_usd"], fill["fee_usd"], exit_ts, reason)
+
+
+def check_stop_losses(state, current_prices, brk):
+    """Once per run, for every open position: did the stop-loss trigger?
+    Paper mode simulates the fill at the stop level; live mode checks the
+    real resting order's status (and market-sells as a backstop if the
+    resting order was never successfully placed). Returns notes for the
+    summary message."""
+    pf = state["portfolio"]
+    notes = []
+    for pos in list(pf["open_positions"]):
+        fill = brk.check_stop_order(pos, current_prices.get(pos["instrument"]))
+        if not fill:
+            continue
+        _book_close(state, pos, fill["price"], fill["proceeds_usd"], fill["fee_usd"],
+                    now_ts(), "stop_loss")
+        t = pf["closed_trades"][-1]
+        notes.append(f"🛑 STOP-LOSS: {pos['instrument']} suleti {t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})")
+    return notes
+
+
+def update_killswitch(state, brk):
+    """The circuit breaker. Engages (stops new opens) when:
+      - portfolio balance dropped more than MAX_DAILY_LOSS_PCT in ~24h, or
+      - MAX_CONSEC_FAILURES orders in a row failed (live API misbehaving).
+    Manual reset: run once with env KILLSWITCH_RESET=1 (or edit state.json).
+    Returns notes for the summary message."""
+    ks = state["killswitch"]
+    pf = state["portfolio"]
+    notes = []
+
+    if os.environ.get("KILLSWITCH_RESET") == "1" and ks["active"]:
+        ks["active"] = False
+        ks["reason"] = ""
+        ks["consec_failures"] = 0
+        notes.append("✅ Kill-switch käsitsi lähtestatud (KILLSWITCH_RESET=1) - bot avab jälle positsioone.")
+        return notes
+
+    if ks["active"]:
+        notes.append(f"⛔ Kill-switch AKTIIVNE ({ks['reason']}) - uusi positsioone ei avata. "
+                     "Lähtesta env muutujaga KILLSWITCH_RESET=1 kui oled olukorra üle vaadanud.")
+        return notes
+
+    cutoff = now_ts() - 24 * 3600
+    baseline = pf["starting_balance"]
+    for h in pf["balance_history"]:
+        if h["ts"] <= cutoff:
+            baseline = h["balance"]
+    if baseline > 0:
+        daily_loss_pct = (baseline - pf["balance"]) / baseline * 100
+        if daily_loss_pct > broker_mod.MAX_DAILY_LOSS_PCT:
+            ks["active"] = True
+            ks["ts"] = now_ts()
+            ks["reason"] = f"päevakaotus {daily_loss_pct:.1f}% > {broker_mod.MAX_DAILY_LOSS_PCT:.0f}% lubatud"
+            notes.append(f"⛔ KILL-SWITCH RAKENDUS: {ks['reason']}. Uusi positsioone ei avata kuni lähtestamiseni.")
+            return notes
+
+    if ks.get("consec_failures", 0) >= broker_mod.MAX_CONSEC_FAILURES:
+        ks["active"] = True
+        ks["ts"] = now_ts()
+        ks["reason"] = f"{ks['consec_failures']} järjestikust ebaõnnestunud orderit"
+        notes.append(f"⛔ KILL-SWITCH RAKENDUS: {ks['reason']}. Kontrolli API võtit/börsi staatust.")
+    return notes
 
 
 # ---------------------------------------------------------------------------
@@ -770,7 +918,7 @@ def should_alert(state, inst, final_score, risk):
     return False
 
 
-def process_followups(state, current_prices):
+def process_followups(state, current_prices, brk):
     """current_prices: {instrument: price}. Check pending recs that are due
     for their 24h or 7d outcome check, and train the model on each 24h
     result as soon as it resolves."""
@@ -788,7 +936,7 @@ def process_followups(state, current_prices):
             resolved_notes.append(f"{inst} 24h: {ret:+.1f}%")
             if rec.get("features"):
                 train_step(state, rec["features"], hit)
-            close_position(state, rec["id"], price_now, now_ts())
+            close_position(state, rec["id"], price_now, now_ts(), brk, reason="24h")
 
         if not rec.get("result_7d") and age_h >= 24 * 7 and price_now:
             ret = (price_now - rec["price_at_call"]) / rec["price_at_call"] * 100
@@ -863,7 +1011,12 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     hype_notes = load_json(hype_notes_path, {})
     current_prices = load_json(current_prices_path, {})
 
-    followup_notes = process_followups(state, current_prices)
+    brk = broker_mod.get_broker()
+    state["portfolio"]["mode"] = brk.mode
+    reconcile_notes = brk.reconcile(state)
+    stop_notes = check_stop_losses(state, current_prices, brk)
+    followup_notes = process_followups(state, current_prices, brk)
+    killswitch_notes = update_killswitch(state, brk)
     threshold_notes = adapt_thresholds(state) or []
 
     n_updates = state["model"]["n_updates"]
@@ -912,7 +1065,7 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
             # sizing real (virtual) money is a higher bar than just display.
             win_prob = model_p if model_ready else None
             traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score,
-                                          category=c["category"], win_prob=win_prob)
+                                          brk, category=c["category"], win_prob=win_prob)
             entry["traded"] = traded
             alerts.append(entry)
             state["alerted"][inst] = {"last_score": final_score, "last_ts": ts, "last_risk": risk}
@@ -934,7 +1087,14 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     render_dashboard(state)
 
     # ---- chat summary (this text is what gets posted as the notification) ----
-    lines = []
+    mode_tag = "🔴 LIVE (PÄRIS RAHA)" if brk.mode == "live" else "📄 PAPER (mänguraha)"
+    lines = [f"Režiim: {mode_tag}"] if brk.mode == "live" else []
+    if killswitch_notes:
+        lines.extend(killswitch_notes)
+    if stop_notes:
+        lines.extend(stop_notes)
+    if reconcile_notes:
+        lines.extend(reconcile_notes)
     if alerts:
         lines.append(f"Cryptobot skann ({datetime.now(timezone.utc).strftime('%d.%m %H:%M')} UTC) - {len(alerts)} uut/muutunud signaali:")
         for a in alerts[:8]:
@@ -1008,10 +1168,14 @@ def render_dashboard(state):
     best = max(total_hits_24h_records, key=lambda r: r["result_24h"]["return_pct"]) if total_hits_24h_records else None
     worst = min(total_hits_24h_records, key=lambda r: r["result_24h"]["return_pct"]) if total_hits_24h_records else None
 
-    # Virtual paper-trading portfolio
+    # Trading portfolio (paper simulation or live mirror - see pf["mode"])
     pf = state["portfolio"]
+    pf_mode = pf.get("mode", "paper")
+    ks = state.get("killswitch", {})
     pf_return_pct = (pf["balance"] - pf["starting_balance"]) / pf["starting_balance"] * 100
     pf_closed = list(reversed(pf["closed_trades"][-40:]))
+    pf_total_fees = (sum(t.get("entry_fee_usd", 0) + t.get("exit_fee_usd", 0) for t in pf["closed_trades"])
+                     + sum(p.get("entry_fee_usd", 0) for p in pf["open_positions"]))
     pf_open = pf["open_positions"]
     pf_wins = sum(1 for t in pf["closed_trades"] if t["pnl_usd"] > 0)
     pf_losses = sum(1 for t in pf["closed_trades"] if t["pnl_usd"] <= 0)
@@ -1142,21 +1306,41 @@ def render_dashboard(state):
     for p in pf_open:
         dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         size_pct_txt = f"{p['size_pct']:.1f}%" if "size_pct" in p else "–"
+        stop_txt = f"{p['stop_price']:.6g}" if p.get("stop_price") else "–"
         pf_open_rows += f"""
         <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>${p['size_usd']:.2f} <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">{size_pct_txt}</span></td>
-        <td class="mono">{p['entry_price']:.6g}</td><td>{risk_dot(p['risk'])}</td></tr>"""
+        <td class="mono">{p['entry_price']:.6g}</td><td class="mono">{stop_txt}</td><td>{risk_dot(p['risk'])}</td></tr>"""
 
     pf_closed_rows = ""
     for t in pf_closed:
         dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
+        reason_tag = ' <span class="tag" style="background:#f4756f">SL</span>' if t.get("exit_reason") == "stop_loss" else ""
+        live_tag = ' <span class="tag" style="background:#dc2626">LIVE</span>' if t.get("mode") == "live" else ""
         pf_closed_rows += f"""
-        <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>${t['size_usd']:.2f}</td>
+        <tr><td>{dt}</td><td class="mono">{t['instrument']}{reason_tag}{live_tag}</td><td>${t['size_usd']:.2f}</td>
         <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td><td>{risk_dot(t['risk'])}</td></tr>"""
 
+    mode_badge = ('<span class="tag" style="background:#dc2626">🔴 LIVE</span>' if pf_mode == "live"
+                  else '<span class="tag">📄 PAPER</span>')
+    killswitch_banner = ""
+    if ks.get("active"):
+        ks_dt = datetime.fromtimestamp(ks.get("ts", 0), tz=timezone.utc).strftime("%d.%m %H:%M") if ks.get("ts") else "?"
+        killswitch_banner = f"""
+  <div class="card" style="border-color:#f4756f;background:linear-gradient(160deg,#2a1520,#1c1220)">
+    <h2>⛔ Kill-switch aktiivne (alates {ks_dt} UTC)</h2>
+    <div class="desc" style="margin-bottom:0">Põhjus: {ks.get('reason', '?')}. Bot EI ava uusi positsioone
+    (olemasolevaid haldab edasi), kuni käivitad ühe korra keskkonna­muutujaga <span class="mono">KILLSWITCH_RESET=1</span>.</div>
+  </div>"""
+
     portfolio_desc = (
-        "Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, "
-        '"ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. '
+        ("PÄRIS RAHA - orderid lähevad Crypto.com börsile. " if pf_mode == "live"
+         else "Mängu raha, mitte päris. ")
+        + 'Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, '
+        f"või varem, kui hind kukub stop-lossini (-{broker_mod.STOP_LOSS_PCT*100:.0f}% sisenemisest). "
+        f"P&L on NETO: sisaldab {broker_mod.FEE_PCT*100:.2f}% teenustasu mõlemal pool tehingut"
+        + (f" ja {broker_mod.SLIPPAGE_PCT*100:.2f}% simuleeritud slippage'it" if pf_mode == "paper" else "")
+        + ". "
         f"Suurus on kas fikseeritud {PORTFOLIO_POSITION_PCT*100:.0f}% (kuni mudel on piisavalt treenitud) "
         f"või pärast seda veerand-Kelly kriteeriumi järgi ({KELLY_MIN_PCT*100:.0f}–{KELLY_MAX_PCT*100:.0f}% vahemikus). "
         f"Algsaldo ${pf['starting_balance']:.0f}."
@@ -1331,7 +1515,7 @@ def render_dashboard(state):
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V3</div>
+      <div class="subtitle">Uuendatud {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')} UTC · V4 · {mode_badge}</div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -1348,6 +1532,7 @@ def render_dashboard(state):
     </table></div>
   </div>
 
+{killswitch_banner}
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">{len(pending)}</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">{len(completed)}</div></div>
@@ -1377,13 +1562,14 @@ def render_dashboard(state):
       <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">{f'-{pf_drawdown:.1f}%' if pf_drawdown else '0.0%'}</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f'{pf_profit_factor:.2f}' if pf_profit_factor is not None else '–'}</div></div>
       <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:{'var(--good)' if (pf_expectancy or 0)>=0 else 'var(--critical)'}">{f'{pf_expectancy:+.2f}%' if pf_expectancy is not None else '–'}</div></div>
+      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">${pf_total_fees:.2f}</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     {portfolio_chart_script if portfolio_chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>'}
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
-      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
-      {pf_open_rows or '<tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
+      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
+      {pf_open_rows or '<tr><td colspan="6" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
