@@ -167,7 +167,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 23.07.2026 14:53 UTC · V3</div>
+      <div class="subtitle">Uuendatud 23.07.2026 15:17 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -184,8 +184,14 @@
     </table></div>
   </div>
 
+
+  <div class="card" style="border-color:#f4756f;background:linear-gradient(160deg,#2a1520,#1c1220)">
+    <h2>⛔ Kill-switch aktiivne (alates 23.07 15:17 UTC)</h2>
+    <div class="desc" style="margin-bottom:0">Põhjus: päevakaotus 22.1% > 5% lubatud. Bot EI ava uusi positsioone
+    (olemasolevaid haldab edasi), kuni käivitad ühe korra keskkonna­muutujaga <span class="mono">KILLSWITCH_RESET=1</span>.</div>
+  </div>
   <div class="stats">
-    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">86</div></div>
+    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">87</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">13%</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">70</div></div>
@@ -203,7 +209,7 @@
   </div>
 
   <div class="card">
-    <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, "ostab" see virtuaalselt positsiooni ja "müüb" 24h pärast automaatselt maha. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
+    <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
       <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$783.46</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-21.7%</div></div>
@@ -213,6 +219,7 @@
       <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-17.7%</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">4.59</div></div>
       <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+1.71%</div></div>
+      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$0.00</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     
@@ -239,18 +246,18 @@
         </script>
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
-      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Risk</th></tr>
+      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
       
         <tr><td>22.07 21:06</td><td class="mono">AAVEUSD</td><td>$48.37 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">98.469</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <td class="mono">98.469</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
         <tr><td>22.07 21:06</td><td class="mono">WIFUSD</td><td>$45.95 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.1553</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <td class="mono">0.1553</td><td class="mono">–</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
         <tr><td>22.07 23:02</td><td class="mono">HBARUSD</td><td>$45.69 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.073175</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <td class="mono">0.073175</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
         <tr><td>23.07 11:08</td><td class="mono">MELANIAUSD</td><td>$43.41 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.086</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
+        <td class="mono">0.086</td><td class="mono">–</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
         <tr><td>23.07 11:08</td><td class="mono">HBARUSD</td><td>$41.23 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.073572</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+        <td class="mono">0.073572</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
@@ -352,6 +359,15 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       
+        <tr>
+          <td>23.07 15:17</td>
+          <td class="mono">NEARUSD</td>
+          <td>40.2</td>
+          <td><span class="dot" style="background:#fab219"></span>yellow</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why">Momentum 47.2/100 (24h -1.1%), trend kinnitatud (OLS R²=0.78 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.7%), vähe oma alphat Likviidsus: low (maht $143,876). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 64% positiivne / 36% negatiivne, turu positsioon #37. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 25%.</td>
+        </tr>
         <tr>
           <td>23.07 14:53</td>
           <td class="mono">TRUMPUSD</td>
@@ -883,15 +899,6 @@
           <td>ootel</td>
           <td class="why">Momentum 50.9/100 (24h +0.4%), trend kinnitatud (OLS R²=0.84 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.9%), vähe oma alphat Likviidsus: low (maht $33,771). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
         </tr>
-        <tr>
-          <td>20.07 23:07</td>
-          <td class="mono">BCHUSD</td>
-          <td>77.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+1.6% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 58.2/100 (24h +2.5%), trend kinnitatud (OLS R²=0.77 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.9%), vähe oma alphat Likviidsus: low (maht $92,769). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
     </table></div>
   </div>
 
@@ -900,6 +907,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>23.07 15:17</td><td>4</td><td>1</td>
+        <td>-</td>
+        <td>-</td></tr>
         <tr><td>23.07 14:53</td><td>3</td><td>2</td>
         <td>-</td>
         <td>-</td></tr>
@@ -985,9 +995,6 @@
         <td>-</td>
         <td>-</td></tr>
         <tr><td>20.07 23:30</td><td>10</td><td>4</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>20.07 23:07</td><td>10</td><td>5</td>
         <td>-</td>
         <td>-</td></tr>
     </table></div>
