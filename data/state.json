@@ -13615,71 +13615,19 @@
       {
         "ts": 1784814907.009634,
         "text": "Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' n\u00f5rgemmaks (-1.85 -> -1.87)."
+      },
+      {
+        "ts": 1784820676.1178849,
+        "text": "Portfell l\u00e4htestati $1000 peale (uus epohh: fee-teadlik broker-kiht, stop-lossid, vahetusloogika). Mudel, treeningajalugu ja soovituste ajalugu s\u00e4ilitati t\u00e4ies mahus."
       }
     ]
   },
   "portfolio": {
     "starting_balance": 1000.0,
-    "balance": 783.4635094580856,
+    "balance": 1000.0,
     "position_size_pct": 0.05,
     "max_open_positions": 5,
-    "open_positions": [
-      {
-        "id": 80,
-        "instrument": "AAVEUSD",
-        "entry_price": 98.469,
-        "size_usd": 48.37,
-        "size_pct": 5.0,
-        "entry_ts": 1784754394.884821,
-        "risk": "yellow",
-        "score": 53.2,
-        "category": "major"
-      },
-      {
-        "id": 81,
-        "instrument": "WIFUSD",
-        "entry_price": 0.1553,
-        "size_usd": 45.95,
-        "size_pct": 5.0,
-        "entry_ts": 1784754394.884821,
-        "risk": "red",
-        "score": 29.4,
-        "category": "meme"
-      },
-      {
-        "id": 82,
-        "instrument": "HBARUSD",
-        "entry_price": 0.073175,
-        "size_usd": 45.69,
-        "size_pct": 5.0,
-        "entry_ts": 1784761343.356348,
-        "risk": "yellow",
-        "score": 47.6,
-        "category": "major"
-      },
-      {
-        "id": 83,
-        "instrument": "MELANIAUSD",
-        "entry_price": 0.086,
-        "size_usd": 43.41,
-        "size_pct": 5.0,
-        "entry_ts": 1784804932.517358,
-        "risk": "red",
-        "score": 31.0,
-        "category": "meme"
-      },
-      {
-        "id": 84,
-        "instrument": "HBARUSD",
-        "entry_price": 0.073572,
-        "size_usd": 41.23,
-        "size_pct": 5.0,
-        "entry_ts": 1784804932.517358,
-        "risk": "yellow",
-        "score": 46.7,
-        "category": "major"
-      }
-    ],
+    "open_positions": [],
     "closed_trades": [
       {
         "id": 1,
@@ -13824,56 +13772,16 @@
     ],
     "balance_history": [
       {
-        "ts": 0,
+        "ts": 1784820676.1178849,
         "balance": 1000.0
-      },
-      {
-        "ts": 1784661626.237268,
-        "balance": 823.12
-      },
-      {
-        "ts": 1784661626.237299,
-        "balance": 876.55
-      },
-      {
-        "ts": 1784661626.237323,
-        "balance": 921.82
-      },
-      {
-        "ts": 1784661626.237345,
-        "balance": 964.28
-      },
-      {
-        "ts": 1784661626.237371,
-        "balance": 1005.69
-      },
-      {
-        "ts": 1784754394.884719,
-        "balance": 830.06
-      },
-      {
-        "ts": 1784754394.884756,
-        "balance": 879.41
-      },
-      {
-        "ts": 1784754394.884777,
-        "balance": 923.79
-      },
-      {
-        "ts": 1784754394.884796,
-        "balance": 967.34
-      },
-      {
-        "ts": 1784761343.356309,
-        "balance": 913.79
       }
     ],
     "mode": "paper"
   },
   "killswitch": {
-    "active": true,
-    "reason": "p\u00e4evakaotus 22.1% > 5% lubatud",
-    "ts": 1784819853.354059,
+    "active": false,
+    "reason": "",
+    "ts": 0,
     "consec_failures": 0
   }
 }

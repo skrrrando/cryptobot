@@ -136,6 +136,20 @@ KELLY_FRACTION = 0.25
 KELLY_MIN_PCT = 0.01   # never below 1% - keep participating/learning even on a marginal edge
 KELLY_MAX_PCT = 0.15   # never above 15% on one idea, however confident the model looks
 
+# "5 parimat, mitte 5 esimest": kui raamat on täis, võib uus, SELGELT tugevam
+# kandidaat välja vahetada nõrgima MIINUSES oleva positsiooni. Hüsterees on
+# teadlik fee-kaitse: üks vahetus maksab garanteeritult ~2x(fee+slippage)
+# (~1.3% vaikeseadetega - müüd ühe ja ostad teise), nii et vahetame ainult
+# siis, kui (a) senine positsioon on ise juba vee all (>=1% miinuses ehk
+# "nõrgenenud", mitte lihtsalt aeglasem tõusja), (b) uus kandidaat on skoorilt
+# selgelt parem (>= +12 punkti - rohkem kui tavaline tunnisisene müra) ja
+# (c) positsiooni on hoitud vähemalt paar tundi (ei pinguta edasi-tagasi sama
+# tunni sees). Max 1 vahetus tunnis, et churn ei sööks kasumit ära.
+SWAP_MIN_SCORE_ADVANTAGE = 12
+SWAP_LOSER_MAX_RETURN_PCT = -1.0   # holding must be at least this far under water
+SWAP_MIN_HOLD_HOURS = 2
+SWAP_MAX_PER_RUN = 1
+
 DEFAULT_STATE = {
     "history": {},          # instrument -> [ {ts, price, change_24h, volume_value}, ... ]
     "alerted": {},          # instrument -> {last_score, last_ts, last_risk}
@@ -506,6 +520,75 @@ def close_position(state, rec_id, exit_price, exit_ts, brk, reason="24h"):
         return
     state["killswitch"]["consec_failures"] = 0
     _book_close(state, match, fill["price"], fill["proceeds_usd"], fill["fee_usd"], exit_ts, reason)
+
+
+def maybe_swap_position(state, rec_id, instrument, price, ts, risk, score, brk,
+                        current_prices, category="unknown", win_prob=None):
+    """Called when an alert fires but the book is already full. Finds the
+    weakest eligible holding (broker-era position, held at least
+    SWAP_MIN_HOLD_HOURS, currently >= 1% under water, and scored at least
+    SWAP_MIN_SCORE_ADVANTAGE below the candidate), sells it, and opens the
+    stronger candidate in its place. See the constants block above for why
+    each condition exists (fee hysteresis). Returns (note, opened) - note
+    is a summary line or None if no swap happened."""
+    pf = state["portfolio"]
+    if state["killswitch"].get("active"):
+        return None, False
+    if len(pf["open_positions"]) < pf["max_open_positions"]:
+        return None, False
+    if any(p["instrument"] == instrument for p in pf["open_positions"]):
+        return None, False
+
+    eligible = []
+    for p in pf["open_positions"]:
+        if "quantity" not in p:
+            continue  # legacy pre-broker position - let its 24h timer handle it
+        cp = current_prices.get(p["instrument"])
+        if cp is None or p["entry_price"] <= 0:
+            continue
+        if (now_ts() - p["entry_ts"]) / 3600 < SWAP_MIN_HOLD_HOURS:
+            continue
+        unreal_pct = (cp - p["entry_price"]) / p["entry_price"] * 100
+        if unreal_pct > SWAP_LOSER_MAX_RETURN_PCT:
+            continue
+        if score - p["score"] < SWAP_MIN_SCORE_ADVANTAGE:
+            continue
+        eligible.append((p, cp))
+    if not eligible:
+        return None, False
+
+    weakest, cp = min(eligible, key=lambda x: x[0]["score"])
+
+    # the per-category diversification cap must still hold AFTER the swap
+    cat_cap = PORTFOLIO_CATEGORY_CAP.get(category)
+    if cat_cap is not None:
+        cat_open = sum(1 for p in pf["open_positions"]
+                       if p.get("category") == category and p is not weakest)
+        if cat_open >= cat_cap:
+            return None, False
+
+    if weakest.get("stop_order_id"):
+        brk.cancel_order(weakest["instrument"], weakest["stop_order_id"])
+    try:
+        fill = brk.sell(weakest["instrument"], weakest["quantity"], cp)
+    except broker_mod.BrokerError as e:
+        fill = None
+        print(f"WARN: swap-sell {weakest['instrument']} failed: {e}", file=sys.stderr)
+    if not fill:
+        _record_order_failure(state, f"swap-sell {weakest['instrument']}")
+        return None, False
+    state["killswitch"]["consec_failures"] = 0
+    _book_close(state, weakest, fill["price"], fill["proceeds_usd"], fill["fee_usd"],
+                now_ts(), "swap")
+    old_trade = pf["closed_trades"][-1]
+
+    opened = maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
+                                 category=category, win_prob=win_prob)
+    note = (f"🔄 VAHETUS: {weakest['instrument']} (skoor {weakest['score']}, {old_trade['pnl_pct']:+.1f}%) "
+            f"→ {instrument} (skoor {score})")
+    if not opened:
+        note += " - uue ost ebaõnnestus, koht jäi vabaks"
+    return note, opened
 
 
 def check_stop_losses(state, current_prices, brk):
@@ -1023,6 +1106,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     model_ready = n_updates >= MODEL_MIN_TRAINING
 
     alerts = []
+    swap_notes = []
+    swaps_left = SWAP_MAX_PER_RUN
     ts = now_ts()
 
     for c in candidates:
@@ -1066,6 +1151,13 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
             win_prob = model_p if model_ready else None
             traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score,
                                           brk, category=c["category"], win_prob=win_prob)
+            if not traded and swaps_left > 0:
+                swap_note, traded = maybe_swap_position(state, rec_id, inst, c["price"], ts, risk,
+                                                        final_score, brk, current_prices,
+                                                        category=c["category"], win_prob=win_prob)
+                if swap_note:
+                    swaps_left -= 1
+                    swap_notes.append(swap_note)
             entry["traded"] = traded
             alerts.append(entry)
             state["alerted"][inst] = {"last_score": final_score, "last_ts": ts, "last_risk": risk}
@@ -1093,6 +1185,8 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.extend(killswitch_notes)
     if stop_notes:
         lines.extend(stop_notes)
+    if swap_notes:
+        lines.extend(swap_notes)
     if reconcile_notes:
         lines.extend(reconcile_notes)
     if alerts:
@@ -1201,7 +1295,7 @@ def render_dashboard(state):
         return f'<span class="info" tabindex="0">?<span class="info-pop">{desc}</span></span>'
 
     history_rows = ""
-    all_recs = sorted(completed + pending, key=lambda r: r["ts"], reverse=True)[:60]
+    all_recs = sorted(completed + pending, key=lambda r: r["ts"], reverse=True)[:40]
     for r in all_recs:
         r24 = r.get("result_24h")
         r7 = r.get("result_7d")
@@ -1217,7 +1311,7 @@ def render_dashboard(state):
           <td>{risk_dot(r['risk'])}</td>
           <td>{r24_txt}</td>
           <td>{r7_txt}</td>
-          <td class="why">{r['why']}</td>
+          <td class="why"><div class="clip">{r['why']}</div></td>
         </tr>"""
 
     run_rows = ""
@@ -1315,7 +1409,8 @@ def render_dashboard(state):
     for t in pf_closed:
         dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
-        reason_tag = ' <span class="tag" style="background:#f4756f">SL</span>' if t.get("exit_reason") == "stop_loss" else ""
+        reason_tag = {"stop_loss": ' <span class="tag" style="background:#f4756f">SL</span>',
+                      "swap": ' <span class="tag" style="background:#f59e0b">SWAP</span>'}.get(t.get("exit_reason"), "")
         live_tag = ' <span class="tag" style="background:#dc2626">LIVE</span>' if t.get("mode") == "live" else ""
         pf_closed_rows += f"""
         <tr><td>{dt}</td><td class="mono">{t['instrument']}{reason_tag}{live_tag}</td><td>${t['size_usd']:.2f}</td>
@@ -1338,6 +1433,8 @@ def render_dashboard(state):
          else "Mängu raha, mitte päris. ")
         + 'Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, '
         f"või varem, kui hind kukub stop-lossini (-{broker_mod.STOP_LOSS_PCT*100:.0f}% sisenemisest). "
+        f"Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥{SWAP_MIN_SCORE_ADVANTAGE}p kõrgem skoor), "
+        f"vahetatakse nõrgim miinuses olev positsioon välja (max {SWAP_MAX_PER_RUN}/tunnis, et fee'd ei sööks kasumit). "
         f"P&L on NETO: sisaldab {broker_mod.FEE_PCT*100:.2f}% teenustasu mõlemal pool tehingut"
         + (f" ja {broker_mod.SLIPPAGE_PCT*100:.2f}% simuleeritud slippage'it" if pf_mode == "paper" else "")
         + ". "
@@ -1471,6 +1568,24 @@ def render_dashboard(state):
   tr:last-child td {{ border-bottom: none; }}
   .mono {{ font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--text); }}
   .why {{ color: var(--muted); max-width: 420px; }}
+  .why .clip {{
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; cursor: pointer;
+  }}
+  .why .clip.expanded {{ display: block; -webkit-line-clamp: unset; }}
+  .why .clip:not(.expanded)::after {{ content: ""; }}
+  details.card {{ padding: 0; }}
+  details.card > summary {{
+    list-style: none; cursor: pointer; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }}
+  details.card > summary::-webkit-details-marker {{ display: none; }}
+  details.card > summary h2 {{ margin: 0; }}
+  details.card > summary .chev {{
+    color: var(--muted); font-size: 12px; flex-shrink: 0; transition: transform .2s ease;
+  }}
+  details.card[open] > summary .chev {{ transform: rotate(180deg); }}
+  details.card > .body {{ padding: 0 20px 20px; }}
   .dot {{
     display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
   }}
@@ -1503,10 +1618,14 @@ def render_dashboard(state):
   @media (max-width: 640px) {{
     .wrap {{ padding: 18px 14px 48px; }}
     .card {{ padding: 16px; border-radius: 14px; }}
+    details.card {{ padding: 0; }}
+    details.card > summary {{ padding: 14px 16px; }}
+    details.card > .body {{ padding: 0 16px 16px; }}
     .stats {{ gap: 8px; }}
     .stat-card {{ padding: 12px 12px; border-radius: 12px; }}
-    table {{ font-size: 12px; }}
-    .why {{ max-width: 220px; }}
+    table {{ font-size: 11.5px; min-width: 420px; }}
+    th, td {{ padding: 6px 7px; }}
+    .why {{ max-width: 190px; }}
   }}
 </style>
 </head>
@@ -1593,45 +1712,57 @@ def render_dashboard(state):
     {chart_script if chart_script else '<div style="color:var(--muted)">Vaja on vähemalt paar lahendatud tulemust, enne kui graafik ilmub.</div>'}
   </div>
 
-  <div class="card">
-    <h2>Õpipäevik{info_badge("Mida süsteem viimati enda kohta õppis, tavakeeles.")}</h2>
+  <details class="card">
+    <summary><h2>📔 Õpipäevik{info_badge("Mida süsteem viimati enda kohta õppis, tavakeeles.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
     {learning_log_rows or '<div style="color:var(--muted)">Veel pole midagi õppida olnud - vajab lahendatud tulemusi.</div>'}
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Riski-lävendid{info_badge("Kohandatakse automaatselt tagasiside põhjal.")}</h2>
+  <details class="card">
+    <summary><h2>🎚️ Riski-lävendid{info_badge("Kohandatakse automaatselt tagasiside põhjal.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="thresholds">
       <div>Skanni lävi: <b>{thresholds['screen_score']}</b></div>
       <div>🟢 roheline tabamuslävi: <b>{thresholds['green_hit_bar']}</b></div>
       <div>🟡 kollane tabamuslävi: <b>{thresholds['yellow_hit_bar']}</b></div>
       <div>🔴 punane tabamuslävi: <b>{thresholds['red_hit_bar']}</b></div>
     </div>
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Soovituste ajalugu{info_badge("Uusimad enne. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.")}</h2>
+  <details class="card">
+    <summary><h2>📜 Soovituste ajalugu{info_badge("Uusimad enne. Puuduta põhjendust, et seda täispikkuses lugeda. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       {history_rows or '<tr><td colspan="7" style="color:var(--muted)">Veel andmeid pole.</td></tr>'}
     </table></div>
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Käivituste logi</h2>
+  <details class="card">
+    <summary><h2>⚙️ Käivituste logi</h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       {run_rows or '<tr><td colspan="5" style="color:var(--muted)">Veel käivitusi pole.</td></tr>'}
     </table></div>
-  </div>
+    </div>
+  </details>
 </div>
 <script>
   document.querySelectorAll('.info').forEach(function(b) {{
     b.addEventListener('click', function(e) {{
       e.stopPropagation();
+      e.preventDefault();  // don't also toggle the surrounding <details> section
       var wasOpen = b.classList.contains('open');
       document.querySelectorAll('.info.open').forEach(function(o) {{ o.classList.remove('open'); }});
       if (!wasOpen) b.classList.add('open');
     }});
+  }});
+  document.querySelectorAll('.why .clip').forEach(function(c) {{
+    c.addEventListener('click', function() {{ c.classList.toggle('expanded'); }});
   }});
   var methodBtn = document.getElementById('methodBtn');
   var methodPanel = document.getElementById('methodPanel');

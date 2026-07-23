@@ -123,6 +123,24 @@
   tr:last-child td { border-bottom: none; }
   .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--text); }
   .why { color: var(--muted); max-width: 420px; }
+  .why .clip {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; cursor: pointer;
+  }
+  .why .clip.expanded { display: block; -webkit-line-clamp: unset; }
+  .why .clip:not(.expanded)::after { content: ""; }
+  details.card { padding: 0; }
+  details.card > summary {
+    list-style: none; cursor: pointer; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  details.card > summary::-webkit-details-marker { display: none; }
+  details.card > summary h2 { margin: 0; }
+  details.card > summary .chev {
+    color: var(--muted); font-size: 12px; flex-shrink: 0; transition: transform .2s ease;
+  }
+  details.card[open] > summary .chev { transform: rotate(180deg); }
+  details.card > .body { padding: 0 20px 20px; }
   .dot {
     display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
   }
@@ -155,10 +173,14 @@
   @media (max-width: 640px) {
     .wrap { padding: 18px 14px 48px; }
     .card { padding: 16px; border-radius: 14px; }
+    details.card { padding: 0; }
+    details.card > summary { padding: 14px 16px; }
+    details.card > .body { padding: 0 16px 16px; }
     .stats { gap: 8px; }
     .stat-card { padding: 12px 12px; border-radius: 12px; }
-    table { font-size: 12px; }
-    .why { max-width: 220px; }
+    table { font-size: 11.5px; min-width: 420px; }
+    th, td { padding: 6px 7px; }
+    .why { max-width: 190px; }
   }
 </style>
 </head>
@@ -167,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 23.07.2026 15:17 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 23.07.2026 15:32 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -185,11 +207,6 @@
   </div>
 
 
-  <div class="card" style="border-color:#f4756f;background:linear-gradient(160deg,#2a1520,#1c1220)">
-    <h2>⛔ Kill-switch aktiivne (alates 23.07 15:17 UTC)</h2>
-    <div class="desc" style="margin-bottom:0">Põhjus: päevakaotus 22.1% > 5% lubatud. Bot EI ava uusi positsioone
-    (olemasolevaid haldab edasi), kuni käivitad ühe korra keskkonna­muutujaga <span class="mono">KILLSWITCH_RESET=1</span>.</div>
-  </div>
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">87</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
@@ -209,55 +226,24 @@
   </div>
 
   <div class="card">
-    <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
+    <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$783.46</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-21.7%</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">5/5</div></div>
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--good)">$1000.00</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--good)">+0.0%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">6✅ / 4❌</div></div>
       <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">7.74</div></div>
-      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-17.7%</div></div>
+      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">0.0%</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">4.59</div></div>
       <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+1.71%</div></div>
       <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$0.00</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
-    
-        <script>
-          const ctx2 = document.getElementById('portfolioChart');
-          new Chart(ctx2, {
-            type: 'line',
-            data: {
-              labels: ["algus", "21.07 19:20", "21.07 19:20", "21.07 19:20", "21.07 19:20", "21.07 19:20", "22.07 21:06", "22.07 21:06", "22.07 21:06", "22.07 21:06", "22.07 23:02"],
-              datasets: [{
-                label: 'Virtuaalne saldo ($)',
-                data: [1000.0, 823.12, 876.55, 921.82, 964.28, 1005.69, 830.06, 879.41, 923.79, 967.34, 913.79],
-                borderColor: "#ef4444",
-                backgroundColor: "rgba(239,68,68,0.12)",
-                tension: 0.25, fill: true, pointRadius: 2
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: { y: { ticks: { color: '#8b94a8' } }, x: { ticks: { color: '#8b94a8' } } },
-              plugins: { legend: { labels: { color: '#e5e9f0' } } }
-            }
-          });
-        </script>
+    <div style="color:var(--muted)">Vaja on vähemalt paar suletud virtuaalset kauplust, enne kui graafik ilmub.</div>
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
-      
-        <tr><td>22.07 21:06</td><td class="mono">AAVEUSD</td><td>$48.37 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">98.469</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.07 21:06</td><td class="mono">WIFUSD</td><td>$45.95 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.1553</td><td class="mono">–</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>22.07 23:02</td><td class="mono">HBARUSD</td><td>$45.69 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.073175</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>23.07 11:08</td><td class="mono">MELANIAUSD</td><td>$43.41 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.086</td><td class="mono">–</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>23.07 11:08</td><td class="mono">HBARUSD</td><td>$41.23 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.073572</td><td class="mono">–</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+      <tr><td colspan="6" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
@@ -339,23 +325,28 @@
         </script>
   </div>
 
-  <div class="card">
-    <h2>Õpipäevik<span class="info" tabindex="0">?<span class="info-pop">Mida süsteem viimati enda kohta õppis, tavakeeles.</span></span></h2>
-    <div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.85 -> -1.87).</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.83 -> -1.85).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.89 -> -1.83).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.86 -> -1.89).</div><div class="log-entry"><span class="log-ts">23.07 05:52</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.84 -> -1.86).</div><div class="log-entry"><span class="log-ts">22.07 23:02</span> Tulemus (ei tabanud, ennustus oli 48%) muutis kaalu 'liquidity' nõrgemmaks (0.81 -> 0.77).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.75 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 32%) muutis kaalu 'bias' nõrgemmaks (-1.73 -> -1.75).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 32%) muutis kaalu 'bias' tugevammaks (-1.78 -> -1.73).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.84 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 19:17</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 25%) muutis kaalu 'bias' tugevammaks (-1.86 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 49%) muutis kaalu 'liquidity' nõrgemmaks (0.86 -> 0.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.85 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (tabas, ennustus oli 22%) muutis kaalu 'bias' tugevammaks (-1.92 -> -1.85).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (ei tabanud, ennustus oli 33%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.79 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 31%) muutis kaalu 'bias' nõrgemmaks (-1.76 -> -1.79).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 59%) muutis kaalu 'liquidity' nõrgemmaks (0.93 -> 0.88).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 39%) muutis kaalu 'bias' nõrgemmaks (-1.67 -> -1.70).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (tabas, ennustus oli 36%) muutis kaalu 'bias' tugevammaks (-1.72 -> -1.67).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 40%) muutis kaalu 'bias' nõrgemmaks (-1.68 -> -1.71).</div>
-  </div>
+  <details class="card">
+    <summary><h2>📔 Õpipäevik<span class="info" tabindex="0">?<span class="info-pop">Mida süsteem viimati enda kohta õppis, tavakeeles.</span></span></h2><span class="chev">▼</span></summary>
+    <div class="body">
+    <div class="log-entry"><span class="log-ts">23.07 15:31</span> Portfell lähtestati $1000 peale (uus epohh: fee-teadlik broker-kiht, stop-lossid, vahetusloogika). Mudel, treeningajalugu ja soovituste ajalugu säilitati täies mahus.</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.85 -> -1.87).</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.83 -> -1.85).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.89 -> -1.83).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.86 -> -1.89).</div><div class="log-entry"><span class="log-ts">23.07 05:52</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.84 -> -1.86).</div><div class="log-entry"><span class="log-ts">22.07 23:02</span> Tulemus (ei tabanud, ennustus oli 48%) muutis kaalu 'liquidity' nõrgemmaks (0.81 -> 0.77).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.75 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 32%) muutis kaalu 'bias' nõrgemmaks (-1.73 -> -1.75).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 32%) muutis kaalu 'bias' tugevammaks (-1.78 -> -1.73).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.84 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 19:17</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 25%) muutis kaalu 'bias' tugevammaks (-1.86 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 49%) muutis kaalu 'liquidity' nõrgemmaks (0.86 -> 0.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.85 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (tabas, ennustus oli 22%) muutis kaalu 'bias' tugevammaks (-1.92 -> -1.85).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (ei tabanud, ennustus oli 33%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.79 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 31%) muutis kaalu 'bias' nõrgemmaks (-1.76 -> -1.79).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 59%) muutis kaalu 'liquidity' nõrgemmaks (0.93 -> 0.88).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 39%) muutis kaalu 'bias' nõrgemmaks (-1.67 -> -1.70).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (tabas, ennustus oli 36%) muutis kaalu 'bias' tugevammaks (-1.72 -> -1.67).</div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Riski-lävendid<span class="info" tabindex="0">?<span class="info-pop">Kohandatakse automaatselt tagasiside põhjal.</span></span></h2>
+  <details class="card">
+    <summary><h2>🎚️ Riski-lävendid<span class="info" tabindex="0">?<span class="info-pop">Kohandatakse automaatselt tagasiside põhjal.</span></span></h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="thresholds">
       <div>Skanni lävi: <b>65</b></div>
       <div>🟢 roheline tabamuslävi: <b>60</b></div>
       <div>🟡 kollane tabamuslävi: <b>65</b></div>
       <div>🔴 punane tabamuslävi: <b>75</b></div>
     </div>
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Soovituste ajalugu<span class="info" tabindex="0">?<span class="info-pop">Uusimad enne. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</span></span></h2>
+  <details class="card">
+    <summary><h2>📜 Soovituste ajalugu<span class="info" tabindex="0">?<span class="info-pop">Uusimad enne. Puuduta põhjendust, et seda täispikkuses lugeda. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</span></span></h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       
@@ -366,7 +357,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 47.2/100 (24h -1.1%), trend kinnitatud (OLS R²=0.78 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.7%), vähe oma alphat Likviidsus: low (maht $143,876). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 64% positiivne / 36% negatiivne, turu positsioon #37. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 25%.</td>
+          <td class="why"><div class="clip">Momentum 47.2/100 (24h -1.1%), trend kinnitatud (OLS R²=0.78 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.7%), vähe oma alphat Likviidsus: low (maht $143,876). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 64% positiivne / 36% negatiivne, turu positsioon #37. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 25%.</div></td>
         </tr>
         <tr>
           <td>23.07 14:53</td>
@@ -375,7 +366,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 58.9/100 (24h +3.6%), trend kinnitatud (OLS R²=0.55 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +5.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $36,617). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 31% positiivne / 69% negatiivne, turu positsioon #113. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</td>
+          <td class="why"><div class="clip">Momentum 58.9/100 (24h +3.6%), trend kinnitatud (OLS R²=0.55 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +5.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $36,617). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 31% positiivne / 69% negatiivne, turu positsioon #113. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</div></td>
         </tr>
         <tr>
           <td>23.07 14:53</td>
@@ -384,7 +375,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.8/100 (24h +1.7%), trend kinnitatud (OLS R²=0.60 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,236). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #478. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</td>
+          <td class="why"><div class="clip">Momentum 54.8/100 (24h +1.7%), trend kinnitatud (OLS R²=0.60 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,236). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #478. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</div></td>
         </tr>
         <tr>
           <td>23.07 11:08</td>
@@ -393,7 +384,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 61.6/100 (24h +6.5%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +7.0pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $5). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 50% positiivne / 50% negatiivne, turu positsioon #299. Mudel (treenitud 68 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%.</td>
+          <td class="why"><div class="clip">Momentum 61.6/100 (24h +6.5%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +7.0pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $5). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 50% positiivne / 50% negatiivne, turu positsioon #299. Mudel (treenitud 68 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%.</div></td>
         </tr>
         <tr>
           <td>23.07 11:08</td>
@@ -402,7 +393,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 57.2/100 (24h +3.2%), nõrk kinnitus - hind tõusuteel (R²=0.85), aga veel ebakindel. alpha +3.8pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $646,215). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #29. Mudel (treenitud 68 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 30%.</td>
+          <td class="why"><div class="clip">Momentum 57.2/100 (24h +3.2%), nõrk kinnitus - hind tõusuteel (R²=0.85), aga veel ebakindel. alpha +3.8pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $646,215). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #29. Mudel (treenitud 68 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 30%.</div></td>
         </tr>
         <tr>
           <td>22.07 23:02</td>
@@ -411,7 +402,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 63.2/100 (24h +5.5%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +5.9pp üle BTC-turu (-0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $566,531). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #29. Mudel (treenitud 62 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</td>
+          <td class="why"><div class="clip">Momentum 63.2/100 (24h +5.5%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +5.9pp üle BTC-turu (-0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $566,531). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #29. Mudel (treenitud 62 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</div></td>
         </tr>
         <tr>
           <td>22.07 21:06</td>
@@ -420,7 +411,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 58.1/100 (24h +3.8%), trend kinnitatud (OLS R²=0.64 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.4pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $199,172). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 93% positiivne / 7% negatiivne, turu positsioon #50. Mudel (treenitud 61 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 33%.</td>
+          <td class="why"><div class="clip">Momentum 58.1/100 (24h +3.8%), trend kinnitatud (OLS R²=0.64 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.4pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $199,172). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 93% positiivne / 7% negatiivne, turu positsioon #50. Mudel (treenitud 61 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 33%.</div></td>
         </tr>
         <tr>
           <td>22.07 21:06</td>
@@ -429,7 +420,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.7/100 (24h +2.0%), trend kinnitatud (OLS R²=0.74 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $10,942). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #196. Mudel (treenitud 61 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 11%.</td>
+          <td class="why"><div class="clip">Momentum 54.7/100 (24h +2.0%), trend kinnitatud (OLS R²=0.74 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $10,942). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #196. Mudel (treenitud 61 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 11%.</div></td>
         </tr>
         <tr>
           <td>22.07 19:17</td>
@@ -438,7 +429,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 48.6/100 (24h -0.5%), trend kinnitatud (OLS R²=0.89 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $174,014). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 26%.</td>
+          <td class="why"><div class="clip">Momentum 48.6/100 (24h -0.5%), trend kinnitatud (OLS R²=0.89 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $174,014). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 26%.</div></td>
         </tr>
         <tr>
           <td>22.07 19:17</td>
@@ -447,7 +438,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 48.1/100 (24h -0.7%), trend kinnitatud (OLS R²=0.95 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $4,020). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</td>
+          <td class="why"><div class="clip">Momentum 48.1/100 (24h -0.7%), trend kinnitatud (OLS R²=0.95 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $4,020). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</div></td>
         </tr>
         <tr>
           <td>22.07 19:17</td>
@@ -456,7 +447,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 49.7/100 (24h -0.1%), trend kinnitatud (OLS R²=0.76 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $246,263). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 26%.</td>
+          <td class="why"><div class="clip">Momentum 49.7/100 (24h -0.1%), trend kinnitatud (OLS R²=0.76 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: low (maht $246,263). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 26%.</div></td>
         </tr>
         <tr>
           <td>22.07 19:17</td>
@@ -465,7 +456,7 @@
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 48.4/100 (24h -0.4%), trend kinnitatud (OLS R²=0.85 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: high (maht $11,342,423). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 44%.</td>
+          <td class="why"><div class="clip">Momentum 48.4/100 (24h -0.4%), trend kinnitatud (OLS R²=0.85 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.8%), vähe oma alphat Likviidsus: high (maht $11,342,423). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 57 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 44%.</div></td>
         </tr>
         <tr>
           <td>22.07 17:18</td>
@@ -474,7 +465,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.2/100 (24h +1.5%), trend kinnitatud (OLS R²=0.56 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $14,304). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #165. Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 11%.</td>
+          <td class="why"><div class="clip">Momentum 54.2/100 (24h +1.5%), trend kinnitatud (OLS R²=0.56 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $14,304). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #165. Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 11%.</div></td>
         </tr>
         <tr>
           <td>22.07 17:18</td>
@@ -483,7 +474,7 @@
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 53.5/100 (24h +0.9%), trend kinnitatud (OLS R²=0.62 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: high (maht $186,025,237). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 90% positiivne / 10% negatiivne, turu positsioon #2. Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 49%.</td>
+          <td class="why"><div class="clip">Momentum 53.5/100 (24h +0.9%), trend kinnitatud (OLS R²=0.62 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: high (maht $186,025,237). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 90% positiivne / 10% negatiivne, turu positsioon #2. Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 49%.</div></td>
         </tr>
         <tr>
           <td>22.07 17:18</td>
@@ -492,7 +483,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 58.1/100 (24h +3.1%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +3.7pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $36,647). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 27%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+          <td class="why"><div class="clip">Momentum 58.1/100 (24h +3.1%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +3.7pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $36,647). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 27%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
         <tr>
           <td>22.07 17:18</td>
@@ -501,7 +492,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.9/100 (24h +1.2%), nõrk kinnitus - hind tõusuteel (R²=0.81), aga veel ebakindel. liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $23,790). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+          <td class="why"><div class="clip">Momentum 54.9/100 (24h +1.2%), nõrk kinnitus - hind tõusuteel (R²=0.81), aga veel ebakindel. liigub suuresti koos BTC-turuga (-0.6%), vähe oma alphat Likviidsus: low (maht $23,790). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 56 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
         <tr>
           <td>22.07 15:41</td>
@@ -510,7 +501,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>ootel</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.7/100 (24h +1.5%), trend kinnitatud (OLS R²=0.73 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.1%), vähe oma alphat Likviidsus: low (maht $163,729). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 83% positiivne / 17% negatiivne, turu positsioon #91. Mudel (treenitud 51 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 28%.</td>
+          <td class="why"><div class="clip">Momentum 54.7/100 (24h +1.5%), trend kinnitatud (OLS R²=0.73 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.1%), vähe oma alphat Likviidsus: low (maht $163,729). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 83% positiivne / 17% negatiivne, turu positsioon #91. Mudel (treenitud 51 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 28%.</div></td>
         </tr>
         <tr>
           <td>22.07 13:50</td>
@@ -519,7 +510,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-0.3% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 57.5/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.34), aga veel ebakindel. alpha +4.1pp üle BTC-turu (-0.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $21,583). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 80% positiivne / 20% negatiivne, turu positsioon #39. Mudel (treenitud 51 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 28%.</td>
+          <td class="why"><div class="clip">Momentum 57.5/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.34), aga veel ebakindel. alpha +4.1pp üle BTC-turu (-0.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $21,583). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 80% positiivne / 20% negatiivne, turu positsioon #39. Mudel (treenitud 51 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 28%.</div></td>
         </tr>
         <tr>
           <td>22.07 11:09</td>
@@ -528,7 +519,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-1.3% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 53.3/100 (24h +2.2%), nõrk kinnitus - hind tõusuteel (R²=0.33), aga veel ebakindel. liigub suuresti koos BTC-turuga (-0.2%), vähe oma alphat Likviidsus: low (maht $71,794). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #41. Mudel (treenitud 46 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 27%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+          <td class="why"><div class="clip">Momentum 53.3/100 (24h +2.2%), nõrk kinnitus - hind tõusuteel (R²=0.33), aga veel ebakindel. liigub suuresti koos BTC-turuga (-0.2%), vähe oma alphat Likviidsus: low (maht $71,794). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #41. Mudel (treenitud 46 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 27%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
         <tr>
           <td>22.07 08:27</td>
@@ -537,7 +528,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+1.2% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 52.6/100 (24h +1.2%), trend kinnitatud (OLS R²=0.52 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.4%), vähe oma alphat Likviidsus: low (maht $156,519). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #51. Mudel (treenitud 42 tulemuse pealt, praegu 63% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</td>
+          <td class="why"><div class="clip">Momentum 52.6/100 (24h +1.2%), trend kinnitatud (OLS R²=0.52 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-0.4%), vähe oma alphat Likviidsus: low (maht $156,519). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #51. Mudel (treenitud 42 tulemuse pealt, praegu 63% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</div></td>
         </tr>
         <tr>
           <td>22.07 08:27</td>
@@ -546,7 +537,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+4.6% ✅</td>
           <td>ootel</td>
-          <td class="why">Momentum 62.0/100 (24h +4.7%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +5.1pp üle BTC-turu (-0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $713,964). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 96% positiivne / 4% negatiivne, turu positsioon #29. Mudel (treenitud 42 tulemuse pealt, praegu 63% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</td>
+          <td class="why"><div class="clip">Momentum 62.0/100 (24h +4.7%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). alpha +5.1pp üle BTC-turu (-0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $713,964). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 96% positiivne / 4% negatiivne, turu positsioon #29. Mudel (treenitud 42 tulemuse pealt, praegu 63% kaaluga lõppskooris) hindab tabamise tõenäosuseks 31%.</div></td>
         </tr>
         <tr>
           <td>22.07 05:49</td>
@@ -555,7 +546,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-2.5% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 59.3/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.42), aga veel ebakindel. alpha +3.0pp üle BTC-turu (+0.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $40,639). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #90. Mudel (treenitud 35 tulemuse pealt, praegu 58% kaaluga lõppskooris) hindab tabamise tõenäosuseks 37%.</td>
+          <td class="why"><div class="clip">Momentum 59.3/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.42), aga veel ebakindel. alpha +3.0pp üle BTC-turu (+0.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $40,639). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #90. Mudel (treenitud 35 tulemuse pealt, praegu 58% kaaluga lõppskooris) hindab tabamise tõenäosuseks 37%.</div></td>
         </tr>
         <tr>
           <td>22.07 02:41</td>
@@ -564,7 +555,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>-0.5% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 60.8/100 (24h +5.5%), trend kinnitatud (OLS R²=0.74 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.0pp üle BTC-turu (+1.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,912). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #315. Mudel (treenitud 35 tulemuse pealt, praegu 58% kaaluga lõppskooris) hindab tabamise tõenäosuseks 15%.</td>
+          <td class="why"><div class="clip">Momentum 60.8/100 (24h +5.5%), trend kinnitatud (OLS R²=0.74 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.0pp üle BTC-turu (+1.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,912). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #315. Mudel (treenitud 35 tulemuse pealt, praegu 58% kaaluga lõppskooris) hindab tabamise tõenäosuseks 15%.</div></td>
         </tr>
         <tr>
           <td>21.07 23:56</td>
@@ -573,7 +564,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>-1.4% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 55.9/100 (24h +1.4%), trend kinnitatud (OLS R²=0.57 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.1%), vähe oma alphat Likviidsus: low (maht $3,704). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #508. Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga lõppskooris) hindab tabamise tõenäosuseks 13%.</td>
+          <td class="why"><div class="clip">Momentum 55.9/100 (24h +1.4%), trend kinnitatud (OLS R²=0.57 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.1%), vähe oma alphat Likviidsus: low (maht $3,704). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #508. Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga lõppskooris) hindab tabamise tõenäosuseks 13%.</div></td>
         </tr>
         <tr>
           <td>21.07 23:56</td>
@@ -582,7 +573,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>+0.0% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 52.1/100 (24h +1.3%), trend kinnitatud (OLS R²=0.79 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.1%), vähe oma alphat Likviidsus: low (maht $2,022). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga lõppskooris) hindab tabamise tõenäosuseks 14%.</td>
+          <td class="why"><div class="clip">Momentum 52.1/100 (24h +1.3%), trend kinnitatud (OLS R²=0.79 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.1%), vähe oma alphat Likviidsus: low (maht $2,022). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga lõppskooris) hindab tabamise tõenäosuseks 14%.</div></td>
         </tr>
         <tr>
           <td>21.07 21:08</td>
@@ -591,7 +582,7 @@
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
           <td>-0.5% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 57.5/100 (24h +1.6%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). BTC ise on turu võrdlusalus Likviidsus: high (maht $330,283,121). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+          <td class="why"><div class="clip">Momentum 57.5/100 (24h +1.6%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). BTC ise on turu võrdlusalus Likviidsus: high (maht $330,283,121). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
         <tr>
           <td>21.07 19:20</td>
@@ -600,7 +591,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+3.2% ✅</td>
           <td>ootel</td>
-          <td class="why">Momentum 68.5/100 (24h +13.2%), trend kinnitatud (OLS R²=0.57 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +11.3pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $159,337). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #41. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</td>
+          <td class="why"><div class="clip">Momentum 68.5/100 (24h +13.2%), trend kinnitatud (OLS R²=0.57 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +11.3pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $159,337). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #41. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</div></td>
         </tr>
         <tr>
           <td>21.07 19:20</td>
@@ -609,7 +600,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+3.3% ✅</td>
           <td>ootel</td>
-          <td class="why">Momentum 66.4/100 (24h +5.2%), trend kinnitatud (OLS R²=0.75 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.4pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $514,990). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #30. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</td>
+          <td class="why"><div class="clip">Momentum 66.4/100 (24h +5.2%), trend kinnitatud (OLS R²=0.75 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.4pp üle BTC-turu (+1.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $514,990). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #30. Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</div></td>
         </tr>
         <tr>
           <td>21.07 19:20</td>
@@ -618,7 +609,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-2.2% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 60.5/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.72), aga veel ebakindel. liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $88,641). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 83%.</td>
+          <td class="why"><div class="clip">Momentum 60.5/100 (24h +3.1%), nõrk kinnitus - hind tõusuteel (R²=0.72), aga veel ebakindel. liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $88,641). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 83%.</div></td>
         </tr>
         <tr>
           <td>21.07 19:20</td>
@@ -627,7 +618,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+1.0% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 58.5/100 (24h +4.6%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $28,389). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 79%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</td>
+          <td class="why"><div class="clip">Momentum 58.5/100 (24h +4.6%), ühekordne hüpe või müra, trend ei ole veel kinnitatud (madal R²). liigub suuresti koos BTC-turuga (+1.8%), vähe oma alphat Likviidsus: low (maht $28,389). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 6 tulemuse pealt, praegu 19% kaaluga lõppskooris) hindab tabamise tõenäosuseks 79%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
         <tr>
           <td>21.07 17:18</td>
@@ -636,7 +627,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-1.1% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 54.3/100 (24h +1.7%), trend kinnitatud (OLS R²=0.69 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+1.6%), vähe oma alphat Likviidsus: low (maht $92,477). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 54.3/100 (24h +1.7%), trend kinnitatud (OLS R²=0.69 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+1.6%), vähe oma alphat Likviidsus: low (maht $92,477). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 15:43</td>
@@ -645,7 +636,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+3.1% ✅</td>
           <td>ootel</td>
-          <td class="why">Momentum 64.9/100 (24h +6.9%), trend kinnitatud (OLS R²=0.81 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.2pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $104,542). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #52. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 64.9/100 (24h +6.9%), trend kinnitatud (OLS R²=0.81 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.2pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $104,542). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #52. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 15:43</td>
@@ -654,7 +645,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+2.2% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 65.3/100 (24h +4.3%), trend kinnitatud (OLS R²=0.82 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $17,831). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #90. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 65.3/100 (24h +4.3%), trend kinnitatud (OLS R²=0.82 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $17,831). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #90. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 15:43</td>
@@ -663,7 +654,7 @@
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
           <td>+0.0% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 63.2/100 (24h +4.0%), trend kinnitatud (OLS R²=0.84 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: high (maht $10,910,528). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 79% positiivne / 21% negatiivne, turu positsioon #6. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 63.2/100 (24h +4.0%), trend kinnitatud (OLS R²=0.84 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: high (maht $10,910,528). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 79% positiivne / 21% negatiivne, turu positsioon #6. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 15:43</td>
@@ -672,7 +663,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>+6.0% ✅</td>
           <td>ootel</td>
-          <td class="why">Momentum 60.2/100 (24h +3.4%), trend kinnitatud (OLS R²=0.93 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $527,953). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 60.2/100 (24h +3.4%), trend kinnitatud (OLS R²=0.93 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $527,953). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 15:43</td>
@@ -681,7 +672,7 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-1.0% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 60.0/100 (24h +2.5%), trend kinnitatud (OLS R²=0.98 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $27,902). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 60.0/100 (24h +2.5%), trend kinnitatud (OLS R²=0.98 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.6%), vähe oma alphat Likviidsus: low (maht $27,902). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 13:47</td>
@@ -690,7 +681,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>-3.8% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 72.0/100 (24h +5.0%), trend kinnitatud (OLS R²=0.98 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.9%), vähe oma alphat Likviidsus: low (maht $29,596). HOIATUS leitud veebist: CoinGecko hoiatus: Render (RNDR) has rebranded to Render (RENDER). For detailed information, kindly visit <a href="https://x.com/rendernetwork/status/1813617540242788679"target="_blank">here</a>.<br>  Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 72.0/100 (24h +5.0%), trend kinnitatud (OLS R²=0.98 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.9%), vähe oma alphat Likviidsus: low (maht $29,596). HOIATUS leitud veebist: CoinGecko hoiatus: Render (RNDR) has rebranded to Render (RENDER). For detailed information, kindly visit <a href="https://x.com/rendernetwork/status/1813617540242788679"target="_blank">here</a>.<br>  Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 13:47</td>
@@ -699,7 +690,7 @@
           <td><span class="dot" style="background:#f4756f"></span>red</td>
           <td>-0.3% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 61.7/100 (24h +6.2%), trend kinnitatud (OLS R²=0.81 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.3pp üle BTC-turu (+2.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,394). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 67% positiivne / 33% negatiivne, turu positsioon #313. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 61.7/100 (24h +6.2%), trend kinnitatud (OLS R²=0.81 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.3pp üle BTC-turu (+2.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,394). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 67% positiivne / 33% negatiivne, turu positsioon #313. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 13:47</td>
@@ -708,7 +699,7 @@
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
           <td>-0.5% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 62.7/100 (24h +7.1%), trend kinnitatud (OLS R²=0.54 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.2pp üle BTC-turu (+2.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,130,311). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 62.7/100 (24h +7.1%), trend kinnitatud (OLS R²=0.54 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.2pp üle BTC-turu (+2.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,130,311). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
         <tr>
           <td>21.07 13:47</td>
@@ -717,193 +708,15 @@
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
           <td>-3.6% ❌</td>
           <td>ootel</td>
-          <td class="why">Momentum 59.7/100 (24h +2.8%), trend kinnitatud (OLS R²=0.91 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.9%), vähe oma alphat Likviidsus: low (maht $7,459). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 13:47</td>
-          <td class="mono">AAVEUSD</td>
-          <td>78.4</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+3.8% ✅</td>
-          <td>ootel</td>
-          <td class="why">Momentum 58.6/100 (24h +4.0%), trend kinnitatud (OLS R²=0.89 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.9%), vähe oma alphat Likviidsus: low (maht $114,773). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 11:07</td>
-          <td class="mono">VIRTUALUSD</td>
-          <td>96.4</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-1.7% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 68.7/100 (24h +9.3%), trend kinnitatud (OLS R²=0.84 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +6.6pp üle BTC-turu (+2.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $25,163). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 55% positiivne / 45% negatiivne, turu positsioon #108. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 11:07</td>
-          <td class="mono">DOTUSD</td>
-          <td>99.2</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-2.4% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 65.9/100 (24h +6.5%), trend kinnitatud (OLS R²=0.79 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.8pp üle BTC-turu (+2.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $409,913). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 76% positiivne / 24% negatiivne, turu positsioon #52. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 11:07</td>
-          <td class="mono">APTUSD</td>
-          <td>80.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-1.1% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 61.7/100 (24h +4.8%), trend kinnitatud (OLS R²=0.69 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.8%), vähe oma alphat Likviidsus: low (maht $11,985). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 11:07</td>
-          <td class="mono">ARKMUSD</td>
-          <td>79.6</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.5% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 61.3/100 (24h +5.7%), trend kinnitatud (OLS R²=0.61 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.8%), vähe oma alphat Likviidsus: low (maht $1,391). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 08:26</td>
-          <td class="mono">BTCUSD</td>
-          <td>94.9</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-0.4% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 67.5/100 (24h +3.2%), trend kinnitatud (OLS R²=0.62 üle 6 tunni, hind+maht mõlemad tõusuteel). BTC ise on turu võrdlusalus Likviidsus: high (maht $385,044,192). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 84% positiivne / 16% negatiivne, turu positsioon #1. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 08:26</td>
-          <td class="mono">RENDERUSD</td>
-          <td>81.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-2.6% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 74.2/100 (24h +5.1%), nõrk kinnitus - hind tõusuteel (R²=0.86), aga veel ebakindel. liigub suuresti koos BTC-turuga (+3.2%), vähe oma alphat Likviidsus: low (maht $28,823). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 05:50</td>
-          <td class="mono">NEARUSD</td>
-          <td>100.0</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-7.9% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 76.5/100 (24h +7.2%), trend kinnitatud (OLS R²=0.78 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +4.6pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $109,212). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #35. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 05:50</td>
-          <td class="mono">FARTCOINUSD</td>
-          <td>93.3</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-4.2% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 82.2/100 (24h +8.7%), nõrk kinnitus - hind tõusuteel (R²=0.39), aga veel ebakindel. alpha +6.1pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $5,061). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 05:50</td>
-          <td class="mono">ONDOUSD</td>
-          <td>100.0</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+11.0% ✅</td>
-          <td>ootel</td>
-          <td class="why">Momentum 74.3/100 (24h +5.8%), trend kinnitatud (OLS R²=0.61 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.2pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $18,149). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 85% positiivne / 15% negatiivne, turu positsioon #44. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 05:50</td>
-          <td class="mono">BCHUSD</td>
-          <td>96.9</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-1.2% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 76.2/100 (24h +6.2%), nõrk kinnitus - hind tõusuteel (R²=0.50), aga veel ebakindel. alpha +3.7pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $99,078). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 67% positiivne / 33% negatiivne, turu positsioon #23. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 05:50</td>
-          <td class="mono">VIRTUALUSD</td>
-          <td>79.2</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-1.7% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 67.8/100 (24h +9.0%), nõrk kinnitus - hind tõusuteel (R²=0.36), aga veel ebakindel. alpha +6.4pp üle BTC-turu (+2.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $25,706). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 02:34</td>
-          <td class="mono">RENDERUSD</td>
-          <td>43.0</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.1% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 65.9/100 (24h +2.8%), nõrk kinnitus - hind tõusuteel (R²=0.43), aga veel ebakindel. liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: low (maht $27,480). HOIATUS leitud veebist: CoinGecko hoiatus: Render (RNDR) has rebranded to Render (RENDER). For detailed information, kindly visit <a href="https://x.com/rendernetwork/status/1813617540242788679"target="_blank">here</a>.<br>  Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>21.07 02:34</td>
-          <td class="mono">TURBOUSD</td>
-          <td>68.5</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.0% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 50.7/100 (24h +0.1%), trend kinnitatud (OLS R²=0.87 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: low (maht $6,452). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:52</td>
-          <td class="mono">SHIBUSD</td>
-          <td>94.4</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.4% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 66.0/100 (24h +2.6%), trend kinnitatud (OLS R²=0.55 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: low (maht $247,416). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 82% positiivne / 18% negatiivne, turu positsioon #37. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:52</td>
-          <td class="mono">ADAUSD</td>
-          <td>74.2</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>+2.1% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 57.4/100 (24h +2.5%), trend kinnitatud (OLS R²=0.59 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: medium (maht $3,697,181). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:30</td>
-          <td class="mono">UNIUSD</td>
-          <td>97.4</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+2.5% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 68.1/100 (24h +3.8%), trend kinnitatud (OLS R²=0.53 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.9%), vähe oma alphat Likviidsus: low (maht $47,747). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 80% positiivne / 20% negatiivne, turu positsioon #39. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:30</td>
-          <td class="mono">PENGUUSD</td>
-          <td>95.6</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-0.9% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 63.2/100 (24h +4.3%), trend kinnitatud (OLS R²=0.75 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.4pp üle BTC-turu (+0.9%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $5,843). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 92% positiivne / 8% negatiivne, turu positsioon #115. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:30</td>
-          <td class="mono">ICPUSD</td>
-          <td>95.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+0.7% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 62.1/100 (24h +3.4%), trend kinnitatud (OLS R²=0.87 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.9%), vähe oma alphat Likviidsus: low (maht $53,944). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 89% positiivne / 11% negatiivne, turu positsioon #60. Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
-        </tr>
-        <tr>
-          <td>20.07 23:30</td>
-          <td class="mono">OPUSD</td>
-          <td>68.5</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+3.0% ❌</td>
-          <td>ootel</td>
-          <td class="why">Momentum 50.9/100 (24h +0.4%), trend kinnitatud (OLS R²=0.84 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+0.9%), vähe oma alphat Likviidsus: low (maht $33,771). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</td>
+          <td class="why"><div class="clip">Momentum 59.7/100 (24h +2.8%), trend kinnitatud (OLS R²=0.91 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (+2.9%), vähe oma alphat Likviidsus: low (maht $7,459). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel alles õpib (0 tulemust kogutud, mõju hetkel alla 5%).</div></td>
         </tr>
     </table></div>
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <h2>Käivituste logi</h2>
+  <details class="card">
+    <summary><h2>⚙️ Käivituste logi</h2><span class="chev">▼</span></summary>
+    <div class="body">
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
@@ -998,16 +811,21 @@
         <td>-</td>
         <td>-</td></tr>
     </table></div>
-  </div>
+    </div>
+  </details>
 </div>
 <script>
   document.querySelectorAll('.info').forEach(function(b) {
     b.addEventListener('click', function(e) {
       e.stopPropagation();
+      e.preventDefault();  // don't also toggle the surrounding <details> section
       var wasOpen = b.classList.contains('open');
       document.querySelectorAll('.info.open').forEach(function(o) { o.classList.remove('open'); });
       if (!wasOpen) b.classList.add('open');
     });
+  });
+  document.querySelectorAll('.why .clip').forEach(function(c) {
+    c.addEventListener('click', function() { c.classList.toggle('expanded'); });
   });
   var methodBtn = document.getElementById('methodBtn');
   var methodPanel = document.getElementById('methodPanel');
