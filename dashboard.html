@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 24.07.2026 13:42 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 24.07.2026 15:25 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -215,8 +215,8 @@
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">93</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
-    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">11%</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">84</div></div>
+    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">10%</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">87</div></div>
     <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">28 · Fear</div></div>
   </div>
 
@@ -224,8 +224,8 @@
     <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
     <div class="stats" style="margin-bottom:0">
       <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">34</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">50</div></div>
-      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.3%</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">53</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.4%</div></div>
       <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">ONDOUSD +12.5%</div></div>
       <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">NEARUSD -7.9%</div></div>
     </div>
@@ -322,24 +322,24 @@
 
   <div class="card">
     <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel aktiivne (treenitud 84 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
+    <div class="model-status">Mudel aktiivne (treenitud 87 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
     <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=84)</th></tr>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=87)</th></tr>
       
-        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.05</td>
-        <td>toetab tabamist</td><td class="mono">+0.14</td></tr>
-        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.11</td>
-        <td>toetab tabamist</td><td class="mono">+0.04</td></tr>
+        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.04</td>
+        <td>neutraalne</td><td class="mono">+0.15</td></tr>
+        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.09</td>
+        <td>toetab tabamist</td><td class="mono">+0.03</td></tr>
         <tr><td>Likviidsus</td><td class="mono">-0.48</td>
         <td>vähendab tabamist</td><td class="mono">-0.10</td></tr>
         <tr><td>Meemi/trend-kategooria</td><td class="mono">-1.26</td>
         <td>vähendab tabamist</td><td class="mono">-0.26</td></tr>
-        <tr><td>Volatiilsus</td><td class="mono">+0.42</td>
+        <tr><td>Volatiilsus</td><td class="mono">+0.41</td>
         <td>toetab tabamist</td><td class="mono">+0.24</td></tr>
-        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.39</td>
-        <td>toetab tabamist</td><td class="mono">+0.17</td></tr>
-        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.32</td>
-        <td>toetab tabamist</td><td class="mono">+0.11</td></tr>
+        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.38</td>
+        <td>toetab tabamist</td><td class="mono">+0.18</td></tr>
+        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.31</td>
+        <td>toetab tabamist</td><td class="mono">+0.10</td></tr>
         <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">+0.00</td>
         <td>neutraalne</td><td class="mono">–</td></tr>
         <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">+0.00</td>
@@ -356,10 +356,10 @@
           new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07"],
+              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07"],
               datasets: [{
                 label: 'Libisev tabamusprotsent (10 viimase pealt)',
-                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99,102,241,0.15)',
                 tension: 0.3,
@@ -461,7 +461,7 @@
           <td class="mono">NEARUSD</td>
           <td>40.2</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>-2.8% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 47.2/100 (24h -1.1%), trend kinnitatud (OLS R²=0.78 üle 6 tunni, hind+maht mõlemad tõusuteel). liigub suuresti koos BTC-turuga (-1.7%), vähe oma alphat Likviidsus: low (maht $143,876). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 64% positiivne / 36% negatiivne, turu positsioon #37. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 25%.</div></td>
         </tr>
@@ -470,7 +470,7 @@
           <td class="mono">TRUMPUSD</td>
           <td>29.8</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>-4.5% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 58.9/100 (24h +3.6%), trend kinnitatud (OLS R²=0.55 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +5.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $36,617). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 31% positiivne / 69% negatiivne, turu positsioon #113. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</div></td>
         </tr>
@@ -479,7 +479,7 @@
           <td class="mono">POPCATUSD</td>
           <td>27.8</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>-6.3% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 54.8/100 (24h +1.7%), trend kinnitatud (OLS R²=0.60 üle 6 tunni, hind+maht mõlemad tõusuteel). alpha +3.0pp üle BTC-turu (-1.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $1,236). negatiivne kajastus veebist: CoinGecko kogukonna hääletus: 0% positiivne / 100% negatiivne, turu positsioon #478. Mudel (treenitud 70 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 9%.</div></td>
         </tr>
@@ -772,6 +772,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>24.07 15:25</td><td>0</td><td>0</td>
+        <td>TRUMPUSD 24h: -4.5%; POPCATUSD 24h: -6.3%; NEARUSD 24h: -2.8%</td>
+        <td>-</td></tr>
         <tr><td>24.07 13:42</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
@@ -858,9 +861,6 @@
         <td>-</td></tr>
         <tr><td>22.07 11:09</td><td>1</td><td>1</td>
         <td>VIRTUALUSD 24h: -1.7%; DOTUSD 24h: -2.4%; APTUSD 24h: -1.1%; ARKMUSD 24h: +0.5%</td>
-        <td>-</td></tr>
-        <tr><td>22.07 08:27</td><td>2</td><td>2</td>
-        <td>NEARUSD 24h: -7.9%; FARTCOINUSD 24h: -4.2%; ONDOUSD 24h: +11.0%; BCHUSD 24h: -1.2%; VIRTUALUSD 24h: -1.7%; BTCUSD 24h: -0.4%; RENDERUSD 24h: -2.6%</td>
         <td>-</td></tr>
     </table></div>
     </div>
