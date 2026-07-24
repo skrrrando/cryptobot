@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 24.07.2026 21:02 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 24.07.2026 23:00 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -216,7 +216,7 @@
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">97</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">10%</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">87</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">88</div></div>
     <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">28 · Fear</div></div>
   </div>
 
@@ -224,8 +224,8 @@
     <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
     <div class="stats" style="margin-bottom:0">
       <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">34</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">53</div></div>
-      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.4%</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">54</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.5%</div></div>
       <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">ONDOUSD +12.5%</div></div>
       <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">NEARUSD -7.9%</div></div>
     </div>
@@ -234,15 +234,15 @@
   <div class="card">
     <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$949.76</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-5.0%</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">1/5</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">6✅ / 5❌</div></div>
-      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">7.10</div></div>
+      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$997.83</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-0.2%</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">6✅ / 6❌</div></div>
+      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">4.86</div></div>
       <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-5.0%</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">4.15</div></div>
-      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+1.50%</div></div>
-      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$0.72</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">2.34</div></div>
+      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+1.06%</div></div>
+      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$0.97</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     
@@ -251,10 +251,10 @@
           new Chart(ctx2, {
             type: 'line',
             data: {
-              labels: ["23.07 15:31", "24.07 13:42"],
+              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00"],
               datasets: [{
                 label: 'Virtuaalne saldo ($)',
-                data: [1000.0, 949.76],
+                data: [1000.0, 949.76, 997.83],
                 borderColor: "#ef4444",
                 backgroundColor: "rgba(239,68,68,0.12)",
                 tension: 0.25, fill: true, pointRadius: 2
@@ -270,14 +270,14 @@
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
-      
-        <tr><td>23.07 21:03</td><td class="mono">LTCUSD</td><td>$50.00 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">47.5422</td><td class="mono">43.7388</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
+      <tr><td colspan="6" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
       
+        <tr><td>24.07 23:00</td><td class="mono">LTCUSD</td><td>$50.00</td>
+        <td style="color:#f4756f">-3.9% ($-1.93)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
         <tr><td>24.07 13:42</td><td class="mono">INJUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$47.50</td>
         <td style="color:#f4756f">-0.5% ($-0.24)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
         <tr><td>22.07 23:02</td><td class="mono">BTCUSD</td><td>$40.96</td>
@@ -309,41 +309,41 @@
     <div class="table-scroll"><table>
       <tr><th>Kriteerium</th><th>Praegu</th><th>Vajalik</th><th>Staatus</th></tr>
       
-        <tr><td>Profit factor</td><td class="mono" style="color:var(--good)">4.15</td>
+        <tr><td>Profit factor</td><td class="mono" style="color:var(--good)">2.34</td>
         <td class="mono">> 1.3</td><td style="text-align:center">✅</td></tr>
         <tr><td>Max langus</td><td class="mono" style="color:var(--good)">5.0%</td>
         <td class="mono">< 15%</td><td style="text-align:center">✅</td></tr>
-        <tr><td>Suletud kauplusi</td><td class="mono" style="color:var(--muted)">11</td>
+        <tr><td>Suletud kauplusi</td><td class="mono" style="color:var(--muted)">12</td>
         <td class="mono">>= 60</td><td style="text-align:center">⏳</td></tr>
-        <tr><td>Oodatav väärtus/kauplus</td><td class="mono" style="color:var(--good)">+1.50%</td>
+        <tr><td>Oodatav väärtus/kauplus</td><td class="mono" style="color:var(--good)">+1.06%</td>
         <td class="mono">> 0%</td><td style="text-align:center">✅</td></tr>
     </table></div>
   </div>
 
   <div class="card">
     <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel aktiivne (treenitud 87 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
+    <div class="model-status">Mudel aktiivne (treenitud 88 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
     <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=87)</th></tr>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=88)</th></tr>
       
         <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.04</td>
         <td>neutraalne</td><td class="mono">+0.15</td></tr>
-        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.09</td>
+        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.08</td>
         <td>toetab tabamist</td><td class="mono">+0.03</td></tr>
         <tr><td>Likviidsus</td><td class="mono">-0.48</td>
         <td>vähendab tabamist</td><td class="mono">-0.10</td></tr>
         <tr><td>Meemi/trend-kategooria</td><td class="mono">-1.26</td>
         <td>vähendab tabamist</td><td class="mono">-0.26</td></tr>
         <tr><td>Volatiilsus</td><td class="mono">+0.41</td>
-        <td>toetab tabamist</td><td class="mono">+0.24</td></tr>
-        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.38</td>
-        <td>toetab tabamist</td><td class="mono">+0.18</td></tr>
-        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.31</td>
+        <td>toetab tabamist</td><td class="mono">+0.25</td></tr>
+        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.37</td>
+        <td>toetab tabamist</td><td class="mono">+0.17</td></tr>
+        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.30</td>
         <td>toetab tabamist</td><td class="mono">+0.10</td></tr>
-        <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">+0.00</td>
-        <td>neutraalne</td><td class="mono">–</td></tr>
-        <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">+0.00</td>
-        <td>neutraalne</td><td class="mono">–</td></tr>
+        <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">-0.00</td>
+        <td>neutraalne</td><td class="mono">-0.04</td></tr>
+        <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">-0.00</td>
+        <td>neutraalne</td><td class="mono">-0.04</td></tr>
     </table></div>
   </div>
 
@@ -356,10 +356,10 @@
           new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07"],
+              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07"],
               datasets: [{
                 label: 'Libisev tabamusprotsent (10 viimase pealt)',
-                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99,102,241,0.15)',
                 tension: 0.3,
@@ -488,7 +488,7 @@
           <td class="mono">LTCUSD</td>
           <td>37.1</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>-2.6% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 51.2/100 (24h +0.4%), trend kinnitatud küünaldelt (OLS R²=0.87, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (-1.1%), vähe oma alphat Likviidsus: low (maht $627,907). müügisurve raamatus (imbalance -0.85, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 84% positiivne / 16% negatiivne, turu positsioon #27. Mudel (treenitud 79 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 16%.</div></td>
         </tr>
@@ -772,6 +772,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>24.07 23:00</td><td>0</td><td>0</td>
+        <td>LTCUSD 24h: -2.6%</td>
+        <td>-</td></tr>
         <tr><td>24.07 21:02</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
@@ -858,9 +861,6 @@
         <td>-</td></tr>
         <tr><td>22.07 19:17</td><td>10</td><td>4</td>
         <td>TAOUSD 24h: -1.2%</td>
-        <td>-</td></tr>
-        <tr><td>22.07 17:18</td><td>8</td><td>4</td>
-        <td>AAVEUSD 24h: +3.1%; FILUSD 24h: +2.2%; XRPUSD 24h: +0.0%; HBARUSD 24h: +6.0%; RENDERUSD 24h: -1.0%</td>
         <td>-</td></tr>
     </table></div>
     </div>
