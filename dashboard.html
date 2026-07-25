@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 25.07.2026 19:17 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 25.07.2026 19:58 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -207,17 +207,12 @@
   </div>
 
 
-  <div class="card" style="border-color:#f4756f;background:linear-gradient(160deg,#2a1520,#1c1220)">
-    <h2>⛔ Kill-switch aktiivne (alates 24.07 03:34 UTC)</h2>
-    <div class="desc" style="margin-bottom:0">Põhjus: päevakaotus 9.8% > 5% lubatud. Bot EI ava uusi positsioone
-    (olemasolevaid haldab edasi), kuni käivitad ühe korra keskkonna­muutujaga <span class="mono">KILLSWITCH_RESET=1</span>.</div>
-  </div>
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">121</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">10%</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">93</div></div>
-    <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">27 · Fear</div></div>
+    <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">–</div></div>
   </div>
 
   <div class="card">
@@ -234,8 +229,9 @@
   <div class="card">
     <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:var(--critical)">$997.83</div></div>
+      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$997.83</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-0.2%</div></div>
+      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$997.83</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">6✅ / 6❌</div></div>
       <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">4.86</div></div>

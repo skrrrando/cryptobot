@@ -791,10 +791,42 @@ def manage_positions(state, current_prices, candles_all, brk):
     return notes
 
 
+def portfolio_equity(pf, current_prices):
+    """Total account value: cash + mark-to-market value of every open
+    position. Buying a position immediately deducts its cost from cash -
+    that capital is DEPLOYED, not lost. Any check that cares about real
+    gains/losses (kill-switch, drawdown) must use this, not raw pf["balance"]
+    - otherwise opening positions during a normal trading day looks
+    indistinguishable from an actual loss."""
+    equity = pf["balance"]
+    for p in pf["open_positions"]:
+        if "quantity" not in p:
+            continue  # legacy pre-broker position, no quantity tracked
+        price = current_prices.get(p["instrument"], p["entry_price"])
+        equity += p["quantity"] * price
+    return equity
+
+
+def record_equity_snapshot(state, current_prices):
+    """Append one equity data point per run (in addition to the points
+    trade-closes already append via _book_close/_book_partial_close). This
+    keeps the balance curve, drawdown, and kill-switch check accurate even
+    during quiet hours with no closes, and - critically - means the
+    kill-switch's 24h comparison is always measuring real account value,
+    not a cash balance that dips the instant a position opens."""
+    pf = state["portfolio"]
+    equity = portfolio_equity(pf, current_prices)
+    pf["balance_history"].append({"ts": now_ts(), "balance": round(equity, 2)})
+    pf["balance_history"] = pf["balance_history"][-500:]
+
+
 def update_killswitch(state, brk):
     """The circuit breaker. Engages (stops new opens) when:
-      - portfolio balance dropped more than MAX_DAILY_LOSS_PCT in ~24h, or
+      - TOTAL EQUITY (cash + open positions' current value) dropped more
+        than MAX_DAILY_LOSS_PCT in ~24h, or
       - MAX_CONSEC_FAILURES orders in a row failed (live API misbehaving).
+    Must run AFTER record_equity_snapshot() in the same call, so the latest
+    balance_history entry is this run's true equity, not stale cash.
     Manual reset: run once with env KILLSWITCH_RESET=1 (or edit state.json).
     Returns notes for the summary message."""
     ks = state["killswitch"]
@@ -818,8 +850,9 @@ def update_killswitch(state, brk):
     for h in pf["balance_history"]:
         if h["ts"] <= cutoff:
             baseline = h["balance"]
+    current_equity = pf["balance_history"][-1]["balance"] if pf["balance_history"] else pf["balance"]
     if baseline > 0:
-        daily_loss_pct = (baseline - pf["balance"]) / baseline * 100
+        daily_loss_pct = (baseline - current_equity) / baseline * 100
         if daily_loss_pct > broker_mod.MAX_DAILY_LOSS_PCT:
             ks["active"] = True
             ks["ts"] = now_ts()
@@ -1409,6 +1442,7 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     stop_notes = manage_positions(state, current_prices, candles_all, brk)
     followup_notes = process_followups(state, current_prices, brk)
     retrain_note = full_retrain(state)
+    record_equity_snapshot(state, current_prices)
     killswitch_notes = update_killswitch(state, brk)
     threshold_notes = adapt_thresholds(state) or []
     if retrain_note:
@@ -1615,7 +1649,12 @@ def render_dashboard(state):
     pf = state["portfolio"]
     pf_mode = pf.get("mode", "paper")
     ks = state.get("killswitch", {})
-    pf_return_pct = (pf["balance"] - pf["starting_balance"]) / pf["starting_balance"] * 100
+    # Total equity (cash + mark-to-market open positions), not raw cash -
+    # the latest balance_history point is always an equity snapshot (see
+    # record_equity_snapshot). Cash alone understates account value while
+    # positions are open and would make active trading look like a loss.
+    pf_equity = pf["balance_history"][-1]["balance"] if pf["balance_history"] else pf["balance"]
+    pf_return_pct = (pf_equity - pf["starting_balance"]) / pf["starting_balance"] * 100
     pf_closed = list(reversed(pf["closed_trades"][-40:]))
     pf_total_fees = (sum(t.get("entry_fee_usd", 0) + t.get("exit_fee_usd", 0) for t in pf["closed_trades"])
                      + sum(p.get("entry_fee_usd", 0) for p in pf["open_positions"]))
@@ -2038,8 +2077,9 @@ def render_dashboard(state):
   <div class="card">
     <h2>💰 Virtuaalne portfell{info_badge(portfolio_desc)}</h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Praegune saldo</div><div class="value" style="color:{'var(--good)' if pf['balance']>=pf['starting_balance'] else 'var(--critical)'}">${pf['balance']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:{'var(--good)' if pf_equity>=pf['starting_balance'] else 'var(--critical)'}">${pf_equity:.2f}</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:{'var(--good)' if pf_return_pct>=0 else 'var(--critical)'}">{pf_return_pct:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">${pf['balance']:.2f}</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">{len(pf_open)}/{pf['max_open_positions']}</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">{pf_wins}✅ / {pf_losses}❌</div></div>
       <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">{f'{pf_sharpe:.2f}' if pf_sharpe is not None else '–'}</div></div>
