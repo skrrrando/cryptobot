@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 25.07.2026 21:55 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 25.07.2026 22:55 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -229,8 +229,8 @@
   <div class="card">
     <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$995.27</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-0.5%</div></div>
+      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$994.49</div></div>
+      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-0.6%</div></div>
       <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$812.74</div></div>
       <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">4/5</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">6✅ / 6❌</div></div>
@@ -247,10 +247,10 @@
           new Chart(ctx2, {
             type: 'line',
             data: {
-              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55"],
+              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55", "25.07 22:55"],
               datasets: [{
                 label: 'Virtuaalne saldo ($)',
-                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27],
+                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27, 994.49],
                 borderColor: "#ef4444",
                 backgroundColor: "rgba(239,68,68,0.12)",
                 tension: 0.25, fill: true, pointRadius: 2
@@ -776,6 +776,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>25.07 22:55</td><td>9</td><td>0</td>
+        <td>-</td>
+        <td>-</td></tr>
         <tr><td>25.07 21:55</td><td>10</td><td>1</td>
         <td>-</td>
         <td>-</td></tr>
@@ -863,9 +866,6 @@
         <tr><td>23.07 16:30</td><td>1</td><td>0</td>
         <td>-</td>
         <td>Täis-treening: mudel treeniti nullist uuesti kogu 71 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 87%, suurim muutus 'volatility' (-0.87 -> +0.43).</td></tr>
-        <tr><td>23.07 16:09</td><td>2</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
     </table></div>
     </div>
   </details>
