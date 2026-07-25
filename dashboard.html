@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 25.07.2026 05:42 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 25.07.2026 08:05 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -216,7 +216,7 @@
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">101</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">0</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">10%</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">90</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">93</div></div>
     <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">27 · Fear</div></div>
   </div>
 
@@ -224,8 +224,8 @@
     <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
     <div class="stats" style="margin-bottom:0">
       <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">35</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">55</div></div>
-      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.4%</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">58</div></div>
+      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.6%</div></div>
       <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">ONDOUSD +12.5%</div></div>
       <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">NEARUSD -7.9%</div></div>
     </div>
@@ -322,28 +322,28 @@
 
   <div class="card">
     <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel aktiivne (treenitud 90 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
+    <div class="model-status">Mudel aktiivne (treenitud 93 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
     <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=90)</th></tr>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=93)</th></tr>
       
-        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.03</td>
-        <td>neutraalne</td><td class="mono">+0.15</td></tr>
-        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.07</td>
+        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.21</td>
+        <td>toetab tabamist</td><td class="mono">+0.16</td></tr>
+        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.18</td>
         <td>toetab tabamist</td><td class="mono">+0.03</td></tr>
-        <tr><td>Likviidsus</td><td class="mono">-0.48</td>
+        <tr><td>Likviidsus</td><td class="mono">-0.41</td>
         <td>vähendab tabamist</td><td class="mono">-0.09</td></tr>
-        <tr><td>Meemi/trend-kategooria</td><td class="mono">-1.26</td>
+        <tr><td>Meemi/trend-kategooria</td><td class="mono">-1.12</td>
         <td>vähendab tabamist</td><td class="mono">-0.25</td></tr>
-        <tr><td>Volatiilsus</td><td class="mono">+0.41</td>
+        <tr><td>Volatiilsus</td><td class="mono">+0.43</td>
         <td>toetab tabamist</td><td class="mono">+0.25</td></tr>
-        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.36</td>
-        <td>toetab tabamist</td><td class="mono">+0.17</td></tr>
-        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.29</td>
+        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.33</td>
+        <td>toetab tabamist</td><td class="mono">+0.16</td></tr>
+        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">+0.20</td>
         <td>toetab tabamist</td><td class="mono">+0.09</td></tr>
-        <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">-0.01</td>
-        <td>neutraalne</td><td class="mono">-0.05</td></tr>
-        <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">-0.01</td>
-        <td>neutraalne</td><td class="mono">-0.06</td></tr>
+        <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">-0.15</td>
+        <td>vähendab tabamist</td><td class="mono">-0.08</td></tr>
+        <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">-0.12</td>
+        <td>vähendab tabamist</td><td class="mono">-0.09</td></tr>
     </table></div>
   </div>
 
@@ -356,10 +356,10 @@
           new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07", "24.07", "24.07"],
+              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07", "24.07", "24.07", "24.07", "24.07", "24.07"],
               datasets: [{
                 label: 'Libisev tabamusprotsent (10 viimase pealt)',
-                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99,102,241,0.15)',
                 tension: 0.3,
@@ -380,7 +380,7 @@
   <details class="card">
     <summary><h2>📔 Õpipäevik<span class="info" tabindex="0">?<span class="info-pop">Mida süsteem viimati enda kohta õppis, tavakeeles.</span></span></h2><span class="chev">▼</span></summary>
     <div class="body">
-    <div class="log-entry"><span class="log-ts">23.07 16:30</span> Täis-treening: mudel treeniti nullist uuesti kogu 71 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 87%, suurim muutus 'volatility' (-0.87 -> +0.43).</div><div class="log-entry"><span class="log-ts">23.07 15:54</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">23.07 15:31</span> Portfell lähtestati $1000 peale (uus epohh: fee-teadlik broker-kiht, stop-lossid, vahetusloogika). Mudel, treeningajalugu ja soovituste ajalugu säilitati täies mahus.</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.85 -> -1.87).</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.83 -> -1.85).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.89 -> -1.83).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.86 -> -1.89).</div><div class="log-entry"><span class="log-ts">23.07 05:52</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.84 -> -1.86).</div><div class="log-entry"><span class="log-ts">22.07 23:02</span> Tulemus (ei tabanud, ennustus oli 48%) muutis kaalu 'liquidity' nõrgemmaks (0.81 -> 0.77).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.75 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 32%) muutis kaalu 'bias' nõrgemmaks (-1.73 -> -1.75).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 32%) muutis kaalu 'bias' tugevammaks (-1.78 -> -1.73).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.84 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 19:17</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 25%) muutis kaalu 'bias' tugevammaks (-1.86 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 49%) muutis kaalu 'liquidity' nõrgemmaks (0.86 -> 0.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.85 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (tabas, ennustus oli 22%) muutis kaalu 'bias' tugevammaks (-1.92 -> -1.85).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (ei tabanud, ennustus oli 33%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.79 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 31%) muutis kaalu 'bias' nõrgemmaks (-1.76 -> -1.79).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 59%) muutis kaalu 'liquidity' nõrgemmaks (0.93 -> 0.88).</div>
+    <div class="log-entry"><span class="log-ts">25.07 08:05</span> Täis-treening: mudel treeniti nullist uuesti kogu 93 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 90%, suurim muutus 'momentum' (+0.02 -> +0.21).</div><div class="log-entry"><span class="log-ts">23.07 16:30</span> Täis-treening: mudel treeniti nullist uuesti kogu 71 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 87%, suurim muutus 'volatility' (-0.87 -> +0.43).</div><div class="log-entry"><span class="log-ts">23.07 15:54</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">23.07 15:31</span> Portfell lähtestati $1000 peale (uus epohh: fee-teadlik broker-kiht, stop-lossid, vahetusloogika). Mudel, treeningajalugu ja soovituste ajalugu säilitati täies mahus.</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.85 -> -1.87).</div><div class="log-entry"><span class="log-ts">23.07 13:55</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.83 -> -1.85).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.89 -> -1.83).</div><div class="log-entry"><span class="log-ts">23.07 08:27</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.86 -> -1.89).</div><div class="log-entry"><span class="log-ts">23.07 05:52</span> Tulemus (ei tabanud, ennustus oli 29%) muutis kaalu 'bias' nõrgemmaks (-1.84 -> -1.86).</div><div class="log-entry"><span class="log-ts">22.07 23:02</span> Tulemus (ei tabanud, ennustus oli 48%) muutis kaalu 'liquidity' nõrgemmaks (0.81 -> 0.77).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.75 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (ei tabanud, ennustus oli 32%) muutis kaalu 'bias' nõrgemmaks (-1.73 -> -1.75).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 32%) muutis kaalu 'bias' tugevammaks (-1.78 -> -1.73).</div><div class="log-entry"><span class="log-ts">22.07 21:06</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.84 -> -1.78).</div><div class="log-entry"><span class="log-ts">22.07 19:17</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 28%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 25%) muutis kaalu 'bias' tugevammaks (-1.86 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 49%) muutis kaalu 'liquidity' nõrgemmaks (0.86 -> 0.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.80 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 17:18</span> Tulemus (tabas, ennustus oli 27%) muutis kaalu 'bias' tugevammaks (-1.85 -> -1.80).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (tabas, ennustus oli 22%) muutis kaalu 'bias' tugevammaks (-1.92 -> -1.85).</div><div class="log-entry"><span class="log-ts">22.07 13:50</span> Tulemus (ei tabanud, ennustus oli 33%) muutis kaalu 'bias' nõrgemmaks (-1.87 -> -1.90).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-1.82 -> -1.84).</div><div class="log-entry"><span class="log-ts">22.07 11:09</span> Tulemus (ei tabanud, ennustus oli 30%) muutis kaalu 'bias' nõrgemmaks (-1.79 -> -1.82).</div><div class="log-entry"><span class="log-ts">22.07 08:27</span> Tulemus (ei tabanud, ennustus oli 31%) muutis kaalu 'bias' nõrgemmaks (-1.76 -> -1.79).</div>
     </div>
   </details>
 
@@ -479,7 +479,7 @@
           <td class="mono">POPCATUSD</td>
           <td>26.8</td>
           <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>ootel</td>
+          <td>-5.0% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 52.0/100 (24h +0.8%), trend kinnitatud küünaldelt (OLS R²=0.62, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (-0.3%), vähe oma alphat Likviidsus: low (maht $1,110). raamat tasakaalus (imbalance -0.04, spread 0.79%). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 82 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 4%.</div></td>
         </tr>
@@ -488,7 +488,7 @@
           <td class="mono">NEARUSD <span class="tag">EXPLORE</span></td>
           <td>32.7</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>-6.6% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 55.3/100 (24h +1.8%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). liigub suuresti koos BTC-turuga (-0.3%), vähe oma alphat Likviidsus: low (maht $153,610). raamat tasakaalus (imbalance +0.16, spread 0.08%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #36. Mudel (treenitud 82 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 14%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
@@ -497,7 +497,7 @@
           <td class="mono">FILUSD <span class="tag">EXPLORE</span></td>
           <td>32.8</td>
           <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
+          <td>-2.1% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 46.4/100 (24h -1.1%), trend kinnitatud küünaldelt (OLS R²=0.63, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (-0.3%), vähe oma alphat Likviidsus: low (maht $7,788). müügisurve raamatus (imbalance -0.37, spread 0.04%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 80% positiivne / 20% negatiivne, turu positsioon #90. Mudel (treenitud 82 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 14%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
         </tr>
@@ -772,6 +772,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>25.07 08:05</td><td>0</td><td>0</td>
+        <td>POPCATUSD 24h: -5.0%; NEARUSD 24h: -6.6%; FILUSD 24h: -2.1%</td>
+        <td>Täis-treening: mudel treeniti nullist uuesti kogu 93 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 90%, suurim muutus 'momentum' (+0.02 -> +0.21).</td></tr>
         <tr><td>25.07 05:42</td><td>0</td><td>0</td>
         <td>BONKUSD 24h: -0.4%</td>
         <td>-</td></tr>
@@ -858,9 +861,6 @@
         <td>-</td></tr>
         <tr><td>23.07 02:37</td><td>0</td><td>0</td>
         <td>PNUTUSD 24h: -1.5%; MELANIAUSD 24h: +0.0%</td>
-        <td>-</td></tr>
-        <tr><td>22.07 23:02</td><td>4</td><td>1</td>
-        <td>BTCUSD 24h: -0.5%</td>
         <td>-</td></tr>
     </table></div>
     </div>
