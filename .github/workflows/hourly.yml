@@ -15,6 +15,22 @@ on:
 permissions:
   contents: write   # needed so the workflow can commit the updated data/dashboard back
 
+# Without this, an overlapping trigger (a schedule firing twice, or a manual
+# "Run workflow" click landing mid-run) can execute two instances of this
+# job in parallel. Each independently reads state.json, makes its own
+# trading decisions, and appends its own equity snapshot - and because the
+# retry loop below resolves push conflicts with a plain git rebase (a
+# line-based text patch, not JSON-aware), BOTH runs' appended entries can
+# survive the merge instead of one properly overwriting the other. That
+# produced a real, confirmed artifact: two balance_history points a
+# fraction of a second apart with different values, which briefly inflated
+# the dashboard's max-drawdown figure. Queuing (not canceling) overlapping
+# runs means every trigger still executes in full - one at a time - so no
+# stop-loss check or followup resolution is ever skipped or duplicated.
+concurrency:
+  group: cryptobot-hourly
+  cancel-in-progress: false
+
 jobs:
   scan:
     runs-on: ubuntu-latest
