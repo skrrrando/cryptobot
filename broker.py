@@ -141,6 +141,28 @@ class PaperBroker:
         """Nothing external to reconcile against in paper mode."""
         return []
 
+    def open_short(self, instrument, usd_amount, price_hint):
+        """Simulate opening (or adding to) a perpetual-futures short sized at
+        usd_amount notional. Selling into the bid -> adverse slippage vs. a
+        long entry, same fee rate."""
+        if not price_hint or price_hint <= 0 or usd_amount <= 0:
+            return None
+        exec_price = price_hint * (1 - SLIPPAGE_PCT)
+        fee = usd_amount * FEE_PCT
+        quantity = (usd_amount - fee) / exec_price
+        return {"price": exec_price, "quantity": quantity,
+                "fee_usd": round(fee, 4), "notional_usd": usd_amount}
+
+    def close_short(self, instrument, quantity, price_hint):
+        """Simulate buying back `quantity` to close a short. Buying at the
+        ask -> adverse slippage, same fee rate."""
+        if not price_hint or price_hint <= 0 or quantity <= 0:
+            return None
+        exec_price = price_hint * (1 + SLIPPAGE_PCT)
+        cost = quantity * exec_price
+        fee = cost * FEE_PCT
+        return {"price": exec_price, "cost_usd": cost + fee, "fee_usd": round(fee, 4)}
+
 
 # ---------------------------------------------------------------------------
 # Live broker - Crypto.com Exchange private REST API
@@ -248,6 +270,13 @@ class LiveBroker:
             raise BrokerError(f"no exchange instrument mapping for {instrument} "
                               f"(data/instrument_map.json missing or stale)")
         return real
+
+    def _perp_name(self, instrument):
+        """Perpetual futures naming is uniform (no separate lookup file
+        needed like spot's BASE_USD/BASE_USDT ambiguity): '{SYMBOL}-PERP'."""
+        if not instrument.endswith("USD"):
+            raise BrokerError(f"{instrument}: can't derive a perpetual name (expected a *USD symbol)")
+        return f"{instrument}-PERP"
 
     def _round_qty(self, real_name, quantity):
         spec = self._instrument_specs().get(real_name) or {}
@@ -379,6 +408,43 @@ class LiveBroker:
         except BrokerError as e:
             notes.append(f"⚠️ LIVE reconcile ebaõnnestus (API võti/ühendus?): {e}")
         return notes
+
+    def open_short(self, instrument, usd_amount, price_hint):
+        """Open (or add to) a short on the perpetual - a plain SELL market
+        order on the *-PERP instrument. Requires the account to have
+        derivatives/margin trading enabled (separate eligibility from spot
+        on some exchanges/jurisdictions - see RUNBOOK before funding-arb
+        go-live)."""
+        real = self._perp_name(instrument)
+        result = self._request("private/create-order", {
+            "instrument_name": real, "side": "SELL", "type": "MARKET",
+            "notional": _fmt_num(round(usd_amount, 2)),
+        })
+        detail = self._wait_filled(result.get("order_id"))
+        avg_price = float(detail.get("avg_price") or 0)
+        qty = float(detail.get("cumulative_quantity") or 0)
+        if avg_price <= 0 or qty <= 0:
+            raise BrokerError(f"open_short {real}: filled but no price/qty in order detail")
+        fee = float(detail.get("cumulative_fee") or 0) or usd_amount * FEE_PCT
+        return {"price": avg_price, "quantity": qty,
+                "fee_usd": round(fee, 4), "notional_usd": usd_amount}
+
+    def close_short(self, instrument, quantity, price_hint):
+        """Close a short - a plain BUY market order on the *-PERP instrument."""
+        real = self._perp_name(instrument)
+        qty = self._round_qty(real, quantity)
+        if qty <= 0:
+            raise BrokerError(f"close_short {real}: quantity {quantity} rounds to 0")
+        result = self._request("private/create-order", {
+            "instrument_name": real, "side": "BUY", "type": "MARKET",
+            "quantity": _fmt_num(qty),
+        })
+        detail = self._wait_filled(result.get("order_id"))
+        avg_price = float(detail.get("avg_price") or 0)
+        filled_qty = float(detail.get("cumulative_quantity") or qty)
+        cost = avg_price * filled_qty
+        fee = float(detail.get("cumulative_fee") or 0) or cost * FEE_PCT
+        return {"price": avg_price, "cost_usd": cost + fee, "fee_usd": round(fee, 4)}
 
 
 # ---------------------------------------------------------------------------

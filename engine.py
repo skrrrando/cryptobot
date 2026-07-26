@@ -86,7 +86,7 @@ TREND_WINDOW = 6    # snapshots used for the OLS trend fit (~6h at hourly cadenc
 
 # Feature order matters - it's the order weights/x vectors are stored in.
 FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility",
-                 "hype_bonus", "alpha", "book_imbalance", "market_fng"]
+                 "hype_bonus", "alpha", "book_imbalance", "market_fng", "onchain_activity"]
 
 # Initial weights: a reasonable hand-set prior (mirrors the original heuristic
 # direction) that then gets refined by real evidence via train_step().
@@ -101,6 +101,7 @@ INITIAL_WEIGHTS = {
     "alpha": 0.9,   # prior: genuine outperformance vs. BTC predicts follow-through better than raw noise
     "book_imbalance": 0.5,  # prior: visible buy pressure in the order book supports follow-through
     "market_fng": 0.0,      # no prior - let the data decide what market mood is worth
+    "onchain_activity": 0.0,  # no prior - BTC-only proxy signal, let the data decide what it's worth
 }
 
 MODEL_MIN_TRAINING = 15   # need this many resolved outcomes before the model is trusted for POSITION SIZING (Kelly)
@@ -124,6 +125,9 @@ EXPLORE_MARGIN = 10       # how far below the screen threshold still counts as "
 PORTFOLIO_START_BALANCE = 1000.0
 PORTFOLIO_POSITION_PCT = 0.05   # 5% of current balance - the flat fallback before Kelly sizing kicks in
 PORTFOLIO_MAX_OPEN = 5          # at most 5 positions open at once (~25% max exposure at flat sizing)
+PORTFOLIO_CORR_ALPHA_THRESHOLD = 0.02   # |alpha_pct| below this = "moves like BTC", not idiosyncratic
+PORTFOLIO_CORR_MAX_LOW_ALPHA = 3        # at most 3/5 open slots may be low-alpha (highly BTC-correlated) at once -
+                                         # otherwise "5 diversified positions" can secretly be one leveraged BTC bet
 PORTFOLIO_CATEGORY_CAP = {"meme": 2}   # never more than 2/5 open slots in high-variance meme names at
                                         # once, however good they score - basic diversification so one
                                         # hype wave rolling over can't wipe the whole simulated book
@@ -166,6 +170,306 @@ TAKE_PROFIT_PCT = 8.0
 TAKE_PROFIT_FRACTION = 0.5
 TRAIL_ARM_PCT = 4.0
 TRAIL_DIST_PCT = 3.0
+
+# ---------------------------------------------------------------------------
+# Funding-rate arbitrage - a market-neutral sleeve, separate from the
+# momentum book. Idea: go long spot + short the equivalent notional on the
+# perpetual (delta-neutral - price moves roughly cancel between the two
+# legs), and collect the funding payment perpetual shorts earn when funding
+# is positive. This does not care whether the market goes up or down, so it
+# is a genuinely different, uncorrelated return source from the momentum
+# strategy - not "more of the same" trend-following.
+# ---------------------------------------------------------------------------
+FUNDING_ARB_START_BALANCE = 300.0   # deliberately smaller than the momentum
+                                     # sleeve's $1000 - a real deployment would
+                                     # split capital across strategies, not
+                                     # give each one the full pot
+FUNDING_ARB_MAX_OPEN = 3
+FUNDING_ARB_POSITION_PCT = 0.25     # fraction of the funding-arb balance risked per pair (both legs use this notional)
+FUNDING_MAX_HOLD_HOURS = 45 * 24    # 45 days - long enough for funding income to clear the round-trip
+                                     # cost below at a realistic entry rate (see FUNDING_MIN_APR_ENTER)
+
+# Round-tripping FOUR legs (spot buy, perp short, spot sell, perp close) at
+# broker.py's default 0.5% fee + 0.15% slippage costs roughly ~1% of the
+# CAPITAL DEPLOYED, but funding only accrues on ONE leg's notional (the
+# short) - so the true breakeven hold time is longer than a naive "1% /
+# APR" estimate suggests: at 15% APR it's ~51 days, LONGER than a 30-day
+# cap would allow (an earlier version of this constant made exactly that
+# mistake). Research on real funding-rate arbitrage puts typical yields at
+# 10-30% APR in 2026 (compressed from 30-50% in 2020-21) - 20% sits near
+# the top of that normal range and breaks even in ~38 days, leaving real
+# profit margin inside the 45-day cap. This makes the sleeve deliberately
+# SELECTIVE (it may go a while between qualifying opportunities) rather
+# than firing on marginal rates that can't outrun retail-tier trading costs.
+# A lower fee tier (see RUNBOOK) would let this threshold come down.
+FUNDING_MIN_APR_ENTER = 20.0
+FUNDING_MIN_APR_EXIT = 1.0          # close if the rate has decayed below this - no longer worth the drag
+
+
+def funding_arb_state_default():
+    return {
+        "starting_balance": FUNDING_ARB_START_BALANCE,
+        "balance": FUNDING_ARB_START_BALANCE,
+        "open_positions": [],   # [{id, instrument, spot_qty, spot_entry, perp_qty, perp_entry,
+                                 #   notional_usd, entry_ts, entry_apr, funding_collected_usd, mode}]
+        "closed_trades": [],
+        "balance_history": [{"ts": 0, "balance": FUNDING_ARB_START_BALANCE}],
+        "next_id": 1,
+    }
+
+
+def scan_funding_opportunities(state, funding_rates, current_prices, brk):
+    """Open a delta-neutral pair (spot long + perp short) for any instrument
+    whose recent funding rate pays enough (>= FUNDING_MIN_APR_ENTER
+    annualized) to be worth the two-legged entry cost, while there's room
+    and cash in the funding-arb sleeve. Independent of the momentum book -
+    this never touches state["portfolio"]."""
+    fa = state.setdefault("funding_arb", funding_arb_state_default())
+    if state["killswitch"].get("active"):
+        return []
+    if len(fa["open_positions"]) >= FUNDING_ARB_MAX_OPEN:
+        return []
+
+    notes = []
+    already_open = {p["instrument"] for p in fa["open_positions"]}
+    candidates = sorted(
+        ((inst, apr) for inst, apr in funding_rates.items()
+         if apr >= FUNDING_MIN_APR_ENTER and inst not in already_open and inst in current_prices),
+        key=lambda x: x[1], reverse=True)
+
+    for inst, apr in candidates:
+        if len(fa["open_positions"]) >= FUNDING_ARB_MAX_OPEN:
+            break
+        notional = fa["balance"] * FUNDING_ARB_POSITION_PCT
+        if notional < 5.0 or notional > fa["balance"]:
+            continue
+        price = current_prices[inst]
+        try:
+            spot_fill = brk.buy(inst, notional, price)
+            if not spot_fill:
+                continue
+            perp_fill = brk.open_short(inst, notional, price)
+        except broker_mod.BrokerError as e:
+            print(f"WARN: funding-arb open {inst} failed: {e}", file=sys.stderr)
+            continue
+        if not perp_fill:
+            continue
+
+        fa["balance"] -= (notional + notional)  # both legs' notional leave the funding-arb cash pool
+        rec_id = fa["next_id"]
+        fa["next_id"] += 1
+        fa["open_positions"].append({
+            "id": rec_id, "instrument": inst,
+            "spot_qty": spot_fill["quantity"], "spot_entry": spot_fill["price"],
+            "perp_qty": perp_fill["quantity"], "perp_entry": perp_fill["price"],
+            "notional_usd": notional, "entry_ts": now_ts(), "entry_apr": round(apr, 1),
+            "funding_collected_usd": 0.0,
+            "entry_fee_usd": round(spot_fill["fee_usd"] + perp_fill["fee_usd"], 4),
+            "mode": brk.mode,
+        })
+        notes.append(f"💹 FUNDING-ARB AVATUD: {inst} (funding {apr:+.1f}% aastas, "
+                    f"${notional:.2f} kummalgi jalal - spot pikk + perp lühike)")
+    return notes
+
+
+def manage_funding_positions(state, funding_rates, current_prices, brk):
+    """Each run: accrue this hour's funding payment on every open pair
+    (a short perpetual position earns funding when the rate is positive -
+    approximated here as notional * current hourly rate, paid every run,
+    which is how the exchange itself settles it), and close out (both legs)
+    when the rate has decayed below FUNDING_MIN_APR_EXIT or the max hold
+    time is reached."""
+    fa = state.setdefault("funding_arb", funding_arb_state_default())
+    notes = []
+    for pos in list(fa["open_positions"]):
+        inst = pos["instrument"]
+        apr = funding_rates.get(inst)
+        if apr is not None:
+            hourly_rate = apr / 100 / 24 / 365
+            funding_payment = pos["notional_usd"] * hourly_rate
+            pos["funding_collected_usd"] = pos.get("funding_collected_usd", 0.0) + funding_payment
+            fa["balance"] += funding_payment
+
+        age_h = (now_ts() - pos["entry_ts"]) / 3600
+        should_close = (apr is not None and apr < FUNDING_MIN_APR_EXIT) or age_h >= FUNDING_MAX_HOLD_HOURS
+        if not should_close:
+            continue
+        price = current_prices.get(inst)
+        if price is None:
+            continue
+        try:
+            spot_fill = brk.sell(inst, pos["spot_qty"], price)
+            perp_fill = brk.close_short(inst, pos["perp_qty"], price)
+        except broker_mod.BrokerError as e:
+            print(f"WARN: funding-arb close {inst} failed: {e}", file=sys.stderr)
+            continue
+        if not spot_fill or not perp_fill:
+            continue
+
+        fa["open_positions"].remove(pos)
+        # Standard short P&L (profit when price fell) for the perp leg, plain
+        # sell-vs-cost-basis for the spot leg. funding_collected_usd is NOT
+        # added again here - it was already credited to cash incrementally,
+        # run by run, in the accrual step above; re-adding it would double-count.
+        spot_pnl_usd = spot_fill["proceeds_usd"] - pos["notional_usd"]
+        short_pnl_usd = (pos["perp_entry"] - perp_fill["price"]) * pos["perp_qty"] - perp_fill["fee_usd"]
+        basis_pnl_usd = spot_pnl_usd + short_pnl_usd
+        pnl_usd = basis_pnl_usd + pos["funding_collected_usd"]  # for DISPLAY: total economic result of the trade
+        pnl_pct = pnl_usd / (pos["notional_usd"] * 2) * 100 if pos["notional_usd"] else 0.0
+        fa["balance"] += pos["notional_usd"] * 2 + basis_pnl_usd
+        fa["closed_trades"].append({
+            "id": pos["id"], "instrument": inst, "notional_usd": pos["notional_usd"],
+            "entry_ts": pos["entry_ts"], "exit_ts": now_ts(), "entry_apr": pos["entry_apr"],
+            "funding_collected_usd": round(pos["funding_collected_usd"], 4),
+            "basis_pnl_usd": round(basis_pnl_usd, 2),
+            "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct, 2), "mode": pos.get("mode", "paper"),
+        })
+        fa["closed_trades"] = fa["closed_trades"][-300:]
+        reason = "funding kahanes alla läve" if (apr is not None and apr < FUNDING_MIN_APR_EXIT) else "max hoiuaeg täis"
+        notes.append(f"💹 FUNDING-ARB SULETUD: {inst} ({reason}) - kogutud funding "
+                    f"${pos['funding_collected_usd']:+.2f}, netotulem {pnl_pct:+.1f}% (${pnl_usd:+.2f})")
+
+    fa["balance_history"].append({"ts": now_ts(), "balance": round(fa["balance"], 2)})
+    fa["balance_history"] = fa["balance_history"][-500:]
+    return notes
+
+
+# ---------------------------------------------------------------------------
+# Mean-reversion / grid sleeve - a second, deliberately DIFFERENT return
+# source from momentum. Momentum only trades when trend_bonus confirms a
+# real breakout (strong R²) - meaning most hours, on most instruments, it
+# does nothing (the market is just chopping sideways, which is most of the
+# time in crypto). This sleeve does the opposite: weak trend + price near
+# the bottom of its recent range on a small set of liquid majors -> buy the
+# dip, take a modest fast profit near the top of the range. Classic grid
+# trading, monetizing the sideways hours momentum has to sit out. Separate
+# ledger, separate capital - never touches state["portfolio"].
+# ---------------------------------------------------------------------------
+GRID_START_BALANCE = 300.0
+GRID_INSTRUMENTS = ["BTCUSD", "ETHUSD"]   # liquid majors only - grid needs tight spreads to survive fees
+GRID_MAX_OPEN = 3
+GRID_POSITION_PCT = 0.20
+GRID_LOWER_BAND_PCT = 0.35    # buy when price sits in the bottom 35% of its recent range
+GRID_UPPER_BAND_PCT = 0.75    # take profit once price reaches the top 25% of the range
+GRID_MAX_TREND_R2 = 0.35      # only trade when there's NO strong confirmed trend (above this is momentum's territory)
+GRID_TAKE_PROFIT_PCT = 3.0
+GRID_STOP_LOSS_PCT = 6.0      # protective stop if the range breaks down instead of reverting
+
+
+def grid_state_default():
+    return {
+        "starting_balance": GRID_START_BALANCE,
+        "balance": GRID_START_BALANCE,
+        "open_positions": [],
+        "closed_trades": [],
+        "balance_history": [{"ts": 0, "balance": GRID_START_BALANCE}],
+        "next_id": 1,
+    }
+
+
+def range_signal(candles):
+    """(position_in_range 0..1, trend_r2) from recent 15m candles - the grid
+    sleeve's entry test. None if there isn't enough history yet."""
+    recent = [c for c in candles if c.get("c")][-96:]
+    if len(recent) < 20:
+        return None
+    closes = [c["c"] for c in recent]
+    highs = [c.get("h", c["c"]) for c in recent]
+    lows = [c.get("l", c["c"]) for c in recent]
+    range_high, range_low = max(highs), min(lows)
+    if range_high <= range_low:
+        return None
+    position = (closes[-1] - range_low) / (range_high - range_low)
+    p0 = closes[0] if closes[0] else 1e-9
+    norm = [(p - p0) / p0 for p in closes]
+    _, r2 = linreg_slope_r2(norm)
+    return clamp(position, 0, 1), r2
+
+
+def manage_grid(state, current_prices, candles_all, brk):
+    """One pass per run: check exits/stops on open grid positions, then look
+    for new range-bound entries on GRID_INSTRUMENTS. Gated by the same
+    kill-switch as momentum (an account-level circuit breaker should stop
+    ALL new risk, not just one sleeve)."""
+    grid = state.setdefault("grid", grid_state_default())
+    notes = []
+
+    for pos in list(grid["open_positions"]):
+        inst = pos["instrument"]
+        cp = current_prices.get(inst)
+        if cp is None:
+            continue
+        cd = candles_all.get(inst) or []
+        hour_low = min((c["l"] for c in cd[-4:] if c.get("l")), default=cp)
+        take_profit_price = pos["entry_price"] * (1 + GRID_TAKE_PROFIT_PCT / 100)
+        hit_stop = hour_low <= pos["stop_price"] or cp <= pos["stop_price"]
+        hit_take_profit = cp >= take_profit_price
+        sig = range_signal(cd) if cd else None
+        hit_upper_band = sig is not None and sig[0] >= GRID_UPPER_BAND_PCT
+        if not (hit_stop or hit_take_profit or hit_upper_band):
+            continue
+        sell_price = min(cp, pos["stop_price"]) if hit_stop else cp
+        try:
+            fill = brk.sell(inst, pos["quantity"], sell_price)
+        except broker_mod.BrokerError as e:
+            print(f"WARN: grid sell {inst} failed: {e}", file=sys.stderr)
+            continue
+        if not fill:
+            continue
+        grid["open_positions"].remove(pos)
+        pnl_usd = fill["proceeds_usd"] - pos["size_usd"]
+        pnl_pct = pnl_usd / pos["size_usd"] * 100 if pos["size_usd"] else 0.0
+        grid["balance"] += fill["proceeds_usd"]
+        reason = "stop_loss" if hit_stop else ("take_profit" if hit_take_profit else "upper_band")
+        grid["closed_trades"].append({
+            "id": pos["id"], "instrument": inst, "entry_price": pos["entry_price"],
+            "exit_price": fill["price"], "size_usd": pos["size_usd"], "entry_ts": pos["entry_ts"],
+            "exit_ts": now_ts(), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct, 2),
+            "exit_reason": reason, "mode": pos.get("mode", "paper"),
+        })
+        grid["closed_trades"] = grid["closed_trades"][-300:]
+        notes.append(f"🔲 GRID SULETUD: {inst} ({reason}) {pnl_pct:+.1f}% (${pnl_usd:+.2f})")
+
+    if not state["killswitch"].get("active") and len(grid["open_positions"]) < GRID_MAX_OPEN:
+        already_open = {p["instrument"] for p in grid["open_positions"]}
+        for inst in GRID_INSTRUMENTS:
+            if len(grid["open_positions"]) >= GRID_MAX_OPEN or inst in already_open:
+                continue
+            cp = current_prices.get(inst)
+            cd = candles_all.get(inst)
+            if cp is None or not cd:
+                continue
+            sig = range_signal(cd)
+            if sig is None:
+                continue
+            position, r2 = sig
+            if position > GRID_LOWER_BAND_PCT or r2 > GRID_MAX_TREND_R2:
+                continue  # not near the bottom of its range, or a real trend is running - momentum's job, not grid's
+            size_usd = grid["balance"] * GRID_POSITION_PCT
+            if size_usd < 5.0 or size_usd > grid["balance"]:
+                continue
+            try:
+                fill = brk.buy(inst, size_usd, cp)
+            except broker_mod.BrokerError as e:
+                print(f"WARN: grid buy {inst} failed: {e}", file=sys.stderr)
+                continue
+            if not fill:
+                continue
+            grid["balance"] -= size_usd
+            rec_id = grid["next_id"]
+            grid["next_id"] += 1
+            grid["open_positions"].append({
+                "id": rec_id, "instrument": inst, "entry_price": fill["price"],
+                "quantity": fill["quantity"], "size_usd": round(size_usd, 2),
+                "entry_fee_usd": fill["fee_usd"], "entry_ts": now_ts(),
+                "stop_price": fill["price"] * (1 - GRID_STOP_LOSS_PCT / 100), "mode": brk.mode,
+            })
+            notes.append(f"🔲 GRID AVATUD: {inst} vahemiku põhjas (positsioon {position:.0%}, R²={r2:.2f}) - ${size_usd:.2f}")
+
+    grid["balance_history"].append({"ts": now_ts(), "balance": round(portfolio_equity(grid, current_prices), 2)})
+    grid["balance_history"] = grid["balance_history"][-500:]
+    return notes
+
 
 # Go-live readiness criteria (mirrors RUNBOOK.md "Go-live checklist" exactly -
 # this is a REPORTING feature only, never touches TRADING_MODE itself. The
@@ -265,6 +569,12 @@ def load_state():
         st["killswitch"].setdefault(k, v)
     st.setdefault("go_live_alert_sent", False)
     st.setdefault("go_live_last_progress_day", "")
+    st.setdefault("funding_arb", funding_arb_state_default())
+    for k, v in funding_arb_state_default().items():
+        st["funding_arb"].setdefault(k, v)
+    st.setdefault("grid", grid_state_default())
+    for k, v in grid_state_default().items():
+        st["grid"].setdefault(k, v)
     return st
 
 
@@ -299,7 +609,7 @@ def sigmoid(z):
 
 
 def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24h, hype_bonus,
-                   alpha_val=0.0, book_imbalance=0.0, fng_value=None):
+                   alpha_val=0.0, book_imbalance=0.0, fng_value=None, onchain_ratio=None):
     liq_map = {"low": 0.0, "medium": 0.5, "high": 1.0}
     return {
         "bias": 1.0,
@@ -315,6 +625,8 @@ def build_features(momentum_score_, trend_bonus_, liquidity, category, change_24
         "book_imbalance": clamp((book_imbalance + 1) / 2, 0, 1),
         # Fear & Greed 0..100 -> 0..1 (0.5 = neutral/unknown)
         "market_fng": (fng_value / 100.0) if fng_value is not None else 0.5,
+        # BTC on-chain activity vs its own 7d average, ratio 0.5x..2x -> 0..1 (0.5 = normal/unknown)
+        "onchain_activity": clamp((onchain_ratio - 0.5) / 1.5, 0, 1) if onchain_ratio is not None else 0.5,
     }
 
 
@@ -495,14 +807,15 @@ def _record_order_failure(state, what):
 
 
 def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
-                        category="unknown", win_prob=None):
+                        category="unknown", win_prob=None, alpha_pct=0.0):
     """Called when a real alert fires. Opens a position THROUGH THE BROKER
     (paper simulation or real exchange order - same code path) if there's
-    room (overall cap AND per-category diversification cap), cash, and the
-    kill-switch is not engaged. Sized via fractional Kelly once the model
-    has earned enough evidence (win_prob passed in); otherwise the flat
-    PORTFOLIO_POSITION_PCT. A stop-loss is attached immediately: a real
-    resting order in live mode, a simulated per-run check in paper mode."""
+    room (overall cap, per-category diversification cap, AND correlation
+    cap), cash, and the kill-switch is not engaged. Sized via fractional
+    Kelly once the model has earned enough evidence (win_prob passed in);
+    otherwise the flat PORTFOLIO_POSITION_PCT. A stop-loss is attached
+    immediately: a real resting order in live mode, a simulated per-run
+    check in paper mode."""
     pf = state["portfolio"]
     if state["killswitch"].get("active"):
         return False
@@ -512,6 +825,16 @@ def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
     if cat_cap is not None:
         cat_open = sum(1 for p in pf["open_positions"] if p.get("category") == category)
         if cat_open >= cat_cap:
+            return False
+    # Correlation cap: most altcoins are just leveraged BTC-beta (see
+    # alpha_bonus) - without this check, "5 diversified positions" can
+    # quietly be one oversized BTC bet if all 5 happen to be low-alpha.
+    # Only meaningfully idiosyncratic moves (|alpha| above the threshold)
+    # count as "independent" for this check.
+    if abs(alpha_pct) < PORTFOLIO_CORR_ALPHA_THRESHOLD:
+        low_alpha_open = sum(1 for p in pf["open_positions"]
+                             if abs(p.get("alpha_pct", 0.0)) < PORTFOLIO_CORR_ALPHA_THRESHOLD)
+        if low_alpha_open >= PORTFOLIO_CORR_MAX_LOW_ALPHA:
             return False
 
     size_pct = pf["position_size_pct"]
@@ -541,7 +864,8 @@ def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
         "quantity": fill["quantity"], "entry_fee_usd": fill["fee_usd"],
         "size_usd": round(size_usd, 2), "size_pct": round(size_pct * 100, 2),
         "entry_ts": ts, "risk": risk, "score": score, "category": category,
-        "mode": brk.mode, "stop_price": stop_price, "stop_order_id": stop_order_id
+        "mode": brk.mode, "stop_price": stop_price, "stop_order_id": stop_order_id,
+        "alpha_pct": alpha_pct
     })
     return True
 
@@ -614,7 +938,7 @@ def close_position(state, rec_id, exit_price, exit_ts, brk, reason="24h"):
 
 
 def maybe_swap_position(state, rec_id, instrument, price, ts, risk, score, brk,
-                        current_prices, category="unknown", win_prob=None):
+                        current_prices, category="unknown", win_prob=None, alpha_pct=0.0):
     """Called when an alert fires but the book is already full. Finds the
     weakest eligible holding (broker-era position, held at least
     SWAP_MIN_HOLD_HOURS, currently >= 1% under water, and scored at least
@@ -674,7 +998,7 @@ def maybe_swap_position(state, rec_id, instrument, price, ts, risk, score, brk,
     old_trade = pf["closed_trades"][-1]
 
     opened = maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
-                                 category=category, win_prob=win_prob)
+                                 category=category, win_prob=win_prob, alpha_pct=alpha_pct)
     note = (f"🔄 VAHETUS: {weakest['instrument']} (skoor {weakest['score']}, {old_trade['pnl_pct']:+.1f}%) "
             f"→ {instrument} (skoor {score})")
     if not opened:
@@ -1426,15 +1750,18 @@ def adapt_thresholds(state):
 
 
 def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_path,
-             candles_path=None, book_path=None):
+             candles_path=None, book_path=None, funding_path=None):
     state = load_state()
     candidates = load_json(candidates_path, [])
     hype_notes = load_json(hype_notes_path, {})
     current_prices = load_json(current_prices_path, {})
     candles_all = load_json(candles_path, {}) if candles_path else {}
     book_notes = load_json(book_path, {}) if book_path else {}
+    funding_rates = load_json(funding_path, {}) if funding_path else {}
     regime = load_json(os.path.join(DATA_DIR, "market_regime.json"), {})
     fng_value = regime.get("value")
+    onchain = load_json(os.path.join(DATA_DIR, "onchain_latest.json"), {})
+    onchain_ratio = onchain.get("ratio_vs_7d_avg")
 
     brk = broker_mod.get_broker()
     state["portfolio"]["mode"] = brk.mode
@@ -1445,6 +1772,14 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     record_equity_snapshot(state, current_prices)
     killswitch_notes = update_killswitch(state, brk)
     threshold_notes = adapt_thresholds(state) or []
+
+    # Independent sleeves - each manages its own separate ledger and never
+    # touches state["portfolio"] (the momentum book). Both are still gated
+    # by the momentum kill-switch (a real account-level circuit breaker
+    # should stop ALL new risk-taking, not just one strategy).
+    funding_close_notes = manage_funding_positions(state, funding_rates, current_prices, brk)
+    funding_open_notes = scan_funding_opportunities(state, funding_rates, current_prices, brk)
+    grid_notes = manage_grid(state, current_prices, candles_all, brk)
     if retrain_note:
         threshold_notes = threshold_notes + [retrain_note]
 
@@ -1486,7 +1821,7 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
 
         features = build_features(c["momentum_score"], c["trend_bonus"], c["liquidity"],
                                    c["category"], c["change_24h"], bonus, c.get("alpha_pct", 0.0),
-                                   book_imbalance=imbalance, fng_value=fng_value)
+                                   book_imbalance=imbalance, fng_value=fng_value, onchain_ratio=onchain_ratio)
         model_p = model_predict(state["model"]["weights"], features)
 
         # Credibility-weighted blend (Z = n/(n+k)): the model's say grows
@@ -1517,12 +1852,15 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
             # evidence bar it always needed before being trusted at all -
             # sizing real (virtual) money is a higher bar than just display.
             win_prob = model_p if model_ready else None
+            alpha_pct_val = c.get("alpha_pct", 0.0)
             traded = maybe_open_position(state, rec_id, inst, c["price"], ts, risk, final_score,
-                                          brk, category=c["category"], win_prob=win_prob)
+                                          brk, category=c["category"], win_prob=win_prob,
+                                          alpha_pct=alpha_pct_val)
             if not traded and swaps_left > 0:
                 swap_note, traded = maybe_swap_position(state, rec_id, inst, c["price"], ts, risk,
                                                         final_score, brk, current_prices,
-                                                        category=c["category"], win_prob=win_prob)
+                                                        category=c["category"], win_prob=win_prob,
+                                                        alpha_pct=alpha_pct_val)
                 if swap_note:
                     swaps_left -= 1
                     swap_notes.append(swap_note)
@@ -1559,12 +1897,21 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.extend(stop_notes)
     if swap_notes:
         lines.extend(swap_notes)
+    if funding_close_notes:
+        lines.extend(funding_close_notes)
+    if funding_open_notes:
+        lines.extend(funding_open_notes)
+    if grid_notes:
+        lines.extend(grid_notes)
     if reconcile_notes:
         lines.extend(reconcile_notes)
     if fng_value is not None and (fng_value <= 25 or fng_value >= 75):
         mood = "äärmuslik HIRM - turg paanikas, momentum petlik" if fng_value <= 25 \
             else "äärmuslik AHNUS - turg ülekuumenenud, ettevaatust"
         lines.append(f"🌡️ Turu meeleolu: {regime.get('classification', '')} ({fng_value}/100) - {mood}")
+    if onchain_ratio is not None and (onchain_ratio >= 1.8 or onchain_ratio <= 0.5):
+        direction = "ebatavaliselt kõrge" if onchain_ratio >= 1.8 else "ebatavaliselt madal"
+        lines.append(f"⛓️ BTC on-chain aktiivsus {direction} ({onchain_ratio:.2f}x 7p keskmisest)")
     if readiness_notes:
         lines.extend(readiness_notes)
     if alerts:
@@ -1604,6 +1951,7 @@ FEATURE_LABELS = {
     "alpha": "Alpha (BTC-suhteline üleliikumine)",
     "book_imbalance": "Orderiraamatu ostu/müügisurve",
     "market_fng": "Turu meeleolu (Fear & Greed)",
+    "onchain_activity": "BTC on-chain aktiivsus",
 }
 
 
@@ -1670,6 +2018,50 @@ def render_dashboard(state):
     pf_drawdown = max_drawdown_pct(pf_chart_values)
     pf_profit_factor = profit_factor(pf["closed_trades"])
     pf_expectancy = expectancy_pct(pf["closed_trades"])
+
+    def sleeve_stats(ledger):
+        closed = ledger["closed_trades"]
+        equity = ledger["balance_history"][-1]["balance"] if ledger["balance_history"] else ledger["balance"]
+        return_pct = (equity - ledger["starting_balance"]) / ledger["starting_balance"] * 100 if ledger["starting_balance"] else 0.0
+        wins = sum(1 for t in closed if t["pnl_usd"] > 0)
+        return {
+            "equity": equity, "return_pct": return_pct, "n_open": len(ledger["open_positions"]),
+            "n_closed": len(closed), "wins": wins, "losses": len(closed) - wins,
+            "profit_factor": profit_factor(closed), "expectancy": expectancy_pct(closed),
+        }
+
+    fa = state.get("funding_arb", funding_arb_state_default())
+    fa_stats = sleeve_stats(fa)
+    fa_rows = ""
+    for t in reversed(fa["closed_trades"][-20:]):
+        dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
+        fa_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>{t['entry_apr']:+.1f}%</td>
+        <td>${t.get('funding_collected_usd',0):+.2f}</td>
+        <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td></tr>"""
+    fa_open_rows = ""
+    for p in fa["open_positions"]:
+        dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        fa_open_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td>{p['entry_apr']:+.1f}%</td>
+        <td>${p['notional_usd']:.2f}/jalg</td><td>${p.get('funding_collected_usd',0):+.2f}</td></tr>"""
+
+    grid = state.get("grid", grid_state_default())
+    grid_stats = sleeve_stats(grid)
+    grid_rows = ""
+    for t in reversed(grid["closed_trades"][-20:]):
+        dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
+        grid_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>{t.get('exit_reason','')}</td>
+        <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td></tr>"""
+    grid_open_rows = ""
+    for p in grid["open_positions"]:
+        dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        grid_open_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td class="mono">{p['entry_price']:.6g}</td>
+        <td>${p['size_usd']:.2f}</td></tr>"""
 
     readiness_criteria, readiness_all_met = go_live_readiness(state)
     readiness_rows = ""
@@ -2110,6 +2502,50 @@ def render_dashboard(state):
       {readiness_rows}
     </table></div>
   </div>
+
+  <details class="card">
+    <summary><h2>💹 Funding-arb sahtel{info_badge("Turuneutraalne strateegia, eraldi kapitaliga (algsaldo $" + f'{fa["starting_balance"]:.0f}' + "): ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni, teenib ainult funding-makseid, ei sõltu turusuunast. Sisenemine kui funding ≥" + f'{FUNDING_MIN_APR_ENTER:.0f}' + "% aastas, väljumine kui langeb alla " + f'{FUNDING_MIN_APR_EXIT:.0f}' + "% või max " + f'{FUNDING_MAX_HOLD_HOURS//24}' + " päeva täis.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
+    <div class="stats" style="margin-bottom:14px">
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:{'var(--good)' if fa_stats['equity']>=fa['starting_balance'] else 'var(--critical)'}">${fa_stats['equity']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:{'var(--good)' if fa_stats['return_pct']>=0 else 'var(--critical)'}">{fa_stats['return_pct']:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">{fa_stats['n_open']}/{fa_stats['n_closed']}</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f"{fa_stats['profit_factor']:.2f}" if fa_stats['profit_factor'] is not None else '–'}</div></div>
+    </div>
+    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Funding (aastas)</th><th>Notional</th><th>Kogutud funding</th></tr>
+      {fa_open_rows or '<tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
+    </table></div>
+    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Sisenemis-APR</th><th>Kogutud funding</th><th>Netotulem</th></tr>
+      {fa_rows or '<tr><td colspan="5" style="color:var(--muted)">Veel pole ühtegi suletud.</td></tr>'}
+    </table></div>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary><h2>🔲 Grid/range sahtel{info_badge("Mean-reversion strateegia likviidsetel majoritel (BTC, ETH), eraldi kapitaliga (algsaldo $" + f'{grid["starting_balance"]:.0f}' + "): ostab kui hind on oma 24h vahemiku põhjas JA trend on nõrk (madal R² - momentumi vastand), müüb +" + f'{GRID_TAKE_PROFIT_PCT:.0f}' + "% juures või vahemiku tipus. Monetiseerib tunde, mil momentum-strateegia lihtsalt ootab.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
+    <div class="stats" style="margin-bottom:14px">
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:{'var(--good)' if grid_stats['equity']>=grid['starting_balance'] else 'var(--critical)'}">${grid_stats['equity']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:{'var(--good)' if grid_stats['return_pct']>=0 else 'var(--critical)'}">{grid_stats['return_pct']:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">{grid_stats['n_open']}/{grid_stats['n_closed']}</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f"{grid_stats['profit_factor']:.2f}" if grid_stats['profit_factor'] is not None else '–'}</div></div>
+    </div>
+    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Sisenemishind</th><th>Suurus</th></tr>
+      {grid_open_rows or '<tr><td colspan="4" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
+    </table></div>
+    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
+      {grid_rows or '<tr><td colspan="4" style="color:var(--muted)">Veel pole ühtegi suletud.</td></tr>'}
+    </table></div>
+    </div>
+  </details>
 
   <div class="card">
     <h2>Õppiv mudel{info_badge("Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.")}</h2>

@@ -37,7 +37,10 @@ WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
 CRYPTO_COM_TICKER_URL = "https://api.crypto.com/exchange/v1/public/get-tickers"
 CRYPTO_COM_CANDLE_URL = "https://api.crypto.com/exchange/v1/public/get-candlestick"
 CRYPTO_COM_BOOK_URL = "https://api.crypto.com/exchange/v1/public/get-book"
+CRYPTO_COM_VALUATIONS_URL = "https://api.crypto.com/exchange/v1/public/get-valuations"
 FNG_URL = "https://api.alternative.me/fng/?limit=1"
+BLOCKCHAIN_STATS_URL = "https://api.blockchain.info/stats"
+ONCHAIN_HISTORY_KEEP = 168   # ~7 days of hourly readings for the trailing baseline
 COINGECKO_COIN_URL = "https://api.coingecko.com/api/v3/coins/{id}"
 
 CANDLE_TIMEFRAME = "15m"
@@ -205,6 +208,69 @@ def fetch_market_regime():
         return {}
 
 
+def fetch_funding_rate_annualized(symbol, hours=24):
+    """Recent funding rate for a watchlist symbol's perpetual (BTCUSD ->
+    BTCUSD-PERP), annualized. Crypto.com's funding_hist valuation returns an
+    hourly rate; averaging the last `hours` readings and scaling by 24*365
+    smooths out noise from any single settlement. Returns None if the perp
+    doesn't exist or the call fails - funding-arb just skips that symbol,
+    same graceful-degradation pattern as the hype-check."""
+    perp_name = f"{symbol}-PERP"
+    url = f"{CRYPTO_COM_VALUATIONS_URL}?instrument_name={perp_name}&valuation_type=funding_hist&count={hours}"
+    try:
+        raw = http_get_json(url)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError):
+        return None
+    data = (raw.get("result") or {}).get("data") or []
+    if not data:
+        return None
+    try:
+        rates = [float(d["v"]) for d in data]
+    except (KeyError, ValueError, TypeError):
+        return None
+    if not rates:
+        return None
+    avg_hourly = sum(rates) / len(rates)
+    return avg_hourly * 24 * 365 * 100  # -> annualized %
+
+
+def fetch_onchain_activity():
+    """BTC on-chain transaction volume, free and keyless (blockchain.info's
+    public /stats endpoint) - the honest limitation here is that GENUINE
+    labeled whale/exchange-netflow data (Nansen, Glassnode, Arkham) is paid
+    and per-chain, so a free, no-key signal across all 45 watchlist tokens
+    (many different blockchains) isn't realistic to build. This is BTC-only,
+    used as a market-wide activity signal (like Fear & Greed) rather than a
+    per-token feature - an unusually large surge in real BTC network value
+    moving on-chain is a genuine, if blunt, proxy for large players active
+    in the market right now. Returns the raw USD figure, or None on failure."""
+    try:
+        raw = http_get_json(BLOCKCHAIN_STATS_URL)
+        return float(raw["estimated_transaction_volume_usd"])
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError,
+            ValueError, KeyError, TypeError):
+        return None
+
+
+def onchain_activity_ratio(current_value, data_dir):
+    """Ratio of the current on-chain volume reading to its trailing 7-day
+    hourly average - >1 means unusually high value moving on-chain right
+    now. Persists its own small rolling history file (independent of
+    engine.py's state.json) since this is a raw external reading, not a
+    trading outcome."""
+    hist_path = os.path.join(data_dir, "onchain_history.json")
+    hist = engine.load_json(hist_path, [])
+    ratio = None
+    if hist:
+        baseline = sum(hist) / len(hist)
+        if baseline > 0:
+            ratio = current_value / baseline
+    hist.append(current_value)
+    hist = hist[-ONCHAIN_HISTORY_KEEP:]
+    engine.save_json(hist_path, hist)
+    return ratio
+
+
 def fetch_hype_note(symbol):
     """Real hype/sentiment check for one Stage-1 candidate, sourced from
     CoinGecko's free public API instead of a live web search (not available
@@ -300,6 +366,28 @@ def main():
     if regime:
         print(f"Turu meeleolu: {regime.get('classification')} ({regime.get('value')}/100)")
 
+    # On-chain activity (BTC-only, free - see fetch_onchain_activity docstring
+    # for why this can't cover the whole watchlist).
+    onchain_value = fetch_onchain_activity()
+    onchain_ratio = onchain_activity_ratio(onchain_value, DATA_DIR) if onchain_value is not None else None
+    engine.save_json(os.path.join(DATA_DIR, "onchain_latest.json"),
+                     {"value_usd": onchain_value, "ratio_vs_7d_avg": onchain_ratio})
+    if onchain_ratio is not None:
+        print(f"On-chain aktiivsus (BTC): {onchain_ratio:.2f}x 7-päeva keskmisest")
+
+    # Funding rates for the market-neutral funding-arb sleeve - one call per
+    # instrument's perpetual (independent of Stage-1 candidates, since this
+    # strategy doesn't care about momentum at all).
+    funding_rates = {}
+    for symbol in instrument_map:
+        apr = fetch_funding_rate_annualized(symbol)
+        if apr is not None:
+            funding_rates[symbol] = apr
+        time.sleep(0.12)
+    funding_path = os.path.join(DATA_DIR, "funding_rates.json")
+    engine.save_json(funding_path, funding_rates)
+    print(f"Funding-määrad: {len(funding_rates)}/{len(instrument_map)} instrumendile leiti perpetual.")
+
     candidates_path = os.path.join(DATA_DIR, "candidates.json")
     engine.screen(tickers_path, candidates_path, candles_path=candles_path)
 
@@ -338,7 +426,9 @@ def main():
     # fetch where possible; only re-fetch what wasn't in the watchlist pull.
     state = engine.load_state()
     needed = ({rec["instrument"] for rec in state["pending_followups"]}
-              | {p["instrument"] for p in state["portfolio"]["open_positions"]})
+              | {p["instrument"] for p in state["portfolio"]["open_positions"]}
+              | {p["instrument"] for p in state.get("funding_arb", {}).get("open_positions", [])}
+              | {p["instrument"] for p in state.get("grid", {}).get("open_positions", [])})
     current_prices = {t["instrument_name"]: float(t["last"])
                       for t in tickers
                       if t["instrument_name"] in needed and t["last"] is not None}
@@ -351,7 +441,8 @@ def main():
 
     summary_path = os.path.join(DATA_DIR, "summary_latest.txt")
     engine.finalize(candidates_path, hype_notes_path, current_prices_path, summary_path,
-                    candles_path=candles_path, book_path=book_notes_path)
+                    candles_path=candles_path, book_path=book_notes_path,
+                    funding_path=funding_path)
 
     with open(summary_path) as f:
         summary = f.read()

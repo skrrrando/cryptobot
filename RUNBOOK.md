@@ -11,6 +11,9 @@ See on käsiraamat, mida ajastatud ülesanne (scheduled task) iga tund täpselt 
 - `data/candles_latest.json` — 24h jagu 15m OHLCV küünlaid iga instrumendi kohta (transient, gitignore'itud). Volatiilsus ja trend arvutatakse nendelt (96 punkti), hetktõmmised on varuvariant.
 - `data/book_notes.json` — orderiraamatu imbalance + spread Stage-1 kandidaatidele (transient). Lai spread (>1%) annab skooritrahvi; imbalance on mudeli tunnus.
 - `data/market_regime.json` — Fear & Greed indeks (transient). Mudeli tunnus `market_fng` + hoiatus summary's äärmuste (≤25 / ≥75) puhul.
+- `data/funding_rates.json` — iga instrumendi perpetual'i annualiseeritud funding määr (transient). Toidab funding-arb sahtlit.
+- `data/onchain_latest.json` + `data/onchain_history.json` — BTC on-chain tehingumaht ja selle 7-päeva keskmise suhe (transient). Mudeli tunnus `onchain_activity`.
+- `backtest.py` — standalone tööriist (EI jookse tunnise workflow osana): mängib sama screen/finalize mootorit läbi ajaloolise andmega (`python3 backtest.py --months 6`), jaotab tulemused bull/bear/chop režiimide kaupa. Ei puuduta `data/state.json` - kirjutab eraldi `backtest_data/` kausta.
 - `dashboard.html` — visuaalne ülevaade, genereeritakse iga käivituse lõpus uuesti.
 
 ## Positsioonihaldus (V5)
@@ -18,6 +21,18 @@ See on käsiraamat, mida ajastatud ülesanne (scheduled task) iga tund täpselt 
 - **Trailing stop**: kui tipp on ≥ +4% sisenemisest, järgneb stop 3% kaugusel tipust (ainult ülespoole). Live-režiimis cancel+replace päris stop-order.
 - **Vahetusloogika**: täis raamatu korral vahetatakse nõrgim ≥1% miinuses positsioon välja, kui uus kandidaat on ≥12 punkti tugevam (max 1/tunnis).
 - **Täis-treening**: iga 20 uue lahendatud tulemuse järel treenitakse mudel nullist kogu ajaloo peal uuesti (150 epohhi) - stabiilsemad kaalud kui ainult ükshaaval õppides.
+- **Korrelatsiooni piirmäär**: max 3/5 avatud positsioonist tohib olla madala-alphaga (tugevalt BTC-korreleeritud) korraga - "5 diversifitseeritud positsiooni" ei tohi salaja olla üks suur BTC-panus.
+
+## Uued sahtlid (V6) — eraldi kapital, eraldi ledger, momentum-portfelli ei puuduta
+
+**💹 Funding-rate arbitraaž** (`state["funding_arb"]`, algsaldo $300): turuneutraalne — ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni (delta-neutraalne), teenib ainult funding-makseid, ei sõltu turu suunast.
+- Sisenemine: annualiseeritud funding ≥ 20%. See lävi EI ole meelevaldne — nelja jala (spot ost/müük + perp ava/sule) teenustasu+slippage kulu on ~1% kapitalist, ja kuna funding koguneb ainult ühe jala (lühikese) notionali pealt, kulub tasuvuseni ~38 päeva 20% APR juures. Madalam lävi ei jõuaks 45-päevase max hoiuaja jooksul kunagi tasuvusse.
+- **Vajab derivatiivide/marginaalkauplemise õigust Crypto.com kontol live-režiimis** — see on eraldi eeldusõigus spot-kauplemisest, võib vajada täiendavat KYC-d. Kontrolli enne live-minekut.
+- Väljumine: funding langeb alla 1% APR, või 45 päeva täis.
+
+**🔲 Grid/mean-reversion** (`state["grid"]`, algsaldo $300): likviidsetel majoritel (BTC, ETH) — ostab kui hind on oma 24h vahemiku põhjas 35% JA trend on nõrk (R²<0.35, momentumi vastand), müüb +3% juures või vahemiku tipus, stop -6%. Monetiseerib tunde, mil momentum-strateegia lihtsalt ootab (enamik aega on crypto turg vahemikus, mitte trendis).
+
+Mõlemad on gate'itud sama kill-switchiga kui momentum-portfell (konto-tasandi kaitse peab peatama KOGU uue riski, mitte ainult ühe strateegia oma).
 
 ## Iga tunni sammud (mida agent teeb)
 
