@@ -549,7 +549,13 @@ def maybe_open_position(state, rec_id, instrument, price, ts, risk, score, brk,
 def _book_close(state, match, exit_price, proceeds_usd, exit_fee_usd, exit_ts, reason):
     """Shared bookkeeping for every way a position can close (24h timer,
     stop-loss, reconcile). P&L is NET of both sides' fees + slippage - the
-    number that would actually land in the account."""
+    number that would actually land in the account.
+
+    Does NOT touch balance_history - that used to append raw pf["balance"]
+    (cash) right here, which understates true account value mid-run
+    whenever OTHER positions are still open (their value isn't in cash yet).
+    record_equity_snapshot() is the single place balance_history gets
+    written now, once per run, after all of a run's closes are settled."""
     pf = state["portfolio"]
     pf["open_positions"].remove(match)
     pnl_usd = proceeds_usd - match["size_usd"]
@@ -564,8 +570,6 @@ def _book_close(state, match, exit_price, proceeds_usd, exit_fee_usd, exit_ts, r
         "risk": match["risk"], "score": match["score"], "category": match.get("category", "unknown")
     })
     pf["closed_trades"] = pf["closed_trades"][-300:]
-    pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
-    pf["balance_history"] = pf["balance_history"][-500:]
 
 
 def close_position(state, rec_id, exit_price, exit_ts, brk, reason="24h"):
@@ -592,8 +596,6 @@ def close_position(state, rec_id, exit_price, exit_ts, brk, reason="24h"):
             "risk": match["risk"], "score": match["score"], "category": match.get("category", "unknown")
         })
         pf["closed_trades"] = pf["closed_trades"][-300:]
-        pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
-        pf["balance_history"] = pf["balance_history"][-500:]
         return
 
     if match.get("stop_order_id"):
@@ -699,8 +701,6 @@ def _book_partial_close(state, pos, fraction, fill, exit_ts, reason):
         "risk": pos["risk"], "score": pos["score"], "category": pos.get("category", "unknown")
     })
     pf["closed_trades"] = pf["closed_trades"][-300:]
-    pf["balance_history"].append({"ts": exit_ts, "balance": round(pf["balance"], 2)})
-    pf["balance_history"] = pf["balance_history"][-500:]
     remain = 1 - fraction
     pos["quantity"] *= remain
     pos["size_usd"] = round(pos["size_usd"] * remain, 2)
