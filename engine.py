@@ -471,6 +471,160 @@ def manage_grid(state, current_prices, candles_all, brk):
     return notes
 
 
+# ---------------------------------------------------------------------------
+# Regime-gated mean-reversion SHORT sleeve.
+#
+# Built in direct response to a live data review that asked "our hit rate is
+# only 12.5% - wouldn't reversing every signal give >80% accuracy?" Checked
+# against the full 184-record history: reversing EVERY long signal gives a
+# raw edge of only +0.40%/trade (184 records: 12.5% would have hit long,
+# 22.3% would have hit short at a symmetric -3% bar, the other 65% moved
+# less than 3% either way) - nowhere near enough to clear the ~1.3%
+# round-trip cost of a real buy+sell cycle. A BLIND full reversal does not
+# survive contact with real trading costs.
+#
+# So this is deliberately narrower than "flip the signal": it only shorts
+# when TWO conditions both hold -
+#   (a) the broader market is confirmed risk-off (BTC itself down over the
+#       window AND Fear&Greed in fear territory) - shorting into strength
+#       during a genuine uptrend is exactly the "catching a falling knife
+#       in reverse" mistake the long side already makes;
+#   (b) the SPECIFIC candidate looks overextended - high momentum (it
+#       pumped) but a WEAK confirmed trend (trend_bonus <= 5, i.e. the
+#       existing scoring already couldn't confirm a genuine breakout) -
+#       a spike more likely to be exhaustion than continuation.
+# Separate ledger, separate small capital, gated by the same kill-switch -
+# this is an experimental sleeve to validate, not a replacement strategy.
+# ---------------------------------------------------------------------------
+SHORT_START_BALANCE = 200.0
+SHORT_MAX_OPEN = 2
+SHORT_POSITION_PCT = 0.15
+SHORT_STOP_LOSS_PCT = 6.0
+SHORT_TAKE_PROFIT_PCT = 5.0
+SHORT_MAX_HOLD_HOURS = 24
+SHORT_MIN_MOMENTUM_SCORE = 60   # candidate must have genuinely pumped (high momentum score)
+SHORT_MAX_TREND_BONUS = 5.0     # but NOT have a strongly confirmed trend (that's the long side's territory)
+SHORT_BTC_BEAR_CHANGE_PCT = -3.0   # BTC's own 24h change must be at/below this
+SHORT_FNG_FEAR_MAX = 40            # Fear & Greed at/below this (fear territory)
+
+
+def short_state_default():
+    return {
+        "starting_balance": SHORT_START_BALANCE,
+        "balance": SHORT_START_BALANCE,
+        "open_positions": [],   # [{id, instrument, quantity, entry_price, size_usd, entry_ts, stop_price, entry_fee_usd, mode}]
+        "closed_trades": [],
+        "balance_history": [{"ts": 0, "balance": SHORT_START_BALANCE}],
+        "next_id": 1,
+    }
+
+
+def short_sleeve_equity(sh, current_prices):
+    """Unlike portfolio_equity() (built for LONG holdings, where quantity*
+    price is the payoff), a short's mark-to-market value is the reserved
+    capital plus/minus its unrealized P&L (positive when price has fallen
+    below entry, negative when it has risen) - reusing the long-side
+    formula here would silently double-count the position's notional."""
+    equity = sh["balance"]
+    for p in sh["open_positions"]:
+        price = current_prices.get(p["instrument"], p["entry_price"])
+        unrealized_pnl = (p["entry_price"] - price) * p["quantity"]
+        equity += p["size_usd"] + unrealized_pnl
+    return equity
+
+
+def market_bearish_regime(btc_change_24h, fng_value):
+    """The regime gate: is the BROADER market confirmed risk-off right now?
+    Both conditions must hold - a single fearful FNG reading during an
+    otherwise-fine market, or a BTC dip without genuine fear, isn't enough."""
+    if btc_change_24h is None or fng_value is None:
+        return False
+    return btc_change_24h <= SHORT_BTC_BEAR_CHANGE_PCT / 100 and fng_value <= SHORT_FNG_FEAR_MAX
+
+
+def manage_short_sleeve(state, candidates, btc_change_24h, fng_value, current_prices, brk):
+    """One pass per run: check exits on open shorts, then look for new
+    overextended-pump-in-a-bearish-regime entries among this run's already-
+    scored candidates (no separate scan needed - reuses screen()'s output)."""
+    sh = state.setdefault("short_reversal", short_state_default())
+    notes = []
+
+    for pos in list(sh["open_positions"]):
+        inst = pos["instrument"]
+        cp = current_prices.get(inst)
+        if cp is None:
+            continue
+        age_h = (now_ts() - pos["entry_ts"]) / 3600
+        hit_stop = cp >= pos["stop_price"]
+        hit_take_profit = cp <= pos["entry_price"] * (1 - SHORT_TAKE_PROFIT_PCT / 100)
+        hit_max_hold = age_h >= SHORT_MAX_HOLD_HOURS
+        if not (hit_stop or hit_take_profit or hit_max_hold):
+            continue
+        try:
+            fill = brk.close_short(inst, pos["quantity"], cp)
+        except broker_mod.BrokerError as e:
+            print(f"WARN: short-sleeve close {inst} failed: {e}", file=sys.stderr)
+            continue
+        if not fill:
+            continue
+        sh["open_positions"].remove(pos)
+        # Standard short P&L: profit when price fell below entry.
+        pnl_usd = (pos["entry_price"] - fill["price"]) * pos["quantity"] - fill["fee_usd"]
+        pnl_pct = pnl_usd / pos["size_usd"] * 100 if pos["size_usd"] else 0.0
+        sh["balance"] += pos["size_usd"] + pnl_usd
+        reason = "stop_loss" if hit_stop else ("take_profit" if hit_take_profit else "max_hold")
+        sh["closed_trades"].append({
+            "id": pos["id"], "instrument": inst, "entry_price": pos["entry_price"],
+            "exit_price": fill["price"], "size_usd": pos["size_usd"], "entry_ts": pos["entry_ts"],
+            "exit_ts": now_ts(), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round(pnl_pct, 2),
+            "exit_reason": reason, "mode": pos.get("mode", "paper"),
+        })
+        sh["closed_trades"] = sh["closed_trades"][-300:]
+        notes.append(f"📉 SHORT SULETUD: {inst} ({reason}) {pnl_pct:+.1f}% (${pnl_usd:+.2f})")
+
+    regime_ok = market_bearish_regime(btc_change_24h, fng_value)
+    if regime_ok and not state["killswitch"].get("active") and len(sh["open_positions"]) < SHORT_MAX_OPEN:
+        already_open = {p["instrument"] for p in sh["open_positions"]}
+        ranked = sorted(
+            (c for c in candidates
+             if c["instrument"] not in already_open
+             and c["momentum_score"] >= SHORT_MIN_MOMENTUM_SCORE
+             and c["trend_bonus"] <= SHORT_MAX_TREND_BONUS
+             and c["change_24h"] > 0
+             and c["instrument"] in current_prices),
+            key=lambda c: c["momentum_score"], reverse=True)
+        for c in ranked:
+            if len(sh["open_positions"]) >= SHORT_MAX_OPEN:
+                break
+            inst = c["instrument"]
+            size_usd = sh["balance"] * SHORT_POSITION_PCT
+            if size_usd < 5.0 or size_usd > sh["balance"]:
+                continue
+            price = current_prices[inst]
+            try:
+                fill = brk.open_short(inst, size_usd, price)
+            except broker_mod.BrokerError as e:
+                print(f"WARN: short-sleeve open {inst} failed: {e}", file=sys.stderr)
+                continue
+            if not fill:
+                continue
+            sh["balance"] -= size_usd
+            rec_id = sh["next_id"]
+            sh["next_id"] += 1
+            sh["open_positions"].append({
+                "id": rec_id, "instrument": inst, "entry_price": fill["price"],
+                "quantity": fill["quantity"], "size_usd": round(size_usd, 2),
+                "entry_fee_usd": fill["fee_usd"], "entry_ts": now_ts(),
+                "stop_price": fill["price"] * (1 + SHORT_STOP_LOSS_PCT / 100), "mode": brk.mode,
+            })
+            notes.append(f"📉 SHORT AVATUD: {inst} üleostetud (momentum {c['momentum_score']:.0f}, "
+                        f"trend nõrk R²-ga kinnitamata) turu hirmu-režiimis - ${size_usd:.2f}")
+
+    sh["balance_history"].append({"ts": now_ts(), "balance": round(short_sleeve_equity(sh, current_prices), 2)})
+    sh["balance_history"] = sh["balance_history"][-500:]
+    return notes
+
+
 # Go-live readiness criteria (mirrors RUNBOOK.md "Go-live checklist" exactly -
 # this is a REPORTING feature only, never touches TRADING_MODE itself. The
 # switch to live money stays a deliberate manual step on GitHub; this just
@@ -487,7 +641,8 @@ DEFAULT_STATE = {
         "screen_score": 65,
         "green_hit_bar": 60,
         "yellow_hit_bar": 65,
-        "red_hit_bar": 75
+        "red_hit_bar": 75,
+        "screen_score_raise_streak": 0,  # consecutive stuck-below-35%-hit-rate raise cycles - see SCREEN_SCORE_STAGNANT_STREAK_LIMIT
     },
     "adjustment_checkpoint": 0,  # len(completed) at last threshold adjustment - prevents re-applying
                                  # the same historical evidence over and over on every run (see adapt_thresholds)
@@ -561,6 +716,9 @@ def load_state():
     st["model"].setdefault("n_updates", 0)
     st["model"].setdefault("last_full_retrain_n", 0)
     st["model"].setdefault("learning_log", [])
+    st.setdefault("thresholds", _deep_default(DEFAULT_STATE["thresholds"]))
+    for k, v in DEFAULT_STATE["thresholds"].items():
+        st["thresholds"].setdefault(k, v)
     st.setdefault("portfolio", _deep_default(DEFAULT_STATE["portfolio"]))
     for k, v in DEFAULT_STATE["portfolio"].items():
         st["portfolio"].setdefault(k, v)
@@ -575,6 +733,9 @@ def load_state():
     st.setdefault("grid", grid_state_default())
     for k, v in grid_state_default().items():
         st["grid"].setdefault(k, v)
+    st.setdefault("short_reversal", short_state_default())
+    for k, v in short_state_default().items():
+        st["short_reversal"].setdefault(k, v)
     return st
 
 
@@ -635,17 +796,38 @@ def model_predict(weights, features):
     return sigmoid(z)
 
 
-def train_step(state, features, hit):
+# A trade that missed by a mile (or won by a mile) should teach the model
+# more than one that barely crossed or barely missed the +3% hit bar - the
+# old scheme weighted a +3.01% "hit" the same as a +28% "hit", and a -0.5%
+# "miss" the same as a -10% "miss", which is exactly the "optimizes for
+# quota, not profit" gap a live data review flagged. OUTCOME_SCALE_PCT is
+# the |return_pct| that counts as "a normal, decisive outcome" (weight
+# 1.0); the clamp keeps one freak 28% mover from swamping everything else.
+OUTCOME_SCALE_PCT = 5.0
+OUTCOME_WEIGHT_MIN = 0.3
+OUTCOME_WEIGHT_MAX = 3.0
+
+
+def outcome_magnitude_weight(return_pct):
+    if return_pct is None:
+        return 1.0
+    return clamp(abs(return_pct) / OUTCOME_SCALE_PCT, OUTCOME_WEIGHT_MIN, OUTCOME_WEIGHT_MAX)
+
+
+def train_step(state, features, hit, return_pct=None):
     """One step of online logistic-regression training (gradient ascent on
-    log-likelihood). Logs a plain-language note if weights moved meaningfully."""
+    log-likelihood), scaled by outcome_magnitude_weight() so decisive
+    trades move the weights more than marginal ones. Logs a plain-language
+    note if weights moved meaningfully."""
     weights = state["model"]["weights"]
     old_weights = dict(weights)
     p = model_predict(weights, features)
     y = 1.0 if hit else 0.0
     error = y - p
+    lr = LEARNING_RATE * outcome_magnitude_weight(return_pct)
     for k in FEATURE_NAMES:
         reg = 0.0 if k == "bias" else L2_LAMBDA * weights[k]  # don't regularize the bias term
-        weights[k] = weights[k] + LEARNING_RATE * (error * features.get(k, 0.0) - reg)
+        weights[k] = weights[k] + lr * (error * features.get(k, 0.0) - reg)
     state["model"]["n_updates"] += 1
 
     moved = {k: weights[k] - old_weights[k] for k in FEATURE_NAMES if abs(weights[k] - old_weights[k]) >= 0.02}
@@ -674,7 +856,7 @@ def full_retrain(state):
     with a decaying learning rate and the same L2 penalty. The batch result
     replaces the online-accumulated weights; online learning then continues
     from this better-calibrated base until the next full retrain."""
-    rows = [(r["features"], 1.0 if r["result_24h"]["hit"] else 0.0)
+    rows = [(r["features"], 1.0 if r["result_24h"]["hit"] else 0.0, r["result_24h"].get("return_pct"))
             for r in state["completed"] + state["pending_followups"]
             if r.get("result_24h") and r.get("features")]
     n = len(rows)
@@ -686,16 +868,17 @@ def full_retrain(state):
     order = list(range(n))
     for epoch in range(RETRAIN_EPOCHS):
         rng.shuffle(order)
-        lr = LEARNING_RATE * (1 - 0.9 * epoch / RETRAIN_EPOCHS)  # decay to 10%
+        base_lr = LEARNING_RATE * (1 - 0.9 * epoch / RETRAIN_EPOCHS)  # decay to 10%
         for i in order:
-            feats, y = rows[i]
+            feats, y, ret = rows[i]
             p = model_predict(weights, feats)
             error = y - p
+            lr = base_lr * outcome_magnitude_weight(ret)
             for k in FEATURE_NAMES:
                 reg = 0.0 if k == "bias" else L2_LAMBDA * weights[k]
                 weights[k] = weights[k] + lr * (error * feats.get(k, 0.0) - reg)
 
-    correct = sum(1 for feats, y in rows
+    correct = sum(1 for feats, y, _ret in rows
                   if (model_predict(weights, feats) >= 0.5) == (y == 1.0))
     old_weights = state["model"]["weights"]
     biggest = max(FEATURE_NAMES, key=lambda k: abs(weights.get(k, 0) - old_weights.get(k, 0)))
@@ -1499,6 +1682,18 @@ def liquidity_bucket(volume_value):
     return "low"
 
 
+# Hard liquidity floor - a data-driven fix, not a guess: analysis of live
+# paper-trading results found many candidates at $166-$60,000 24h volume
+# with spreads up to 0.95%, exactly the instruments where fees/slippage eat
+# any edge and where a single actor can move the price. Below this, a
+# candidate never even reaches scoring - no score is high enough to
+# compensate for a market this thin and this easy to manipulate.
+MIN_CANDIDATE_VOLUME_USD = 500_000
+# Spread wide enough that no score should override it (the softer -12pt
+# penalty in finalize() still applies below this, for 0.3-2% spreads).
+MAX_CANDIDATE_SPREAD_PCT = 2.0
+
+
 def screen(tickers_raw_path, out_path, candles_path=None):
     """Stage 1. tickers_raw_path: JSON list of Crypto.com ticker dicts
     (as returned by get_tickers), one per watched instrument. candles_path
@@ -1536,6 +1731,9 @@ def screen(tickers_raw_path, out_path, candles_path=None):
             volume_value = float(t.get("volume_value", 0))
         except (KeyError, ValueError, TypeError):
             continue
+
+        if volume_value < MIN_CANDIDATE_VOLUME_USD:
+            continue  # too thin to trade honestly - see MIN_CANDIDATE_VOLUME_USD
 
         hist = state["history"].setdefault(inst, [])
         cd = candles_all.get(inst)
@@ -1615,17 +1813,22 @@ SCAM_KEYWORDS = ["rug pull", "rugpull", "scam", "hack", "exploit", "delisted",
 
 def hype_adjustment(note):
     """note: {'summary': str, 'sentiment': 'positive'|'neutral'|'negative'|'warning', 'found': bool}
-    Returns (bonus, forced_risk_or_None, why_fragment)."""
+    Returns (bonus, forced_risk_or_None, why_fragment, excluded). A confirmed
+    security warning (scam/hack/governance-attack keywords) is a HARD
+    exclusion, not just a score penalty - a data review found candidates
+    carrying live security warnings that still scored high enough to trade
+    despite a -30 penalty. No momentum score should override "this token
+    has an active exploit/scam warning right now"."""
     if not note or not note.get("found"):
-        return 0, None, "veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel"
+        return 0, None, "veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel", False
     text = (note.get("summary") or "").lower()
     if note.get("sentiment") == "warning" or any(k in text for k in SCAM_KEYWORDS):
-        return -30, "red", f"HOIATUS leitud veebist: {note.get('summary', '')[:200]}"
+        return -30, "red", f"VÄLJA JÄETUD - turvahoiatus veebist: {note.get('summary', '')[:200]}", True
     if note.get("sentiment") == "positive":
-        return 12, None, f"hype kinnitatud veebist: {note.get('summary', '')[:200]}"
+        return 12, None, f"hype kinnitatud veebist: {note.get('summary', '')[:200]}", False
     if note.get("sentiment") == "negative":
-        return -10, None, f"negatiivne kajastus veebist: {note.get('summary', '')[:200]}"
-    return 3, None, f"mainitud veebis, neutraalne toon: {note.get('summary', '')[:200]}"
+        return -10, None, f"negatiivne kajastus veebist: {note.get('summary', '')[:200]}", False
+    return 3, None, f"mainitud veebis, neutraalne toon: {note.get('summary', '')[:200]}", False
 
 
 def risk_label(category, liquidity, change_24h, forced_risk):
@@ -1679,7 +1882,7 @@ def process_followups(state, current_prices, brk):
             rec["result_24h"] = {"price": price_now, "return_pct": round(ret, 2), "hit": hit}
             resolved_notes.append(f"{inst} 24h: {ret:+.1f}%")
             if rec.get("features"):
-                train_step(state, rec["features"], hit)
+                train_step(state, rec["features"], hit, return_pct=ret)
             close_position(state, rec["id"], price_now, now_ts(), brk, reason="24h")
 
         if not rec.get("result_7d") and age_h >= 24 * 7 and price_now:
@@ -1694,6 +1897,9 @@ def process_followups(state, current_prices, brk):
 
     state["pending_followups"] = still_pending
     return resolved_notes
+
+
+SCREEN_SCORE_STAGNANT_STREAK_LIMIT = 3
 
 
 def adapt_thresholds(state):
@@ -1740,12 +1946,33 @@ def adapt_thresholds(state):
     overall_hits = [h for hs in by_risk.values() for h in hs]
     if overall_hits:
         overall_rate = sum(overall_hits) / len(overall_hits)
+        streak = state["thresholds"].get("screen_score_raise_streak", 0)
         if overall_rate < 0.35:
-            state["thresholds"]["screen_score"] = clamp(state["thresholds"]["screen_score"] + 3, 50, 85)
-            notes.append(f"üldine tabamus {overall_rate:.0%} madal -> screen_score tõstetud {state['thresholds']['screen_score']}")
+            # Raising the bar repeatedly while the hit rate STAYS stuck below
+            # 35% means the system is just trading less, not trading smarter
+            # - a live data review found exactly this pattern (screen_score
+            # 65->85 over several cycles with no improvement). Past
+            # SCREEN_SCORE_STAGNANT_STREAK_LIMIT consecutive raise-cycles
+            # still below the bar, stop auto-raising and say so loudly - the
+            # fix belongs in the scoring logic, not in trading less often.
+            if streak >= SCREEN_SCORE_STAGNANT_STREAK_LIMIT:
+                notes.append(
+                    f"⚠️ DIAGNOSTIKA: screen_score on tõstetud {streak} korda järjest (praegu "
+                    f"{state['thresholds']['screen_score']}), aga tabamus ({overall_rate:.0%}) ei "
+                    f"parane. Viga on tõenäoliselt SIGNAALIS endas, mitte lävendis - täiendav "
+                    f"automaatne tõstmine peatatud. Vaja on strateegiat ennast üle vaadata."
+                )
+            else:
+                state["thresholds"]["screen_score"] = clamp(state["thresholds"]["screen_score"] + 3, 50, 85)
+                state["thresholds"]["screen_score_raise_streak"] = streak + 1
+                notes.append(f"üldine tabamus {overall_rate:.0%} madal -> screen_score tõstetud "
+                            f"{state['thresholds']['screen_score']} (järjestikune tõus {streak + 1}/{SCREEN_SCORE_STAGNANT_STREAK_LIMIT})")
         elif overall_rate > 0.65:
             state["thresholds"]["screen_score"] = clamp(state["thresholds"]["screen_score"] - 2, 50, 85)
+            state["thresholds"]["screen_score_raise_streak"] = 0
             notes.append(f"üldine tabamus {overall_rate:.0%} kõrge -> screen_score langetatud {state['thresholds']['screen_score']}")
+        else:
+            state["thresholds"]["screen_score_raise_streak"] = 0
     return notes
 
 
@@ -1780,6 +2007,9 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     funding_close_notes = manage_funding_positions(state, funding_rates, current_prices, brk)
     funding_open_notes = scan_funding_opportunities(state, funding_rates, current_prices, brk)
     grid_notes = manage_grid(state, current_prices, candles_all, brk)
+    btc_hist = state["history"].get("BTCUSD", [])
+    btc_change_24h = btc_hist[-1]["change_24h"] if btc_hist else None
+    short_notes = manage_short_sleeve(state, candidates, btc_change_24h, fng_value, current_prices, brk)
     if retrain_note:
         threshold_notes = threshold_notes + [retrain_note]
 
@@ -1791,16 +2021,26 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
     swaps_left = SWAP_MAX_PER_RUN
     ts = now_ts()
 
+    excluded_notes = []
     for c in candidates:
         inst = c["instrument"]
         note = hype_notes.get(inst)
-        bonus, forced_risk, why_hype = hype_adjustment(note)
+        bonus, forced_risk, why_hype, hype_excluded = hype_adjustment(note)
+        if hype_excluded:
+            excluded_notes.append(f"🚫 {inst} VÄLJA JÄETUD: {why_hype[:150]}")
+            continue
 
         # Order book check: thin/wide books are where market orders get hurt,
-        # and top-of-book imbalance is real-time buy/sell pressure.
+        # and top-of-book imbalance is real-time buy/sell pressure. A spread
+        # this wide is a hard exclusion (data review found candidates with up
+        # to 0.95% spread still trading on score alone) - below that, only a
+        # score penalty.
         book = book_notes.get(inst) or {}
         imbalance = book.get("imbalance", 0.0)
         spread_pct = book.get("spread_pct")
+        if spread_pct is not None and spread_pct > MAX_CANDIDATE_SPREAD_PCT:
+            excluded_notes.append(f"🚫 {inst} VÄLJA JÄETUD: spread {spread_pct:.2f}% > {MAX_CANDIDATE_SPREAD_PCT:.1f}% lubatud")
+            continue
         book_adj = 0
         if spread_pct is None:
             book_note = "orderiraamatu andmeid pole selles käivituses"
@@ -1903,6 +2143,10 @@ def finalize(candidates_path, hype_notes_path, current_prices_path, out_summary_
         lines.extend(funding_open_notes)
     if grid_notes:
         lines.extend(grid_notes)
+    if short_notes:
+        lines.extend(short_notes)
+    if excluded_notes:
+        lines.extend(excluded_notes)
     if reconcile_notes:
         lines.extend(reconcile_notes)
     if fng_value is not None and (fng_value <= 25 or fng_value >= 75):
@@ -2060,6 +2304,22 @@ def render_dashboard(state):
     for p in grid["open_positions"]:
         dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
         grid_open_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td class="mono">{p['entry_price']:.6g}</td>
+        <td>${p['size_usd']:.2f}</td></tr>"""
+
+    short_sleeve = state.get("short_reversal", short_state_default())
+    short_stats = sleeve_stats(short_sleeve)
+    short_rows = ""
+    for t in reversed(short_sleeve["closed_trades"][-20:]):
+        dt = datetime.fromtimestamp(t["exit_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        pnl_color = "#0ca30c" if t["pnl_usd"] > 0 else "#f4756f"
+        short_rows += f"""
+        <tr><td>{dt}</td><td class="mono">{t['instrument']}</td><td>{t.get('exit_reason','')}</td>
+        <td style="color:{pnl_color}">{t['pnl_pct']:+.1f}% (${t['pnl_usd']:+.2f})</td></tr>"""
+    short_open_rows = ""
+    for p in short_sleeve["open_positions"]:
+        dt = datetime.fromtimestamp(p["entry_ts"], tz=timezone.utc).strftime("%d.%m %H:%M")
+        short_open_rows += f"""
         <tr><td>{dt}</td><td class="mono">{p['instrument']}</td><td class="mono">{p['entry_price']:.6g}</td>
         <td>${p['size_usd']:.2f}</td></tr>"""
 
@@ -2543,6 +2803,28 @@ def render_dashboard(state):
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
       {grid_rows or '<tr><td colspan="4" style="color:var(--muted)">Veel pole ühtegi suletud.</td></tr>'}
+    </table></div>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary><h2>📉 Short-pöörduse sahtel (eksperimentaalne){info_badge("Režiimist sõltuv mean-reversion, eraldi kapitaliga (algsaldo $" + f'{short_sleeve["starting_balance"]:.0f}' + "). Andmepõhine leid: pime 'pööra kõik signaalid ümber' andis kogu ajaloo peal ainult +0.4%/tehing toorest edge'i - alla kauplemiskulu. Seetõttu shortitakse AINULT kui BTC 24h muutus ≤" + f'{SHORT_BTC_BEAR_CHANGE_PCT:.0f}' + "% JA Fear&Greed ≤" + f'{SHORT_FNG_FEAR_MAX}' + " (kinnitatud turu-hirm) JA kandidaat on üleostetud (momentum ≥" + f'{SHORT_MIN_MOMENTUM_SCORE:.0f}' + ", trend nõrgalt kinnitatud). Väike, ettevaatlik katse, mitte peamine strateegia.")}</h2><span class="chev">▼</span></summary>
+    <div class="body">
+    <div class="stats" style="margin-bottom:14px">
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:{'var(--good)' if short_stats['equity']>=short_sleeve['starting_balance'] else 'var(--critical)'}">${short_stats['equity']:.2f}</div></div>
+      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:{'var(--good)' if short_stats['return_pct']>=0 else 'var(--critical)'}">{short_stats['return_pct']:+.1f}%</div></div>
+      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">{short_stats['n_open']}/{short_stats['n_closed']}</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">{f"{short_stats['profit_factor']:.2f}" if short_stats['profit_factor'] is not None else '–'}</div></div>
+    </div>
+    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Sisenemishind</th><th>Suurus</th></tr>
+      {short_open_rows or '<tr><td colspan="4" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>'}
+    </table></div>
+    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
+    <div class="table-scroll"><table>
+      <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
+      {short_rows or '<tr><td colspan="4" style="color:var(--muted)">Veel pole ühtegi suletud.</td></tr>'}
     </table></div>
     </div>
   </details>

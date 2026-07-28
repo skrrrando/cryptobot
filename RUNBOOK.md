@@ -34,6 +34,15 @@ See on käsiraamat, mida ajastatud ülesanne (scheduled task) iga tund täpselt 
 
 Mõlemad on gate'itud sama kill-switchiga kui momentum-portfell (konto-tasandi kaitse peab peatama KOGU uue riski, mitte ainult ühe strateegia oma).
 
+## Arendusplaan (V7) — andmepõhine parandusring 2026-07-28
+
+Reaalse paper-trading andmete ülevaade (184 lahendatud tulemust) leidis: profit factor 0.69, Sharpe -1.63, tabamus 12.5% - süstemaatiline probleem, mitte müra. Neli parandust:
+
+- **Likviidsuse/turvahoiatuse kõva filter**: kandidaat, mille 24h maht < $500k, EI jõua enam skoorimisse üldse (varem ainult skoori-trahv). Spread > 2% või kinnitatud turvahoiatus (rug pull/hack/governance-rünnak) = täielik väljajätt, mitte -30 punkti trahv.
+- **P&L-kaalutud õppimine**: `train_step`/`full_retrain` kaaluvad gradienti tulemuse suurusega (`outcome_magnitude_weight`, 5% = baaskaal 1.0, vahemik 0.3-3.0) - +25% võit õpetab mudelit rohkem kui +3.1% napp tabamus, mis varem said identse kaalu.
+- **Lävendi-tõusu diagnostika**: kui `screen_score` tõuseb 3 tsüklit järjest ilma et üldine tabamus paraneks, peatub automaatne tõstmine ja ilmub hoiatus "viga on signaalis, mitte lävendis" - varem tõusis lävi (65→85) piiramatult, ilma et keegi/miski seda küsimärgi alla seaks.
+- **Režiimist sõltuv short-sahtel** (`state["short_reversal"]`, algsaldo $200, eksperimentaalne): andmed näitasid, et PIME "pööra kõik signaalid ümber" annab kogu 184-kirjelise ajaloo peal ainult +0.4%/tehing toorest edge't - alla ~1.3% kauplemiskulu, ei tasu end ära. Selle asemel shortitakse AINULT kui BTC 24h muutus ≤-3% JA Fear&Greed ≤40 (kinnitatud turu-hirm) JA kandidaat üleostetud (momentum ≥60, trend nõrgalt kinnitatud, R² madal). Väike, eraldi, selgelt katseline - mitte peamine strateegia.
+
 ## Iga tunni sammud (mida agent teeb)
 
 1. **Tooma turuandmed** — kutsu Crypto.com `get_tickers` iga `watchlist.json`-is oleva instrumendi kohta (üks kutse per sümbol, ~45 kutset). Pane tulemused kokku JSON-listiks kujul `[{"instrument_name":..., "last":..., "change":..., "volume_value":...}, ...]` ja kirjuta faili (nt `data/tickers_latest.json`).
