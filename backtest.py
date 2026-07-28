@@ -33,6 +33,12 @@ Known, deliberate limitations (so the results are read honestly):
     fetched here) - this backtest points engine.DATA_DIR at its own isolated
     folder specifically so it never reads today's real market_regime.json
     and mistakenly applies a live reading to a simulated past hour.
+  - The funding-arb, grid, and regime-gated short sleeves stay entirely
+    INACTIVE here - funding-arb needs real funding-rate history (not
+    fetched), grid needs 15m candles (only hourly are fetched for this
+    tool), and the short sleeve's regime gate requires a real Fear&Greed
+    reading (see above, always None here). Only the momentum long
+    portfolio (state["portfolio"]) produces any trades in this backtest.
   - Crypto.com's public candlestick API caps each call at 300 candles, so
     reaching back several months requires many paginated calls per instrument
     (see fetch_full_history). A 6-month backtest over ~15 instruments takes on
@@ -179,6 +185,26 @@ def run_backtest(months, instruments):
     all_ts = sorted(set.intersection(*[set(h.keys()) for h in histories.values()]))
     print(f"\nÜhine ajatelg: {len(all_ts)} tundi kõigi instrumentide peale.\n")
 
+    # Rolling 24h volume (sum of the last 24 hourly candles' notional) per
+    # symbol, keyed by ts - production's volume_value is a genuine 24h
+    # figure (Crypto.com ticker's "vv" field); using a single hour's candle
+    # volume here would be ~24x too small and would wrongly trip
+    # MIN_CANDIDATE_VOLUME_USD for almost everything.
+    volume_24h_by_symbol = {}
+    for sym, hist in histories.items():
+        sorted_ts = sorted(hist.keys())
+        notionals = [hist[t]["v"] * hist[t]["c"] for t in sorted_ts]
+        rolling = {}
+        window_sum = 0.0
+        window = []
+        for t, notional in zip(sorted_ts, notionals):
+            window.append(notional)
+            window_sum += notional
+            if len(window) > 24:
+                window_sum -= window.pop(0)
+            rolling[t] = window_sum
+        volume_24h_by_symbol[sym] = rolling
+
     tickers_path = os.path.join(BT_DIR, "tickers.json")
     cands_path = os.path.join(BT_DIR, "cands.json")
     hype_path = os.path.join(BT_DIR, "hype.json")
@@ -211,8 +237,9 @@ def run_backtest(months, instruments):
                 earliest = min(hist.keys())
                 past_c = hist[earliest]
             change = (c["c"] - past_c["c"]) / past_c["c"] if past_c["c"] else 0.0
+            vol_24h = volume_24h_by_symbol[sym].get(ts, c["v"] * c["c"])
             tickers.append({"instrument_name": sym, "last": c["c"], "change": change,
-                            "volume_value": c["v"] * c["c"]})
+                            "volume_value": vol_24h})
         engine.save_json(tickers_path, tickers)
         engine.screen(tickers_path, cands_path)
 

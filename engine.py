@@ -246,13 +246,27 @@ def scan_funding_opportunities(state, funding_rates, current_prices, brk):
         price = current_prices[inst]
         try:
             spot_fill = brk.buy(inst, notional, price)
-            if not spot_fill:
-                continue
+        except broker_mod.BrokerError as e:
+            print(f"WARN: funding-arb spot leg open {inst} failed: {e}", file=sys.stderr)
+            continue
+        if not spot_fill:
+            continue
+        try:
             perp_fill = brk.open_short(inst, notional, price)
         except broker_mod.BrokerError as e:
-            print(f"WARN: funding-arb open {inst} failed: {e}", file=sys.stderr)
-            continue
+            perp_fill = None
+            print(f"WARN: funding-arb perp leg open {inst} failed ({e}) - unwinding the spot "
+                  f"leg that already filled, so we don't leave an unhedged position", file=sys.stderr)
         if not perp_fill:
+            # Spot leg is real (live mode) or a no-op fill (paper mode) - either
+            # way, unwind it immediately rather than leaving a directional,
+            # un-hedged spot position this sleeve never intended to hold.
+            try:
+                brk.sell(inst, spot_fill["quantity"], price)
+            except broker_mod.BrokerError as e2:
+                print(f"CRITICAL: funding-arb spot unwind FAILED for {inst} after the perp leg "
+                      f"couldn't open: {e2} - a real unhedged spot position may be sitting on the "
+                      f"exchange right now, check the account manually.", file=sys.stderr)
             continue
 
         fa["balance"] -= (notional + notional)  # both legs' notional leave the funding-arb cash pool
@@ -297,13 +311,32 @@ def manage_funding_positions(state, funding_rates, current_prices, brk):
         price = current_prices.get(inst)
         if price is None:
             continue
+
+        # Close the spot leg first, but track completion on the position
+        # itself (pos["spot_closed"]) so a perp-leg failure AFTER the spot
+        # already sold doesn't re-sell (nonexistent) spot again next run -
+        # it just retries the remaining perp leg until that succeeds too.
+        if not pos.get("spot_closed"):
+            try:
+                spot_fill = brk.sell(inst, pos["spot_qty"], price)
+            except broker_mod.BrokerError as e:
+                print(f"WARN: funding-arb spot close {inst} failed: {e}", file=sys.stderr)
+                continue
+            if not spot_fill:
+                continue
+            pos["spot_closed"] = True
+            pos["spot_exit_fill"] = spot_fill
+        else:
+            spot_fill = pos["spot_exit_fill"]
+
         try:
-            spot_fill = brk.sell(inst, pos["spot_qty"], price)
             perp_fill = brk.close_short(inst, pos["perp_qty"], price)
         except broker_mod.BrokerError as e:
-            print(f"WARN: funding-arb close {inst} failed: {e}", file=sys.stderr)
+            print(f"WARN: funding-arb perp close {inst} failed - spot leg is ALREADY SOLD, "
+                  f"position is temporarily unhedged, will retry the perp leg next run: {e}",
+                  file=sys.stderr)
             continue
-        if not spot_fill or not perp_fill:
+        if not perp_fill:
             continue
 
         fa["open_positions"].remove(pos)
