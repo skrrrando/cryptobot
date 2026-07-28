@@ -970,10 +970,22 @@ def kelly_position_pct(win_prob, b, base_pct):
     and clamp it to [KELLY_MIN_PCT, KELLY_MAX_PCT] - full Kelly is
     notoriously violent in practice (it will happily suggest 40%+ of the
     bankroll on a strong-looking edge). If the math says there's no edge
-    (f* <= 0, or p<=0.5) we fall back to the flat base_pct rather than
-    sizing to zero - an alert that clears every other bar still deserves a
-    baseline-sized look."""
-    if win_prob <= 0.5 or b <= 0:
+    (f* <= 0) we fall back to the flat base_pct rather than sizing to zero -
+    an alert that clears every other bar still deserves a baseline look.
+
+    IMPORTANT: the breakeven win probability is 1/(1+b), NOT 0.5 - an
+    earlier version of this function hard-gated on win_prob <= 0.5, which
+    is only correct for an even-money payoff (b=1). With this strategy's
+    real payoff ratio (avg win well above avg loss, since losses are capped
+    by the stop-loss but wins can run), the true breakeven sits well below
+    50% - a live check found breakeven at ~23% against a payoff ratio of
+    ~3.3, while the model's best-scoring tercile of candidates has a real
+    empirical hit rate of ~26%. The hard 0.5 gate meant Kelly sizing NEVER
+    activated - every position used the flat base_pct regardless of how
+    much the model's own ranking favored it. f_star's own sign is already
+    the correct, complete gate; do not add a redundant win_prob threshold
+    on top of it."""
+    if b <= 0:
         return base_pct
     f_star = win_prob - (1 - win_prob) / b
     if f_star <= 0:
