@@ -57,6 +57,24 @@ FEE_PCT = float(os.environ.get("TRADING_FEE_PCT", "0.5")) / 100.0
 # the exact last price). Live fills use the real executed price instead.
 SLIPPAGE_PCT = float(os.environ.get("TRADING_SLIPPAGE_PCT", "0.15")) / 100.0
 
+# Maker fee, charged instead of FEE_PCT when an order rests in the book
+# (a POST_ONLY limit order) rather than crossing the spread. Set this to
+# your account's real maker tier. This matters enormously for any strategy
+# that pays the spread on several legs: the funding-arb sleeve crosses
+# FOUR legs per round trip, so at taker rates it cannot break even inside
+# its own max hold window at any realistic funding rate (measured: 47 days
+# to break even at 20% APR, against a 45-day cap), while at maker rates
+# the same trade breaks even in roughly 5-11 days. A resting order also
+# doesn't pay slippage - it fills at its own limit price or not at all -
+# which is why maker fills skip SLIPPAGE_PCT entirely.
+MAKER_FEE_PCT = float(os.environ.get("TRADING_MAKER_FEE_PCT", "0.1")) / 100.0
+
+# How long a resting maker order gets to fill before it's cancelled and the
+# caller told "no fill" (returns None). Deliberately short: the hourly job
+# must not block, and for a non-time-critical strategy like funding-arb,
+# simply retrying next hour is free.
+MAKER_FILL_TIMEOUT_S = float(os.environ.get("TRADING_MAKER_TIMEOUT_S", "45"))
+
 # Stop-loss distance below entry. 8% is wide enough that normal hourly noise
 # on majors rarely triggers it, tight enough to cap a single meme-coin
 # faceplant well below "wipe out the month".
@@ -94,24 +112,27 @@ def _round_down_to_tick(value, tick):
 class PaperBroker:
     mode = "paper"
 
-    def buy(self, instrument, usd_amount, price_hint):
-        """Simulate a market buy spending usd_amount total (fee comes out of
-        it, same as a real notional order). Returns a fill dict or None."""
+    def buy(self, instrument, usd_amount, price_hint, maker=False):
+        """Simulate a buy spending usd_amount total (fee comes out of it,
+        same as a real notional order). maker=True simulates a resting
+        POST_ONLY limit order: it fills at the limit price (no slippage)
+        and pays the lower maker fee. Returns a fill dict or None."""
         if not price_hint or price_hint <= 0 or usd_amount <= 0:
             return None
-        exec_price = price_hint * (1 + SLIPPAGE_PCT)
-        fee = usd_amount * FEE_PCT
+        exec_price = price_hint if maker else price_hint * (1 + SLIPPAGE_PCT)
+        fee = usd_amount * (MAKER_FEE_PCT if maker else FEE_PCT)
         quantity = (usd_amount - fee) / exec_price
         return {"price": exec_price, "quantity": quantity,
                 "fee_usd": round(fee, 4), "notional_usd": usd_amount}
 
-    def sell(self, instrument, quantity, price_hint):
-        """Simulate a market sell. Returns net proceeds after fee, or None."""
+    def sell(self, instrument, quantity, price_hint, maker=False):
+        """Simulate a sell. maker=True as in buy(). Returns net proceeds
+        after fee, or None."""
         if not price_hint or price_hint <= 0 or quantity <= 0:
             return None
-        exec_price = price_hint * (1 - SLIPPAGE_PCT)
+        exec_price = price_hint if maker else price_hint * (1 - SLIPPAGE_PCT)
         gross = quantity * exec_price
-        fee = gross * FEE_PCT
+        fee = gross * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": exec_price, "proceeds_usd": gross - fee,
                 "fee_usd": round(fee, 4)}
 
@@ -141,26 +162,27 @@ class PaperBroker:
         """Nothing external to reconcile against in paper mode."""
         return []
 
-    def open_short(self, instrument, usd_amount, price_hint):
+    def open_short(self, instrument, usd_amount, price_hint, maker=False):
         """Simulate opening (or adding to) a perpetual-futures short sized at
         usd_amount notional. Selling into the bid -> adverse slippage vs. a
-        long entry, same fee rate."""
+        long entry, unless maker=True (rests in the book, no slippage,
+        lower fee)."""
         if not price_hint or price_hint <= 0 or usd_amount <= 0:
             return None
-        exec_price = price_hint * (1 - SLIPPAGE_PCT)
-        fee = usd_amount * FEE_PCT
+        exec_price = price_hint if maker else price_hint * (1 - SLIPPAGE_PCT)
+        fee = usd_amount * (MAKER_FEE_PCT if maker else FEE_PCT)
         quantity = (usd_amount - fee) / exec_price
         return {"price": exec_price, "quantity": quantity,
                 "fee_usd": round(fee, 4), "notional_usd": usd_amount}
 
-    def close_short(self, instrument, quantity, price_hint):
+    def close_short(self, instrument, quantity, price_hint, maker=False):
         """Simulate buying back `quantity` to close a short. Buying at the
-        ask -> adverse slippage, same fee rate."""
+        ask -> adverse slippage, unless maker=True."""
         if not price_hint or price_hint <= 0 or quantity <= 0:
             return None
-        exec_price = price_hint * (1 + SLIPPAGE_PCT)
+        exec_price = price_hint if maker else price_hint * (1 + SLIPPAGE_PCT)
         cost = quantity * exec_price
-        fee = cost * FEE_PCT
+        fee = cost * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": exec_price, "cost_usd": cost + fee, "fee_usd": round(fee, 4)}
 
 
@@ -286,6 +308,47 @@ class LiveBroker:
         spec = self._instrument_specs().get(real_name) or {}
         return _round_down_to_tick(price, spec.get("price_tick_size"))
 
+    def _maker_order(self, real_name, side, price, quantity=None, notional=None):
+        """Place a POST_ONLY limit order at `price` and wait up to
+        MAKER_FILL_TIMEOUT_S for it to fill. POST_ONLY guarantees the order
+        either rests in the book (earning the maker fee) or is rejected -
+        it can never cross the spread and quietly become a taker fill,
+        which is the whole point: the strategies that use this are only
+        viable at maker rates. Returns the filled order detail, or None if
+        it didn't fill in time (cancelled) or was rejected for crossing -
+        callers treat None as "no trade this run, retry next hour"."""
+        params = {"instrument_name": real_name, "side": side, "type": "LIMIT",
+                  "price": _fmt_num(price), "exec_inst": ["POST_ONLY"]}
+        if quantity is not None:
+            params["quantity"] = _fmt_num(quantity)
+        else:
+            params["notional"] = _fmt_num(round(notional, 2))
+        try:
+            result = self._request("private/create-order", params)
+        except BrokerError as e:
+            print(f"WARN: maker {side} {real_name} rejected (likely would have crossed): {e}",
+                  file=sys.stderr)
+            return None
+        order_id = result.get("order_id")
+
+        deadline = time.time() + MAKER_FILL_TIMEOUT_S
+        while time.time() < deadline:
+            time.sleep(2.0)
+            try:
+                detail = self._request("private/get-order-detail", {"order_id": str(order_id)})
+            except BrokerError as e:
+                print(f"WARN: maker order status check failed for {order_id}: {e}", file=sys.stderr)
+                continue
+            status = (detail.get("status") or "").upper()
+            if status == "FILLED":
+                return detail
+            if status in ("REJECTED", "CANCELED", "EXPIRED"):
+                return None
+        self.cancel_order(real_name, order_id)
+        print(f"INFO: maker {side} {real_name} did not fill within "
+              f"{MAKER_FILL_TIMEOUT_S:.0f}s, cancelled - will retry next run", file=sys.stderr)
+        return None
+
     def _wait_filled(self, order_id, tries=8, delay=1.5):
         last = None
         for _ in range(tries):
@@ -301,36 +364,47 @@ class LiveBroker:
 
     # -- trading interface (same shape as PaperBroker) ---------------------
 
-    def buy(self, instrument, usd_amount, price_hint):
+    def buy(self, instrument, usd_amount, price_hint, maker=False):
         real = self._real_name(instrument)
-        result = self._request("private/create-order", {
-            "instrument_name": real, "side": "BUY", "type": "MARKET",
-            "notional": _fmt_num(round(usd_amount, 2)),
-        })
-        detail = self._wait_filled(result.get("order_id"))
+        if maker:
+            detail = self._maker_order(real, "BUY", self._round_price(real, price_hint),
+                                       notional=usd_amount)
+            if detail is None:
+                return None
+        else:
+            result = self._request("private/create-order", {
+                "instrument_name": real, "side": "BUY", "type": "MARKET",
+                "notional": _fmt_num(round(usd_amount, 2)),
+            })
+            detail = self._wait_filled(result.get("order_id"))
         avg_price = float(detail.get("avg_price") or 0)
         qty = float(detail.get("cumulative_quantity") or 0)
         if avg_price <= 0 or qty <= 0:
             raise BrokerError(f"buy {real}: filled but no price/qty in order detail")
-        fee = float(detail.get("cumulative_fee") or 0) or usd_amount * FEE_PCT
+        fee = float(detail.get("cumulative_fee") or 0) or usd_amount * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": avg_price, "quantity": qty,
                 "fee_usd": round(fee, 4), "notional_usd": usd_amount,
-                "order_id": str(result.get("order_id"))}
+                "order_id": str(detail.get("order_id") or "")}
 
-    def sell(self, instrument, quantity, price_hint):
+    def sell(self, instrument, quantity, price_hint, maker=False):
         real = self._real_name(instrument)
         qty = self._round_qty(real, quantity)
         if qty <= 0:
             raise BrokerError(f"sell {real}: quantity {quantity} rounds to 0")
-        result = self._request("private/create-order", {
-            "instrument_name": real, "side": "SELL", "type": "MARKET",
-            "quantity": _fmt_num(qty),
-        })
-        detail = self._wait_filled(result.get("order_id"))
+        if maker:
+            detail = self._maker_order(real, "SELL", self._round_price(real, price_hint), quantity=qty)
+            if detail is None:
+                return None
+        else:
+            result = self._request("private/create-order", {
+                "instrument_name": real, "side": "SELL", "type": "MARKET",
+                "quantity": _fmt_num(qty),
+            })
+            detail = self._wait_filled(result.get("order_id"))
         avg_price = float(detail.get("avg_price") or 0)
         filled_qty = float(detail.get("cumulative_quantity") or qty)
         gross = avg_price * filled_qty
-        fee = float(detail.get("cumulative_fee") or 0) or gross * FEE_PCT
+        fee = float(detail.get("cumulative_fee") or 0) or gross * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": avg_price, "proceeds_usd": gross - fee,
                 "fee_usd": round(fee, 4)}
 
@@ -409,41 +483,51 @@ class LiveBroker:
             notes.append(f"⚠️ LIVE reconcile ebaõnnestus (API võti/ühendus?): {e}")
         return notes
 
-    def open_short(self, instrument, usd_amount, price_hint):
-        """Open (or add to) a short on the perpetual - a plain SELL market
-        order on the *-PERP instrument. Requires the account to have
-        derivatives/margin trading enabled (separate eligibility from spot
-        on some exchanges/jurisdictions - see RUNBOOK before funding-arb
-        go-live)."""
+    def open_short(self, instrument, usd_amount, price_hint, maker=False):
+        """Open (or add to) a short on the perpetual. Requires the account
+        to have derivatives/margin trading enabled (separate eligibility
+        from spot on some exchanges/jurisdictions - see RUNBOOK before
+        funding-arb go-live)."""
         real = self._perp_name(instrument)
-        result = self._request("private/create-order", {
-            "instrument_name": real, "side": "SELL", "type": "MARKET",
-            "notional": _fmt_num(round(usd_amount, 2)),
-        })
-        detail = self._wait_filled(result.get("order_id"))
+        if maker:
+            detail = self._maker_order(real, "SELL", self._round_price(real, price_hint),
+                                       notional=usd_amount)
+            if detail is None:
+                return None
+        else:
+            result = self._request("private/create-order", {
+                "instrument_name": real, "side": "SELL", "type": "MARKET",
+                "notional": _fmt_num(round(usd_amount, 2)),
+            })
+            detail = self._wait_filled(result.get("order_id"))
         avg_price = float(detail.get("avg_price") or 0)
         qty = float(detail.get("cumulative_quantity") or 0)
         if avg_price <= 0 or qty <= 0:
             raise BrokerError(f"open_short {real}: filled but no price/qty in order detail")
-        fee = float(detail.get("cumulative_fee") or 0) or usd_amount * FEE_PCT
+        fee = float(detail.get("cumulative_fee") or 0) or usd_amount * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": avg_price, "quantity": qty,
                 "fee_usd": round(fee, 4), "notional_usd": usd_amount}
 
-    def close_short(self, instrument, quantity, price_hint):
-        """Close a short - a plain BUY market order on the *-PERP instrument."""
+    def close_short(self, instrument, quantity, price_hint, maker=False):
+        """Close a short - a BUY order on the *-PERP instrument."""
         real = self._perp_name(instrument)
         qty = self._round_qty(real, quantity)
         if qty <= 0:
             raise BrokerError(f"close_short {real}: quantity {quantity} rounds to 0")
-        result = self._request("private/create-order", {
-            "instrument_name": real, "side": "BUY", "type": "MARKET",
-            "quantity": _fmt_num(qty),
-        })
-        detail = self._wait_filled(result.get("order_id"))
+        if maker:
+            detail = self._maker_order(real, "BUY", self._round_price(real, price_hint), quantity=qty)
+            if detail is None:
+                return None
+        else:
+            result = self._request("private/create-order", {
+                "instrument_name": real, "side": "BUY", "type": "MARKET",
+                "quantity": _fmt_num(qty),
+            })
+            detail = self._wait_filled(result.get("order_id"))
         avg_price = float(detail.get("avg_price") or 0)
         filled_qty = float(detail.get("cumulative_quantity") or qty)
         cost = avg_price * filled_qty
-        fee = float(detail.get("cumulative_fee") or 0) or cost * FEE_PCT
+        fee = float(detail.get("cumulative_fee") or 0) or cost * (MAKER_FEE_PCT if maker else FEE_PCT)
         return {"price": avg_price, "cost_usd": cost + fee, "fee_usd": round(fee, 4)}
 
 

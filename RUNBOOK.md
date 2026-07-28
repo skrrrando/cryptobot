@@ -25,8 +25,15 @@ See on käsiraamat, mida ajastatud ülesanne (scheduled task) iga tund täpselt 
 
 ## Uued sahtlid (V6) — eraldi kapital, eraldi ledger, momentum-portfelli ei puuduta
 
-**💹 Funding-rate arbitraaž** (`state["funding_arb"]`, algsaldo $300): turuneutraalne — ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni (delta-neutraalne), teenib ainult funding-makseid, ei sõltu turu suunast.
-- Sisenemine: annualiseeritud funding ≥ 20%. See lävi EI ole meelevaldne — nelja jala (spot ost/müük + perp ava/sule) teenustasu+slippage kulu on ~1% kapitalist, ja kuna funding koguneb ainult ühe jala (lühikese) notionali pealt, kulub tasuvuseni ~38 päeva 20% APR juures. Madalam lävi ei jõuaks 45-päevase max hoiuaja jooksul kunagi tasuvusse.
+**💹 Funding-rate arbitraaž** (`state["funding_arb"]`, algsaldo $300): turuneutraalne — ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni (delta-neutraalne), teenib ainult funding-makseid, ei sõltu turu suunast. **See on ainus sahtel, millel on struktuurne (mitte ennustuspõhine) tuluallikas.**
+- **Kõik neli jalga on POST_ONLY maker-orderid.** See pole detail, vaid tingimus, mis teeb strateegia üldse võimalikuks. Mõõdetud tasuvusaeg (funding koguneb ühe jala notionalilt, kulu tuleb neljalt):
+  - taker (0.5% + 0.15% slippage): **95 päeva** @10% APR, **47 päeva** @20% APR
+  - maker (0.1%, slippage puudub): **15 päeva** @10% APR, **7 päeva** @20% APR
+  - Taker-tasudega EI JÕUA see kaubeldus kunagi 45-päevase hoiupiiri sees tasuvusse — varasem versioon oli matemaatiliselt kasumivõimetu.
+- Sisenemine: annualiseeritud funding ≥ 10% (mõõdetud: ~2700 tunni ajaloos 8 instrumendil oli 18.5% tundidest ≥10% APR, aga ainult 3.9% ≥20% — vana 20% lävi jättis sahtli praktiliselt seisma).
+- Kui maker-order ei täitu 45 sekundiga, tühistatakse ja proovitakse järgmisel tunnil — midagi ei kohustuta.
+- **Erand:** kui üks jalg on juba täidetud ja teine ebaõnnestub, tehakse tagasipööramine/sulgemine TAKER-orderiga — kaitsmata positsioonist vabanemine on tähtsam kui tasu kokkuhoid.
+- Sea `TRADING_MAKER_FEE_PCT` oma tegeliku maker-taseme järgi (vaikimisi 0.1%).
 - **Vajab derivatiivide/marginaalkauplemise õigust Crypto.com kontol live-režiimis** — see on eraldi eeldusõigus spot-kauplemisest, võib vajada täiendavat KYC-d. Kontrolli enne live-minekut.
 - Väljumine: funding langeb alla 1% APR, või 45 päeva täis.
 

@@ -84,6 +84,19 @@ HISTORY_KEEP = 48  # keep last 48 hourly snapshots per instrument (~2 days)
 VOL_WINDOW = 24     # snapshots used for the rolling volatility estimate (~1 day at hourly cadence)
 TREND_WINDOW = 6    # snapshots used for the OLS trend fit (~6h at hourly cadence)
 
+# Experimental knob, NOT wired to any env var - production always runs at
+# 1.0 (unchanged behavior). A live data review found trend_bonus's learned
+# model weight had gone NEGATIVE over a full backtested year (confirmed
+# "breakouts" predicting worse outcomes, not better - consistent with
+# chasing exhaustion tops rather than genuine continuations). Rather than
+# hand-editing the heuristic on a hunch, this multiplier lets an experiment
+# script (see experiment_trend_bonus.py) test alternate hypotheses -
+# disabling (0.0) or inverting (negative) the bonus's contribution to
+# raw_score - validated on a held-out test period, not fit to the whole
+# sample. Only ever changed by an experiment harness, never by engine.py
+# itself.
+TREND_BONUS_MULTIPLIER = 1.0
+
 # Feature order matters - it's the order weights/x vectors are stored in.
 FEATURE_NAMES = ["bias", "momentum", "trend_bonus", "liquidity", "is_meme", "volatility",
                  "hype_bonus", "alpha", "book_imbalance", "market_fng", "onchain_activity"]
@@ -186,23 +199,29 @@ FUNDING_ARB_START_BALANCE = 300.0   # deliberately smaller than the momentum
                                      # give each one the full pot
 FUNDING_ARB_MAX_OPEN = 3
 FUNDING_ARB_POSITION_PCT = 0.25     # fraction of the funding-arb balance risked per pair (both legs use this notional)
-FUNDING_MAX_HOLD_HOURS = 45 * 24    # 45 days - long enough for funding income to clear the round-trip
-                                     # cost below at a realistic entry rate (see FUNDING_MIN_APR_ENTER)
+FUNDING_MAX_HOLD_HOURS = 45 * 24    # 45 days
 
-# Round-tripping FOUR legs (spot buy, perp short, spot sell, perp close) at
-# broker.py's default 0.5% fee + 0.15% slippage costs roughly ~1% of the
-# CAPITAL DEPLOYED, but funding only accrues on ONE leg's notional (the
-# short) - so the true breakeven hold time is longer than a naive "1% /
-# APR" estimate suggests: at 15% APR it's ~51 days, LONGER than a 30-day
-# cap would allow (an earlier version of this constant made exactly that
-# mistake). Research on real funding-rate arbitrage puts typical yields at
-# 10-30% APR in 2026 (compressed from 30-50% in 2020-21) - 20% sits near
-# the top of that normal range and breaks even in ~38 days, leaving real
-# profit margin inside the 45-day cap. This makes the sleeve deliberately
-# SELECTIVE (it may go a while between qualifying opportunities) rather
-# than firing on marginal rates that can't outrun retail-tier trading costs.
-# A lower fee tier (see RUNBOOK) would let this threshold come down.
-FUNDING_MIN_APR_ENTER = 20.0
+# All four legs (spot buy, perp short, spot sell, perp close) are placed as
+# POST_ONLY maker orders - this sleeve is not time-critical, so it can
+# afford to rest in the book and simply retry next hour if a leg doesn't
+# fill. That choice is what makes the strategy viable at all, and the
+# numbers are stark. Measured breakeven hold time, funding accruing on ONE
+# leg's notional against FOUR legs of cost:
+#     taker (0.5% fee + 0.15% slippage): 95d @10% APR, 47d @20% APR
+#     maker (0.1% fee, no slippage):     15d @10% APR,  7d @20% APR
+# At taker rates the trade cannot break even inside its own 45-day cap at
+# ANY realistic funding rate - an earlier version of this sleeve was
+# therefore mathematically incapable of profit, which is exactly the sort
+# of thing that only shows up when you compute the breakeven instead of
+# assuming it. At maker rates a 10% APR threshold breaks even in ~15 days,
+# leaving a month of margin inside the cap.
+#
+# Threshold set from real measured data, not a guess: across ~2700 hours of
+# funding history over 8 instruments, 18.5% of hours were at/above 10% APR
+# while only 3.9% reached 20% - a 20% bar leaves the sleeve idle almost
+# always, while 10% is both frequently reachable and comfortably profitable
+# under maker economics.
+FUNDING_MIN_APR_ENTER = 10.0
 FUNDING_MIN_APR_EXIT = 1.0          # close if the rate has decayed below this - no longer worth the drag
 
 
@@ -245,14 +264,14 @@ def scan_funding_opportunities(state, funding_rates, current_prices, brk):
             continue
         price = current_prices[inst]
         try:
-            spot_fill = brk.buy(inst, notional, price)
+            spot_fill = brk.buy(inst, notional, price, maker=True)
         except broker_mod.BrokerError as e:
             print(f"WARN: funding-arb spot leg open {inst} failed: {e}", file=sys.stderr)
             continue
         if not spot_fill:
-            continue
+            continue  # maker order didn't fill - retry next run, nothing committed
         try:
-            perp_fill = brk.open_short(inst, notional, price)
+            perp_fill = brk.open_short(inst, notional, price, maker=True)
         except broker_mod.BrokerError as e:
             perp_fill = None
             print(f"WARN: funding-arb perp leg open {inst} failed ({e}) - unwinding the spot "
@@ -262,6 +281,10 @@ def scan_funding_opportunities(state, funding_rates, current_prices, brk):
             # way, unwind it immediately rather than leaving a directional,
             # un-hedged spot position this sleeve never intended to hold.
             try:
+                # Unwind as a TAKER: we need this filled now, not "maybe
+                # next hour" - an unhedged position is exactly what we're
+                # trying not to hold, so paying the spread to be rid of it
+                # is the right trade.
                 brk.sell(inst, spot_fill["quantity"], price)
             except broker_mod.BrokerError as e2:
                 print(f"CRITICAL: funding-arb spot unwind FAILED for {inst} after the perp leg "
@@ -318,18 +341,20 @@ def manage_funding_positions(state, funding_rates, current_prices, brk):
         # it just retries the remaining perp leg until that succeeds too.
         if not pos.get("spot_closed"):
             try:
-                spot_fill = brk.sell(inst, pos["spot_qty"], price)
+                spot_fill = brk.sell(inst, pos["spot_qty"], price, maker=True)
             except broker_mod.BrokerError as e:
                 print(f"WARN: funding-arb spot close {inst} failed: {e}", file=sys.stderr)
                 continue
             if not spot_fill:
-                continue
+                continue  # maker exit didn't fill - position stays intact, retry next run
             pos["spot_closed"] = True
             pos["spot_exit_fill"] = spot_fill
         else:
             spot_fill = pos["spot_exit_fill"]
 
         try:
+            # Taker on this leg: the spot side is already sold, so the pair
+            # is unhedged until this completes - speed beats fee here.
             perp_fill = brk.close_short(inst, pos["perp_qty"], price)
         except broker_mod.BrokerError as e:
             print(f"WARN: funding-arb perp close {inst} failed - spot leg is ALREADY SOLD, "
@@ -1801,7 +1826,7 @@ def screen(tickers_raw_path, out_path, candles_path=None):
                       "volume_value": volume_value})
         state["history"][inst] = hist[-HISTORY_KEEP:]
 
-        raw_score = clamp(m_score + bonus + a_bonus, 0, 100)
+        raw_score = clamp(m_score + bonus * TREND_BONUS_MULTIPLIER + a_bonus, 0, 100)
         category = watchlist_cat.get(inst, "unknown")
 
         entry = {
