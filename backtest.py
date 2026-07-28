@@ -222,8 +222,24 @@ def run_backtest(months, instruments):
     engine.DASHBOARD_PATH = os.path.join(BT_DIR, "dashboard.html")
     engine.INDEX_PATH = os.path.join(BT_DIR, "index.html")
 
+    # engine.py uses now_ts() everywhere for elapsed-time logic - position
+    # age, 24h/7d follow-up resolution, kill-switch's daily window, alert
+    # cooldowns. Left at the real wall clock, an 8-month backtest that
+    # finishes in a few minutes would never let any of that fire (a
+    # position can't turn 24h old when the whole run takes 4 minutes of
+    # real time) - confirmed in the wild as 0 trades ever resolving via the
+    # natural 24h check and the model training 0 steps on every backtest
+    # run. Overriding now_ts() to the current simulated hour, updated each
+    # iteration below, makes all of that logic operate on simulated time
+    # consistently, exactly like a real hourly cron would experience it.
+    def _simulated_now():
+        return _simulated_now.ts_seconds
+    _simulated_now.ts_seconds = all_ts[0] / 1000.0 if all_ts else 0.0
+    engine.now_ts = _simulated_now
+
     t0 = time.time()
     for i, ts in enumerate(all_ts):
+        _simulated_now.ts_seconds = ts / 1000.0
         tickers = []
         for sym, hist in histories.items():
             c = hist.get(ts)
