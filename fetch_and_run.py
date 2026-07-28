@@ -428,7 +428,8 @@ def main():
     needed = ({rec["instrument"] for rec in state["pending_followups"]}
               | {p["instrument"] for p in state["portfolio"]["open_positions"]}
               | {p["instrument"] for p in state.get("funding_arb", {}).get("open_positions", [])}
-              | {p["instrument"] for p in state.get("grid", {}).get("open_positions", [])})
+              | {p["instrument"] for p in state.get("grid", {}).get("open_positions", [])}
+              | {p["instrument"] for p in state.get("short_reversal", {}).get("open_positions", [])})
     current_prices = {t["instrument_name"]: float(t["last"])
                       for t in tickers
                       if t["instrument_name"] in needed and t["last"] is not None}
