@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1784921027.014336,
-        "price": 64151.81,
-        "change_24h": -0.0092,
-        "volume_value": 287026978.91
-      },
-      {
         "ts": 1784926933.800487,
         "price": 64105.41,
         "change_24h": -0.0157,
@@ -288,15 +282,15 @@
         "price": 63788.43,
         "change_24h": -0.0034,
         "volume_value": 276716932.94
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 63866.03,
+        "change_24h": 0.0026,
+        "volume_value": 266770995.38
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1784921027.014336,
-        "price": 1858.8,
-        "change_24h": -0.0095,
-        "volume_value": 158287219.26
-      },
       {
         "ts": 1784926933.800487,
         "price": 1858.32,
@@ -578,15 +572,15 @@
         "price": 1912.32,
         "change_24h": 0.0052,
         "volume_value": 194453995.56
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 1920.29,
+        "change_24h": 0.0155,
+        "volume_value": 190443195.18
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1784921027.014336,
-        "price": 73.86,
-        "change_24h": -0.0226,
-        "volume_value": 10089891.11
-      },
       {
         "ts": 1784926933.800487,
         "price": 73.71,
@@ -868,15 +862,15 @@
         "price": 73.44,
         "change_24h": -0.0125,
         "volume_value": 16091718.72
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 73.78,
+        "change_24h": -0.0051,
+        "volume_value": 14972798.17
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1784921027.014336,
-        "price": 1.0863,
-        "change_24h": -0.0148,
-        "volume_value": 6289715.19
-      },
       {
         "ts": 1784926933.800487,
         "price": 1.0896,
@@ -1158,15 +1152,15 @@
         "price": 1.0632,
         "change_24h": -0.006,
         "volume_value": 8056012.69
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 1.0686,
+        "change_24h": 0.0031,
+        "volume_value": 7809692.31
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1784921027.014336,
-        "price": 0.16373,
-        "change_24h": -0.0308,
-        "volume_value": 2276432.77
-      },
       {
         "ts": 1784926933.800487,
         "price": 0.16342,
@@ -1448,15 +1442,15 @@
         "price": 0.16133,
         "change_24h": 0.0375,
         "volume_value": 3137304.44
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 0.16188,
+        "change_24h": 0.0413,
+        "volume_value": 3005132.2
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1784921027.014336,
-        "price": 0.06913,
-        "change_24h": -0.0002,
-        "volume_value": 2273598.9
-      },
       {
         "ts": 1784926933.800487,
         "price": 0.069116,
@@ -1738,6 +1732,12 @@
         "price": 0.070424,
         "change_24h": -0.0051,
         "volume_value": 2523955.56
+      },
+      {
+        "ts": 1785283254.574686,
+        "price": 0.070843,
+        "change_24h": 0.0077,
+        "volume_value": 2291114.07
       }
     ],
     "AVAXUSD": [
@@ -13275,66 +13275,12 @@
   },
   "thresholds": {
     "screen_score": 85,
-    "green_hit_bar": 65,
+    "green_hit_bar": 70,
     "yellow_hit_bar": 90,
     "red_hit_bar": 90,
-    "screen_score_raise_streak": 1
+    "screen_score_raise_streak": 2
   },
   "pending_followups": [
-    {
-      "id": 63,
-      "instrument": "PNUTUSD",
-      "ts": 1784678189.293641,
-      "score": 33.3,
-      "risk": "red",
-      "why": "Momentum 55.9/100 (24h +1.4%), trend kinnitatud (OLS R\u00b2=0.57 \u00fcle 6 tunni, hind+maht m\u00f5lemad t\u00f5usuteel). liigub suuresti koos BTC-turuga (+2.1%), v\u00e4he oma alphat Likviidsus: low (maht $3,704). negatiivne kajastus veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 0% positiivne / 100% negatiivne, turu positsioon #508. Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 13%.",
-      "price_at_call": 0.04206,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.5589999999999999,
-        "trend_bonus": 0.8178571428571428,
-        "liquidity": 0.0,
-        "is_meme": 1.0,
-        "volatility": 0.04566666666666667,
-        "hype_bonus": 0.3333333333333333,
-        "alpha": 0.37079999999999996
-      },
-      "exploration": false,
-      "traded": false,
-      "result_24h": {
-        "price": 0.04145,
-        "return_pct": -1.45,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
-      "id": 64,
-      "instrument": "MELANIAUSD",
-      "ts": 1784678189.293641,
-      "score": 37.6,
-      "risk": "red",
-      "why": "Momentum 52.1/100 (24h +1.3%), trend kinnitatud (OLS R\u00b2=0.79 \u00fcle 6 tunni, hind+maht m\u00f5lemad t\u00f5usuteel). liigub suuresti koos BTC-turuga (+2.1%), v\u00e4he oma alphat Likviidsus: low (maht $2,022). veebist ei leidnud v\u00e4rsket kajastust - hinnang p\u00f5hineb ainult turuandmetel Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 14%.",
-      "price_at_call": 0.08076,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.521,
-        "trend_bonus": 0.9107142857142857,
-        "liquidity": 0.0,
-        "is_meme": 1.0,
-        "volatility": 0.042333333333333334,
-        "hype_bonus": 0.5,
-        "alpha": 0.3668
-      },
-      "exploration": false,
-      "traded": false,
-      "result_24h": {
-        "price": 0.08076,
-        "return_pct": 0.0,
-        "hit": false
-      },
-      "result_7d": null
-    },
     {
       "id": 65,
       "instrument": "ARKMUSD",
@@ -18759,6 +18705,68 @@
         "return_pct": -3.81,
         "hit": false
       }
+    },
+    {
+      "id": 63,
+      "instrument": "PNUTUSD",
+      "ts": 1784678189.293641,
+      "score": 33.3,
+      "risk": "red",
+      "why": "Momentum 55.9/100 (24h +1.4%), trend kinnitatud (OLS R\u00b2=0.57 \u00fcle 6 tunni, hind+maht m\u00f5lemad t\u00f5usuteel). liigub suuresti koos BTC-turuga (+2.1%), v\u00e4he oma alphat Likviidsus: low (maht $3,704). negatiivne kajastus veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 0% positiivne / 100% negatiivne, turu positsioon #508. Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 13%.",
+      "price_at_call": 0.04206,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.5589999999999999,
+        "trend_bonus": 0.8178571428571428,
+        "liquidity": 0.0,
+        "is_meme": 1.0,
+        "volatility": 0.04566666666666667,
+        "hype_bonus": 0.3333333333333333,
+        "alpha": 0.37079999999999996
+      },
+      "exploration": false,
+      "traded": false,
+      "result_24h": {
+        "price": 0.04145,
+        "return_pct": -1.45,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 0.04026,
+        "return_pct": -4.28,
+        "hit": false
+      }
+    },
+    {
+      "id": 64,
+      "instrument": "MELANIAUSD",
+      "ts": 1784678189.293641,
+      "score": 37.6,
+      "risk": "red",
+      "why": "Momentum 52.1/100 (24h +1.3%), trend kinnitatud (OLS R\u00b2=0.79 \u00fcle 6 tunni, hind+maht m\u00f5lemad t\u00f5usuteel). liigub suuresti koos BTC-turuga (+2.1%), v\u00e4he oma alphat Likviidsus: low (maht $2,022). veebist ei leidnud v\u00e4rsket kajastust - hinnang p\u00f5hineb ainult turuandmetel Mudel (treenitud 33 tulemuse pealt, praegu 57% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 14%.",
+      "price_at_call": 0.08076,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.521,
+        "trend_bonus": 0.9107142857142857,
+        "liquidity": 0.0,
+        "is_meme": 1.0,
+        "volatility": 0.042333333333333334,
+        "hype_bonus": 0.5,
+        "alpha": 0.3668
+      },
+      "exploration": false,
+      "traded": false,
+      "result_24h": {
+        "price": 0.08076,
+        "return_pct": 0.0,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 0.08001,
+        "return_pct": -0.93,
+        "hit": false
+      }
     }
   ],
   "run_log": [
@@ -20309,10 +20317,25 @@
         "red: tabamus 18% madal -> l\u00e4vi t\u00f5stetud 90",
         "\u00fcldine tabamus 8% madal -> screen_score t\u00f5stetud 85 (j\u00e4rjestikune t\u00f5us 1/3)"
       ]
+    },
+    {
+      "ts": 1785283254.6135,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [
+        "PNUTUSD 7d: -4.3%",
+        "MELANIAUSD 7d: -0.9%"
+      ],
+      "threshold_adjustments": [
+        "green: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 70",
+        "yellow: tabamus 5% madal -> l\u00e4vi t\u00f5stetud 90",
+        "red: tabamus 15% madal -> l\u00e4vi t\u00f5stetud 90",
+        "\u00fcldine tabamus 8% madal -> screen_score t\u00f5stetud 85 (j\u00e4rjestikune t\u00f5us 2/3)"
+      ]
     }
   ],
   "next_id": 187,
-  "adjustment_checkpoint": 62,
+  "adjustment_checkpoint": 64,
   "model": {
     "weights": {
       "bias": -2.6274752457081885,
@@ -21264,6 +21287,10 @@
       {
         "ts": 1785279454.88173,
         "balance": 983.32
+      },
+      {
+        "ts": 1785283254.613245,
+        "balance": 983.12
       }
     ],
     "mode": "paper"
@@ -21275,10 +21302,10 @@
     "consec_failures": 0
   },
   "go_live_alert_sent": false,
-  "go_live_last_progress_day": "2026-07-28",
+  "go_live_last_progress_day": "2026-07-29",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 37.69385015140419,
+    "balance": 37.71219359133517,
     "open_positions": [
       {
         "id": 1,
@@ -21290,7 +21317,7 @@
         "notional_usd": 75.0,
         "entry_ts": 1785079673.569772,
         "entry_apr": 234.3,
-        "funding_collected_usd": 0.4397810218750001,
+        "funding_collected_usd": 0.4531155093750001,
         "entry_fee_usd": 0.75,
         "mode": "paper"
       },
@@ -21304,7 +21331,7 @@
         "notional_usd": 37.5,
         "entry_ts": 1785079673.569784,
         "entry_apr": 178.8,
-        "funding_collected_usd": 0.11501989531250001,
+        "funding_collected_usd": 0.11837419531250001,
         "entry_fee_usd": 0.375,
         "mode": "paper"
       },
@@ -21318,7 +21345,7 @@
         "notional_usd": 18.769488704516416,
         "entry_ts": 1785224251.724003,
         "entry_apr": 193.7,
-        "funding_collected_usd": 0.018995736121360657,
+        "funding_collected_usd": 0.02065038855234036,
         "entry_fee_usd": 0.1876,
         "mode": "paper"
       }
@@ -21442,6 +21469,10 @@
       {
         "ts": 1785279454.881792,
         "balance": 37.69
+      },
+      {
+        "ts": 1785283254.613311,
+        "balance": 37.71
       }
     ],
     "next_id": 5
@@ -21582,6 +21613,10 @@
       {
         "ts": 1785279454.882118,
         "balance": 297.67
+      },
+      {
+        "ts": 1785283254.613488,
+        "balance": 297.67
       }
     ],
     "next_id": 3
@@ -21602,6 +21637,10 @@
       },
       {
         "ts": 1785279454.882127,
+        "balance": 200.0
+      },
+      {
+        "ts": 1785283254.613497,
         "balance": 200.0
       }
     ],
