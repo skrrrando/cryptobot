@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 01.08.2026 23:57 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 02.08.2026 02:57 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -209,7 +209,7 @@
 
   <div class="stats">
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">64</div></div>
-    <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">125</div></div>
+    <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">126</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">12%</div></div>
     <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">189</div></div>
     <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">27 · Fear</div></div>
@@ -231,14 +231,14 @@
     <div class="stats" style="margin-bottom:14px">
       <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$976.86</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-2.3%</div></div>
-      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$976.86</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
+      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$928.02</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">1/5</div></div>
       <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">11✅ / 19❌</div></div>
       <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">-3.58</div></div>
       <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-5.0%</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.51</div></div>
       <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--critical)">-0.95%</div></div>
-      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$8.40</div></div>
+      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$8.65</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     
@@ -247,10 +247,10 @@
           new Chart(ctx2, {
             type: 'line',
             data: {
-              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55", "25.07 22:55", "26.07 00:00", "26.07 03:47", "26.07 06:36", "26.07 09:12", "26.07 11:18", "26.07 13:19", "26.07 15:04", "26.07 15:27", "26.07 15:46", "26.07 17:00", "26.07 18:08", "26.07 20:09", "26.07 21:59", "26.07 23:05", "27.07 02:49", "27.07 06:30", "27.07 10:42", "27.07 13:39", "27.07 16:18", "27.07 18:24", "27.07 20:22", "27.07 22:06", "28.07 00:01", "28.07 04:08", "28.07 07:37", "28.07 10:33", "28.07 12:53", "28.07 15:20", "28.07 17:26", "28.07 19:22", "28.07 21:07", "28.07 22:57", "29.07 00:00", "29.07 03:29", "29.07 06:30", "29.07 09:37", "29.07 12:00", "29.07 14:28", "29.07 16:21", "29.07 18:06", "29.07 20:13", "29.07 22:00", "29.07 23:59", "30.07 02:57", "30.07 05:45", "30.07 08:25", "30.07 11:07", "30.07 13:58", "30.07 15:54", "30.07 17:26", "30.07 19:24", "30.07 21:09", "30.07 23:06", "31.07 02:42", "31.07 06:12", "31.07 09:44", "31.07 11:59", "31.07 14:27", "31.07 16:45", "31.07 18:20", "31.07 20:20", "31.07 22:04", "01.08 00:02", "01.08 04:20", "01.08 07:26", "01.08 09:58", "01.08 11:22", "01.08 13:17", "01.08 15:00", "01.08 16:08", "01.08 17:59", "01.08 19:21", "01.08 20:53", "01.08 21:55", "01.08 22:54", "01.08 23:57"],
+              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55", "25.07 22:55", "26.07 00:00", "26.07 03:47", "26.07 06:36", "26.07 09:12", "26.07 11:18", "26.07 13:19", "26.07 15:04", "26.07 15:27", "26.07 15:46", "26.07 17:00", "26.07 18:08", "26.07 20:09", "26.07 21:59", "26.07 23:05", "27.07 02:49", "27.07 06:30", "27.07 10:42", "27.07 13:39", "27.07 16:18", "27.07 18:24", "27.07 20:22", "27.07 22:06", "28.07 00:01", "28.07 04:08", "28.07 07:37", "28.07 10:33", "28.07 12:53", "28.07 15:20", "28.07 17:26", "28.07 19:22", "28.07 21:07", "28.07 22:57", "29.07 00:00", "29.07 03:29", "29.07 06:30", "29.07 09:37", "29.07 12:00", "29.07 14:28", "29.07 16:21", "29.07 18:06", "29.07 20:13", "29.07 22:00", "29.07 23:59", "30.07 02:57", "30.07 05:45", "30.07 08:25", "30.07 11:07", "30.07 13:58", "30.07 15:54", "30.07 17:26", "30.07 19:24", "30.07 21:09", "30.07 23:06", "31.07 02:42", "31.07 06:12", "31.07 09:44", "31.07 11:59", "31.07 14:27", "31.07 16:45", "31.07 18:20", "31.07 20:20", "31.07 22:04", "01.08 00:02", "01.08 04:20", "01.08 07:26", "01.08 09:58", "01.08 11:22", "01.08 13:17", "01.08 15:00", "01.08 16:08", "01.08 17:59", "01.08 19:21", "01.08 20:53", "01.08 21:55", "01.08 22:54", "01.08 23:57", "02.08 02:57"],
               datasets: [{
                 label: 'Virtuaalne saldo ($)',
-                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27, 994.49, 994.41, 1001.52, 1003.21, 1004.28, 1002.65, 1000.29, 998.39, 998.56, 998.97, 999.6, 999.09, 998.13, 996.89, 997.87, 996.18, 994.8, 993.95, 993.31, 989.34, 990.24, 989.59, 987.86, 984.02, 983.34, 983.12, 983.24, 983.35, 983.44, 984.62, 984.39, 983.97, 983.32, 983.12, 982.89, 982.26, 982.16, 981.79, 981.24, 980.45, 982.53, 979.77, 979.7, 979.47, 979.67, 979.23, 979.23, 979.23, 979.23, 979.23, 978.83, 978.9, 978.17, 978.09, 977.96, 977.53, 977.53, 977.51, 976.45, 976.63, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86],
+                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27, 994.49, 994.41, 1001.52, 1003.21, 1004.28, 1002.65, 1000.29, 998.39, 998.56, 998.97, 999.6, 999.09, 998.13, 996.89, 997.87, 996.18, 994.8, 993.95, 993.31, 989.34, 990.24, 989.59, 987.86, 984.02, 983.34, 983.12, 983.24, 983.35, 983.44, 984.62, 984.39, 983.97, 983.32, 983.12, 982.89, 982.26, 982.16, 981.79, 981.24, 980.45, 982.53, 979.77, 979.7, 979.47, 979.67, 979.23, 979.23, 979.23, 979.23, 979.23, 978.83, 978.9, 978.17, 978.09, 977.96, 977.53, 977.53, 977.51, 976.45, 976.63, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86],
                 borderColor: "#ef4444",
                 backgroundColor: "rgba(239,68,68,0.12)",
                 tension: 0.25, fill: true, pointRadius: 2
@@ -266,7 +266,9 @@
     <h2 style="margin-top:20px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
-      <tr><td colspan="6" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
+      
+        <tr><td>02.08 02:57</td><td class="mono">ADAUSD</td><td>$48.84 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
+        <td class="mono">0.180711</td><td class="mono">0.166254</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
     </table></div>
     <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
     <div class="table-scroll"><table>
@@ -356,7 +358,7 @@
     <summary><h2>💹 Funding-arb sahtel<span class="info" tabindex="0">?<span class="info-pop">Turuneutraalne strateegia, eraldi kapitaliga (algsaldo $300): ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni, teenib ainult funding-makseid, ei sõltu turusuunast. Sisenemine kui funding ≥10% aastas, väljumine kui langeb alla 1% või max 45 päeva täis.</span></span></h2><span class="chev">▼</span></summary>
     <div class="body">
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$38.40</div></div>
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$38.41</div></div>
       <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-87.2%</div></div>
       <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">3/2</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.00</div></div>
@@ -366,7 +368,7 @@
       <tr><th>Millal</th><th>Token</th><th>Funding (aastas)</th><th>Notional</th><th>Kogutud funding</th></tr>
       
         <tr><td>26.07 15:27</td><td class="mono">MELANIAUSD</td><td>+234.3%</td>
-        <td>$75.00/jalg</td><td>$+1.17</td></tr>
+        <td>$75.00/jalg</td><td>$+1.18</td></tr>
         <tr><td>26.07 15:27</td><td class="mono">WIFUSD</td><td>+178.8%</td>
         <td>$37.50/jalg</td><td>$+0.27</td></tr>
         <tr><td>30.07 02:57</td><td class="mono">FARTCOINUSD</td><td>+205.0%</td>
@@ -390,24 +392,24 @@
     <summary><h2>🔲 Grid/range sahtel<span class="info" tabindex="0">?<span class="info-pop">Mean-reversion strateegia likviidsetel majoritel (BTC, ETH), eraldi kapitaliga (algsaldo $300): ostab kui hind on oma 24h vahemiku põhjas JA trend on nõrk (madal R² - momentumi vastand), müüb +3% juures või vahemiku tipus. Monetiseerib tunde, mil momentum-strateegia lihtsalt ootab.</span></span></h2><span class="chev">▼</span></summary>
     <div class="body">
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$294.40</div></div>
-      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-1.9%</div></div>
-      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">2/7</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.18</div></div>
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$295.06</div></div>
+      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-1.6%</div></div>
+      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">0/9</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.17</div></div>
     </div>
     <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Sisenemishind</th><th>Suurus</th></tr>
-      
-        <tr><td>01.08 17:59</td><td class="mono">BTCUSD</td><td class="mono">62755.5</td>
-        <td>$59.08</td></tr>
-        <tr><td>01.08 17:59</td><td class="mono">ETHUSD</td><td class="mono">1863.47</td>
-        <td>$47.27</td></tr>
+      <tr><td colspan="4" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
     </table></div>
     <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
       
+        <tr><td>02.08 02:57</td><td class="mono">ETHUSD</td><td>upper_band</td>
+        <td style="color:#f4756f">-0.6% ($-0.27)</td></tr>
+        <tr><td>02.08 02:57</td><td class="mono">BTCUSD</td><td>upper_band</td>
+        <td style="color:#f4756f">-0.1% ($-0.09)</td></tr>
         <tr><td>01.08 15:00</td><td class="mono">BTCUSD</td><td>upper_band</td>
         <td style="color:#f4756f">-3.2% ($-1.55)</td></tr>
         <tr><td>01.08 15:00</td><td class="mono">ETHUSD</td><td>upper_band</td>
@@ -532,6 +534,15 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
       
+        <tr>
+          <td>02.08 02:57</td>
+          <td class="mono">ADAUSD</td>
+          <td>40.6</td>
+          <td><span class="dot" style="background:#0ca30c"></span>green</td>
+          <td>ootel</td>
+          <td>ootel</td>
+          <td class="why"><div class="clip">Momentum 65.3/100 (24h +6.1%), trend kinnitatud küünaldelt (OLS R²=0.51, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +5.5pp üle BTC-turu (+0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $3,378,853). raamat tasakaalus (imbalance -0.08, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #17. Mudel (treenitud 189 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%.</div></td>
+        </tr>
         <tr>
           <td>30.07 17:26</td>
           <td class="mono">ADAUSD <span class="tag">EXPLORE</span></td>
@@ -883,15 +894,6 @@
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 61.2/100 (24h +1.6%), trend kinnitatud küünaldelt (OLS R²=0.69, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: low (maht $26,352). raamat tasakaalus (imbalance +0.06, spread 0.70%). HOIATUS leitud veebist: CoinGecko hoiatus: A security incident has been reported on THORChain. The team had provided the post-mortem report. For more information, please refer to <a href="https://blog.thorchain.org/thorchain Mudel (treenitud 112 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 22%.</div></td>
         </tr>
-        <tr>
-          <td>26.07 15:04</td>
-          <td class="mono">LINKUSD</td>
-          <td>49.3</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+0.6% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 58.8/100 (24h +1.8%), trend kinnitatud küünaldelt (OLS R²=0.62, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (+0.8%), vähe oma alphat Likviidsus: low (maht $203,715). raamat tasakaalus (imbalance +0.28, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 71% positiivne / 29% negatiivne, turu positsioon #18. Mudel (treenitud 112 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 29%.</div></td>
-        </tr>
     </table></div>
     </div>
   </details>
@@ -902,6 +904,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>02.08 02:57</td><td>1</td><td>1</td>
+        <td>MOODENGUSD 7d: -4.4%</td>
+        <td>green: tabamus 0% madal -> lävi tõstetud 90; yellow: tabamus 6% madal -> lävi tõstetud 90; red: tabamus 12% madal -> lävi tõstetud 90; ⚠️ DIAGNOSTIKA: screen_score on tõstetud 3 korda järjest (praegu 85), aga tabamus (8%) ei parane. Viga on tõenäoliselt SIGNAALIS endas, mitte lävendis - täiendav automaatne tõstmine peatatud. Vaja on strateegiat ennast üle vaadata.</td></tr>
         <tr><td>01.08 23:57</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
@@ -989,9 +994,6 @@
         <tr><td>30.07 13:58</td><td>0</td><td>0</td>
         <td>MELANIAUSD 7d: -8.8%; HBARUSD 7d: -7.0%</td>
         <td>green: tabamus 0% madal -> lävi tõstetud 90; yellow: tabamus 0% madal -> lävi tõstetud 90; red: tabamus 0% madal -> lävi tõstetud 90; ⚠️ DIAGNOSTIKA: screen_score on tõstetud 3 korda järjest (praegu 85), aga tabamus (0%) ei parane. Viga on tõenäoliselt SIGNAALIS endas, mitte lävendis - täiendav automaatne tõstmine peatatud. Vaja on strateegiat ennast üle vaadata.</td></tr>
-        <tr><td>30.07 11:07</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
     </table></div>
     </div>
   </details>
