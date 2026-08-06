@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1785621306.421414,
-        "price": 62753.94,
-        "change_24h": -0.0034,
-        "volume_value": 77247762.42
-      },
-      {
         "ts": 1785624895.117238,
         "price": 62788.51,
         "change_24h": -0.0013,
@@ -288,15 +282,15 @@
         "price": 64903.19,
         "change_24h": 0.0033,
         "volume_value": 230880767.73
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 64272.23,
+        "change_24h": -0.0049,
+        "volume_value": 192251953.87
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1785621306.421414,
-        "price": 1843.12,
-        "change_24h": -0.0099,
-        "volume_value": 59680067.77
-      },
       {
         "ts": 1785624895.117238,
         "price": 1846.45,
@@ -578,15 +572,15 @@
         "price": 1917.35,
         "change_24h": 0.0191,
         "volume_value": 162110966.95
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 1902.63,
+        "change_24h": -0.0021,
+        "volume_value": 131548116.74
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1785621306.421414,
-        "price": 71.75,
-        "change_24h": -0.0163,
-        "volume_value": 7152737.42
-      },
       {
         "ts": 1785624895.117238,
         "price": 71.87,
@@ -868,15 +862,15 @@
         "price": 73.55,
         "change_24h": -0.0084,
         "volume_value": 8562105.6
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 72.59,
+        "change_24h": -0.0185,
+        "volume_value": 7352859.12
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1785621306.421414,
-        "price": 1.0582,
-        "change_24h": -0.0016,
-        "volume_value": 3363015.11
-      },
       {
         "ts": 1785624895.117238,
         "price": 1.0604,
@@ -1158,15 +1152,15 @@
         "price": 1.0492,
         "change_24h": -0.0155,
         "volume_value": 7458983.63
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 1.0337,
+        "change_24h": -0.0257,
+        "volume_value": 8208023.84
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1785621306.421414,
-        "price": 0.17327,
-        "change_24h": 0.0314,
-        "volume_value": 2680341.25
-      },
       {
         "ts": 1785624895.117238,
         "price": 0.1735,
@@ -1448,15 +1442,15 @@
         "price": 0.20231,
         "change_24h": 0.055,
         "volume_value": 4296981.96
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 0.20091,
+        "change_24h": 0.0504,
+        "volume_value": 6878675.1
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1785621306.421414,
-        "price": 0.069099,
-        "change_24h": -0.0089,
-        "volume_value": 982864.59
-      },
       {
         "ts": 1785624895.117238,
         "price": 0.068967,
@@ -1738,6 +1732,12 @@
         "price": 0.069158,
         "change_24h": -0.0123,
         "volume_value": 1291579.37
+      },
+      {
+        "ts": 1786060684.043903,
+        "price": 0.069036,
+        "change_24h": -0.0134,
+        "volume_value": 1170577.95
       }
     ],
     "AVAXUSD": [
@@ -13282,66 +13282,6 @@
   },
   "pending_followups": [
     {
-      "id": 188,
-      "instrument": "XRPUSD",
-      "ts": 1785426872.546473,
-      "score": 37.1,
-      "risk": "green",
-      "why": "Momentum 58.0/100 (24h +2.1%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.77, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.1%), v\u00e4he oma alphat Likviidsus: high (maht $10,405,973). raamat tasakaalus (imbalance -0.00, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 66% positiivne / 34% negatiivne, turu positsioon #6. Mudel (treenitud 187 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 10%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 1.0908,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.58,
-        "trend_bonus": 0.9,
-        "liquidity": 1.0,
-        "is_meme": 0.0,
-        "volatility": 0.07133333333333333,
-        "hype_bonus": 0.7,
-        "alpha": 0.4416,
-        "book_imbalance": 0.499,
-        "market_fng": 0.28,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": true,
-      "result_24h": {
-        "price": 1.0608,
-        "return_pct": -2.75,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
-      "id": 189,
-      "instrument": "ADAUSD",
-      "ts": 1785432368.091708,
-      "score": 38.2,
-      "risk": "green",
-      "why": "Momentum 59.4/100 (24h +4.4%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.66, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.8%), v\u00e4he oma alphat Likviidsus: medium (maht $4,033,465). raamat tasakaalus (imbalance +0.04, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 88% positiivne / 12% negatiivne, turu positsioon #18. Mudel (treenitud 187 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 10%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 0.17082,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.594,
-        "trend_bonus": 0.8535714285714285,
-        "liquidity": 0.5,
-        "is_meme": 0.0,
-        "volatility": 0.1456666666666667,
-        "hype_bonus": 0.7,
-        "alpha": 0.504,
-        "book_imbalance": 0.5215,
-        "market_fng": 0.28,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": true,
-      "result_24h": {
-        "price": 0.17155,
-        "return_pct": 0.43,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
       "id": 190,
       "instrument": "ADAUSD",
       "ts": 1785639479.217478,
@@ -19443,16 +19383,77 @@
         "return_pct": 16.16,
         "hit": true
       }
+    },
+    {
+      "id": 188,
+      "instrument": "XRPUSD",
+      "ts": 1785426872.546473,
+      "score": 37.1,
+      "risk": "green",
+      "why": "Momentum 58.0/100 (24h +2.1%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.77, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.1%), v\u00e4he oma alphat Likviidsus: high (maht $10,405,973). raamat tasakaalus (imbalance -0.00, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 66% positiivne / 34% negatiivne, turu positsioon #6. Mudel (treenitud 187 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 10%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 1.0908,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.58,
+        "trend_bonus": 0.9,
+        "liquidity": 1.0,
+        "is_meme": 0.0,
+        "volatility": 0.07133333333333333,
+        "hype_bonus": 0.7,
+        "alpha": 0.4416,
+        "book_imbalance": 0.499,
+        "market_fng": 0.28,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": true,
+      "result_24h": {
+        "price": 1.0608,
+        "return_pct": -2.75,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 1.0337,
+        "return_pct": -5.23,
+        "hit": false
+      }
+    },
+    {
+      "id": 189,
+      "instrument": "ADAUSD",
+      "ts": 1785432368.091708,
+      "score": 38.2,
+      "risk": "green",
+      "why": "Momentum 59.4/100 (24h +4.4%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.66, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.8%), v\u00e4he oma alphat Likviidsus: medium (maht $4,033,465). raamat tasakaalus (imbalance +0.04, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 88% positiivne / 12% negatiivne, turu positsioon #18. Mudel (treenitud 187 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 10%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 0.17082,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.594,
+        "trend_bonus": 0.8535714285714285,
+        "liquidity": 0.5,
+        "is_meme": 0.0,
+        "volatility": 0.1456666666666667,
+        "hype_bonus": 0.7,
+        "alpha": 0.504,
+        "book_imbalance": 0.5215,
+        "market_fng": 0.28,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": true,
+      "result_24h": {
+        "price": 0.17155,
+        "return_pct": 0.43,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 0.20091,
+        "return_pct": 17.62,
+        "hit": true
+      }
     }
   ],
   "run_log": [
-    {
-      "ts": 1784497906.562102,
-      "n_candidates": 0,
-      "n_alerts": 0,
-      "followups_resolved": [],
-      "threshold_adjustments": []
-    },
     {
       "ts": 1784501458.57892,
       "n_candidates": 0,
@@ -21602,10 +21603,25 @@
       "n_alerts": 0,
       "followups_resolved": [],
       "threshold_adjustments": []
+    },
+    {
+      "ts": 1786060684.086098,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [
+        "XRPUSD 7d: -5.2%",
+        "ADAUSD 7d: +17.6%"
+      ],
+      "threshold_adjustments": [
+        "green: tabamus 22% madal -> l\u00e4vi t\u00f5stetud 90",
+        "yellow: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "red: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 85), aga tabamus (5%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
+      ]
     }
   ],
   "next_id": 193,
-  "adjustment_checkpoint": 187,
+  "adjustment_checkpoint": 189,
   "model": {
     "weights": {
       "bias": -2.657306917327329,
@@ -23020,6 +23036,10 @@
       {
         "ts": 1786029164.111793,
         "balance": 976.97
+      },
+      {
+        "ts": 1786060684.085982,
+        "balance": 976.97
       }
     ],
     "mode": "paper"
@@ -23034,7 +23054,7 @@
   "go_live_last_progress_day": "2026-08-06",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 103.47384494004923,
+    "balance": 150.28620201270516,
     "open_positions": [
       {
         "id": 1,
@@ -23046,22 +23066,8 @@
         "notional_usd": 75.0,
         "entry_ts": 1785079673.569772,
         "entry_apr": 234.3,
-        "funding_collected_usd": 1.5367095343750004,
+        "funding_collected_usd": 1.5419714750000004,
         "entry_fee_usd": 0.75,
-        "mode": "paper"
-      },
-      {
-        "id": 7,
-        "instrument": "ADAUSD",
-        "spot_qty": 120.99052418510709,
-        "spot_entry": 0.19409,
-        "perp_qty": 120.99052418510709,
-        "perp_entry": 0.19409,
-        "notional_usd": 23.50655739648392,
-        "entry_ts": 1785783050.217327,
-        "entry_apr": 37.8,
-        "funding_collected_usd": 0.011843600686158163,
-        "entry_fee_usd": 0.047,
         "mode": "paper"
       }
     ],
@@ -23129,6 +23135,19 @@
         "basis_pnl_usd": -0.24,
         "pnl_usd": -0.18,
         "pnl_pct": -0.31,
+        "mode": "paper"
+      },
+      {
+        "id": 7,
+        "instrument": "ADAUSD",
+        "notional_usd": 23.50655739648392,
+        "entry_ts": 1785783050.217327,
+        "exit_ts": 1786060684.086059,
+        "entry_apr": 37.8,
+        "funding_collected_usd": 0.0118,
+        "basis_pnl_usd": -0.21,
+        "pnl_usd": -0.19,
+        "pnl_pct": -0.41,
         "mode": "paper"
       }
     ],
@@ -23592,6 +23611,10 @@
       {
         "ts": 1786029164.111827,
         "balance": 103.47
+      },
+      {
+        "ts": 1786060684.086066,
+        "balance": 150.29
       }
     ],
     "next_id": 8
@@ -24205,6 +24228,10 @@
       {
         "ts": 1786029164.111847,
         "balance": 294.86
+      },
+      {
+        "ts": 1786060684.086088,
+        "balance": 294.86
       }
     ],
     "next_id": 12
@@ -24581,6 +24608,10 @@
       },
       {
         "ts": 1786029164.111854,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786060684.086094,
         "balance": 200.0
       }
     ],
