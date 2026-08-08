@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1785816795.387631,
-        "price": 63750.74,
-        "change_24h": 0.0154,
-        "volume_value": 291194538.63
-      },
-      {
         "ts": 1785829126.946461,
         "price": 63636.46,
         "change_24h": 0.0173,
@@ -288,15 +282,15 @@
         "price": 64920.33,
         "change_24h": 0.0093,
         "volume_value": 167410974.3
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 64968.81,
+        "change_24h": 0.0088,
+        "volume_value": 166191363.99
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1785816795.387631,
-        "price": 1861.8,
-        "change_24h": 0.0035,
-        "volume_value": 121884988.48
-      },
       {
         "ts": 1785829126.946461,
         "price": 1858.36,
@@ -578,15 +572,15 @@
         "price": 1913.83,
         "change_24h": 0.0062,
         "volume_value": 98071103.19
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 1916.06,
+        "change_24h": 0.0059,
+        "volume_value": 96884012.06
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1785816795.387631,
-        "price": 73.61,
-        "change_24h": 0.011,
-        "volume_value": 8104187.96
-      },
       {
         "ts": 1785829126.946461,
         "price": 73.5,
@@ -868,15 +862,15 @@
         "price": 74.67,
         "change_24h": 0.0244,
         "volume_value": 9882337.98
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 74.82,
+        "change_24h": 0.0258,
+        "volume_value": 9994475.93
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1785816795.387631,
-        "price": 1.0765,
-        "change_24h": 0.0067,
-        "volume_value": 5774785.13
-      },
       {
         "ts": 1785829126.946461,
         "price": 1.0749,
@@ -1158,15 +1152,15 @@
         "price": 1.0332,
         "change_24h": 0.0064,
         "volume_value": 7928655.95
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 1.0344,
+        "change_24h": 0.0068,
+        "volume_value": 7859318.28
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1785816795.387631,
-        "price": 0.19788,
-        "change_24h": 0.0675,
-        "volume_value": 6677241.75
-      },
       {
         "ts": 1785829126.946461,
         "price": 0.19526,
@@ -1448,15 +1442,15 @@
         "price": 0.19908,
         "change_24h": -0.0117,
         "volume_value": 3309259.93
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 0.20011,
+        "change_24h": -0.0075,
+        "volume_value": 3270257.44
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1785816795.387631,
-        "price": 0.070208,
-        "change_24h": 0.0063,
-        "volume_value": 1095235.97
-      },
       {
         "ts": 1785829126.946461,
         "price": 0.070208,
@@ -1738,6 +1732,12 @@
         "price": 0.070226,
         "change_24h": 0.014,
         "volume_value": 1099505.69
+      },
+      {
+        "ts": 1786178352.208047,
+        "price": 0.070262,
+        "change_24h": 0.0142,
+        "volume_value": 1075155.35
       }
     ],
     "AVAXUSD": [
@@ -13394,7 +13394,11 @@
       },
       "exploration": false,
       "traded": true,
-      "result_24h": null,
+      "result_24h": {
+        "price": 0.20011,
+        "return_pct": -1.14,
+        "hit": false
+      },
       "result_7d": null
     },
     {
@@ -19533,13 +19537,6 @@
   ],
   "run_log": [
     {
-      "ts": 1784654323.222099,
-      "n_candidates": 10,
-      "n_alerts": 1,
-      "followups_resolved": [],
-      "threshold_adjustments": []
-    },
-    {
       "ts": 1784661626.237453,
       "n_candidates": 8,
       "n_alerts": 4,
@@ -21696,25 +21693,34 @@
       "n_alerts": 0,
       "followups_resolved": [],
       "threshold_adjustments": []
+    },
+    {
+      "ts": 1786178352.250909,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [
+        "ADAUSD 24h: -1.1%"
+      ],
+      "threshold_adjustments": []
     }
   ],
   "next_id": 196,
   "adjustment_checkpoint": 189,
   "model": {
     "weights": {
-      "bias": -2.657306917327329,
-      "momentum": 0.042578726157708816,
-      "trend_bonus": 0.30075398598755254,
-      "liquidity": -0.1466572224004367,
-      "is_meme": 0.02521486522992166,
-      "volatility": 0.1239881396672169,
-      "hype_bonus": 0.3682611994205849,
-      "alpha": 0.2622779832375006,
-      "book_imbalance": 0.1823247060227091,
-      "market_fng": 0.1285762599956829,
-      "onchain_activity": -0.6201211640502894
+      "bias": -2.6597238541806516,
+      "momentum": 0.04105039534611191,
+      "trend_bonus": 0.2985654224752727,
+      "liquidity": -0.14781289422703398,
+      "is_meme": 0.025205787878438888,
+      "volatility": 0.12337149554831696,
+      "hype_bonus": 0.3664367695914675,
+      "alpha": 0.26046850477241723,
+      "book_imbalance": 0.18152673726198407,
+      "market_fng": 0.1278290608546208,
+      "onchain_activity": -0.6211063888578927
     },
-    "n_updates": 192,
+    "n_updates": 193,
     "learning_log": [
       {
         "ts": 1784674557.643236,
@@ -22041,28 +22047,10 @@
   },
   "portfolio": {
     "starting_balance": 1000.0,
-    "balance": 837.629160044846,
+    "balance": 885.2976155284191,
     "position_size_pct": 0.05,
     "max_open_positions": 5,
     "open_positions": [
-      {
-        "id": 193,
-        "instrument": "ADAUSD",
-        "entry_price": 0.202713615,
-        "quantity": 239.76795466988628,
-        "entry_fee_usd": 0.2442,
-        "size_usd": 48.85,
-        "size_pct": 5.0,
-        "entry_ts": 1786090404.756107,
-        "risk": "green",
-        "score": 38.9,
-        "category": "major",
-        "mode": "paper",
-        "stop_price": 0.1864965258,
-        "stop_order_id": null,
-        "alpha_pct": 0.0774,
-        "high_water": 0.20317
-      },
       {
         "id": 194,
         "instrument": "ETHUSD",
@@ -22654,6 +22642,24 @@
         "mode": "paper",
         "risk": "yellow",
         "score": 36.8,
+        "category": "major"
+      },
+      {
+        "id": 193,
+        "instrument": "ADAUSD",
+        "entry_price": 0.202713615,
+        "exit_price": 0.19980983500000002,
+        "size_usd": 48.85,
+        "entry_ts": 1786090404.756107,
+        "exit_ts": 1786178352.250697,
+        "pnl_usd": -1.18,
+        "pnl_pct": -2.42,
+        "entry_fee_usd": 0.2442,
+        "exit_fee_usd": 0.2395,
+        "exit_reason": "24h",
+        "mode": "paper",
+        "risk": "green",
+        "score": 38.9,
         "category": "major"
       }
     ],
@@ -23265,6 +23271,10 @@
       {
         "ts": 1786175354.613803,
         "balance": 974.92
+      },
+      {
+        "ts": 1786178352.250777,
+        "balance": 974.93
       }
     ],
     "mode": "paper"
@@ -23929,6 +23939,10 @@
       },
       {
         "ts": 1786175354.613831,
+        "balance": 299.14
+      },
+      {
+        "ts": 1786178352.250803,
         "balance": 299.14
       }
     ],
@@ -24651,6 +24665,10 @@
       {
         "ts": 1786175354.613927,
         "balance": 294.61
+      },
+      {
+        "ts": 1786178352.250896,
+        "balance": 294.67
       }
     ],
     "next_id": 13
@@ -25123,6 +25141,10 @@
       },
       {
         "ts": 1786175354.613936,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786178352.250905,
         "balance": 200.0
       }
     ],

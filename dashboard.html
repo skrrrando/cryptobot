@@ -189,7 +189,7 @@
   <div class="topbar">
     <div>
       <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 08.08.2026 07:49 UTC · V4 · <span class="tag">📄 PAPER</span></div>
+      <div class="subtitle">Uuendatud 08.08.2026 08:39 UTC · V4 · <span class="tag">📄 PAPER</span></div>
     </div>
     <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
   </div>
@@ -211,7 +211,7 @@
     <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">6</div></div>
     <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">189</div></div>
     <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">12%</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">192</div></div>
+    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">193</div></div>
     <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">30 · Fear</div></div>
   </div>
 
@@ -219,7 +219,7 @@
     <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
     <div class="stats" style="margin-bottom:0">
       <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">82</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">110</div></div>
+      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">111</div></div>
       <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">-0.4%</div></div>
       <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">SHIBUSD +28.1%</div></div>
       <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">SHIBUSD -10.1%</div></div>
@@ -229,16 +229,16 @@
   <div class="card">
     <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$974.92</div></div>
+      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$974.93</div></div>
       <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-2.5%</div></div>
-      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$837.63</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">3/5</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">13✅ / 20❌</div></div>
-      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">-3.39</div></div>
+      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$885.30</div></div>
+      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">2/5</div></div>
+      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">13✅ / 21❌</div></div>
+      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">-3.62</div></div>
       <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-5.0%</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.52</div></div>
-      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--critical)">-0.86%</div></div>
-      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$10.50</div></div>
+      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.50</div></div>
+      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--critical)">-0.91%</div></div>
+      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$10.74</div></div>
     </div>
     <canvas id="portfolioChart" height="70"></canvas>
     
@@ -247,10 +247,10 @@
           new Chart(ctx2, {
             type: 'line',
             data: {
-              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55", "25.07 22:55", "26.07 00:00", "26.07 03:47", "26.07 06:36", "26.07 09:12", "26.07 11:18", "26.07 13:19", "26.07 15:04", "26.07 15:27", "26.07 15:46", "26.07 17:00", "26.07 18:08", "26.07 20:09", "26.07 21:59", "26.07 23:05", "27.07 02:49", "27.07 06:30", "27.07 10:42", "27.07 13:39", "27.07 16:18", "27.07 18:24", "27.07 20:22", "27.07 22:06", "28.07 00:01", "28.07 04:08", "28.07 07:37", "28.07 10:33", "28.07 12:53", "28.07 15:20", "28.07 17:26", "28.07 19:22", "28.07 21:07", "28.07 22:57", "29.07 00:00", "29.07 03:29", "29.07 06:30", "29.07 09:37", "29.07 12:00", "29.07 14:28", "29.07 16:21", "29.07 18:06", "29.07 20:13", "29.07 22:00", "29.07 23:59", "30.07 02:57", "30.07 05:45", "30.07 08:25", "30.07 11:07", "30.07 13:58", "30.07 15:54", "30.07 17:26", "30.07 19:24", "30.07 21:09", "30.07 23:06", "31.07 02:42", "31.07 06:12", "31.07 09:44", "31.07 11:59", "31.07 14:27", "31.07 16:45", "31.07 18:20", "31.07 20:20", "31.07 22:04", "01.08 00:02", "01.08 04:20", "01.08 07:26", "01.08 09:58", "01.08 11:22", "01.08 13:17", "01.08 15:00", "01.08 16:08", "01.08 17:59", "01.08 19:21", "01.08 20:53", "01.08 21:55", "01.08 22:54", "01.08 23:57", "02.08 02:57", "02.08 06:07", "02.08 09:08", "02.08 11:15", "02.08 13:18", "02.08 15:01", "02.08 16:57", "02.08 18:01", "02.08 20:09", "02.08 21:55", "02.08 22:56", "02.08 23:58", "03.08 03:38", "03.08 06:59", "03.08 10:50", "03.08 13:40", "03.08 16:25", "03.08 18:50", "03.08 20:27", "03.08 22:08", "04.08 00:09", "04.08 04:13", "04.08 07:38", "04.08 10:38", "04.08 13:01", "04.08 16:11", "04.08 18:27", "04.08 20:23", "04.08 22:10", "05.08 00:01", "05.08 04:07", "05.08 07:37", "05.08 10:33", "05.08 12:51", "05.08 15:12", "05.08 17:28", "05.08 19:28", "05.08 21:06", "05.08 22:57", "06.08 00:03", "06.08 04:11", "06.08 07:37", "06.08 10:37", "06.08 12:55", "06.08 15:12", "06.08 23:58", "07.08 02:52", "07.08 04:54", "07.08 06:08", "07.08 08:13", "07.08 10:00", "07.08 11:02", "07.08 13:00", "07.08 14:17", "07.08 15:55", "07.08 16:53", "07.08 17:48", "07.08 18:54", "07.08 19:52", "07.08 20:39", "07.08 21:38", "07.08 22:33", "07.08 23:32", "08.08 01:26", "08.08 03:24", "08.08 04:55", "08.08 05:41", "08.08 06:51", "08.08 07:49"],
+              labels: ["23.07 15:31", "24.07 13:42", "24.07 23:00", "25.07 20:01", "25.07 20:52", "25.07 21:55", "25.07 22:55", "26.07 00:00", "26.07 03:47", "26.07 06:36", "26.07 09:12", "26.07 11:18", "26.07 13:19", "26.07 15:04", "26.07 15:27", "26.07 15:46", "26.07 17:00", "26.07 18:08", "26.07 20:09", "26.07 21:59", "26.07 23:05", "27.07 02:49", "27.07 06:30", "27.07 10:42", "27.07 13:39", "27.07 16:18", "27.07 18:24", "27.07 20:22", "27.07 22:06", "28.07 00:01", "28.07 04:08", "28.07 07:37", "28.07 10:33", "28.07 12:53", "28.07 15:20", "28.07 17:26", "28.07 19:22", "28.07 21:07", "28.07 22:57", "29.07 00:00", "29.07 03:29", "29.07 06:30", "29.07 09:37", "29.07 12:00", "29.07 14:28", "29.07 16:21", "29.07 18:06", "29.07 20:13", "29.07 22:00", "29.07 23:59", "30.07 02:57", "30.07 05:45", "30.07 08:25", "30.07 11:07", "30.07 13:58", "30.07 15:54", "30.07 17:26", "30.07 19:24", "30.07 21:09", "30.07 23:06", "31.07 02:42", "31.07 06:12", "31.07 09:44", "31.07 11:59", "31.07 14:27", "31.07 16:45", "31.07 18:20", "31.07 20:20", "31.07 22:04", "01.08 00:02", "01.08 04:20", "01.08 07:26", "01.08 09:58", "01.08 11:22", "01.08 13:17", "01.08 15:00", "01.08 16:08", "01.08 17:59", "01.08 19:21", "01.08 20:53", "01.08 21:55", "01.08 22:54", "01.08 23:57", "02.08 02:57", "02.08 06:07", "02.08 09:08", "02.08 11:15", "02.08 13:18", "02.08 15:01", "02.08 16:57", "02.08 18:01", "02.08 20:09", "02.08 21:55", "02.08 22:56", "02.08 23:58", "03.08 03:38", "03.08 06:59", "03.08 10:50", "03.08 13:40", "03.08 16:25", "03.08 18:50", "03.08 20:27", "03.08 22:08", "04.08 00:09", "04.08 04:13", "04.08 07:38", "04.08 10:38", "04.08 13:01", "04.08 16:11", "04.08 18:27", "04.08 20:23", "04.08 22:10", "05.08 00:01", "05.08 04:07", "05.08 07:37", "05.08 10:33", "05.08 12:51", "05.08 15:12", "05.08 17:28", "05.08 19:28", "05.08 21:06", "05.08 22:57", "06.08 00:03", "06.08 04:11", "06.08 07:37", "06.08 10:37", "06.08 12:55", "06.08 15:12", "06.08 23:58", "07.08 02:52", "07.08 04:54", "07.08 06:08", "07.08 08:13", "07.08 10:00", "07.08 11:02", "07.08 13:00", "07.08 14:17", "07.08 15:55", "07.08 16:53", "07.08 17:48", "07.08 18:54", "07.08 19:52", "07.08 20:39", "07.08 21:38", "07.08 22:33", "07.08 23:32", "08.08 01:26", "08.08 03:24", "08.08 04:55", "08.08 05:41", "08.08 06:51", "08.08 07:49", "08.08 08:39"],
               datasets: [{
                 label: 'Virtuaalne saldo ($)',
-                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27, 994.49, 994.41, 1001.52, 1003.21, 1004.28, 1002.65, 1000.29, 998.39, 998.56, 998.97, 999.6, 999.09, 998.13, 996.89, 997.87, 996.18, 994.8, 993.95, 993.31, 989.34, 990.24, 989.59, 987.86, 984.02, 983.34, 983.12, 983.24, 983.35, 983.44, 984.62, 984.39, 983.97, 983.32, 983.12, 982.89, 982.26, 982.16, 981.79, 981.24, 980.45, 982.53, 979.77, 979.7, 979.47, 979.67, 979.23, 979.23, 979.23, 979.23, 979.23, 978.83, 978.9, 978.17, 978.09, 977.96, 977.53, 977.53, 977.51, 976.45, 976.63, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 977.91, 978.05, 978.15, 979.24, 979.02, 978.83, 978.2, 978.17, 978.36, 978.52, 978.34, 975.46, 974.74, 975.46, 976.78, 977.33, 977.27, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.49, 976.63, 976.36, 975.14, 975.26, 975.31, 974.7, 975.12, 975.77, 975.71, 975.69, 975.58, 975.47, 975.37, 975.55, 975.64, 975.46, 975.22, 974.92],
+                data: [1000.0, 949.76, 997.83, 997.83, 995.08, 995.27, 994.49, 994.41, 1001.52, 1003.21, 1004.28, 1002.65, 1000.29, 998.39, 998.56, 998.97, 999.6, 999.09, 998.13, 996.89, 997.87, 996.18, 994.8, 993.95, 993.31, 989.34, 990.24, 989.59, 987.86, 984.02, 983.34, 983.12, 983.24, 983.35, 983.44, 984.62, 984.39, 983.97, 983.32, 983.12, 982.89, 982.26, 982.16, 981.79, 981.24, 980.45, 982.53, 979.77, 979.7, 979.47, 979.67, 979.23, 979.23, 979.23, 979.23, 979.23, 978.83, 978.9, 978.17, 978.09, 977.96, 977.53, 977.53, 977.51, 976.45, 976.63, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 976.86, 977.91, 978.05, 978.15, 979.24, 979.02, 978.83, 978.2, 978.17, 978.36, 978.52, 978.34, 975.46, 974.74, 975.46, 976.78, 977.33, 977.27, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.49, 976.63, 976.36, 975.14, 975.26, 975.31, 974.7, 975.12, 975.77, 975.71, 975.69, 975.58, 975.47, 975.37, 975.55, 975.64, 975.46, 975.22, 974.92, 974.93],
                 borderColor: "#ef4444",
                 backgroundColor: "rgba(239,68,68,0.12)",
                 tension: 0.25, fill: true, pointRadius: 2
@@ -267,8 +267,6 @@
     <div class="table-scroll"><table>
       <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
       
-        <tr><td>07.08 08:13</td><td class="mono">ADAUSD</td><td>$48.85 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
-        <td class="mono">0.202714</td><td class="mono">0.186497</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
         <tr><td>07.08 13:00</td><td class="mono">ETHUSD</td><td>$46.41 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
         <td class="mono">1934.41</td><td class="mono">1779.65</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
         <tr><td>08.08 04:55</td><td class="mono">DOGEUSD</td><td>$44.09 <span class="tag" style="background:linear-gradient(120deg,var(--accent2),var(--pink))">5.0%</span></td>
@@ -278,6 +276,8 @@
     <div class="table-scroll"><table>
       <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
       
+        <tr><td>08.08 08:39</td><td class="mono">ADAUSD</td><td>$48.85</td>
+        <td style="color:#f4756f">-2.4% ($-1.18)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
         <tr><td>03.08 20:27</td><td class="mono">DOGEUSD</td><td>$44.08</td>
         <td style="color:#f4756f">-1.7% ($-0.75)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
         <tr><td>03.08 16:25</td><td class="mono">ADAUSD</td><td>$46.40</td>
@@ -353,13 +353,13 @@
     <div class="table-scroll"><table>
       <tr><th>Kriteerium</th><th>Praegu</th><th>Vajalik</th><th>Staatus</th></tr>
       
-        <tr><td>Profit factor</td><td class="mono" style="color:var(--muted)">0.52</td>
+        <tr><td>Profit factor</td><td class="mono" style="color:var(--muted)">0.50</td>
         <td class="mono">> 1.3</td><td style="text-align:center">⏳</td></tr>
         <tr><td>Max langus</td><td class="mono" style="color:var(--good)">5.0%</td>
         <td class="mono">< 15%</td><td style="text-align:center">✅</td></tr>
-        <tr><td>Suletud kauplusi</td><td class="mono" style="color:var(--muted)">33</td>
+        <tr><td>Suletud kauplusi</td><td class="mono" style="color:var(--muted)">34</td>
         <td class="mono">>= 60</td><td style="text-align:center">⏳</td></tr>
-        <tr><td>Oodatav väärtus/kauplus</td><td class="mono" style="color:var(--muted)">-0.86%</td>
+        <tr><td>Oodatav väärtus/kauplus</td><td class="mono" style="color:var(--muted)">-0.91%</td>
         <td class="mono">> 0%</td><td style="text-align:center">⏳</td></tr>
     </table></div>
   </div>
@@ -411,7 +411,7 @@
     <summary><h2>🔲 Grid/range sahtel<span class="info" tabindex="0">?<span class="info-pop">Mean-reversion strateegia likviidsetel majoritel (BTC, ETH), eraldi kapitaliga (algsaldo $300): ostab kui hind on oma 24h vahemiku põhjas JA trend on nõrk (madal R² - momentumi vastand), müüb +3% juures või vahemiku tipus. Monetiseerib tunde, mil momentum-strateegia lihtsalt ootab.</span></span></h2><span class="chev">▼</span></summary>
     <div class="body">
     <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$294.61</div></div>
+      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$294.67</div></div>
       <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-1.8%</div></div>
       <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">1/11</div></div>
       <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.17</div></div>
@@ -477,9 +477,9 @@
 
   <div class="card">
     <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel aktiivne (treenitud 192 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
+    <div class="model-status">Mudel aktiivne (treenitud 193 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
     <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=192)</th></tr>
+      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=193)</th></tr>
       
         <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.04</td>
         <td>neutraalne</td><td class="mono">+0.05</td></tr>
@@ -488,7 +488,7 @@
         <tr><td>Likviidsus</td><td class="mono">-0.15</td>
         <td>vähendab tabamist</td><td class="mono">-0.05</td></tr>
         <tr><td>Meemi/trend-kategooria</td><td class="mono">+0.03</td>
-        <td>neutraalne</td><td class="mono">+0.02</td></tr>
+        <td>neutraalne</td><td class="mono">+0.03</td></tr>
         <tr><td>Volatiilsus</td><td class="mono">+0.12</td>
         <td>toetab tabamist</td><td class="mono">+0.06</td></tr>
         <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.37</td>
@@ -513,10 +513,10 @@
           new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "28.07", "29.07", "30.07", "30.07", "02.08", "02.08", "02.08"],
+              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "28.07", "29.07", "30.07", "30.07", "02.08", "02.08", "02.08", "07.08"],
               datasets: [{
                 label: 'Libisev tabamusprotsent (10 viimase pealt)',
-                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 40.0, 40.0, 50.0, 50.0, 50.0, 40.0, 50.0, 50.0, 40.0, 40.0, 30.0, 40.0, 30.0, 30.0, 20.0, 20.0, 10.0, 20.0, 20.0, 20.0, 30.0, 20.0, 30.0, 40.0, 40.0, 40.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 40.0, 40.0, 50.0, 50.0, 50.0, 40.0, 50.0, 50.0, 40.0, 40.0, 30.0, 40.0, 30.0, 30.0, 20.0, 20.0, 10.0, 20.0, 20.0, 20.0, 30.0, 20.0, 30.0, 40.0, 40.0, 40.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99,102,241,0.15)',
                 tension: 0.3,
@@ -582,7 +582,7 @@
           <td class="mono">ADAUSD</td>
           <td>38.9</td>
           <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>ootel</td>
+          <td>-1.1% ❌</td>
           <td>ootel</td>
           <td class="why"><div class="clip">Momentum 62.6/100 (24h +7.1%), trend kinnitatud küünaldelt (OLS R²=0.67, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +7.7pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $7,349,303). müügisurve raamatus (imbalance -0.39, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 89% positiivne / 11% negatiivne, turu positsioon #16. Mudel (treenitud 192 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 10%.</div></td>
         </tr>
@@ -929,6 +929,9 @@
     <div class="table-scroll"><table>
       <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
       
+        <tr><td>08.08 08:39</td><td>0</td><td>0</td>
+        <td>ADAUSD 24h: -1.1%</td>
+        <td>-</td></tr>
         <tr><td>08.08 07:49</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
@@ -1014,9 +1017,6 @@
         <td>-</td>
         <td>-</td></tr>
         <tr><td>06.08 04:11</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>06.08 00:03</td><td>0</td><td>0</td>
         <td>-</td>
         <td>-</td></tr>
     </table></div>
