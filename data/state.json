@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1786152391.402492,
-        "price": 64904.29,
-        "change_24h": 0.0096,
-        "volume_value": 185542249.14
-      },
-      {
         "ts": 1786159486.488328,
         "price": 65006.2,
         "change_24h": 0.012,
@@ -288,15 +282,15 @@
         "price": 65175.36,
         "change_24h": 0.006,
         "volume_value": 113824448.38
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 64975.1,
+        "change_24h": 0.0006,
+        "volume_value": 116032608.78
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1786152391.402492,
-        "price": 1914.7,
-        "change_24h": 0.0065,
-        "volume_value": 114522687.97
-      },
       {
         "ts": 1786159486.488328,
         "price": 1914.99,
@@ -578,15 +572,15 @@
         "price": 1925.23,
         "change_24h": 0.0059,
         "volume_value": 79867003.17
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 1915.65,
+        "change_24h": -0.0021,
+        "volume_value": 79356660.13
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1786152391.402492,
-        "price": 73.79,
-        "change_24h": 0.0168,
-        "volume_value": 8835277.21
-      },
       {
         "ts": 1786159486.488328,
         "price": 74.04,
@@ -868,15 +862,15 @@
         "price": 76.95,
         "change_24h": 0.0073,
         "volume_value": 10590811.67
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 76.66,
+        "change_24h": 0.0042,
+        "volume_value": 10790812.57
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1786152391.402492,
-        "price": 1.0271,
-        "change_24h": -0.0092,
-        "volume_value": 9211049.84
-      },
       {
         "ts": 1786159486.488328,
         "price": 1.0326,
@@ -1158,15 +1152,15 @@
         "price": 1.0339,
         "change_24h": 0.0006,
         "volume_value": 4511913.08
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 1.0309,
+        "change_24h": -0.0042,
+        "volume_value": 4722303.04
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1786152391.402492,
-        "price": 0.2,
-        "change_24h": -0.0074,
-        "volume_value": 3904015.48
-      },
       {
         "ts": 1786159486.488328,
         "price": 0.20072,
@@ -1448,15 +1442,15 @@
         "price": 0.19621,
         "change_24h": -0.0022,
         "volume_value": 1897455.38
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 0.19478,
+        "change_24h": -0.007,
+        "volume_value": 1928139.87
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1786152391.402492,
-        "price": 0.069879,
-        "change_24h": 0.01,
-        "volume_value": 1271930.31
-      },
       {
         "ts": 1786159486.488328,
         "price": 0.069992,
@@ -1738,6 +1732,12 @@
         "price": 0.070071,
         "change_24h": 0.0004,
         "volume_value": 1286390.73
+      },
+      {
+        "ts": 1786360052.587029,
+        "price": 0.069862,
+        "change_24h": -0.0043,
+        "volume_value": 1306643.98
       }
     ],
     "AVAXUSD": [
@@ -19617,15 +19617,6 @@
   ],
   "run_log": [
     {
-      "ts": 1784946788.092349,
-      "n_candidates": 6,
-      "n_alerts": 4,
-      "followups_resolved": [
-        "INJUSD 24h: +2.3%"
-      ],
-      "threshold_adjustments": []
-    },
-    {
       "ts": 1784958167.531139,
       "n_candidates": 0,
       "n_alerts": 0,
@@ -21697,6 +21688,13 @@
       "n_alerts": 0,
       "followups_resolved": [],
       "threshold_adjustments": []
+    },
+    {
+      "ts": 1786360052.620458,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [],
+      "threshold_adjustments": []
     }
   ],
   "next_id": 198,
@@ -23469,6 +23467,10 @@
       {
         "ts": 1786353554.170615,
         "balance": 973.11
+      },
+      {
+        "ts": 1786360052.620322,
+        "balance": 973.11
       }
     ],
     "mode": "paper"
@@ -23483,7 +23485,7 @@
   "go_live_last_progress_day": "2026-08-10",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 74.83849769562181,
+    "balance": 74.83962952308066,
     "open_positions": [
       {
         "id": 8,
@@ -23495,7 +23497,7 @@
         "notional_usd": 74.78555896686622,
         "entry_ts": 1786206745.699741,
         "entry_apr": 12.0,
-        "funding_collected_usd": 0.034058191123179156,
+        "funding_collected_usd": 0.03499607681818263,
         "entry_fee_usd": 0.1496,
         "mode": "paper"
       },
@@ -23509,7 +23511,7 @@
         "notional_usd": 37.393572514174494,
         "entry_ts": 1786217348.0599,
         "entry_apr": 10.5,
-        "funding_collected_usd": 0.02046659911513478,
+        "funding_collected_usd": 0.020660540878979543,
         "entry_fee_usd": 0.0748,
         "mode": "paper"
       }
@@ -24331,14 +24333,30 @@
       {
         "ts": 1786353554.170651,
         "balance": 74.84
+      },
+      {
+        "ts": 1786360052.620354,
+        "balance": 74.84
       }
     ],
     "next_id": 10
   },
   "grid": {
     "starting_balance": 300.0,
-    "balance": 294.1991581330319,
-    "open_positions": [],
+    "balance": 235.35932650642553,
+    "open_positions": [
+      {
+        "id": 14,
+        "instrument": "ETHUSD",
+        "entry_price": 1918.5234750000002,
+        "quantity": 0.03051598441789895,
+        "size_usd": 58.84,
+        "entry_fee_usd": 0.2942,
+        "entry_ts": 1786360052.620442,
+        "stop_price": 1803.4120665,
+        "mode": "paper"
+      }
+    ],
     "closed_trades": [
       {
         "id": 1,
@@ -25234,9 +25252,13 @@
       {
         "ts": 1786353554.170746,
         "balance": 294.2
+      },
+      {
+        "ts": 1786360052.620447,
+        "balance": 293.82
       }
     ],
-    "next_id": 14
+    "next_id": 15
   },
   "short_reversal": {
     "starting_balance": 200.0,
@@ -25874,6 +25896,10 @@
       },
       {
         "ts": 1786353554.170755,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786360052.620454,
         "balance": 200.0
       }
     ],
