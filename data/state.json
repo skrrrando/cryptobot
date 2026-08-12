@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1786271599.547354,
-        "price": 64899.35,
-        "change_24h": -0.0014,
-        "volume_value": 50422719.9
-      },
-      {
         "ts": 1786274880.003096,
         "price": 64936.07,
         "change_24h": -0.0001,
@@ -288,15 +282,15 @@
         "price": 63800.18,
         "change_24h": -0.0027,
         "volume_value": 175730088.85
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 63783.53,
+        "change_24h": -0.0046,
+        "volume_value": 178246323.1
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1786271599.547354,
-        "price": 1919.08,
-        "change_24h": -0.0009,
-        "volume_value": 34215479.92
-      },
       {
         "ts": 1786274880.003096,
         "price": 1919.87,
@@ -578,15 +572,15 @@
         "price": 1884.75,
         "change_24h": 0.0048,
         "volume_value": 119056069.31
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 1885.98,
+        "change_24h": 0.0038,
+        "volume_value": 119736493.38
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1786271599.547354,
-        "price": 76.43,
-        "change_24h": 0.0203,
-        "volume_value": 9656550.2
-      },
       {
         "ts": 1786274880.003096,
         "price": 76.38,
@@ -868,15 +862,15 @@
         "price": 76.48,
         "change_24h": 0.0072,
         "volume_value": 12405098.61
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 76.41,
+        "change_24h": 0.0045,
+        "volume_value": 12550615.45
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1786271599.547354,
-        "price": 1.0365,
-        "change_24h": -0.0005,
-        "volume_value": 3260512.23
-      },
       {
         "ts": 1786274880.003096,
         "price": 1.0353,
@@ -1158,15 +1152,15 @@
         "price": 1.024,
         "change_24h": 0.0092,
         "volume_value": 8489720.89
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 1.0193,
+        "change_24h": 0.005,
+        "volume_value": 8410554.83
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1786271599.547354,
-        "price": 0.19635,
-        "change_24h": -0.0173,
-        "volume_value": 1704282.08
-      },
       {
         "ts": 1786274880.003096,
         "price": 0.19682,
@@ -1448,15 +1442,15 @@
         "price": 0.1867,
         "change_24h": -0.0203,
         "volume_value": 2104058.74
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 0.18784,
+        "change_24h": -0.013,
+        "volume_value": 2082254.53
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1786271599.547354,
-        "price": 0.070119,
-        "change_24h": -0.0023,
-        "volume_value": 1034503.3
-      },
       {
         "ts": 1786274880.003096,
         "price": 0.070178,
@@ -1738,6 +1732,12 @@
         "price": 0.072402,
         "change_24h": 0.0344,
         "volume_value": 1748909.1
+      },
+      {
+        "ts": 1786507655.043512,
+        "price": 0.072119,
+        "change_24h": 0.03,
+        "volume_value": 1838749.19
       }
     ],
     "AVAXUSD": [
@@ -19643,28 +19643,6 @@
   ],
   "run_log": [
     {
-      "ts": 1785148976.147702,
-      "n_candidates": 6,
-      "n_alerts": 1,
-      "followups_resolved": [
-        "WIFUSD 24h: -3.9%",
-        "PNUTUSD 24h: -0.9%",
-        "PEPEUSD 24h: +2.5%",
-        "DOGEUSD 24h: -0.2%",
-        "TAOUSD 24h: -0.5%",
-        "FLOKIUSD 24h: -4.0%",
-        "PENGUUSD 24h: +0.9%",
-        "POPCATUSD 24h: +0.2%",
-        "SHIBUSD 24h: -10.1%",
-        "LTCUSD 24h: -0.4%",
-        "GOATUSD 24h: -3.1%",
-        "BONKUSD 24h: -1.8%"
-      ],
-      "threshold_adjustments": [
-        "T\u00e4is-treening: mudel treeniti nullist uuesti kogu 141 tulemuse peal (150 epohhi, segatud j\u00e4rjekord) - stabiilsemad kaalud kui \u00fckshaaval \u00f5ppides. Treeningt\u00e4psus 85%, suurim muutus 'trend_bonus' (+0.11 -> +0.33)."
-      ]
-    },
-    {
       "ts": 1785159577.881778,
       "n_candidates": 7,
       "n_alerts": 3,
@@ -21664,6 +21642,13 @@
       "n_alerts": 0,
       "followups_resolved": [],
       "threshold_adjustments": []
+    },
+    {
+      "ts": 1786507655.089149,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [],
+      "threshold_adjustments": []
     }
   ],
   "next_id": 199,
@@ -23571,6 +23556,10 @@
       {
         "ts": 1786499390.657121,
         "balance": 972.97
+      },
+      {
+        "ts": 1786507655.088907,
+        "balance": 972.78
       }
     ],
     "mode": "paper"
@@ -23585,7 +23574,7 @@
   "go_live_last_progress_day": "2026-08-12",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 74.68634940095849,
+    "balance": 74.68738959463538,
     "open_positions": [
       {
         "id": 8,
@@ -23597,7 +23586,7 @@
         "notional_usd": 74.78555896686622,
         "entry_ts": 1786206745.699741,
         "entry_apr": 12.0,
-        "funding_collected_usd": 0.07560002667711967,
+        "funding_collected_usd": 0.07595887271756234,
         "entry_fee_usd": 0.1496,
         "mode": "paper"
       },
@@ -23611,7 +23600,7 @@
         "notional_usd": 37.337185875574534,
         "entry_ts": 1786464057.267034,
         "entry_apr": 10.9,
-        "funding_collected_usd": 0.00422051770557104,
+        "funding_collected_usd": 0.004901865342021462,
         "entry_fee_usd": 0.0746,
         "mode": "paper"
       }
@@ -24562,26 +24551,18 @@
       {
         "ts": 1786499390.657161,
         "balance": 74.69
+      },
+      {
+        "ts": 1786507655.08895,
+        "balance": 74.69
       }
     ],
     "next_id": 11
   },
   "grid": {
     "starting_balance": 300.0,
-    "balance": 235.35932650642553,
-    "open_positions": [
-      {
-        "id": 14,
-        "instrument": "ETHUSD",
-        "entry_price": 1918.5234750000002,
-        "quantity": 0.03051598441789895,
-        "size_usd": 58.84,
-        "entry_fee_usd": 0.2942,
-        "entry_ts": 1786360052.620442,
-        "stop_price": 1803.4120665,
-        "mode": "paper"
-      }
-    ],
+    "balance": 292.53820295701576,
+    "open_positions": [],
     "closed_trades": [
       {
         "id": 1,
@@ -24749,6 +24730,19 @@
         "exit_ts": 1786347536.557913,
         "pnl_usd": -0.29,
         "pnl_pct": -0.5,
+        "exit_reason": "upper_band",
+        "mode": "paper"
+      },
+      {
+        "id": 14,
+        "instrument": "ETHUSD",
+        "entry_price": 1918.5234750000002,
+        "exit_price": 1883.1510300000002,
+        "size_usd": 58.84,
+        "entry_ts": 1786360052.620442,
+        "exit_ts": 1786507655.08906,
+        "pnl_usd": -1.66,
+        "pnl_pct": -2.82,
         "exit_reason": "upper_band",
         "mode": "paper"
       }
@@ -25593,6 +25587,10 @@
       {
         "ts": 1786499390.657266,
         "balance": 292.87
+      },
+      {
+        "ts": 1786507655.089136,
+        "balance": 292.54
       }
     ],
     "next_id": 15
@@ -26349,6 +26347,10 @@
       },
       {
         "ts": 1786499390.657276,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786507655.089145,
         "balance": 200.0
       }
     ],
