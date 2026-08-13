@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1786373842.61265,
-        "price": 64622.5,
-        "change_24h": -0.0082,
-        "volume_value": 170030000.67
-      },
-      {
         "ts": 1786377733.84894,
         "price": 64198.76,
         "change_24h": -0.0153,
@@ -288,15 +282,15 @@
         "price": 63673.92,
         "change_24h": -0.0049,
         "volume_value": 201325359.39
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 63835.81,
+        "change_24h": 0.0064,
+        "volume_value": 165679386.58
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1786373842.61265,
-        "price": 1892.97,
-        "change_24h": -0.0156,
-        "volume_value": 109878797.3
-      },
       {
         "ts": 1786377733.84894,
         "price": 1875.24,
@@ -578,15 +572,15 @@
         "price": 1889.14,
         "change_24h": -0.0092,
         "volume_value": 126376815.19
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 1891.65,
+        "change_24h": 0.0025,
+        "volume_value": 111637761.71
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1786373842.61265,
-        "price": 76.26,
-        "change_24h": -0.007,
-        "volume_value": 11601829.32
-      },
       {
         "ts": 1786377733.84894,
         "price": 75.89,
@@ -868,15 +862,15 @@
         "price": 76.06,
         "change_24h": -0.0046,
         "volume_value": 10691807.81
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 76.44,
+        "change_24h": 0.0135,
+        "volume_value": 9322755.09
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1786373842.61265,
-        "price": 1.0274,
-        "change_24h": -0.0128,
-        "volume_value": 5305885.78
-      },
       {
         "ts": 1786377733.84894,
         "price": 1.0224,
@@ -1158,15 +1152,15 @@
         "price": 1.0054,
         "change_24h": -0.0107,
         "volume_value": 5478108.49
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 1.0088,
+        "change_24h": -0.0017,
+        "volume_value": 5214573.71
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1786373842.61265,
-        "price": 0.19598,
-        "change_24h": -0.0095,
-        "volume_value": 2046869.46
-      },
       {
         "ts": 1786377733.84894,
         "price": 0.19473,
@@ -1448,15 +1442,15 @@
         "price": 0.18322,
         "change_24h": -0.0053,
         "volume_value": 1811413.6
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 0.18476,
+        "change_24h": 0.0137,
+        "volume_value": 1696717.84
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1786373842.61265,
-        "price": 0.069778,
-        "change_24h": -0.0089,
-        "volume_value": 1243545.21
-      },
       {
         "ts": 1786377733.84894,
         "price": 0.069589,
@@ -1738,6 +1732,12 @@
         "price": 0.070159,
         "change_24h": -0.0173,
         "volume_value": 1576643.97
+      },
+      {
+        "ts": 1786632991.273441,
+        "price": 0.070076,
+        "change_24h": -0.0045,
+        "volume_value": 1426841.6
       }
     ],
     "AVAXUSD": [
@@ -19647,20 +19647,6 @@
   ],
   "run_log": [
     {
-      "ts": 1785335282.396839,
-      "n_candidates": 0,
-      "n_alerts": 0,
-      "followups_resolved": [
-        "UNIUSD 7d: +5.7%"
-      ],
-      "threshold_adjustments": [
-        "green: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
-        "yellow: tabamus 4% madal -> l\u00e4vi t\u00f5stetud 90",
-        "red: tabamus 8% madal -> l\u00e4vi t\u00f5stetud 90",
-        "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 85), aga tabamus (5%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
-      ]
-    },
-    {
       "ts": 1785342095.921773,
       "n_candidates": 0,
       "n_alerts": 0,
@@ -21450,6 +21436,13 @@
     },
     {
       "ts": 1786626415.250783,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [],
+      "threshold_adjustments": []
+    },
+    {
+      "ts": 1786632991.309199,
       "n_candidates": 0,
       "n_alerts": 0,
       "followups_resolved": [],
@@ -23444,6 +23437,10 @@
       {
         "ts": 1786626415.250578,
         "balance": 970.59
+      },
+      {
+        "ts": 1786632991.308992,
+        "balance": 970.59
       }
     ],
     "mode": "paper"
@@ -23458,7 +23455,7 @@
   "go_live_last_progress_day": "2026-08-13",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 148.99732736699136,
+    "balance": 148.99806033100677,
     "open_positions": [
       {
         "id": 11,
@@ -23470,7 +23467,7 @@
         "notional_usd": 74.4970455921452,
         "entry_ts": 1786601746.518108,
         "entry_apr": 10.1,
-        "funding_collected_usd": 0.0032361827009584516,
+        "funding_collected_usd": 0.003969146716365303,
         "entry_fee_usd": 0.149,
         "mode": "paper"
       }
@@ -24531,26 +24528,18 @@
       {
         "ts": 1786626415.25063,
         "balance": 149.0
+      },
+      {
+        "ts": 1786632991.309032,
+        "balance": 149.0
       }
     ],
     "next_id": 12
   },
   "grid": {
     "starting_balance": 300.0,
-    "balance": 234.0305623656126,
-    "open_positions": [
-      {
-        "id": 15,
-        "instrument": "ETHUSD",
-        "entry_price": 1882.31925,
-        "quantity": 0.030927326694685894,
-        "size_usd": 58.51,
-        "entry_fee_usd": 0.2925,
-        "entry_ts": 1786565003.483512,
-        "stop_price": 1769.380095,
-        "mode": "paper"
-      }
-    ],
+    "balance": 292.15440478117375,
+    "open_positions": [],
     "closed_trades": [
       {
         "id": 1,
@@ -24731,6 +24720,19 @@
         "exit_ts": 1786507655.08906,
         "pnl_usd": -1.66,
         "pnl_pct": -2.82,
+        "exit_reason": "upper_band",
+        "mode": "paper"
+      },
+      {
+        "id": 15,
+        "instrument": "ETHUSD",
+        "entry_price": 1882.31925,
+        "exit_price": 1888.8125250000003,
+        "size_usd": 58.51,
+        "entry_ts": 1786565003.483512,
+        "exit_ts": 1786632991.309127,
+        "pnl_usd": -0.39,
+        "pnl_pct": -0.66,
         "exit_reason": "upper_band",
         "mode": "paper"
       }
@@ -25659,6 +25661,10 @@
       {
         "ts": 1786626415.250768,
         "balance": 292.46
+      },
+      {
+        "ts": 1786632991.309186,
+        "balance": 292.15
       }
     ],
     "next_id": 16
@@ -26499,6 +26505,10 @@
       },
       {
         "ts": 1786626415.250778,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786632991.309195,
         "balance": 200.0
       }
     ],
