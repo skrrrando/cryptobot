@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1786448902.389951,
-        "price": 64304.14,
-        "change_24h": -0.0112,
-        "volume_value": 218495160.89
-      },
-      {
         "ts": 1786453282.566549,
         "price": 64282.45,
         "change_24h": -0.0084,
@@ -288,15 +282,15 @@
         "price": 62684.99,
         "change_24h": -0.0186,
         "volume_value": 197169242.85
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 62925.22,
+        "change_24h": -0.0103,
+        "volume_value": 195859437.28
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1786448902.389951,
-        "price": 1891.62,
-        "change_24h": -0.0137,
-        "volume_value": 141472068.89
-      },
       {
         "ts": 1786453282.566549,
         "price": 1886.67,
@@ -578,15 +572,15 @@
         "price": 1868.76,
         "change_24h": -0.013,
         "volume_value": 133394727.4
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 1880.73,
+        "change_24h": -0.0031,
+        "volume_value": 132813280.78
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1786448902.389951,
-        "price": 76.08,
-        "change_24h": -0.0098,
-        "volume_value": 11082597.23
-      },
       {
         "ts": 1786453282.566549,
         "price": 75.82,
@@ -868,15 +862,15 @@
         "price": 75.26,
         "change_24h": -0.016,
         "volume_value": 15292942.91
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 75.62,
+        "change_24h": -0.0041,
+        "volume_value": 15537605.61
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1786448902.389951,
-        "price": 1.0079,
-        "change_24h": -0.0242,
-        "volume_value": 6527318.05
-      },
       {
         "ts": 1786453282.566549,
         "price": 1.0038,
@@ -1158,15 +1152,15 @@
         "price": 1.0032,
         "change_24h": -0.0048,
         "volume_value": 5964144.26
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 1.0072,
+        "change_24h": 0.002,
+        "volume_value": 6023767.01
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1786448902.389951,
-        "price": 0.18847,
-        "change_24h": -0.0362,
-        "volume_value": 2106574.32
-      },
       {
         "ts": 1786453282.566549,
         "price": 0.18682,
@@ -1448,15 +1442,15 @@
         "price": 0.17852,
         "change_24h": -0.0343,
         "volume_value": 1681942.86
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 0.17956,
+        "change_24h": -0.019,
+        "volume_value": 1697989.27
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1786448902.389951,
-        "price": 0.070506,
-        "change_24h": 0.0072,
-        "volume_value": 978188.66
-      },
       {
         "ts": 1786453282.566549,
         "price": 0.070601,
@@ -1738,6 +1732,12 @@
         "price": 0.0695,
         "change_24h": -0.0086,
         "volume_value": 948106.76
+      },
+      {
+        "ts": 1786722658.749908,
+        "price": 0.069786,
+        "change_24h": -0.0015,
+        "volume_value": 936607.71
       }
     ],
     "AVAXUSD": [
@@ -19655,19 +19655,6 @@
   ],
   "run_log": [
     {
-      "ts": 1785465776.48032,
-      "n_candidates": 0,
-      "n_alerts": 0,
-      "followups_resolved": [
-        "INJUSD 7d: -4.5%"
-      ],
-      "threshold_adjustments": [
-        "yellow: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
-        "red: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
-        "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 85), aga tabamus (0%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
-      ]
-    },
-    {
       "ts": 1785478374.365066,
       "n_candidates": 0,
       "n_alerts": 0,
@@ -21396,6 +21383,13 @@
     },
     {
       "ts": 1786719033.670147,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [],
+      "threshold_adjustments": []
+    },
+    {
+      "ts": 1786722658.779948,
       "n_candidates": 0,
       "n_alerts": 0,
       "followups_resolved": [],
@@ -23454,6 +23448,10 @@
       {
         "ts": 1786719033.66999,
         "balance": 970.59
+      },
+      {
+        "ts": 1786722658.779837,
+        "balance": 970.59
       }
     ],
     "mode": "paper"
@@ -23468,7 +23466,7 @@
   "go_live_last_progress_day": "2026-08-14",
   "funding_arb": {
     "starting_balance": 300.0,
-    "balance": 74.50620757730601,
+    "balance": 74.50681263119675,
     "open_positions": [
       {
         "id": 11,
@@ -23480,7 +23478,7 @@
         "notional_usd": 74.4970455921452,
         "entry_ts": 1786601746.518108,
         "entry_apr": 10.1,
-        "funding_collected_usd": 0.010923964297667635,
+        "funding_collected_usd": 0.01104354757606086,
         "entry_fee_usd": 0.149,
         "mode": "paper"
       },
@@ -23494,7 +23492,7 @@
         "notional_usd": 37.25088543728109,
         "entry_ts": 1786680493.524346,
         "entry_apr": 10.2,
-        "funding_collected_usd": 0.0029633032801750316,
+        "funding_collected_usd": 0.003448773892516171,
         "entry_fee_usd": 0.0746,
         "mode": "paper"
       }
@@ -24618,6 +24616,10 @@
       },
       {
         "ts": 1786719033.670028,
+        "balance": 74.51
+      },
+      {
+        "ts": 1786722658.779865,
         "balance": 74.51
       }
     ],
@@ -25837,6 +25839,10 @@
       {
         "ts": 1786719033.670133,
         "balance": 291.4
+      },
+      {
+        "ts": 1786722658.77993,
+        "balance": 291.77
       }
     ],
     "next_id": 18
@@ -26741,6 +26747,10 @@
       },
       {
         "ts": 1786719033.670143,
+        "balance": 200.0
+      },
+      {
+        "ts": 1786722658.779945,
         "balance": 200.0
       }
     ],
