@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1787632647.932596,
-        "price": 80326.68,
-        "change_24h": 0.0407,
-        "volume_value": 504663713.41
-      },
-      {
         "ts": 1787635831.348127,
         "price": 80709.28,
         "change_24h": 0.0467,
@@ -288,15 +282,15 @@
         "price": 78716.51,
         "change_24h": 0.0137,
         "volume_value": 126602268.09
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 79008.47,
+        "change_24h": 0.0128,
+        "volume_value": 144771511.18
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1787632647.932596,
-        "price": 2495.45,
-        "change_24h": 0.0217,
-        "volume_value": 370755590.32
-      },
       {
         "ts": 1787635831.348127,
         "price": 2510.59,
@@ -578,15 +572,15 @@
         "price": 2467.48,
         "change_24h": 0.0137,
         "volume_value": 72327643.38
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 2503.93,
+        "change_24h": 0.0228,
+        "volume_value": 100549036.95
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1787632647.932596,
-        "price": 101.36,
-        "change_24h": 0.0764,
-        "volume_value": 72530523.64
-      },
       {
         "ts": 1787635831.348127,
         "price": 102.8,
@@ -868,15 +862,15 @@
         "price": 106.62,
         "change_24h": 0.0282,
         "volume_value": 15829181.6
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 106.09,
+        "change_24h": 0.0127,
+        "volume_value": 20751873.86
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1787632647.932596,
-        "price": 1.5106,
-        "change_24h": 0.0203,
-        "volume_value": 38661437.23
-      },
       {
         "ts": 1787635831.348127,
         "price": 1.5265,
@@ -1158,15 +1152,15 @@
         "price": 1.3994,
         "change_24h": 0.0094,
         "volume_value": 5980730.44
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 1.4163,
+        "change_24h": 0.0193,
+        "volume_value": 6397343.74
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1787632647.932596,
-        "price": 0.22565,
-        "change_24h": 0.024,
-        "volume_value": 8328760.65
-      },
       {
         "ts": 1787635831.348127,
         "price": 0.22774,
@@ -1448,15 +1442,15 @@
         "price": 0.20345,
         "change_24h": 0.0173,
         "volume_value": 1699094.83
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 0.20445,
+        "change_24h": 0.0206,
+        "volume_value": 2026070.46
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1787632647.932596,
-        "price": 0.092042,
-        "change_24h": -0.001,
-        "volume_value": 4935143.89
-      },
       {
         "ts": 1787635831.348127,
         "price": 0.093068,
@@ -1738,6 +1732,12 @@
         "price": 0.085429,
         "change_24h": 0.0074,
         "volume_value": 1058394.35
+      },
+      {
+        "ts": 1788112556.010327,
+        "price": 0.085825,
+        "change_24h": 0.0098,
+        "volume_value": 1155535.73
       }
     ],
     "AVAXUSD": [
@@ -13282,66 +13282,6 @@
   },
   "pending_followups": [
     {
-      "id": 282,
-      "instrument": "XRPUSD",
-      "ts": 1787494932.135744,
-      "score": 64.0,
-      "risk": "green",
-      "why": "Momentum 56.6/100 (24h +3.7%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.72, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). alpha +3.1pp \u00fcle BTC-turu (+0.6%) - reaalne oma j\u00f5ud, mitte lihtsalt BTC laine Likviidsus: high (maht $47,002,885). raamat tasakaalus (imbalance +0.07, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 80% positiivne / 20% negatiivne, turu positsioon #4. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 51%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 1.539,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.5660000000000001,
-        "trend_bonus": 0.8785714285714287,
-        "liquidity": 1.0,
-        "is_meme": 0.0,
-        "volatility": 0.12466666666666668,
-        "hype_bonus": 0.7,
-        "alpha": 0.524,
-        "book_imbalance": 0.5365,
-        "market_fng": 0.66,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": false,
-      "result_24h": {
-        "price": 1.5206,
-        "return_pct": -1.2,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
-      "id": 283,
-      "instrument": "AAVEUSD",
-      "ts": 1787498466.518727,
-      "score": 48.6,
-      "risk": "yellow",
-      "why": "Momentum 69.7/100 (24h +12.8%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.80, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). alpha +12.7pp \u00fcle BTC-turu (+0.1%) - reaalne oma j\u00f5ud, mitte lihtsalt BTC laine Likviidsus: low (maht $507,691). raamat tasakaalus (imbalance -0.15, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 100% positiivne / 0% negatiivne, turu positsioon #43. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 21%.",
-      "price_at_call": 137.25,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.6970000000000001,
-        "trend_bonus": 0.9142857142857144,
-        "liquidity": 0.0,
-        "is_meme": 0.0,
-        "volatility": 0.4266666666666667,
-        "hype_bonus": 0.7,
-        "alpha": 0.9092,
-        "book_imbalance": 0.426,
-        "market_fng": 0.66,
-        "onchain_activity": 0.5
-      },
-      "exploration": false,
-      "traded": false,
-      "result_24h": {
-        "price": 136.051,
-        "return_pct": -0.87,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
       "id": 284,
       "instrument": "AAVEUSD",
       "ts": 1787546584.770305,
@@ -22729,16 +22669,77 @@
         "return_pct": -5.88,
         "hit": false
       }
+    },
+    {
+      "id": 282,
+      "instrument": "XRPUSD",
+      "ts": 1787494932.135744,
+      "score": 64.0,
+      "risk": "green",
+      "why": "Momentum 56.6/100 (24h +3.7%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.72, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). alpha +3.1pp \u00fcle BTC-turu (+0.6%) - reaalne oma j\u00f5ud, mitte lihtsalt BTC laine Likviidsus: high (maht $47,002,885). raamat tasakaalus (imbalance +0.07, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 80% positiivne / 20% negatiivne, turu positsioon #4. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 51%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 1.539,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.5660000000000001,
+        "trend_bonus": 0.8785714285714287,
+        "liquidity": 1.0,
+        "is_meme": 0.0,
+        "volatility": 0.12466666666666668,
+        "hype_bonus": 0.7,
+        "alpha": 0.524,
+        "book_imbalance": 0.5365,
+        "market_fng": 0.66,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": false,
+      "result_24h": {
+        "price": 1.5206,
+        "return_pct": -1.2,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 1.4163,
+        "return_pct": -7.97,
+        "hit": false
+      }
+    },
+    {
+      "id": 283,
+      "instrument": "AAVEUSD",
+      "ts": 1787498466.518727,
+      "score": 48.6,
+      "risk": "yellow",
+      "why": "Momentum 69.7/100 (24h +12.8%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.80, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). alpha +12.7pp \u00fcle BTC-turu (+0.1%) - reaalne oma j\u00f5ud, mitte lihtsalt BTC laine Likviidsus: low (maht $507,691). raamat tasakaalus (imbalance -0.15, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 100% positiivne / 0% negatiivne, turu positsioon #43. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 21%.",
+      "price_at_call": 137.25,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.6970000000000001,
+        "trend_bonus": 0.9142857142857144,
+        "liquidity": 0.0,
+        "is_meme": 0.0,
+        "volatility": 0.4266666666666667,
+        "hype_bonus": 0.7,
+        "alpha": 0.9092,
+        "book_imbalance": 0.426,
+        "market_fng": 0.66,
+        "onchain_activity": 0.5
+      },
+      "exploration": false,
+      "traded": false,
+      "result_24h": {
+        "price": 136.051,
+        "return_pct": -0.87,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 128.594,
+        "return_pct": -6.31,
+        "hit": false
+      }
     }
   ],
   "run_log": [
-    {
-      "ts": 1787045504.646484,
-      "n_candidates": 0,
-      "n_alerts": 0,
-      "followups_resolved": [],
-      "threshold_adjustments": []
-    },
     {
       "ts": 1787048820.38264,
       "n_candidates": 0,
@@ -24439,10 +24440,25 @@
         "red: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
         "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 85), aga tabamus (2%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
       ]
+    },
+    {
+      "ts": 1788112556.06774,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [
+        "XRPUSD 7d: -8.0%",
+        "AAVEUSD 7d: -6.3%"
+      ],
+      "threshold_adjustments": [
+        "green: tabamus 10% madal -> l\u00e4vi t\u00f5stetud 90",
+        "yellow: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "red: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 85), aga tabamus (2%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
+      ]
     }
   ],
   "next_id": 290,
-  "adjustment_checkpoint": 281,
+  "adjustment_checkpoint": 283,
   "model": {
     "weights": {
       "bias": -1.516424345532135,
@@ -26091,10 +26107,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1785348419.974006,
-        "balance": 982.53
-      },
       {
         "ts": 1785355988.15181,
         "balance": 979.77
@@ -28090,6 +28102,10 @@
       {
         "ts": 1788096868.57842,
         "balance": 984.9
+      },
+      {
+        "ts": 1788112556.067675,
+        "balance": 984.9
       }
     ],
     "mode": "paper"
@@ -28343,10 +28359,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1785348419.974066,
-        "balance": 37.82
-      },
       {
         "ts": 1785355988.151866,
         "balance": 37.83
@@ -30342,6 +30354,10 @@
       {
         "ts": 1788096868.57847,
         "balance": 294.88
+      },
+      {
+        "ts": 1788112556.067721,
+        "balance": 294.88
       }
     ],
     "next_id": 19
@@ -30600,10 +30616,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1785348419.974285,
-        "balance": 297.89
-      },
       {
         "ts": 1785355988.152034,
         "balance": 297.2
@@ -32599,6 +32611,10 @@
       {
         "ts": 1788096868.578479,
         "balance": 290.47
+      },
+      {
+        "ts": 1788112556.06773,
+        "balance": 290.47
       }
     ],
     "next_id": 20
@@ -32609,10 +32625,6 @@
     "open_positions": [],
     "closed_trades": [],
     "balance_history": [
-      {
-        "ts": 1785348419.974293,
-        "balance": 200.0
-      },
       {
         "ts": 1785355988.152041,
         "balance": 200.0
@@ -34607,6 +34619,10 @@
       },
       {
         "ts": 1788096868.578487,
+        "balance": 200.0
+      },
+      {
+        "ts": 1788112556.067736,
         "balance": 200.0
       }
     ],
