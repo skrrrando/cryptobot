@@ -110,6 +110,29 @@ def http_get_json(url, timeout=15):
         return json.loads(resp.read().decode())
 
 
+def geckoterminal_get_json(url, timeout=15, max_retries=2):
+    """GeckoTerminal's free tier rate-limits tighter than its documented 10/min
+    in practice (empirically confirmed - see plan doc). A 429 here is routine,
+    not exceptional, so retry with backoff instead of just dropping the tick's
+    data. Honors Retry-After when the API sends one."""
+    for attempt in range(max_retries + 1):
+        try:
+            return http_get_json(url, timeout=timeout)
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == max_retries:
+                raise
+            # GeckoTerminal sometimes sends "Retry-After: 0", which is useless -
+            # floor it at our own escalating minimum instead of trusting it blindly.
+            wait = e.headers.get("Retry-After")
+            default_delay = 3 * (attempt + 1)
+            try:
+                delay = max(float(wait), default_delay) if wait else default_delay
+            except ValueError:
+                delay = default_delay
+            print(f"WARN: 429 from GeckoTerminal, retrying in {delay:.0f}s ({attempt + 1}/{max_retries})...", file=sys.stderr)
+            time.sleep(delay)
+
+
 def send_telegram(text):
     """Duplicated from fetch_and_run.py rather than imported, so this sleeve
     stays fully decoupled from the Crypto.com-specific trading script."""
@@ -139,7 +162,7 @@ def _as_float(v, default=0.0):
 def fetch_trending_pools(network):
     url = GECKOTERMINAL_TRENDING_URL.format(network=network)
     try:
-        data = http_get_json(url)
+        data = geckoterminal_get_json(url)
     except (urllib.error.URLError, urllib.error.HTTPError) as e:
         print(f"WARN: failed to fetch trending pools for {network}: {e}", file=sys.stderr)
         return []
@@ -178,7 +201,7 @@ def fetch_pool_price(network, pool_address):
     whole trending list."""
     url = GECKOTERMINAL_POOL_URL.format(network=network, pool_address=pool_address)
     try:
-        data = http_get_json(url, timeout=15)
+        data = geckoterminal_get_json(url, timeout=15)
     except (urllib.error.URLError, urllib.error.HTTPError) as e:
         print(f"WARN: pool price lookup failed for {network}/{pool_address}: {e}", file=sys.stderr)
         return None
@@ -395,6 +418,8 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick):
                 continue
             if lookups_this_tick[0] >= MAX_CHECKPOINT_LOOKUPS_PER_TICK:
                 break  # defer remaining due checkpoints (this token and others) to a later tick
+            if lookups_this_tick[0] > 0:
+                time.sleep(1.5)  # stagger checkpoint lookups too - they share GeckoTerminal's rate limit
             lookups_this_tick[0] += 1
 
             current = fetch_pool_price(entry["network"], entry["pool_address"])
@@ -463,7 +488,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buff
 
     for i, network in enumerate(NETWORKS):
         if i > 0:
-            time.sleep(2)  # stagger GeckoTerminal calls within a tick to avoid bursting its rate limit
+            time.sleep(3)  # stagger GeckoTerminal calls within a tick to avoid bursting its rate limit
         pools = fetch_trending_pools(network)
         jsonl_buffer.append(json.dumps({"timestamp": timestamp, "network": network, "pools": pools}))
 
@@ -478,8 +503,12 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buff
 
             candidates_out.append({
                 "timestamp": timestamp, "network": network, "name": pool["name"],
-                "address": pool["address"], "rank": pool["rank"], "features": features,
-                "security": security,
+                "address": pool["address"], "base_token_address": pool["base_token_address"],
+                "rank": pool["rank"], "features": features, "security": security,
+                # display fields for the dashboard chart - not used by filter logic itself
+                "price_change_pct": pool["price_change_pct"],
+                "volume_usd": pool["volume_usd"],
+                "market_cap_usd": _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"]),
             })
 
             entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp)

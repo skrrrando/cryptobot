@@ -8,10 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47;
+    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47; --border2: #2f3b57;
     --text: #e8ebf5; --text-muted: #8a93ab; --text-faint: #545e78;
-    --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee; --pink: #ec4899;
+    --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee;
     --good: #34d399; --bad: #fb7185;
+    /* validated categorical triple (dataviz skill: blue/aqua/orange, dark mode, all checks pass) */
+    --net-solana: #3987e5; --net-base: #199e70; --net-bsc: #d95926;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -19,80 +21,134 @@
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden; width: 100%; max-width: 100vw;
   }
-  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums; }
   a { color: inherit; }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 20px 90px; }
 
-  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
-  h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .h1-row { display: flex; align-items: center; gap: 12px; }
+  h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
   h1 span { background: linear-gradient(100deg, var(--text) 20%, var(--accent2) 70%, var(--accent3) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); position: relative; flex-shrink: 0; }
+  .pulse-dot.live { background: var(--good); }
+  .pulse-dot.live::after {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid var(--good);
+    animation: pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(1.8); opacity: 0; } }
   .updated { font-size: 12px; color: var(--text-faint); }
   .updated .mono { color: var(--text-muted); }
-  .subtitle { color: var(--text-muted); font-size: 14px; margin: 0 0 28px; max-width: 640px; line-height: 1.5; }
+  .subtitle { color: var(--text-muted); font-size: 14px; margin: 10px 0 26px; max-width: 660px; line-height: 1.55; }
 
-  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 28px; }
-  .tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; transition: border-color 0.15s; }
   .tile .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 8px; }
-  .tile .value { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .tile .value { font-size: 27px; font-weight: 800; letter-spacing: -0.01em; }
   .tile .value.good { color: var(--good); }
   .tile .value.bad { color: var(--bad); }
 
-  section { margin-bottom: 32px; }
-  h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 12px; }
+  section { margin-bottom: 36px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0; }
+
+  /* filter chips - one row, above the content they scope */
+  .chips { display: flex; gap: 6px; }
+  .chip {
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card);
+    color: var(--text-faint); cursor: pointer; transition: all 0.12s; font-family: inherit;
+  }
+  .chip:hover { border-color: var(--border2); color: var(--text-muted); }
+  .chip.active { background: var(--card2); color: var(--text); border-color: var(--border2); }
+  .chip .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
 
   .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--text-muted); font-size: 14px; }
 
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-  .cand-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .cand-card .row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .cand-card .name { font-weight: 700; font-size: 15px; }
-  .net-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
-    padding: 3px 8px; border-radius: 999px; background: var(--card2); color: var(--accent3); border: 1px solid var(--border); }
-  .cand-card .stats { display: flex; gap: 14px; font-size: 13px; margin-bottom: 10px; }
-  .cand-card .stats .stat-label { color: var(--text-faint); font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 2px; }
-  .cand-card .sec-line { font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 2px; }
-  .cand-card a.chart-link { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--accent3); text-decoration: none; font-weight: 700; }
-  .cand-card a.chart-link:hover { text-decoration: underline; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 20px 12px; }
+  .chart-legend { display: flex; gap: 16px; margin-bottom: 4px; flex-wrap: wrap; }
+  .chart-legend .item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .chart-legend .swatch { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grid-line { stroke: var(--border); stroke-width: 1; }
+  .axis-text { fill: var(--text-faint); font-size: 10px; font-family: 'Manrope', sans-serif; }
+  .zero-line { stroke: var(--border2); stroke-width: 1; }
+  .dot-ring { stroke: var(--card); stroke-width: 2; }
+  .hit-area { fill: transparent; cursor: pointer; }
+  .hit-area:hover + circle.mark, .hit-area:focus + circle.mark { filter: brightness(1.3); }
+
+  #tooltip {
+    position: fixed; pointer-events: none; background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 10px 12px; font-size: 12px; z-index: 50; opacity: 0; transition: opacity 0.1s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 220px;
+  }
+  #tooltip.show { opacity: 1; }
+  #tooltip .tt-title { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+  #tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; color: var(--text-muted); padding: 1px 0; }
+  #tooltip .tt-row b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+  #tooltip .tt-key { display: inline-block; width: 10px; height: 2px; margin-right: 5px; vertical-align: middle; }
 
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint); font-weight: 700; padding: 0 10px 8px; }
   th.num, td.num { text-align: right; }
   td { padding: 10px; border-top: 1px solid var(--border); }
+  tbody tr { transition: background 0.1s; }
   tbody tr:hover { background: var(--card2); }
-  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 6px 6px; overflow-x: auto; }
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; padding: 6px 6px; overflow-x: auto; }
+  .row-name { font-weight: 700; }
+  .row-link { color: var(--accent3); text-decoration: none; font-size: 12px; font-weight: 700; }
+  .row-link:hover { text-decoration: underline; }
 
-  .feed-item { display: flex; align-items: baseline; gap: 10px; padding: 10px 4px; border-top: 1px solid var(--border); font-size: 13px; }
+  .bar-row { display: grid; grid-template-columns: 56px 1fr 90px; align-items: center; gap: 12px; padding: 9px 4px; font-size: 13px; }
+  .bar-row .off-label { color: var(--text-muted); font-weight: 700; }
+  .bar-track { position: relative; height: 20px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
+  .bar-track .zero-mark { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border2); }
+  .bar-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; transition: width 0.3s ease; }
+  .bar-fill.good { background: var(--good); }
+  .bar-fill.bad { background: var(--bad); }
+  .bar-row .bar-val { text-align: right; font-weight: 700; }
+  .bar-row .bar-n { color: var(--text-faint); font-size: 11px; font-weight: 600; }
+
+  .feed-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--border); font-size: 13px; }
   .feed-item:first-child { border-top: none; }
-  .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; }
-  .feed-item .net-badge { font-size: 9px; padding: 2px 6px; }
+  .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; width: 76px; flex-shrink: 0; }
+  .net-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 3px 8px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 5px; }
+  .net-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
 
-  footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 40px; line-height: 1.6; }
+  footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 44px; line-height: 1.6; }
   footer a { color: var(--accent3); text-decoration: none; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1><span>memecoin</span> scanner</h1>
+    <div class="h1-row">
+      <h1><span>memecoin</span> scanner</h1>
+      <div class="pulse-wrap"><span class="pulse-dot" id="pulse-dot"></span><span id="pulse-label">—</span></div>
+    </div>
     <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
   </header>
   <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
 
   <div class="tiles" id="tiles"></div>
 
+  <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
+
   <section>
-    <h2>Praegused kandidaadid</h2>
-    <div id="candidates"></div>
+    <div class="section-head"><h2>Praegused kandidaadid</h2></div>
+    <div id="scatter-wrap"></div>
+    <div id="candidates-table" style="margin-top: 14px;"></div>
   </section>
 
   <section>
-    <h2>Tulemused checkpointide kaupa</h2>
+    <div class="section-head"><h2>Tulemused checkpointide kaupa</h2></div>
     <div id="outcomes"></div>
   </section>
 
   <section>
-    <h2>Viimased leiud</h2>
+    <div class="section-head"><h2>Viimased leiud</h2></div>
     <div id="feed"></div>
   </section>
 
@@ -102,7 +158,13 @@
   </footer>
 </div>
 
+<div id="tooltip"></div>
+
 <script>
+const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: 'var(--net-bsc)' };
+const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926' };
+const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC' };
+
 const fmtUsd = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
   if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
@@ -119,13 +181,13 @@ const timeAgo = (isoStr) => {
   const diffMs = Date.now() - new Date(isoStr).getTime();
   const mins = Math.round(diffMs / 60000);
   if (mins < 1) return 'just nüüd';
-  if (mins < 60) return mins + ' min tagasi';
+  if (mins < 60) return mins + ' min';
   const hrs = Math.round(mins / 60);
-  if (hrs < 24) return hrs + ' h tagasi';
-  return Math.round(hrs / 24) + ' päeva tagasi';
+  if (hrs < 24) return hrs + ' h';
+  return Math.round(hrs / 24) + ' päeva';
 };
-const geckoterminalLink = (network, poolAddress) =>
-  `https://www.geckoterminal.com/${network}/pools/${poolAddress}`;
+const geckoterminalLink = (network, poolAddress) => `https://www.geckoterminal.com/${network}/pools/${poolAddress}`;
+const asFloat = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
 
 async function fetchJson(path, fallback) {
   try {
@@ -134,7 +196,6 @@ async function fetchJson(path, fallback) {
     return await res.json();
   } catch (e) { return fallback; }
 }
-
 async function fetchJsonl(path) {
   try {
     const res = await fetch(path + '?t=' + Date.now());
@@ -150,32 +211,176 @@ function renderTile(label, value, cls) {
   return `<div class="tile"><div class="label">${label}</div><div class="value ${cls || ''}">${value}</div></div>`;
 }
 
-function renderCandidates(candidates) {
-  const el = document.getElementById('candidates');
-  if (!candidates || candidates.length === 0) {
-    el.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
+// ---- Tooltip -------------------------------------------------------------
+const tooltipEl = document.getElementById('tooltip');
+function showTooltip(evt, titleText, rows) {
+  tooltipEl.innerHTML = '';
+  const title = document.createElement('div');
+  title.className = 'tt-title';
+  title.textContent = titleText;
+  tooltipEl.appendChild(title);
+  rows.forEach(([label, value, color]) => {
+    const row = document.createElement('div');
+    row.className = 'tt-row';
+    const left = document.createElement('span');
+    if (color) {
+      const key = document.createElement('span');
+      key.className = 'tt-key';
+      key.style.background = color;
+      left.appendChild(key);
+    }
+    left.appendChild(document.createTextNode(label));
+    const right = document.createElement('b');
+    right.textContent = value;
+    row.appendChild(left);
+    row.appendChild(right);
+    tooltipEl.appendChild(row);
+  });
+  tooltipEl.classList.add('show');
+  moveTooltip(evt);
+}
+function moveTooltip(evt) {
+  const x = evt.clientX ?? (evt.target.getBoundingClientRect().left + evt.target.getBoundingClientRect().width / 2);
+  const y = evt.clientY ?? evt.target.getBoundingClientRect().top;
+  const pad = 16;
+  let left = x + pad, top = y + pad;
+  if (left + 230 > window.innerWidth) left = x - 230 - pad;
+  if (top + 120 > window.innerHeight) top = y - 120 - pad;
+  tooltipEl.style.left = left + 'px';
+  tooltipEl.style.top = top + 'px';
+}
+function hideTooltip() { tooltipEl.classList.remove('show'); }
+
+// ---- Scatter chart: 1h% vs market cap (log), sized by 24h volume --------
+function renderScatter(candidates, activeNetworks) {
+  const wrap = document.getElementById('scatter-wrap');
+  const visible = candidates.filter(c => activeNetworks.has(c.network));
+  if (candidates.length === 0) {
+    wrap.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
     return;
   }
-  el.innerHTML = `<div class="card-grid">${candidates.map(c => {
-    const sec = c.security || {};
-    const secLine = c.network === 'solana'
-      ? `top10 holderid ${sec.top10_pct?.toFixed(1) ?? '—'}%, mint/freeze mitteaktiivne`
-      : `owner+creator ${sec.owner_creator_pct?.toFixed(1) ?? '—'}%, mitte honeypot`;
-    const rv = c.features?.rank_velocity;
-    return `<div class="cand-card">
-      <div class="row1"><span class="name">${c.name}</span><span class="net-badge">${c.network}</span></div>
-      <div class="stats">
-        <div><span class="stat-label">Rank</span>#${c.rank}${rv != null ? ` (${rv >= 0 ? '+' : ''}${rv})` : ''}</div>
-      </div>
-      <div class="sec-line">${secLine}</div>
-      <a class="chart-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">Vaata graafikut →</a>
-    </div>`;
-  }).join('')}</div>`;
+  if (visible.length === 0) {
+    wrap.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`;
+    return;
+  }
+
+  const W = 900, H = 340, M = { top: 16, right: 24, bottom: 34, left: 54 };
+  const iw = W - M.left - M.right, ih = H - M.top - M.bottom;
+
+  const h1Vals = visible.map(c => asFloat(c.price_change_pct?.h1));
+  const mcapVals = visible.map(c => Math.max(c.market_cap_usd || 1, 1));
+  const volVals = visible.map(c => asFloat(c.volume_usd?.h24));
+
+  const xMax = Math.max(...h1Vals, 10) * 1.12;
+  const yMin = Math.min(...mcapVals, 50000) * 0.7;
+  const yMax = Math.max(...mcapVals) * 1.6;
+  const volMax = Math.max(...volVals, 1);
+
+  const xScale = (v) => M.left + (v / xMax) * iw;
+  const log10 = Math.log(10);
+  const yScale = (v) => M.top + ih - ((Math.log(Math.max(v, yMin)) - Math.log(yMin)) / (Math.log(yMax) - Math.log(yMin))) * ih;
+  const rScale = (v) => 5 + Math.sqrt(Math.max(v, 0) / volMax) * 17;
+
+  // y-axis ticks at clean powers of ten within range
+  const yTicks = [];
+  for (let p = 4; p <= 9; p++) {
+    const v = Math.pow(10, p);
+    if (v >= yMin && v <= yMax) yTicks.push(v);
+  }
+  const xTicks = [0, xMax * 0.25, xMax * 0.5, xMax * 0.75, xMax].map(v => Math.round(v));
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kandidaadid: 1h muutus vs turukapitalisatsioon">`;
+
+  // gridlines (horizontal, at y-ticks) - recessive
+  yTicks.forEach(v => {
+    const y = yScale(v);
+    svg += `<line class="grid-line" x1="${M.left}" x2="${W - M.right}" y1="${y}" y2="${y}"/>`;
+    svg += `<text class="axis-text" x="${M.left - 8}" y="${y + 3}" text-anchor="end">${fmtUsd(v)}</text>`;
+  });
+  // x axis ticks
+  xTicks.forEach(v => {
+    const x = xScale(v);
+    svg += `<text class="axis-text" x="${x}" y="${H - M.bottom + 18}" text-anchor="middle">${v >= 0 ? '+' : ''}${v}%</text>`;
+  });
+  svg += `<line class="zero-line" x1="${M.left}" x2="${M.left}" y1="${M.top}" y2="${H - M.bottom}"/>`;
+  svg += `<line class="zero-line" x1="${M.left}" x2="${W - M.right}" y1="${H - M.bottom}" y2="${H - M.bottom}"/>`;
+
+  // axis titles
+  svg += `<text class="axis-text" x="${M.left + iw / 2}" y="${H - 2}" text-anchor="middle">1h hinnamuutus</text>`;
+
+  // dots, sorted so smaller (more likely occluded) draw last / on top
+  const sorted = [...visible].sort((a, b) => asFloat(b.volume_usd?.h24) - asFloat(a.volume_usd?.h24));
+  sorted.forEach((c, i) => {
+    const h1 = asFloat(c.price_change_pct?.h1);
+    const mcap = Math.max(c.market_cap_usd || 1, 1);
+    const vol = asFloat(c.volume_usd?.h24);
+    const x = xScale(h1), y = yScale(mcap), r = rScale(vol);
+    const color = `var(--net-${c.network})`;
+    const hitR = Math.max(r + 8, 14);
+    svg += `<circle class="hit-area" data-idx="${i}" cx="${x}" cy="${y}" r="${hitR}" tabindex="0" role="button" aria-label="${c.name}"/>`;
+    svg += `<circle class="mark dot-ring" cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="0.88"/>`;
+  });
+
+  svg += `</svg>`;
+
+  wrap.innerHTML = `<div class="chart-card">
+    <div class="chart-legend">${['solana','base','bsc'].filter(n => activeNetworks.has(n)).map(n =>
+      `<span class="item"><span class="swatch" style="background:${NET_COLOR[n]}"></span>${NET_LABEL[n]}</span>`
+    ).join('')}<span class="item" style="margin-left:auto; color:var(--text-faint);">suurus = 24h volume</span></div>
+    ${svg}
+  </div>`;
+
+  // wire up hover/focus tooltips
+  wrap.querySelectorAll('.hit-area').forEach(el => {
+    const c = sorted[parseInt(el.dataset.idx, 10)];
+    const rows = [
+      ['1h muutus', fmtPct(asFloat(c.price_change_pct?.h1))],
+      ['24h muutus', fmtPct(asFloat(c.price_change_pct?.h24))],
+      ['Turukapital', fmtUsd(c.market_cap_usd)],
+      ['24h volume', fmtUsd(asFloat(c.volume_usd?.h24))],
+      ['Rank', '#' + c.rank],
+    ];
+    const title = `${c.name} · ${NET_LABEL[c.network]}`;
+    el.addEventListener('mouseenter', (e) => showTooltip(e, title, rows));
+    el.addEventListener('mousemove', moveTooltip);
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('focus', (e) => showTooltip(e, title, rows));
+    el.addEventListener('blur', hideTooltip);
+  });
 }
 
-function renderOutcomes(labelRows) {
+// ---- Candidates table (exact values, same data as the chart) ------------
+function renderCandidatesTable(candidates, activeNetworks) {
+  const el = document.getElementById('candidates-table');
+  const visible = candidates.filter(c => activeNetworks.has(c.network))
+    .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
+  if (visible.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Token</th><th>Võrk</th><th class="num">Rank</th><th class="num">1h</th><th class="num">24h</th><th class="num">Mcap</th><th class="num">Security</th><th></th></tr></thead>
+    <tbody>${visible.map(c => {
+      const sec = c.security || {};
+      const secLine = c.network === 'solana'
+        ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%`
+        : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+      const rv = c.features?.rank_velocity;
+      return `<tr>
+        <td class="row-name">${c.name}</td>
+        <td><span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span></td>
+        <td class="num mono">#${c.rank}${rv != null ? `<span style="color:var(--text-faint)"> (${rv >= 0 ? '+' : ''}${rv})</span>` : ''}</td>
+        <td class="num mono ${pctClass(asFloat(c.price_change_pct?.h1))}">${fmtPct(asFloat(c.price_change_pct?.h1))}</td>
+        <td class="num mono ${pctClass(asFloat(c.price_change_pct?.h24))}">${fmtPct(asFloat(c.price_change_pct?.h24))}</td>
+        <td class="num mono">${fmtUsd(c.market_cap_usd)}</td>
+        <td class="num mono" style="color:var(--text-muted); font-size:12px;">${secLine}</td>
+        <td class="num"><a class="row-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">graafik →</a></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+// ---- Checkpoint outcomes: diverging bars + table -------------------------
+function renderOutcomes(labelRows, activeNetworks) {
   const el = document.getElementById('outcomes');
-  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint');
+  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint' && activeNetworks.has(r.network));
   if (checkpoints.length === 0) {
     el.innerHTML = `<div class="empty">Checkpointe pole veel kogunenud — esimesed tulemused ilmuvad 10 min pärast esimest kandidaati. Kannatust: see ongi mõte, mitte kiirustada mudeliga enne kui andmeid on.</div>`;
     return;
@@ -183,36 +388,81 @@ function renderOutcomes(labelRows) {
   const offsets = [10, 30, 60, 180, 360];
   const offsetLabel = { 10: '10 min', 30: '30 min', 60: '1 h', 180: '3 h', 360: '6 h' };
   const rows = offsets.map(off => {
-    const rows = checkpoints.filter(r => r.offset_minutes === off && r.return_pct != null);
-    if (rows.length === 0) return { off, n: 0 };
-    const avg = rows.reduce((s, r) => s + r.return_pct, 0) / rows.length;
-    const winRate = rows.filter(r => r.return_pct > 0).length / rows.length * 100;
-    return { off, n: rows.length, avg, winRate };
+    const rs = checkpoints.filter(r => r.offset_minutes === off && r.return_pct != null);
+    if (rs.length === 0) return { off, n: 0 };
+    const avg = rs.reduce((s, r) => s + r.return_pct, 0) / rs.length;
+    const winRate = rs.filter(r => r.return_pct > 0).length / rs.length * 100;
+    return { off, n: rs.length, avg, winRate };
   });
-  el.innerHTML = `<div class="table-wrap"><table>
-    <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
-    <tbody>${rows.map(r => `<tr>
+  const maxAbs = Math.max(...rows.map(r => Math.abs(r.avg || 0)), 1);
+
+  const bars = rows.map(r => {
+    if (!r.n) return `<div class="bar-row"><span class="off-label">${offsetLabel[r.off]}</span><div class="bar-track"><div class="zero-mark" style="left:50%"></div></div><span class="bar-val mono" style="color:var(--text-faint)">—</span></div>`;
+    const pct = Math.min(Math.abs(r.avg) / maxAbs * 50, 50);
+    const cls = r.avg >= 0 ? 'good' : 'bad';
+    const left = r.avg >= 0 ? '50%' : (50 - pct) + '%';
+    return `<div class="bar-row">
+      <span class="off-label">${offsetLabel[r.off]}</span>
+      <div class="bar-track">
+        <div class="zero-mark" style="left:50%"></div>
+        <div class="bar-fill ${cls}" style="left:${left}; width:${pct}%"></div>
+      </div>
+      <span class="bar-val mono ${pctClass(r.avg)}">${fmtPct(r.avg)} <span class="bar-n">(n=${r.n})</span></span>
+    </div>`;
+  }).join('');
+
+  const tableRows = rows.map(r => `<tr>
       <td>${offsetLabel[r.off]}</td>
       <td class="num mono">${r.n}</td>
       <td class="num mono ${r.n ? pctClass(r.avg) : ''}">${r.n ? fmtPct(r.avg) : '—'}</td>
       <td class="num mono">${r.n ? r.winRate.toFixed(0) + '%' : '—'}</td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
+    </tr>`).join('');
+
+  el.innerHTML = `
+    <div class="chart-card" style="margin-bottom: 12px;">${bars}</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table></div>`;
 }
 
-function renderFeed(labelRows) {
+// ---- Recent finds feed ----------------------------------------------------
+function renderFeed(labelRows, activeNetworks) {
   const el = document.getElementById('feed');
-  const entries = labelRows.filter(r => r.row_type === 'entry').sort((a, b) => new Date(b.entry_ts) - new Date(a.entry_ts)).slice(0, 20);
+  const entries = labelRows.filter(r => r.row_type === 'entry' && activeNetworks.has(r.network))
+    .sort((a, b) => new Date(b.entry_ts) - new Date(a.entry_ts)).slice(0, 20);
   if (entries.length === 0) {
     el.innerHTML = `<div class="empty">Pole veel ühtegi leidu. Esimene ilmub siia kohe, kui mõni token mõlemast filtrist läbi saab.</div>`;
     return;
   }
   el.innerHTML = `<div class="table-wrap">${entries.map(e => `<div class="feed-item">
     <span class="ts mono">${timeAgo(e.entry_ts)}</span>
-    <span class="net-badge">${e.network}</span>
-    <span>${e.name}</span>
+    <span class="net-badge"><span class="dot" style="background:${NET_COLOR[e.network]}"></span>${NET_LABEL[e.network]}</span>
+    <span class="row-name">${e.name}</span>
     <span class="mono" style="color: var(--text-faint); margin-left: auto;">${fmtUsd(e.entry_mcap_usd)} mcap</span>
   </div>`).join('')}</div>`;
+}
+
+// ---- Network filter chips --------------------------------------------------
+function renderFilterChips(networksPresent, activeNetworks, onChange) {
+  const el = document.getElementById('net-filter');
+  const order = ['solana', 'base', 'bsc'].filter(n => networksPresent.has(n));
+  if (order.length <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = `<button class="chip ${activeNetworks.size === order.length ? 'active' : ''}" data-net="__all">Kõik</button>` +
+    order.map(n => `<button class="chip ${activeNetworks.has(n) ? 'active' : ''}" data-net="${n}"><span class="dot" style="background:${NET_COLOR_HEX[n]}"></span>${NET_LABEL[n]}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const net = btn.dataset.net;
+      if (net === '__all') { activeNetworks.clear(); order.forEach(n => activeNetworks.add(n)); }
+      else {
+        if (activeNetworks.size === order.length) { activeNetworks.clear(); activeNetworks.add(net); }
+        else if (activeNetworks.has(net) && activeNetworks.size > 1) { activeNetworks.delete(net); }
+        else { activeNetworks.add(net); }
+      }
+      renderFilterChips(networksPresent, activeNetworks, onChange);
+      onChange();
+    });
+  });
 }
 
 async function main() {
@@ -220,10 +470,18 @@ async function main() {
     fetchJson('data/memecoin_candidates.json', null),
     fetchJsonl('data/memecoin_labels.jsonl'),
   ]);
+  const candidates = candData?.candidates ?? [];
 
   document.getElementById('updated-ts').textContent = candData?.timestamp
     ? new Date(candData.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
     : 'pole veel jooksnud';
+
+  const dot = document.getElementById('pulse-dot');
+  const label = document.getElementById('pulse-label');
+  const ageMin = candData?.timestamp ? (Date.now() - new Date(candData.timestamp).getTime()) / 60000 : Infinity;
+  if (ageMin < 10) { dot.classList.add('live'); label.textContent = 'Live'; }
+  else if (ageMin < Infinity) { label.textContent = 'Passiivne'; }
+  else { label.textContent = 'Ootel'; }
 
   const entries = labelRows.filter(r => r.row_type === 'entry');
   const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint');
@@ -237,9 +495,21 @@ async function main() {
     renderTile('Keskm. 1h tootlus', avg1h != null ? fmtPct(avg1h) : '—', avg1h != null ? pctClass(avg1h) : ''),
   ].join('');
 
-  renderCandidates(candData?.candidates ?? []);
-  renderOutcomes(labelRows);
-  renderFeed(labelRows);
+  const networksPresent = new Set([
+    ...candidates.map(c => c.network),
+    ...labelRows.map(r => r.network),
+  ]);
+  const activeNetworks = new Set(networksPresent);
+
+  function rerender() {
+    renderScatter(candidates, activeNetworks);
+    renderCandidatesTable(candidates, activeNetworks);
+    renderOutcomes(labelRows, activeNetworks);
+    renderFeed(labelRows, activeNetworks);
+  }
+
+  renderFilterChips(networksPresent, activeNetworks, rerender);
+  rerender();
 }
 
 main();
