@@ -13,6 +13,7 @@
     --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee;
     --good: #34d399; --good-glow: rgba(52,211,153,0.35);
     --bad: #fb7185; --bad-glow: rgba(251,113,133,0.35);
+    --caution: #f5a524;
     --gold: #fbbf24; --silver: #cbd5e1; --bronze: #d97757;
     /* validated categorical triple (dataviz skill: blue/aqua/orange, dark mode, all checks pass) */
     --net-solana: #3987e5; --net-base: #199e70; --net-bsc: #d95926;
@@ -123,6 +124,18 @@
   .card-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .card-stats .stat-label { font-size: 9px; text-transform: uppercase; color: var(--text-faint); font-weight: 700; letter-spacing: 0.03em; display: block; margin-bottom: 3px; }
   .card-stats .stat-val { font-size: 13px; font-weight: 700; }
+
+  .tag-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 10.5px; font-weight: 800; padding: 4px 9px 4px 7px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 5px; letter-spacing: 0.01em;
+  }
+  .tag .tag-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .tag.good { background: rgba(52,211,153,0.13); color: var(--good); }
+  .tag.good .tag-dot { background: var(--good); box-shadow: 0 0 6px var(--good-glow); }
+  .tag.caution { background: rgba(245,165,36,0.13); color: var(--caution); }
+  .tag.caution .tag-dot { background: var(--caution); box-shadow: 0 0 6px rgba(245,165,36,0.35); }
 
   .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .shield-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--good); }
@@ -272,6 +285,37 @@ const timeAgo = (isoStr) => {
 const geckoterminalLink = (network, poolAddress) => `https://www.geckoterminal.com/${network}/pools/${poolAddress}`;
 const asFloat = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
 
+// ---- Quick-read tags: short, plain-language "what's good / what to watch" --
+// Simple threshold rules over the same fields already shown elsewhere on the
+// card - not a hidden score, just a faster way to read numbers you can also
+// see spelled out. Every candidate here already passed the hard security
+// gate, so "caution" tags are about degree, not a pass/fail result.
+function getTags(c) {
+  const good = [], caution = [];
+  const rv = c.features?.rank_velocity;
+  const accel = c.features?.h1_accel;
+  const h1 = asFloat(c.price_change_pct?.h1);
+  const h24 = asFloat(c.price_change_pct?.h24);
+  const mcap = c.market_cap_usd || 0;
+  const sec = c.security || {};
+  const concentration = c.network === 'solana' ? sec.top10_pct : sec.owner_creator_pct;
+  const concLow = c.network === 'solana' ? 20 : 5;
+  const concHigh = c.network === 'solana' ? 30 : 10;
+
+  if (rv != null && rv > 0) good.push('Rank kerkib');
+  if (accel != null && accel > 0) good.push('Hoog kasvab');
+  if (h24 >= 20) good.push('Tugev 24h trend');
+  if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
+  if (mcap >= 1000000) good.push('Kindlam turusuurus');
+
+  if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
+  if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
+  if (h24 < 0 && h1 > 0) caution.push('Alles pöördumas');
+  if (rv != null && rv === 0) caution.push('Rank paigal');
+
+  return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
+}
+
 async function fetchJson(path, fallback) {
   try {
     const res = await fetch(path + '?t=' + Date.now());
@@ -375,6 +419,11 @@ function renderCoinGrid(candidates, activeNetworks) {
     const vol = asFloat(c.volume_usd?.h24);
     const sec = c.security || {};
     const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+    const tags = getTags(c);
+    const tagRows = (tags.good.length || tags.caution.length) ? `<div class="tag-rows">
+        ${tags.good.length ? `<div class="tag-row">${tags.good.map(t => `<span class="tag good"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
+        ${tags.caution.length ? `<div class="tag-row">${tags.caution.map(t => `<span class="tag caution"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
+      </div>` : '';
     return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[c.network]}; animation-delay:${Math.min(i * 35, 400)}ms">
       <div class="card-top">
         ${medal ? `<span class="medal-badge medal-${medal}">${medalNames[medal]}</span>` : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>`}
@@ -388,6 +437,7 @@ function renderCoinGrid(candidates, activeNetworks) {
         <div><span class="stat-label">Mcap</span><span class="stat-val">${fmtUsd(c.market_cap_usd)}</span></div>
         <div><span class="stat-label">Vol</span><span class="stat-val">${fmtUsd(vol)}</span></div>
       </div>
+      ${tagRows}
       <div class="card-footer">
         <span class="shield-badge">${SHIELD_SVG}${secLine}</span>
         <a class="card-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">Graafik →</a>
