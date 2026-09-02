@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Memecoin Scanner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47; --border2: #2f3b57;
+    --bg: #06070d; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47; --border2: #2f3b57;
     --text: #e8ebf5; --text-muted: #8a93ab; --text-faint: #545e78;
     --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee;
-    --good: #34d399; --bad: #fb7185;
+    --good: #34d399; --good-glow: rgba(52,211,153,0.35);
+    --bad: #fb7185; --bad-glow: rgba(251,113,133,0.35);
+    --gold: #fbbf24; --silver: #cbd5e1; --bronze: #d97757;
     /* validated categorical triple (dataviz skill: blue/aqua/orange, dark mode, all checks pass) */
     --net-solana: #3987e5; --net-base: #199e70; --net-bsc: #d95926;
   }
@@ -21,39 +23,50 @@
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden; width: 100%; max-width: 100vw;
   }
+  body {
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(124,127,242,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(34,211,238,0.10), transparent 60%);
+    background-repeat: no-repeat;
+  }
   .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums; }
   a { color: inherit; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 20px 90px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 20px 90px; }
 
   header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
   .h1-row { display: flex; align-items: center; gap: 12px; }
-  h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
-  h1 span { background: linear-gradient(100deg, var(--text) 20%, var(--accent2) 70%, var(--accent3) 100%);
+  h1 { font-size: 30px; font-weight: 900; margin: 0; letter-spacing: -0.03em; }
+  h1 span { background: linear-gradient(100deg, var(--text) 15%, var(--accent2) 65%, var(--accent3) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
   .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); position: relative; flex-shrink: 0; }
-  .pulse-dot.live { background: var(--good); }
+  .pulse-dot.live { background: var(--good); box-shadow: 0 0 10px var(--good-glow); }
   .pulse-dot.live::after {
     content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid var(--good);
     animation: pulse 1.8s ease-out infinite;
   }
-  @keyframes pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(1.8); opacity: 0; } }
+  @keyframes pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.1); opacity: 0; } }
   .updated { font-size: 12px; color: var(--text-faint); }
   .updated .mono { color: var(--text-muted); }
-  .subtitle { color: var(--text-muted); font-size: 14px; margin: 10px 0 26px; max-width: 660px; line-height: 1.55; }
+  .subtitle { color: var(--text-muted); font-size: 14px; margin: 10px 0 28px; max-width: 660px; line-height: 1.55; }
 
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 32px; }
-  .tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; transition: border-color 0.15s; }
-  .tile .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 8px; }
-  .tile .value { font-size: 27px; font-weight: 800; letter-spacing: -0.01em; }
-  .tile .value.good { color: var(--good); }
-  .tile .value.bad { color: var(--bad); }
+  .tile {
+    background: linear-gradient(160deg, var(--card) 0%, var(--card2) 140%);
+    border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px;
+    transition: transform 0.15s, border-color 0.15s; position: relative; overflow: hidden;
+  }
+  .tile:hover { transform: translateY(-2px); border-color: var(--border2); }
+  .tile .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 800; margin-bottom: 8px; }
+  .tile .value { font-size: 28px; font-weight: 900; letter-spacing: -0.01em; }
+  .tile .value.good { color: var(--good); text-shadow: 0 0 24px var(--good-glow); }
+  .tile .value.bad { color: var(--bad); text-shadow: 0 0 24px var(--bad-glow); }
 
-  section { margin-bottom: 36px; }
-  .section-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
-  h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0; }
+  section { margin-bottom: 40px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
+  h2 .count { color: var(--text-faint); font-weight: 700; }
 
-  /* filter chips - one row, above the content they scope */
   .chips { display: flex; gap: 6px; }
   .chip {
     font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
@@ -64,9 +77,74 @@
   .chip.active { background: var(--card2); color: var(--text); border-color: var(--border2); }
   .chip .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
 
-  .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--text-muted); font-size: 14px; }
+  .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 14px; padding: 32px; text-align: center; color: var(--text-muted); font-size: 14px; }
 
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 20px 12px; }
+  /* ---- coin card grid: the game-board ---- */
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+  .coin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .coin-card {
+    background: linear-gradient(165deg, var(--card) 0%, var(--card2) 160%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+    animation: cardIn 0.45s cubic-bezier(.2,.8,.2,1) both;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    position: relative; overflow: hidden;
+  }
+  .coin-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 16px; padding: 1px;
+    background: linear-gradient(135deg, var(--net-color, transparent), transparent 45%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; pointer-events: none;
+  }
+  .coin-card:hover {
+    transform: translateY(-4px) scale(1.015);
+    border-color: var(--border2);
+    box-shadow: 0 16px 40px -12px rgba(0,0,0,0.6), 0 0 0 1px var(--border2);
+  }
+  .coin-card.medal-1 { border-color: rgba(251,191,36,0.55); box-shadow: 0 0 0 1px rgba(251,191,36,0.25), 0 10px 30px -10px rgba(251,191,36,0.25); }
+  .coin-card.medal-2 { border-color: rgba(203,213,225,0.4); box-shadow: 0 0 0 1px rgba(203,213,225,0.18); }
+  .coin-card.medal-3 { border-color: rgba(217,119,87,0.45); box-shadow: 0 0 0 1px rgba(217,119,87,0.2); }
+  .coin-card.medal-1:hover { box-shadow: 0 16px 40px -10px rgba(251,191,36,0.35), 0 0 0 1px rgba(251,191,36,0.4); }
+
+  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .medal-badge {
+    font-size: 10px; font-weight: 900; letter-spacing: 0.04em; padding: 3px 9px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .medal-badge.medal-1 { background: rgba(251,191,36,0.16); color: var(--gold); }
+  .medal-badge.medal-2 { background: rgba(203,213,225,0.12); color: var(--silver); }
+  .medal-badge.medal-3 { background: rgba(217,119,87,0.14); color: var(--bronze); }
+
+  .card-name { font-weight: 800; font-size: 16px; letter-spacing: -0.01em; margin-bottom: 2px; }
+  .card-hero { font-size: 34px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.1; margin: 10px 0 2px; }
+  .card-hero.good { color: var(--good); text-shadow: 0 0 30px var(--good-glow); }
+  .card-hero.bad { color: var(--bad); text-shadow: 0 0 30px var(--bad-glow); }
+  .card-hero-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; margin-bottom: 14px; }
+
+  .card-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .card-stats .stat-label { font-size: 9px; text-transform: uppercase; color: var(--text-faint); font-weight: 700; letter-spacing: 0.03em; display: block; margin-bottom: 3px; }
+  .card-stats .stat-val { font-size: 13px; font-weight: 700; }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .shield-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--good); }
+  .shield-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .card-link { font-size: 12px; color: var(--accent3); text-decoration: none; font-weight: 800; white-space: nowrap; }
+  .card-link:hover { text-decoration: underline; }
+
+  .net-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 3px 8px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 5px; }
+  .net-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  details.raw-table { margin-top: 16px; }
+  details.raw-table summary {
+    cursor: pointer; font-size: 12px; color: var(--text-faint); font-weight: 700; list-style: none;
+    padding: 8px 2px; user-select: none;
+  }
+  details.raw-table summary:hover { color: var(--text-muted); }
+  details.raw-table summary::-webkit-details-marker { display: none; }
+  details.raw-table summary::before { content: '▸ '; }
+  details.raw-table[open] summary::before { content: '▾ '; }
+
+  .chart-card { background: linear-gradient(165deg, var(--card) 0%, var(--card2) 160%); border: 1px solid var(--border); border-radius: 16px; padding: 20px 20px 12px; }
   .chart-legend { display: flex; gap: 16px; margin-bottom: 4px; flex-wrap: wrap; }
   .chart-legend .item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
   .chart-legend .swatch { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
@@ -76,12 +154,11 @@
   .zero-line { stroke: var(--border2); stroke-width: 1; }
   .dot-ring { stroke: var(--card); stroke-width: 2; }
   .hit-area { fill: transparent; cursor: pointer; }
-  .hit-area:hover + circle.mark, .hit-area:focus + circle.mark { filter: brightness(1.3); }
 
   #tooltip {
     position: fixed; pointer-events: none; background: var(--bg2); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 10px 12px; font-size: 12px; z-index: 50; opacity: 0; transition: opacity 0.1s;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 220px;
+    border-radius: 10px; padding: 10px 12px; font-size: 12px; z-index: 50; opacity: 0; transition: opacity 0.1s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5); max-width: 220px;
   }
   #tooltip.show { opacity: 1; }
   #tooltip .tt-title { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
@@ -93,7 +170,6 @@
   th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint); font-weight: 700; padding: 0 10px 8px; }
   th.num, td.num { text-align: right; }
   td { padding: 10px; border-top: 1px solid var(--border); }
-  tbody tr { transition: background 0.1s; }
   tbody tr:hover { background: var(--card2); }
   .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; padding: 6px 6px; overflow-x: auto; }
   .row-name { font-weight: 700; }
@@ -102,22 +178,20 @@
 
   .bar-row { display: grid; grid-template-columns: 56px 1fr 90px; align-items: center; gap: 12px; padding: 9px 4px; font-size: 13px; }
   .bar-row .off-label { color: var(--text-muted); font-weight: 700; }
-  .bar-track { position: relative; height: 20px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
-  .bar-track .zero-mark { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border2); }
-  .bar-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; transition: width 0.3s ease; }
-  .bar-fill.good { background: var(--good); }
-  .bar-fill.bad { background: var(--bad); }
-  .bar-row .bar-val { text-align: right; font-weight: 700; }
+  .bar-track { position: relative; height: 22px; background: var(--bg2); border-radius: 6px; overflow: hidden; }
+  .bar-track .zero-mark { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border2); z-index: 1; }
+  .bar-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 5px; transition: width 0.4s cubic-bezier(.2,.8,.2,1); }
+  .bar-fill.good { background: linear-gradient(90deg, var(--good), #6ee7b7); box-shadow: 0 0 14px var(--good-glow); }
+  .bar-fill.bad { background: linear-gradient(90deg, #fca5b1, var(--bad)); box-shadow: 0 0 14px var(--bad-glow); }
+  .bar-row .bar-val { text-align: right; font-weight: 800; }
   .bar-row .bar-n { color: var(--text-faint); font-size: 11px; font-weight: 600; }
 
-  .feed-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--border); font-size: 13px; }
+  .feed-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-top: 1px solid var(--border); font-size: 13px; transition: background 0.1s; }
   .feed-item:first-child { border-top: none; }
-  .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; width: 76px; flex-shrink: 0; }
-  .net-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
-    padding: 3px 8px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 5px; }
-  .net-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .feed-item:hover { background: var(--card2); }
+  .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; width: 70px; flex-shrink: 0; }
 
-  footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 44px; line-height: 1.6; }
+  footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 48px; line-height: 1.6; }
   footer a { color: var(--accent3); text-decoration: none; }
 </style>
 </head>
@@ -137,9 +211,17 @@
   <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
 
   <section>
-    <div class="section-head"><h2>Praegused kandidaadid</h2></div>
+    <div class="section-head"><h2>Praegused kandidaadid <span class="count" id="cand-count"></span></h2></div>
+    <div id="coin-grid"></div>
+    <details class="raw-table" id="raw-table-wrap">
+      <summary>Täpne tabel</summary>
+      <div id="candidates-table"></div>
+    </details>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Turu kaart</h2></div>
     <div id="scatter-wrap"></div>
-    <div id="candidates-table" style="margin-top: 14px;"></div>
   </section>
 
   <section>
@@ -164,6 +246,7 @@
 const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: 'var(--net-bsc)' };
 const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926' };
 const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC' };
+const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M10 2l6 2.5v4.7c0 4-2.6 7.3-6 8.3-3.4-1-6-4.3-6-8.3V4.5L10 2z" fill="currentColor" opacity="0.18"/><path d="M6.5 10l2.3 2.3L13.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 const fmtUsd = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
@@ -180,7 +263,7 @@ const timeAgo = (isoStr) => {
   if (!isoStr) return '—';
   const diffMs = Date.now() - new Date(isoStr).getTime();
   const mins = Math.round(diffMs / 60000);
-  if (mins < 1) return 'just nüüd';
+  if (mins < 1) return 'nüüd';
   if (mins < 60) return mins + ' min';
   const hrs = Math.round(mins / 60);
   if (hrs < 24) return hrs + ' h';
@@ -207,8 +290,22 @@ async function fetchJsonl(path) {
   } catch (e) { return []; }
 }
 
-function renderTile(label, value, cls) {
-  return `<div class="tile"><div class="label">${label}</div><div class="value ${cls || ''}">${value}</div></div>`;
+// ---- animated count-up for stat tiles -------------------------------------
+function animateCount(el, target, isPct) {
+  const start = 0, dur = 700, t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = start + (target - start) * eased;
+    el.textContent = isPct ? (val >= 0 ? '+' : '') + val.toFixed(1) + '%' : Math.round(val).toLocaleString('et-EE');
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function renderTile(label, value, cls, animateTo, isPct) {
+  const id = 'tile-' + Math.random().toString(36).slice(2, 8);
+  return { html: `<div class="tile"><div class="label">${label}</div><div class="value ${cls || ''}" id="${id}">${animateTo == null ? value : '0'}</div></div>`, id, target: animateTo, isPct };
 }
 
 // ---- Tooltip -------------------------------------------------------------
@@ -251,20 +348,62 @@ function moveTooltip(evt) {
 }
 function hideTooltip() { tooltipEl.classList.remove('show'); }
 
+// ---- Coin card grid: the game-board (primary candidates view) -----------
+function renderCoinGrid(candidates, activeNetworks) {
+  const grid = document.getElementById('coin-grid');
+  const countEl = document.getElementById('cand-count');
+  const visible = candidates.filter(c => activeNetworks.has(c.network))
+    .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
+
+  countEl.textContent = visible.length ? `(${visible.length})` : '';
+
+  if (candidates.length === 0) {
+    grid.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
+    return;
+  }
+  if (visible.length === 0) {
+    grid.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`;
+    return;
+  }
+
+  const medalNames = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
+
+  grid.innerHTML = `<div class="coin-grid">${visible.map((c, i) => {
+    const medal = i < 3 ? i + 1 : null;
+    const h1 = asFloat(c.price_change_pct?.h1);
+    const h24 = asFloat(c.price_change_pct?.h24);
+    const vol = asFloat(c.volume_usd?.h24);
+    const sec = c.security || {};
+    const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+    return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[c.network]}; animation-delay:${Math.min(i * 35, 400)}ms">
+      <div class="card-top">
+        ${medal ? `<span class="medal-badge medal-${medal}">${medalNames[medal]}</span>` : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>`}
+        ${medal ? `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>` : ''}
+      </div>
+      <div class="card-name">${c.name}</div>
+      <div class="card-hero ${pctClass(h1)}">${fmtPct(h1)}</div>
+      <div class="card-hero-label">1h muutus · rank #${c.rank}</div>
+      <div class="card-stats">
+        <div><span class="stat-label">24h</span><span class="stat-val ${pctClass(h24)}">${fmtPct(h24)}</span></div>
+        <div><span class="stat-label">Mcap</span><span class="stat-val">${fmtUsd(c.market_cap_usd)}</span></div>
+        <div><span class="stat-label">Vol</span><span class="stat-val">${fmtUsd(vol)}</span></div>
+      </div>
+      <div class="card-footer">
+        <span class="shield-badge">${SHIELD_SVG}${secLine}</span>
+        <a class="card-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">Graafik →</a>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
 // ---- Scatter chart: 1h% vs market cap (log), sized by 24h volume --------
 function renderScatter(candidates, activeNetworks) {
   const wrap = document.getElementById('scatter-wrap');
   const visible = candidates.filter(c => activeNetworks.has(c.network));
-  if (candidates.length === 0) {
-    wrap.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
-    return;
-  }
-  if (visible.length === 0) {
-    wrap.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`;
-    return;
-  }
+  if (candidates.length === 0) { wrap.innerHTML = ''; return; }
+  if (visible.length === 0) { wrap.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`; return; }
 
-  const W = 900, H = 340, M = { top: 16, right: 24, bottom: 34, left: 54 };
+  const W = 900, H = 320, M = { top: 16, right: 24, bottom: 34, left: 54 };
   const iw = W - M.left - M.right, ih = H - M.top - M.bottom;
 
   const h1Vals = visible.map(c => asFloat(c.price_change_pct?.h1));
@@ -277,38 +416,27 @@ function renderScatter(candidates, activeNetworks) {
   const volMax = Math.max(...volVals, 1);
 
   const xScale = (v) => M.left + (v / xMax) * iw;
-  const log10 = Math.log(10);
   const yScale = (v) => M.top + ih - ((Math.log(Math.max(v, yMin)) - Math.log(yMin)) / (Math.log(yMax) - Math.log(yMin))) * ih;
-  const rScale = (v) => 5 + Math.sqrt(Math.max(v, 0) / volMax) * 17;
+  const rScale = (v) => 5 + Math.sqrt(Math.max(v, 0) / volMax) * 16;
 
-  // y-axis ticks at clean powers of ten within range
   const yTicks = [];
-  for (let p = 4; p <= 9; p++) {
-    const v = Math.pow(10, p);
-    if (v >= yMin && v <= yMax) yTicks.push(v);
-  }
+  for (let p = 4; p <= 9; p++) { const v = Math.pow(10, p); if (v >= yMin && v <= yMax) yTicks.push(v); }
   const xTicks = [0, xMax * 0.25, xMax * 0.5, xMax * 0.75, xMax].map(v => Math.round(v));
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kandidaadid: 1h muutus vs turukapitalisatsioon">`;
-
-  // gridlines (horizontal, at y-ticks) - recessive
   yTicks.forEach(v => {
     const y = yScale(v);
     svg += `<line class="grid-line" x1="${M.left}" x2="${W - M.right}" y1="${y}" y2="${y}"/>`;
     svg += `<text class="axis-text" x="${M.left - 8}" y="${y + 3}" text-anchor="end">${fmtUsd(v)}</text>`;
   });
-  // x axis ticks
   xTicks.forEach(v => {
     const x = xScale(v);
     svg += `<text class="axis-text" x="${x}" y="${H - M.bottom + 18}" text-anchor="middle">${v >= 0 ? '+' : ''}${v}%</text>`;
   });
   svg += `<line class="zero-line" x1="${M.left}" x2="${M.left}" y1="${M.top}" y2="${H - M.bottom}"/>`;
   svg += `<line class="zero-line" x1="${M.left}" x2="${W - M.right}" y1="${H - M.bottom}" y2="${H - M.bottom}"/>`;
-
-  // axis titles
   svg += `<text class="axis-text" x="${M.left + iw / 2}" y="${H - 2}" text-anchor="middle">1h hinnamuutus</text>`;
 
-  // dots, sorted so smaller (more likely occluded) draw last / on top
   const sorted = [...visible].sort((a, b) => asFloat(b.volume_usd?.h24) - asFloat(a.volume_usd?.h24));
   sorted.forEach((c, i) => {
     const h1 = asFloat(c.price_change_pct?.h1);
@@ -318,9 +446,8 @@ function renderScatter(candidates, activeNetworks) {
     const color = `var(--net-${c.network})`;
     const hitR = Math.max(r + 8, 14);
     svg += `<circle class="hit-area" data-idx="${i}" cx="${x}" cy="${y}" r="${hitR}" tabindex="0" role="button" aria-label="${c.name}"/>`;
-    svg += `<circle class="mark dot-ring" cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="0.88"/>`;
+    svg += `<circle class="mark dot-ring" cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="0.9"/>`;
   });
-
   svg += `</svg>`;
 
   wrap.innerHTML = `<div class="chart-card">
@@ -330,7 +457,6 @@ function renderScatter(candidates, activeNetworks) {
     ${svg}
   </div>`;
 
-  // wire up hover/focus tooltips
   wrap.querySelectorAll('.hit-area').forEach(el => {
     const c = sorted[parseInt(el.dataset.idx, 10)];
     const rows = [
@@ -349,7 +475,7 @@ function renderScatter(candidates, activeNetworks) {
   });
 }
 
-// ---- Candidates table (exact values, same data as the chart) ------------
+// ---- Candidates table (accessibility fallback, collapsed by default) ----
 function renderCandidatesTable(candidates, activeNetworks) {
   const el = document.getElementById('candidates-table');
   const visible = candidates.filter(c => activeNetworks.has(c.network))
@@ -359,9 +485,7 @@ function renderCandidatesTable(candidates, activeNetworks) {
     <thead><tr><th>Token</th><th>Võrk</th><th class="num">Rank</th><th class="num">1h</th><th class="num">24h</th><th class="num">Mcap</th><th class="num">Security</th><th></th></tr></thead>
     <tbody>${visible.map(c => {
       const sec = c.security || {};
-      const secLine = c.network === 'solana'
-        ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%`
-        : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+      const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
       const rv = c.features?.rank_velocity;
       return `<tr>
         <td class="row-name">${c.name}</td>
@@ -420,10 +544,12 @@ function renderOutcomes(labelRows, activeNetworks) {
 
   el.innerHTML = `
     <div class="chart-card" style="margin-bottom: 12px;">${bars}</div>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table></div>`;
+    <details class="raw-table"><summary>Täpne tabel</summary>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table></div>
+    </details>`;
 }
 
 // ---- Recent finds feed ----------------------------------------------------
@@ -488,20 +614,25 @@ async function main() {
   const oneHour = checkpoints.filter(r => r.offset_minutes === 60 && r.return_pct != null);
   const avg1h = oneHour.length ? oneHour.reduce((s, r) => s + r.return_pct, 0) / oneHour.length : null;
 
-  document.getElementById('tiles').innerHTML = [
-    renderTile('Aktiivseid kandidaate', candData?.candidates?.length ?? 0),
-    renderTile('Tokeneid jälgitud', entries.length),
-    renderTile('Checkpointe kogutud', checkpoints.length),
-    renderTile('Keskm. 1h tootlus', avg1h != null ? fmtPct(avg1h) : '—', avg1h != null ? pctClass(avg1h) : ''),
-  ].join('');
+  const tileDefs = [
+    renderTile('Aktiivseid kandidaate', 0, '', candData?.candidates?.length ?? 0, false),
+    renderTile('Tokeneid jälgitud', 0, '', entries.length, false),
+    renderTile('Checkpointe kogutud', 0, '', checkpoints.length, false),
+    renderTile('Keskm. 1h tootlus', avg1h != null ? fmtPct(avg1h) : '—', avg1h != null ? pctClass(avg1h) : '', avg1h != null ? avg1h : null, true),
+  ];
+  document.getElementById('tiles').innerHTML = tileDefs.map(t => t.html).join('');
+  tileDefs.forEach(t => {
+    if (t.target != null) {
+      const el = document.getElementById(t.id);
+      if (el) animateCount(el, t.target, t.isPct);
+    }
+  });
 
-  const networksPresent = new Set([
-    ...candidates.map(c => c.network),
-    ...labelRows.map(r => r.network),
-  ]);
+  const networksPresent = new Set([...candidates.map(c => c.network), ...labelRows.map(r => r.network)]);
   const activeNetworks = new Set(networksPresent);
 
   function rerender() {
+    renderCoinGrid(candidates, activeNetworks);
     renderScatter(candidates, activeNetworks);
     renderCandidatesTable(candidates, activeNetworks);
     renderOutcomes(labelRows, activeNetworks);
