@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memecoin Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47;
+    --text: #e8ebf5; --text-muted: #8a93ab; --text-faint: #545e78;
+    --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee; --pink: #ec4899;
+    --good: #34d399; --bad: #fb7185;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden; width: 100%; max-width: 100vw;
+  }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  a { color: inherit; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  h1 span { background: linear-gradient(100deg, var(--text) 20%, var(--accent2) 70%, var(--accent3) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .updated { font-size: 12px; color: var(--text-faint); }
+  .updated .mono { color: var(--text-muted); }
+  .subtitle { color: var(--text-muted); font-size: 14px; margin: 0 0 28px; max-width: 640px; line-height: 1.5; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .tile .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 8px; }
+  .tile .value { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .tile .value.good { color: var(--good); }
+  .tile .value.bad { color: var(--bad); }
+
+  section { margin-bottom: 32px; }
+  h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 12px; }
+
+  .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .cand-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .cand-card .row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .cand-card .name { font-weight: 700; font-size: 15px; }
+  .net-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 3px 8px; border-radius: 999px; background: var(--card2); color: var(--accent3); border: 1px solid var(--border); }
+  .cand-card .stats { display: flex; gap: 14px; font-size: 13px; margin-bottom: 10px; }
+  .cand-card .stats .stat-label { color: var(--text-faint); font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .cand-card .sec-line { font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 2px; }
+  .cand-card a.chart-link { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--accent3); text-decoration: none; font-weight: 700; }
+  .cand-card a.chart-link:hover { text-decoration: underline; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint); font-weight: 700; padding: 0 10px 8px; }
+  th.num, td.num { text-align: right; }
+  td { padding: 10px; border-top: 1px solid var(--border); }
+  tbody tr:hover { background: var(--card2); }
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 6px 6px; overflow-x: auto; }
+
+  .feed-item { display: flex; align-items: baseline; gap: 10px; padding: 10px 4px; border-top: 1px solid var(--border); font-size: 13px; }
+  .feed-item:first-child { border-top: none; }
+  .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; }
+  .feed-item .net-badge { font-size: 9px; padding: 2px 6px; }
+
+  footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 40px; line-height: 1.6; }
+  footer a { color: var(--accent3); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span>memecoin</span> scanner</h1>
+    <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
+  </header>
+  <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>Praegused kandidaadid</h2>
+    <div id="candidates"></div>
+  </section>
+
+  <section>
+    <h2>Tulemused checkpointide kaupa</h2>
+    <div id="outcomes"></div>
+  </section>
+
+  <section>
+    <h2>Viimased leiud</h2>
+    <div id="feed"></div>
+  </section>
+
+  <footer>
+    Andmed: GeckoTerminal (hind/volume/rank), RugCheck.xyz + GoPlus Security (turvakontroll).<br>
+    Skann jookseb iga 5 min <a href="https://github.com/skrrrando/cryptobot" target="_blank" rel="noopener">GitHub Actions</a> kaudu.
+  </footer>
+</div>
+
+<script>
+const fmtUsd = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+  return '$' + n.toFixed(n < 1 ? 4 : 0);
+};
+const fmtPct = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+};
+const pctClass = (n) => (n === null || n === undefined || isNaN(n)) ? '' : (n >= 0 ? 'good' : 'bad');
+const timeAgo = (isoStr) => {
+  if (!isoStr) return '—';
+  const diffMs = Date.now() - new Date(isoStr).getTime();
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 1) return 'just nüüd';
+  if (mins < 60) return mins + ' min tagasi';
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return hrs + ' h tagasi';
+  return Math.round(hrs / 24) + ' päeva tagasi';
+};
+const geckoterminalLink = (network, poolAddress) =>
+  `https://www.geckoterminal.com/${network}/pools/${poolAddress}`;
+
+async function fetchJson(path, fallback) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return fallback;
+    return await res.json();
+  } catch (e) { return fallback; }
+}
+
+async function fetchJsonl(path) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return [];
+    const text = await res.text();
+    return text.split('\n').filter(Boolean).map(line => {
+      try { return JSON.parse(line); } catch (e) { return null; }
+    }).filter(Boolean);
+  } catch (e) { return []; }
+}
+
+function renderTile(label, value, cls) {
+  return `<div class="tile"><div class="label">${label}</div><div class="value ${cls || ''}">${value}</div></div>`;
+}
+
+function renderCandidates(candidates) {
+  const el = document.getElementById('candidates');
+  if (!candidates || candidates.length === 0) {
+    el.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="card-grid">${candidates.map(c => {
+    const sec = c.security || {};
+    const secLine = c.network === 'solana'
+      ? `top10 holderid ${sec.top10_pct?.toFixed(1) ?? '—'}%, mint/freeze mitteaktiivne`
+      : `owner+creator ${sec.owner_creator_pct?.toFixed(1) ?? '—'}%, mitte honeypot`;
+    const rv = c.features?.rank_velocity;
+    return `<div class="cand-card">
+      <div class="row1"><span class="name">${c.name}</span><span class="net-badge">${c.network}</span></div>
+      <div class="stats">
+        <div><span class="stat-label">Rank</span>#${c.rank}${rv != null ? ` (${rv >= 0 ? '+' : ''}${rv})` : ''}</div>
+      </div>
+      <div class="sec-line">${secLine}</div>
+      <a class="chart-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">Vaata graafikut →</a>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderOutcomes(labelRows) {
+  const el = document.getElementById('outcomes');
+  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint');
+  if (checkpoints.length === 0) {
+    el.innerHTML = `<div class="empty">Checkpointe pole veel kogunenud — esimesed tulemused ilmuvad 10 min pärast esimest kandidaati. Kannatust: see ongi mõte, mitte kiirustada mudeliga enne kui andmeid on.</div>`;
+    return;
+  }
+  const offsets = [10, 30, 60, 180, 360];
+  const offsetLabel = { 10: '10 min', 30: '30 min', 60: '1 h', 180: '3 h', 360: '6 h' };
+  const rows = offsets.map(off => {
+    const rows = checkpoints.filter(r => r.offset_minutes === off && r.return_pct != null);
+    if (rows.length === 0) return { off, n: 0 };
+    const avg = rows.reduce((s, r) => s + r.return_pct, 0) / rows.length;
+    const winRate = rows.filter(r => r.return_pct > 0).length / rows.length * 100;
+    return { off, n: rows.length, avg, winRate };
+  });
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
+    <tbody>${rows.map(r => `<tr>
+      <td>${offsetLabel[r.off]}</td>
+      <td class="num mono">${r.n}</td>
+      <td class="num mono ${r.n ? pctClass(r.avg) : ''}">${r.n ? fmtPct(r.avg) : '—'}</td>
+      <td class="num mono">${r.n ? r.winRate.toFixed(0) + '%' : '—'}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderFeed(labelRows) {
+  const el = document.getElementById('feed');
+  const entries = labelRows.filter(r => r.row_type === 'entry').sort((a, b) => new Date(b.entry_ts) - new Date(a.entry_ts)).slice(0, 20);
+  if (entries.length === 0) {
+    el.innerHTML = `<div class="empty">Pole veel ühtegi leidu. Esimene ilmub siia kohe, kui mõni token mõlemast filtrist läbi saab.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap">${entries.map(e => `<div class="feed-item">
+    <span class="ts mono">${timeAgo(e.entry_ts)}</span>
+    <span class="net-badge">${e.network}</span>
+    <span>${e.name}</span>
+    <span class="mono" style="color: var(--text-faint); margin-left: auto;">${fmtUsd(e.entry_mcap_usd)} mcap</span>
+  </div>`).join('')}</div>`;
+}
+
+async function main() {
+  const [candData, labelRows] = await Promise.all([
+    fetchJson('data/memecoin_candidates.json', null),
+    fetchJsonl('data/memecoin_labels.jsonl'),
+  ]);
+
+  document.getElementById('updated-ts').textContent = candData?.timestamp
+    ? new Date(candData.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
+    : 'pole veel jooksnud';
+
+  const entries = labelRows.filter(r => r.row_type === 'entry');
+  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint');
+  const oneHour = checkpoints.filter(r => r.offset_minutes === 60 && r.return_pct != null);
+  const avg1h = oneHour.length ? oneHour.reduce((s, r) => s + r.return_pct, 0) / oneHour.length : null;
+
+  document.getElementById('tiles').innerHTML = [
+    renderTile('Aktiivseid kandidaate', candData?.candidates?.length ?? 0),
+    renderTile('Tokeneid jälgitud', entries.length),
+    renderTile('Checkpointe kogutud', checkpoints.length),
+    renderTile('Keskm. 1h tootlus', avg1h != null ? fmtPct(avg1h) : '—', avg1h != null ? pctClass(avg1h) : ''),
+  ].join('');
+
+  renderCandidates(candData?.candidates ?? []);
+  renderOutcomes(labelRows);
+  renderFeed(labelRows);
+}
+
+main();
+</script>
+</body>
+</html>
