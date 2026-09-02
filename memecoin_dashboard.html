@@ -67,6 +67,7 @@
   .section-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
   h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
   h2 .count { color: var(--text-faint); font-weight: 700; }
+  .coin-section-sub { color: var(--text-faint); font-size: 12.5px; margin: -8px 0 16px; max-width: 560px; line-height: 1.5; }
 
   .chips { display: flex; gap: 6px; }
   .chip {
@@ -224,7 +225,11 @@
   <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
 
   <section>
-    <div class="section-head"><h2>Praegused kandidaadid <span class="count" id="cand-count"></span></h2></div>
+    <div class="section-head">
+      <h2><span id="coin-section-title">Tänased soovitused</span> <span class="count" id="cand-count"></span></h2>
+      <button class="chip" id="show-all-toggle"></button>
+    </div>
+    <p class="coin-section-sub" id="coin-section-sub"></p>
     <div id="coin-grid"></div>
     <details class="raw-table" id="raw-table-wrap">
       <summary>Täpne tabel</summary>
@@ -393,33 +398,55 @@ function moveTooltip(evt) {
 function hideTooltip() { tooltipEl.classList.remove('show'); }
 
 // ---- Coin card grid: the game-board (primary candidates view) -----------
-function renderCoinGrid(candidates, activeNetworks) {
+const RECOMMENDED_CAP = 6; // "a couple of good ones a day", not the whole list
+
+function renderCoinGrid(candidates, activeNetworks, showAll) {
   const grid = document.getElementById('coin-grid');
   const countEl = document.getElementById('cand-count');
-  const visible = candidates.filter(c => activeNetworks.has(c.network))
+  const titleEl = document.getElementById('coin-section-title');
+  const subEl = document.getElementById('coin-section-sub');
+  const toggleBtn = document.getElementById('show-all-toggle');
+
+  const allVisible = candidates.filter(c => activeNetworks.has(c.network))
     .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
 
-  countEl.textContent = visible.length ? `(${visible.length})` : '';
+  const withTags = allVisible.map(c => ({ c, tags: getTags(c) }));
+  const recommended = withTags.filter(x => x.tags.caution.length === 0 && x.tags.good.length >= 2)
+    .slice(0, RECOMMENDED_CAP);
+
+  const shown = showAll ? withTags : recommended;
+
+  titleEl.textContent = showAll ? 'Kõik kandidaadid' : 'Tänased soovitused';
+  countEl.textContent = shown.length ? `(${shown.length})` : '';
+  subEl.textContent = showAll
+    ? 'Kõik momentum + security filtri läbinud tokenid, halvimast parimani.'
+    : 'Ainult need, millel on vähemalt 2 head märki ja ühtegi riskimärki. Kui siin midagi ei ole, ei leidnud süsteem täna midagi piisavalt head.';
+
+  toggleBtn.textContent = showAll ? `← Ainult soovitused` : `Kõik kandidaadid (${allVisible.length})`;
+  toggleBtn.style.display = allVisible.length > recommended.length || showAll ? '' : 'none';
 
   if (candidates.length === 0) {
     grid.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
     return;
   }
-  if (visible.length === 0) {
+  if (allVisible.length === 0) {
     grid.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`;
+    return;
+  }
+  if (shown.length === 0) {
+    grid.innerHTML = `<div class="empty">Süsteem eelistab täna mitte midagi soovitada, kui midagi selget silma ei jää — vaata "Kõik kandidaadid", kui tahad ise kõiki läbi vaadata.</div>`;
     return;
   }
 
   const medalNames = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
 
-  grid.innerHTML = `<div class="coin-grid">${visible.map((c, i) => {
+  grid.innerHTML = `<div class="coin-grid">${shown.map(({ c, tags }, i) => {
     const medal = i < 3 ? i + 1 : null;
     const h1 = asFloat(c.price_change_pct?.h1);
     const h24 = asFloat(c.price_change_pct?.h24);
     const vol = asFloat(c.volume_usd?.h24);
     const sec = c.security || {};
     const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
-    const tags = getTags(c);
     const tagRows = (tags.good.length || tags.caution.length) ? `<div class="tag-rows">
         ${tags.good.length ? `<div class="tag-row">${tags.good.map(t => `<span class="tag good"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
         ${tags.caution.length ? `<div class="tag-row">${tags.caution.map(t => `<span class="tag caution"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
@@ -680,14 +707,20 @@ async function main() {
 
   const networksPresent = new Set([...candidates.map(c => c.network), ...labelRows.map(r => r.network)]);
   const activeNetworks = new Set(networksPresent);
+  let showAll = false;
 
   function rerender() {
-    renderCoinGrid(candidates, activeNetworks);
+    renderCoinGrid(candidates, activeNetworks, showAll);
     renderScatter(candidates, activeNetworks);
     renderCandidatesTable(candidates, activeNetworks);
     renderOutcomes(labelRows, activeNetworks);
     renderFeed(labelRows, activeNetworks);
   }
+
+  document.getElementById('show-all-toggle').addEventListener('click', () => {
+    showAll = !showAll;
+    rerender();
+  });
 
   renderFilterChips(networksPresent, activeNetworks, rerender);
   rerender();
