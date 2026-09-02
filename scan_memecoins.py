@@ -46,6 +46,7 @@ a persistent server.
 """
 import json
 import os
+import random
 import sys
 import time
 import urllib.error
@@ -63,6 +64,7 @@ ALERTED_PATH = os.path.join(DATA_DIR, "memecoin_alerted.json")
 CANDIDATES_PATH = os.path.join(DATA_DIR, "memecoin_candidates.json")
 PENDING_CHECKPOINTS_PATH = os.path.join(DATA_DIR, "memecoin_pending_checkpoints.json")
 LABELS_JSONL_PATH = os.path.join(DATA_DIR, "memecoin_labels.jsonl")
+PORTFOLIO_PATH = os.path.join(DATA_DIR, "memecoin_portfolio.json")
 
 NETWORKS = ["solana", "base", "bsc"]
 GECKOTERMINAL_TRENDING_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/trending_pools"
@@ -97,6 +99,20 @@ ALERT_COOLDOWN_SECONDS = 7200  # don't re-alert the same token within 2h
 # --- Outcome checkpoints (the actual training-data generator) -------------
 CHECKPOINT_OFFSETS_MINUTES = [10, 30, 60, 180, 360]  # 10m, 30m, 1h, 3h, 6h after entry
 MAX_CHECKPOINT_LOOKUPS_PER_TICK = 8  # defensive cap, same rationale as security checks
+
+# --- Play-money paper portfolio ("mänguraha") -----------------------------
+# Buys only the tightest tier - candidates that clear the same "recommended"
+# bar the dashboard shows by default (>=2 good tags, 0 caution tags), not
+# every base-filter candidate. Exits at the 6h checkpoint, reusing that
+# price fetch instead of costing extra API calls. Purely play money - this
+# never touches broker.py/engine.py or anything resembling real trading.
+STARTING_BALANCE_USD = 1000.0
+POSITION_SIZE_FRACTION = 0.20  # 20% of current balance per buy
+MIN_TRADE_USD = 1.0
+EXIT_OFFSET_MINUTES = 360  # sell at the 6h checkpoint
+GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
+GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
+RECOMMENDED_MIN_GOOD = 2
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -364,6 +380,98 @@ def check_security_cached(pool, security_cache, checks_this_tick):
     return result
 
 
+# --- Recommendation tier + play-money portfolio ----------------------------
+# Mirrors the dashboard's client-side getTags() logic exactly (same thresholds,
+# same "good/caution" counts) so the coins the bot "buys" are exactly the ones
+# the dashboard shows as today's recommendations - one definition, two places
+# it's read, kept in sync deliberately rather than reimplemented differently.
+
+def classify_recommendation(pool, features, security):
+    good = 0
+    caution = 0
+    rv = features.get("rank_velocity")
+    accel = features.get("h1_accel")
+    h1 = _as_float(pool["price_change_pct"].get("h1"))
+    h24 = _as_float(pool["price_change_pct"].get("h24"))
+    mcap = _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"])
+
+    key = "solana" if pool["network"] == "solana" else "_evm"
+    concentration = security.get("top10_pct") if pool["network"] == "solana" else security.get("owner_creator_pct")
+    conc_low = GOOD_CONCENTRATION_LOW[key]
+    conc_high = GOOD_CONCENTRATION_HIGH[key]
+
+    if rv is not None and rv > 0:
+        good += 1
+    if accel is not None and accel > 0:
+        good += 1
+    if h24 >= 20:
+        good += 1
+    if concentration is not None and concentration < conc_low:
+        good += 1
+    if mcap >= 1_000_000:
+        good += 1
+
+    if concentration is not None and concentration > conc_high:
+        caution += 1
+    if 0 < mcap < 200_000:
+        caution += 1
+    if h24 < 0 and h1 > 0:
+        caution += 1
+    if rv is not None and rv == 0:
+        caution += 1
+
+    return good >= RECOMMENDED_MIN_GOOD and caution == 0
+
+
+def default_portfolio():
+    return {"balance": STARTING_BALANCE_USD, "positions": {}, "closed": []}
+
+
+def maybe_buy(portfolio, pool, timestamp):
+    pool_id = pool["id"]
+    if pool_id in portfolio["positions"]:
+        return None
+    price = _as_float(pool.get("price_usd"))
+    if price <= 0:
+        return None
+    amount = portfolio["balance"] * POSITION_SIZE_FRACTION
+    if amount < MIN_TRADE_USD:
+        return None
+    portfolio["balance"] -= amount
+    position = {
+        "network": pool["network"],
+        "pool_address": pool["address"],
+        "base_token_address": pool["base_token_address"],
+        "name": pool["name"],
+        "entry_ts": timestamp,
+        "entry_price_usd": price,
+        "amount_usd": amount,
+        "qty": amount / price,
+    }
+    portfolio["positions"][pool_id] = position
+    return position
+
+
+def maybe_sell(portfolio, pool_id, price_now, timestamp):
+    pos = portfolio["positions"].pop(pool_id, None)
+    if pos is None:
+        return None
+    proceeds = pos["qty"] * price_now if price_now and price_now > 0 else 0.0
+    pnl_usd = proceeds - pos["amount_usd"]
+    pnl_pct = (pnl_usd / pos["amount_usd"] * 100.0) if pos["amount_usd"] else 0.0
+    portfolio["balance"] += proceeds
+    closed = {
+        **pos,
+        "exit_ts": timestamp,
+        "exit_price_usd": price_now,
+        "proceeds_usd": proceeds,
+        "pnl_usd": pnl_usd,
+        "pnl_pct": round(pnl_pct, 2),
+    }
+    portfolio["closed"].append(closed)
+    return closed
+
+
 # --- Outcome checkpoints / labels table -----------------------------------
 
 def register_pending_checkpoint(pending, pool, timestamp):
@@ -398,7 +506,7 @@ def register_pending_checkpoint(pending, pool, timestamp):
     }
 
 
-def process_due_checkpoints(pending, now_wall, lookups_this_tick):
+def process_due_checkpoints(pending, now_wall, lookups_this_tick, portfolio):
     """Runs once per tick over every token still awaiting outcome checkpoints.
     Only fetches a fresh price for checkpoints that are actually due, and
     only up to MAX_CHECKPOINT_LOOKUPS_PER_TICK - if there's a burst, the rest
@@ -432,6 +540,11 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick):
             mcap_now = _as_float(current.get("market_cap_usd")) or _as_float(current.get("fdv_usd"))
             return_pct = (price_now - entry["entry_price_usd"]) / entry["entry_price_usd"] * 100.0
 
+            if offset == EXIT_OFFSET_MINUTES:
+                closed = maybe_sell(portfolio, pool_id, price_now, checkpoint_ts)
+                if closed is not None:
+                    send_telegram(format_sell_alert(closed, portfolio["balance"]))
+
             label_rows.append({
                 "row_type": "checkpoint",
                 "pool_id": pool_id,
@@ -459,6 +572,40 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick):
 
 
 # --- Formatting -------------------------------------------------------------
+# Playful on purpose (the user asked for it) - the numbers underneath are
+# still exact and unembellished, only the framing has personality.
+
+ALERT_INTROS = [
+    "🚨 Radar piiksus!",
+    "👀 Silm jäi millelegi pidama.",
+    "🐸 Uus tulija areenile!",
+    "🔍 Nuusutasime ringi ja leidsime midagi.",
+    "📈 Trendib nagu hull.",
+    "🎯 Bot nägi midagi ja ei jäänud ükskõikseks.",
+]
+BUY_INTROS = [
+    "🛒 Bot ostis!",
+    "💰 Portfell just kasvas.",
+    "🤝 Käsi sügeles, panus tehtud.",
+    "🎮 Mänguraha liigub!",
+    "💸 CHA-CHING, ostuots sooritatud.",
+    "🚀 Pardale astutud, lootuses to-the-moon'i.",
+]
+SELL_WIN_INTROS = [
+    "🎉 CHA-CHING! Kasumiga väljas.",
+    "🥳 Selline nädal võiks iga kord olla.",
+    "💎🙌 Kassa kõliseb!",
+    "🏆 Bot müüs plussiga, respekt.",
+    "🌕 WAGMI — kasum kotti!",
+]
+SELL_LOSS_INTROS = [
+    "😅 Noh, ei läinud plaanipäraselt.",
+    "🩹 See oli valus, aga mänguraha ju.",
+    "⚰️ RIP see trade, järgmine tuleb parem.",
+    "📚 Jälle üks õppetund kirja saanud.",
+    "🫠 NGMI see kord, aga oleme siin lõbu pärast.",
+]
+
 
 def format_alert(pool, features, security):
     h1 = _as_float(pool["price_change_pct"].get("h1"))
@@ -466,7 +613,8 @@ def format_alert(pool, features, security):
     vol_h24 = _as_float(pool["volume_usd"].get("h24"))
     mcap = _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"])
     lines = [
-        f"[MEMECOIN SCAN] {pool['name']} ({pool['network']})",
+        f"[MEMECOIN SCAN] {random.choice(ALERT_INTROS)}",
+        f"{pool['name']} ({pool['network']})",
         f"rank #{pool['rank']} (velocity {features['rank_velocity']:+d})" if features["rank_velocity"] is not None
         else f"rank #{pool['rank']} (velocity n/a, too new)",
         f"1h {h1:+.1f}% | 24h {h24:+.1f}% | vol24h ${vol_h24:,.0f} | mcap ${mcap:,.0f}",
@@ -479,9 +627,30 @@ def format_alert(pool, features, security):
     return "\n".join(lines)
 
 
+def format_buy_alert(position, balance_after):
+    return "\n".join([
+        f"[MÄNGURAHA] {random.choice(BUY_INTROS)}",
+        f"{position['name']} ({position['network']})",
+        f"Ostsime ${position['amount_usd']:.2f} eest hinnaga ${position['entry_price_usd']:.8f}",
+        f"Ülejäänud saldo: ${balance_after:.2f}",
+    ])
+
+
+def format_sell_alert(closed, balance_after):
+    win = closed["pnl_usd"] >= 0
+    intro = random.choice(SELL_WIN_INTROS if win else SELL_LOSS_INTROS)
+    sign = "+" if win else ""
+    return "\n".join([
+        f"[MÄNGURAHA] {intro}",
+        f"{closed['name']} ({closed['network']})",
+        f"Tulemus: {sign}${closed['pnl_usd']:.2f} ({sign}{closed['pnl_pct']:.1f}%)",
+        f"Uus saldo: ${balance_after:.2f}",
+    ])
+
+
 # --- Main loop ---------------------------------------------------------------
 
-def run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buffer, candidates_out, label_rows_out):
+def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio, jsonl_buffer, candidates_out, label_rows_out):
     timestamp = datetime.now(timezone.utc).isoformat()
     checks_this_tick = [0]
     checkpoint_lookups_this_tick = [0]
@@ -514,6 +683,10 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buff
             entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp)
             if entry_row is not None:
                 label_rows_out.append(entry_row)
+                if classify_recommendation(pool, features, security):
+                    position = maybe_buy(portfolio, pool, timestamp)
+                    if position is not None:
+                        send_telegram(format_buy_alert(position, portfolio["balance"]))
 
             last_alert = alerted.get(pool["id"])
             if last_alert:
@@ -527,7 +700,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buff
             send_telegram(format_alert(pool, features, security))
             alerted[pool["id"]] = timestamp
 
-    label_rows_out.extend(process_due_checkpoints(pending_checkpoints, datetime.now(timezone.utc), checkpoint_lookups_this_tick))
+    label_rows_out.extend(process_due_checkpoints(pending_checkpoints, datetime.now(timezone.utc), checkpoint_lookups_this_tick, portfolio))
 
 
 def main():
@@ -536,6 +709,7 @@ def main():
     security_cache = engine.load_json(SECURITY_CACHE_PATH, {})
     alerted = engine.load_json(ALERTED_PATH, {})
     pending_checkpoints = engine.load_json(PENDING_CHECKPOINTS_PATH, {})
+    portfolio = engine.load_json(PORTFOLIO_PATH, default_portfolio())
 
     jsonl_buffer = []
     candidates_out = []
@@ -544,7 +718,7 @@ def main():
     loop_start = time.monotonic()
     ticks = 0
     while True:
-        run_tick(hot_state, security_cache, alerted, pending_checkpoints, jsonl_buffer, candidates_out, label_rows)
+        run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio, jsonl_buffer, candidates_out, label_rows)
         ticks += 1
         if time.monotonic() - loop_start >= LOOP_DURATION_SECONDS:
             break
@@ -567,6 +741,7 @@ def main():
     engine.save_json(SECURITY_CACHE_PATH, security_cache)
     engine.save_json(ALERTED_PATH, alerted)
     engine.save_json(PENDING_CHECKPOINTS_PATH, pending_checkpoints)
+    engine.save_json(PORTFOLIO_PATH, portfolio)
     engine.save_json(CANDIDATES_PATH, {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "candidates": candidates_out,
@@ -574,7 +749,8 @@ def main():
 
     print(f"Completed {ticks} ticks over ~{int(time.monotonic() - loop_start)}s. "
           f"{len(candidates_out)} candidate observation(s) passed both filters, "
-          f"{len(label_rows)} label row(s) written, {len(pending_checkpoints)} token(s) still awaiting outcome checkpoints.")
+          f"{len(label_rows)} label row(s) written, {len(pending_checkpoints)} token(s) still awaiting outcome checkpoints. "
+          f"Portfolio balance: ${portfolio['balance']:.2f}, {len(portfolio['positions'])} open position(s), {len(portfolio['closed'])} closed trade(s).")
 
 
 if __name__ == "__main__":

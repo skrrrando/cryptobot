@@ -205,6 +205,28 @@
   .feed-item:hover { background: var(--card2); }
   .feed-item .ts { color: var(--text-faint); font-size: 11px; white-space: nowrap; width: 70px; flex-shrink: 0; }
 
+  /* ---- play-money portfolio ---- */
+  .portfolio-hero {
+    background: linear-gradient(135deg, var(--card) 0%, var(--card2) 130%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+  }
+  .portfolio-balance .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 800; margin-bottom: 6px; }
+  .portfolio-balance .value { font-size: 44px; font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+  .portfolio-balance .starting { font-size: 12px; color: var(--text-faint); margin-top: 6px; }
+  .portfolio-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .portfolio-stats .stat { text-align: right; }
+  .portfolio-stats .stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
+  .portfolio-stats .stat .val { font-size: 18px; font-weight: 800; }
+
+  .pos-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 14px; padding: 12px 14px; border-top: 1px solid var(--border); font-size: 13px; }
+  .pos-row:first-child { border-top: none; }
+  .pos-row .pos-name { font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .pos-row .pos-meta { color: var(--text-faint); font-size: 11px; }
+  .pos-row .pos-val { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .pos-row .pos-pl { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 70px; }
+  .pos-row .pos-pl.pending { color: var(--text-faint); font-weight: 600; }
+
   footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 48px; line-height: 1.6; }
   footer a { color: var(--accent3); text-decoration: none; }
 </style>
@@ -221,6 +243,16 @@
   <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
 
   <div class="tiles" id="tiles"></div>
+
+  <section id="portfolio-section">
+    <div class="section-head"><h2>Mänguraha portfell</h2></div>
+    <div id="portfolio-hero"></div>
+    <div id="portfolio-positions" style="margin-top: 14px;"></div>
+    <details class="raw-table" id="closed-trades-wrap" style="margin-top: 10px;">
+      <summary>Suletud tehingud</summary>
+      <div id="portfolio-closed"></div>
+    </details>
+  </section>
 
   <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
 
@@ -270,7 +302,7 @@ const fmtUsd = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
   if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
   if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
-  return '$' + n.toFixed(n < 1 ? 4 : 0);
+  return (n < 0 ? '-$' : '$') + Math.abs(n).toFixed(Math.abs(n) < 1 ? 4 : 2);
 };
 const fmtPct = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
@@ -337,6 +369,17 @@ async function fetchJsonl(path) {
       try { return JSON.parse(line); } catch (e) { return null; }
     }).filter(Boolean);
   } catch (e) { return []; }
+}
+
+// ---- live price lookup for open positions (mirrors scan_memecoins.py's
+// fetch_pool_price - same public, keyless GeckoTerminal endpoint) ----------
+async function fetchLivePrice(network, poolAddress) {
+  try {
+    const res = await fetch(`https://api.geckoterminal.com/api/v2/networks/${network}/pools/${poolAddress}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return asFloat(data?.data?.attributes?.base_token_price_usd) || null;
+  } catch (e) { return null; }
 }
 
 // ---- animated count-up for stat tiles -------------------------------------
@@ -646,6 +689,77 @@ function renderFeed(labelRows, activeNetworks) {
   </div>`).join('')}</div>`;
 }
 
+// ---- Play-money portfolio ---------------------------------------------------
+async function renderPortfolio(portfolio) {
+  const heroEl = document.getElementById('portfolio-hero');
+  const posEl = document.getElementById('portfolio-positions');
+  const closedEl = document.getElementById('portfolio-closed');
+
+  const balance = portfolio?.balance ?? 1000;
+  const positions = Object.entries(portfolio?.positions ?? {});
+  const closed = portfolio?.closed ?? [];
+
+  const invested = positions.reduce((s, [, p]) => s + p.amount_usd, 0);
+  const realizedPl = closed.reduce((s, c) => s + c.pnl_usd, 0);
+  const wins = closed.filter(c => c.pnl_usd >= 0).length;
+  const winRate = closed.length ? (wins / closed.length * 100) : null;
+  const equity = balance + invested; // cost-basis estimate; live P/L shown per-position below
+
+  heroEl.innerHTML = `<div class="portfolio-hero">
+    <div class="portfolio-balance">
+      <div class="label">Vaba saldo</div>
+      <div class="value ${pctClass(realizedPl)}">${fmtUsd(balance)}</div>
+      <div class="starting">Algne mänguraha: $1,000 · investeeritud hetkel: ${fmtUsd(invested)}</div>
+    </div>
+    <div class="portfolio-stats">
+      <div class="stat"><div class="label">Realiseeritud P/L</div><div class="val ${pctClass(realizedPl)}">${realizedPl >= 0 ? '+' : ''}${fmtUsd(realizedPl)}</div></div>
+      <div class="stat"><div class="label">Suletud tehinguid</div><div class="val">${closed.length}</div></div>
+      <div class="stat"><div class="label">Võiduprotsent</div><div class="val">${winRate != null ? winRate.toFixed(0) + '%' : '—'}</div></div>
+    </div>
+  </div>`;
+
+  if (positions.length === 0) {
+    posEl.innerHTML = `<div class="empty">Bot ei hoia hetkel ühtegi positsiooni. Iga uus "tänane soovitus" saab automaatselt 20% hetke saldost investeeritud.</div>`;
+  } else {
+    posEl.innerHTML = `<div class="table-wrap">${positions.map(([poolId, p]) => `<div class="pos-row" data-pool-id="${poolId}" data-network="${p.network}" data-address="${p.pool_address}" data-entry="${p.entry_price_usd}" data-qty="${p.qty}" data-amount="${p.amount_usd}">
+      <span class="pos-name"><span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span>${p.name}</span>
+      <span class="pos-meta">${timeAgo(p.entry_ts)} tagasi</span>
+      <span class="pos-val">${fmtUsd(p.amount_usd)}</span>
+      <span class="pos-pl pending">laen...</span>
+    </div>`).join('')}</div>`;
+
+    // fetch live prices for open positions in parallel (small count, capped by position sizing anyway)
+    posEl.querySelectorAll('.pos-row').forEach(async (row) => {
+      const network = row.dataset.network, address = row.dataset.address;
+      const entry = parseFloat(row.dataset.entry), qty = parseFloat(row.dataset.qty), amount = parseFloat(row.dataset.amount);
+      const plEl = row.querySelector('.pos-pl');
+      const price = await fetchLivePrice(network, address);
+      if (price == null || entry <= 0) { plEl.textContent = '—'; plEl.classList.remove('pending'); return; }
+      const value = qty * price;
+      const pl = value - amount;
+      const plPct = (pl / amount) * 100;
+      plEl.classList.remove('pending');
+      plEl.classList.add(pctClass(pl));
+      plEl.textContent = `${pl >= 0 ? '+' : ''}${fmtUsd(pl)} (${fmtPct(plPct)})`;
+    });
+  }
+
+  if (closed.length === 0) {
+    closedEl.innerHTML = `<div class="empty">Ühtegi tehingut pole veel suletud - positsioonid müüakse 6h checkpointi juures.</div>`;
+  } else {
+    const sortedClosed = [...closed].sort((a, b) => new Date(b.exit_ts) - new Date(a.exit_ts));
+    closedEl.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Token</th><th>Võrk</th><th class="num">Investeeritud</th><th class="num">Tulemus</th></tr></thead>
+      <tbody>${sortedClosed.map(c => `<tr>
+        <td class="row-name">${c.name}</td>
+        <td><span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span></td>
+        <td class="num mono">${fmtUsd(c.amount_usd)}</td>
+        <td class="num mono ${pctClass(c.pnl_usd)}">${c.pnl_usd >= 0 ? '+' : ''}${fmtUsd(c.pnl_usd)} (${fmtPct(c.pnl_pct)})</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+}
+
 // ---- Network filter chips --------------------------------------------------
 function renderFilterChips(networksPresent, activeNetworks, onChange) {
   const el = document.getElementById('net-filter');
@@ -669,11 +783,13 @@ function renderFilterChips(networksPresent, activeNetworks, onChange) {
 }
 
 async function main() {
-  const [candData, labelRows] = await Promise.all([
+  const [candData, labelRows, portfolio] = await Promise.all([
     fetchJson('data/memecoin_candidates.json', null),
     fetchJsonl('data/memecoin_labels.jsonl'),
+    fetchJson('data/memecoin_portfolio.json', { balance: 1000, positions: {}, closed: [] }),
   ]);
   const candidates = candData?.candidates ?? [];
+  renderPortfolio(portfolio);
 
   document.getElementById('updated-ts').textContent = candData?.timestamp
     ? new Date(candData.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
