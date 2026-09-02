@@ -671,6 +671,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
                 continue
 
             candidates_out.append({
+                "id": pool["id"],  # joins against memecoin_hot_state.json for the dashboard's sparklines
                 "timestamp": timestamp, "network": network, "name": pool["name"],
                 "address": pool["address"], "base_token_address": pool["base_token_address"],
                 "rank": pool["rank"], "features": features, "security": security,

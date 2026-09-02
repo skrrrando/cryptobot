@@ -18,6 +18,9 @@
     /* validated categorical triple (dataviz skill: blue/aqua/orange, dark mode, all checks pass) */
     --net-solana: #3987e5; --net-base: #199e70; --net-bsc: #d95926;
   }
+  @property --gx1 { syntax: '<percentage>'; inherits: false; initial-value: 15%; }
+  @property --gx2 { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
+  @property --gx3 { syntax: '<percentage>'; inherits: false; initial-value: 50%; }
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0; background: var(--bg); color: var(--text);
@@ -26,9 +29,18 @@
   }
   body {
     background-image:
-      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(124,127,242,0.16), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(34,211,238,0.10), transparent 60%);
+      radial-gradient(ellipse 900px 500px at var(--gx1, 15%) -5%, rgba(124,127,242,0.18), transparent 60%),
+      radial-gradient(ellipse 700px 500px at var(--gx2, 100%) 10%, rgba(34,211,238,0.12), transparent 60%),
+      radial-gradient(ellipse 600px 400px at var(--gx3, 50%) 100%, rgba(217,119,87,0.06), transparent 60%);
     background-repeat: no-repeat;
+    animation: driftBg 22s ease-in-out infinite;
+  }
+  @keyframes driftBg {
+    0%, 100% { --gx1: 10%; --gx2: 100%; --gx3: 40%; }
+    50% { --gx1: 30%; --gx2: 80%; --gx3: 65%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body { animation: none; }
   }
   .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums; }
   a { color: inherit; }
@@ -39,6 +51,15 @@
   h1 { font-size: 30px; font-weight: 900; margin: 0; letter-spacing: -0.03em; }
   h1 span { background: linear-gradient(100deg, var(--text) 15%, var(--accent2) 65%, var(--accent3) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .mascot { display: flex; animation: mascotBob 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(124,127,242,0.35)); }
+  @keyframes mascotBob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
+  .mascot-eye { animation: mascotBlink 4.5s ease-in-out infinite; transform-origin: center; }
+  @keyframes mascotBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
+  .level-badge {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 4px 10px; border-radius: 999px; background: linear-gradient(120deg, rgba(124,127,242,0.18), rgba(34,211,238,0.14));
+    color: var(--accent2); border: 1px solid var(--border2);
+  }
   .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
   .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); position: relative; flex-shrink: 0; }
   .pulse-dot.live { background: var(--good); box-shadow: 0 0 10px var(--good-glow); }
@@ -97,10 +118,18 @@
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.5; pointer-events: none;
   }
+  /* foil-card shine sweep - pure CSS, no JS mouse tracking needed */
+  .coin-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: 16px; pointer-events: none;
+    background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.10) 40%, rgba(255,255,255,0.02) 50%, transparent 65%);
+    background-size: 250% 250%; background-position: -40% -40%;
+    transition: background-position 0.7s ease;
+  }
+  .coin-card:hover::after { background-position: 100% 100%; }
   .coin-card:hover {
-    transform: translateY(-4px) scale(1.015);
+    transform: translateY(-6px) scale(1.02);
     border-color: var(--border2);
-    box-shadow: 0 16px 40px -12px rgba(0,0,0,0.6), 0 0 0 1px var(--border2);
+    box-shadow: 0 20px 44px -12px rgba(0,0,0,0.65), 0 0 0 1px var(--border2);
   }
   .coin-card.medal-1 { border-color: rgba(251,191,36,0.55); box-shadow: 0 0 0 1px rgba(251,191,36,0.25), 0 10px 30px -10px rgba(251,191,36,0.25); }
   .coin-card.medal-2 { border-color: rgba(203,213,225,0.4); box-shadow: 0 0 0 1px rgba(203,213,225,0.18); }
@@ -109,9 +138,10 @@
 
   .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .medal-badge {
-    font-size: 10px; font-weight: 900; letter-spacing: 0.04em; padding: 3px 9px; border-radius: 999px;
+    font-size: 10px; font-weight: 900; letter-spacing: 0.04em; padding: 3px 9px 3px 7px; border-radius: 999px;
     display: inline-flex; align-items: center; gap: 4px;
   }
+  .medal-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
   .medal-badge.medal-1 { background: rgba(251,191,36,0.16); color: var(--gold); }
   .medal-badge.medal-2 { background: rgba(203,213,225,0.12); color: var(--silver); }
   .medal-badge.medal-3 { background: rgba(217,119,87,0.14); color: var(--bronze); }
@@ -120,7 +150,8 @@
   .card-hero { font-size: 34px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.1; margin: 10px 0 2px; }
   .card-hero.good { color: var(--good); text-shadow: 0 0 30px var(--good-glow); }
   .card-hero.bad { color: var(--bad); text-shadow: 0 0 30px var(--bad-glow); }
-  .card-hero-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; margin-bottom: 14px; }
+  .card-hero-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
+  .sparkline { width: 100%; height: 26px; display: block; margin: 8px 0 10px; overflow: visible; }
 
   .card-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
   .card-stats .stat-label { font-size: 9px; text-transform: uppercase; color: var(--text-faint); font-weight: 700; letter-spacing: 0.03em; display: block; margin-bottom: 3px; }
@@ -235,7 +266,26 @@
 <div class="wrap">
   <header>
     <div class="h1-row">
+      <div class="mascot" id="mascot" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="36" height="36">
+          <circle cx="20" cy="6" r="2.2" fill="var(--accent3)"/>
+          <line x1="20" y1="8" x2="20" y2="12" stroke="var(--accent3)" stroke-width="1.6"/>
+          <rect x="6" y="12" width="28" height="22" rx="9" fill="url(#mascotGrad)"/>
+          <circle class="mascot-eye" cx="15" cy="23" r="3.4" fill="var(--bg)"/>
+          <circle class="mascot-eye" cx="25" cy="23" r="3.4" fill="var(--bg)"/>
+          <circle class="mascot-pupil" cx="15" cy="23" r="1.5" fill="var(--accent3)"/>
+          <circle class="mascot-pupil" cx="25" cy="23" r="1.5" fill="var(--accent3)"/>
+          <path d="M14 29.5 Q20 33 26 29.5" stroke="var(--bg)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="mascotGrad" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="var(--accent)"/>
+              <stop offset="100%" stop-color="var(--accent2)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       <h1><span>memecoin</span> scanner</h1>
+      <span class="level-badge" id="level-badge"></span>
       <div class="pulse-wrap"><span class="pulse-dot" id="pulse-dot"></span><span id="pulse-label">—</span></div>
     </div>
     <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
@@ -297,6 +347,7 @@ const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: '
 const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926' };
 const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC' };
 const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M10 2l6 2.5v4.7c0 4-2.6 7.3-6 8.3-3.4-1-6-4.3-6-8.3V4.5L10 2z" fill="currentColor" opacity="0.18"/><path d="M6.5 10l2.3 2.3L13.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const TROPHY_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M6 3h8v4a4 4 0 0 1-8 0V3z" fill="currentColor" opacity="0.85"/><path d="M6 4H3.5a1 1 0 0 0-1 1.2c.3 1.6 1.3 2.7 3 3M14 4h2.5a1 1 0 0 1 1 1.2c-.3 1.6-1.3 2.7-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 11v2.5M7.5 16.5h5M8 14.2h4l.6 2.3H7.4l.6-2.3z" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 
 const fmtUsd = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
@@ -443,7 +494,27 @@ function hideTooltip() { tooltipEl.classList.remove('show'); }
 // ---- Coin card grid: the game-board (primary candidates view) -----------
 const RECOMMENDED_CAP = 6; // "a couple of good ones a day", not the whole list
 
-function renderCoinGrid(candidates, activeNetworks, showAll) {
+function renderSparkline(history) {
+  if (!history || history.length < 2) return '';
+  const values = history.map(h => h.h1);
+  const min = Math.min(...values), max = Math.max(...values);
+  const range = (max - min) || 1;
+  const w = 100, h = 26;
+  const points = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * w;
+    const y = h - ((v - min) / range) * h;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const rising = values[values.length - 1] >= values[0];
+  const color = rising ? 'var(--good)' : 'var(--bad)';
+  const lastX = w, lastY = h - ((values[values.length - 1] - min) / range) * h;
+  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <polyline points="${points}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX.toFixed(1)}" cy="${lastY.toFixed(1)}" r="2.4" fill="${color}"/>
+  </svg>`;
+}
+
+function renderCoinGrid(candidates, activeNetworks, showAll, hotState) {
   const grid = document.getElementById('coin-grid');
   const countEl = document.getElementById('cand-count');
   const titleEl = document.getElementById('coin-section-title');
@@ -496,12 +567,13 @@ function renderCoinGrid(candidates, activeNetworks, showAll) {
       </div>` : '';
     return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[c.network]}; animation-delay:${Math.min(i * 35, 400)}ms">
       <div class="card-top">
-        ${medal ? `<span class="medal-badge medal-${medal}">${medalNames[medal]}</span>` : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>`}
+        ${medal ? `<span class="medal-badge medal-${medal}">${TROPHY_SVG}${medalNames[medal]}</span>` : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>`}
         ${medal ? `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>` : ''}
       </div>
       <div class="card-name">${c.name}</div>
       <div class="card-hero ${pctClass(h1)}">${fmtPct(h1)}</div>
       <div class="card-hero-label">1h muutus · rank #${c.rank}</div>
+      ${renderSparkline(hotState?.[c.id]?.history)}
       <div class="card-stats">
         <div><span class="stat-label">24h</span><span class="stat-val ${pctClass(h24)}">${fmtPct(h24)}</span></div>
         <div><span class="stat-label">Mcap</span><span class="stat-val">${fmtUsd(c.market_cap_usd)}</span></div>
@@ -690,6 +762,71 @@ function renderFeed(labelRows, activeNetworks) {
 }
 
 // ---- Play-money portfolio ---------------------------------------------------
+// ---- Trader level badge - purely for fun, based on how many trades closed -
+function renderLevelBadge(portfolio) {
+  const el = document.getElementById('level-badge');
+  const n = portfolio?.closed?.length ?? 0;
+  let label;
+  if (n === 0) label = 'Uustulnuk';
+  else if (n < 5) label = 'Kaubleja';
+  else if (n < 15) label = 'Proff';
+  else label = 'Legend';
+  el.textContent = label;
+}
+
+// ---- Confetti burst - fires once per page load when there's something to
+// celebrate (a recent winning trade, or a candidate mooning). Self-contained
+// canvas animation, no dependency, removes itself when done. -------------
+function fireConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const colors = ['#3987e5', '#199e70', '#d95926', '#fbbf24', '#a78bfa', '#34d399'];
+  const particles = Array.from({ length: 90 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: -20 - Math.random() * 200,
+    vx: (Math.random() - 0.5) * 3,
+    vy: 2 + Math.random() * 3,
+    size: 4 + Math.random() * 5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI * 2,
+    vrot: (Math.random() - 0.5) * 0.3,
+  }));
+  let frame = 0;
+  const maxFrames = 220;
+  function tick() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.rot += p.vrot;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame / maxFrames);
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < maxFrames) requestAnimationFrame(tick);
+    else canvas.remove();
+  }
+  requestAnimationFrame(tick);
+}
+
+function maybeFireConfetti(portfolio, candidates) {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const closed = portfolio?.closed ?? [];
+  const now = Date.now();
+  const recentWin = closed.some(c => c.pnl_usd > 0 && (now - new Date(c.exit_ts).getTime()) < 30 * 60 * 1000);
+  const bigMover = candidates.some(c => asFloat(c.price_change_pct?.h1) >= 50);
+  if (recentWin || bigMover) fireConfetti();
+}
+
 async function renderPortfolio(portfolio) {
   const heroEl = document.getElementById('portfolio-hero');
   const posEl = document.getElementById('portfolio-positions');
@@ -783,13 +920,16 @@ function renderFilterChips(networksPresent, activeNetworks, onChange) {
 }
 
 async function main() {
-  const [candData, labelRows, portfolio] = await Promise.all([
+  const [candData, labelRows, portfolio, hotState] = await Promise.all([
     fetchJson('data/memecoin_candidates.json', null),
     fetchJsonl('data/memecoin_labels.jsonl'),
     fetchJson('data/memecoin_portfolio.json', { balance: 1000, positions: {}, closed: [] }),
+    fetchJson('data/memecoin_hot_state.json', {}),
   ]);
   const candidates = candData?.candidates ?? [];
   renderPortfolio(portfolio);
+  maybeFireConfetti(portfolio, candidates);
+  renderLevelBadge(portfolio);
 
   document.getElementById('updated-ts').textContent = candData?.timestamp
     ? new Date(candData.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
@@ -826,7 +966,7 @@ async function main() {
   let showAll = false;
 
   function rerender() {
-    renderCoinGrid(candidates, activeNetworks, showAll);
+    renderCoinGrid(candidates, activeNetworks, showAll, hotState);
     renderScatter(candidates, activeNetworks);
     renderCandidatesTable(candidates, activeNetworks);
     renderOutcomes(labelRows, activeNetworks);
