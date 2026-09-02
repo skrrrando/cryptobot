@@ -8,5 +8,8 @@ data/market_regime.json
 data/funding_rates.json
 data/onchain_latest.json
 data/onchain_history.json
+# full per-tick memecoin firehose - overwritten every run, uploaded as a
+# GitHub Actions artifact instead (see memecoin_scan.yml), not committed
+data/memecoin_run_snapshot.jsonl
 backtest_data/
 experiment_data/

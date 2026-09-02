@@ -1,0 +1,63 @@
+name: Memecoin trend scan
+
+on:
+  schedule:
+    # GitHub Actions cron is always UTC. */5 * * * * = every 5 minutes, the
+    # practical floor for scheduled Actions cron. Each invocation internally
+    # loops (see scan_memecoins.py LOOP_DURATION_SECONDS/TICK_INTERVAL_SECONDS)
+    # taking a snapshot every ~30s for ~4 minutes, so real sampling density
+    # is much higher than the 5-minute trigger alone would suggest.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed so the workflow can commit the updated data back
+
+# Distinct group from cryptobot-hourly (the trading bot's workflow) so this
+# scan never queues behind, or blocks, the trading run.
+concurrency:
+  group: cryptobot-memecoin-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run memecoin scan
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 scan_memecoins.py
+
+      # Full unfiltered per-tick snapshot for this run only - kept out of git
+      # (see scan_memecoins.py module docstring: at production tick density
+      # this would add several GB/month to a public repo). Artifacts expire
+      # on their own after retention-days instead of living in git forever.
+      - name: Upload raw snapshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: memecoin-run-snapshot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: data/memecoin_run_snapshot.jsonl
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Commit updated memecoin data
+        run: |
+          git config user.name "cryptobot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/memecoin_labels.jsonl data/memecoin_hot_state.json data/memecoin_security_cache.json data/memecoin_alerted.json data/memecoin_pending_checkpoints.json data/memecoin_candidates.json
+          git diff --staged --quiet || git commit -m "Memecoin scan update [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main && git push && break
+            echo "Push attempt $i failed, retrying..."
+            sleep 5
+          done
