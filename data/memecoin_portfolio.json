@@ -1,5 +1,5 @@
 {
-  "balance": 394.3902893834456,
+  "balance": 418.93841079538856,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -34,17 +34,6 @@
       "amount_usd": 30.858047123404972,
       "qty": 0.012768776637124061
     },
-    "base_0x4a9b9e13975d26f4e3e17c655593bb82145dd4452aedafb826d856b817c9cfd4": {
-      "network": "base",
-      "pool_address": "0x4a9b9e13975d26f4e3e17c655593bb82145dd4452aedafb826d856b817c9cfd4",
-      "base_token_address": "0xbf8e8f0e8866a7052f948c16508644347c57aba3",
-      "name": "aeon / WETH",
-      "entry_ts": "2026-09-03T12:53:31.702315+00:00",
-      "entry_price_usd": 1.87524449266581e-05,
-      "peak_price_usd": 2.64940844057619e-05,
-      "amount_usd": 19.74915015897918,
-      "qty": 1053150.68174946
-    },
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
       "pool_address": "0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f",
@@ -63,7 +52,7 @@
       "name": "WKC / WBNB",
       "entry_ts": "2026-09-03T13:05:24.756658+00:00",
       "entry_price_usd": 8.58058973812925e-08,
-      "peak_price_usd": 9.3584720960612e-08,
+      "peak_price_usd": 9.36872003690388e-08,
       "amount_usd": 10.111564881397342,
       "qty": 117842306.76435858
     },
@@ -118,7 +107,7 @@
       "name": "TIBBIR / VIRTUAL",
       "entry_ts": "2026-09-03T14:30:50.516565+00:00",
       "entry_price_usd": 0.225127357604014,
-      "peak_price_usd": 0.240060111105815,
+      "peak_price_usd": 0.241683601003703,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
     },
@@ -410,6 +399,23 @@
       "proceeds_usd": 43.33976364604036,
       "pnl_usd": 4.767204741784148,
       "pnl_pct": 12.36,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x4a9b9e13975d26f4e3e17c655593bb82145dd4452aedafb826d856b817c9cfd4",
+      "base_token_address": "0xbf8e8f0e8866a7052f948c16508644347c57aba3",
+      "name": "aeon / WETH",
+      "entry_ts": "2026-09-03T12:53:31.702315+00:00",
+      "entry_price_usd": 1.87524449266581e-05,
+      "peak_price_usd": 2.64940844057619e-05,
+      "amount_usd": 19.74915015897918,
+      "qty": 1053150.68174946,
+      "exit_ts": "2026-09-03T18:55:49.208789+00:00",
+      "exit_price_usd": 2.33092204537763e-05,
+      "proceeds_usd": 24.54812141194297,
+      "pnl_usd": 4.7989712529637885,
+      "pnl_pct": 24.3,
       "exit_reason": "timeout"
     }
   ]
