@@ -278,35 +278,17 @@
   .portfolio-stats .stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
   .portfolio-stats .stat .val { font-size: 18px; font-weight: 800; }
 
-  /* ---- holdings: numbered columns, biggest position first ---- */
+  /* ---- holdings: reuses the .coin-card look, numbered biggest-first ---- */
   .holdings-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); margin: 24px 0 12px; }
-  .holdings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
-  .holding-card {
-    background: linear-gradient(165deg, var(--card) 0%, var(--card2) 160%);
-    border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px 16px;
-    position: relative; text-align: center; animation: cardIn 0.4s cubic-bezier(.2,.8,.2,1) both;
-    transition: transform 0.15s, border-color 0.15s;
+  .pos-badge {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.02em; color: var(--text-faint);
+    padding: 3px 10px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border);
   }
-  .holding-card:hover { transform: translateY(-3px); border-color: var(--border2); }
-  .holding-rank {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    width: 28px; height: 28px; border-radius: 50%; background: var(--card2); border: 1px solid var(--border2);
-    color: var(--text-muted); font-weight: 900; font-size: 12px; display: flex; align-items: center; justify-content: center;
-  }
-  .holding-card.rank-1 .holding-rank { background: linear-gradient(135deg, var(--gold), #f59e0b); border-color: transparent; color: #1a1305; }
-  .holding-card.rank-1 { border-color: rgba(251,191,36,0.4); }
-  .holding-card .h-net { display: flex; justify-content: center; margin-bottom: 10px; }
-  .holding-card .h-name { font-weight: 800; font-size: 14px; margin-bottom: 2px; word-break: break-word; }
-  .holding-card .h-age { font-size: 11px; color: var(--text-faint); margin-bottom: 12px; }
-  .holding-card .h-pl { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; margin-bottom: 2px; }
-  .holding-card .h-pl.pending { color: var(--text-faint); font-size: 14px; font-weight: 600; }
-  .holding-card .h-pl-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 12px; }
-  .holding-card .h-detail { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-top: 1px solid var(--border); color: var(--text-muted); }
-  .holding-card .h-detail b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
-  .holding-card .h-dca-tag {
-    display: inline-block; margin-top: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.03em;
-    padding: 2px 7px; border-radius: 999px; background: rgba(124,127,242,0.14); color: var(--accent2);
-  }
+  .tag.info { background: rgba(124,127,242,0.14); color: var(--accent2); }
+  .tag.info .tag-dot { background: var(--accent2); box-shadow: 0 0 6px rgba(124,127,242,0.4); }
+  .card-hero.pending { font-size: 15px; color: var(--text-faint); text-shadow: none; }
+  .card-hero-label .pl-dollar.good { color: var(--good); }
+  .card-hero-label .pl-dollar.bad { color: var(--bad); }
 
   /* ---- bottom "Andmed" / "Reeglid" panels ---- */
   .bottom-panel { margin-top: 20px; }
@@ -927,7 +909,7 @@ function maybeFireConfetti(portfolio, candidates) {
   if (recentWin || bigMover) fireConfetti();
 }
 
-async function renderPortfolio(portfolio) {
+async function renderPortfolio(portfolio, hotState) {
   const heroEl = document.getElementById('portfolio-hero');
   const holdingsTitleEl = document.getElementById('holdings-title');
   const posEl = document.getElementById('portfolio-positions');
@@ -951,22 +933,35 @@ async function renderPortfolio(portfolio) {
 
   // Render positions with a loading placeholder first (net worth needs
   // every live price in hand before it can be computed, but the cards
-  // themselves can still appear immediately).
+  // themselves can still appear immediately). Reuses the exact .coin-card
+  // look from the recommendations grid (medal badges, colored hero number,
+  // momentum sparkline, stat row) instead of a separate visual language.
+  const medalNames = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
   if (positions.length === 0) {
     posEl.innerHTML = `<div class="empty">Bot ei hoia hetkel ühtegi positsiooni. Iga uus "tänane soovitus" saab automaatselt 20% hetke saldost investeeritud.</div>`;
   } else {
-    posEl.innerHTML = `<div class="holdings-grid">${positions.map(([poolId, p], i) => {
+    posEl.innerHTML = `<div class="coin-grid">${positions.map(([poolId, p], i) => {
       const rank = i + 1;
-      return `<div class="holding-card ${rank === 1 ? 'rank-1' : ''}" data-pool-id="${poolId}">
-        <div class="holding-rank">${rank}</div>
-        <div class="h-net"><span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span></div>
-        <div class="h-name">${p.name}</div>
-        <div class="h-age">${timeAgo(p.entry_ts)} tagasi ostetud</div>
-        <div class="h-pl pending">laen...</div>
-        <div class="h-pl-label">praegune tulemus</div>
-        <div class="h-detail"><span>Alghind</span><b>${fmtPrice(p.entry_price_usd)}</b></div>
-        <div class="h-detail"><span>Investeeritud</span><b>${fmtUsd(p.amount_usd)}</b></div>
-        ${p.dca_count ? `<div class="h-dca-tag">+ juurde ostetud</div>` : ''}
+      const medal = rank <= 3 ? rank : null;
+      return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[p.network]}; animation-delay:${Math.min(i * 35, 400)}ms" data-pool-id="${poolId}">
+        <div class="card-top">
+          ${medal ? `<span class="medal-badge medal-${medal}">${TROPHY_SVG}${medalNames[medal]}</span>` : `<span class="pos-badge">#${rank}</span>`}
+          <span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span>
+        </div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-hero pending h-pl">laen...</div>
+        <div class="card-hero-label h-pl-label">${timeAgo(p.entry_ts)} tagasi ostetud</div>
+        ${renderSparkline(hotState?.[poolId]?.history)}
+        <div class="card-stats">
+          <div><span class="stat-label">Alghind</span><span class="stat-val">${fmtPrice(p.entry_price_usd)}</span></div>
+          <div><span class="stat-label">Investeeritud</span><span class="stat-val">${fmtUsd(p.amount_usd)}</span></div>
+          <div><span class="stat-label">Väärtus nüüd</span><span class="stat-val h-val">—</span></div>
+        </div>
+        ${p.dca_count ? `<div class="tag-rows"><div class="tag-row"><span class="tag info"><span class="tag-dot"></span>Juurde ostetud</span></div></div>` : ''}
+        <div class="card-footer">
+          <span class="shield-badge">${SHIELD_SVG}${p.qty ? p.qty.toLocaleString('en-US', {maximumFractionDigits: 2}) : '—'} tk</span>
+          <a class="card-link" href="${geckoterminalLink(p.network, p.pool_address)}" target="_blank" rel="noopener">Graafik →</a>
+        </div>
       </div>`;
     }).join('')}</div>`;
   }
@@ -981,8 +976,10 @@ async function renderPortfolio(portfolio) {
 
   let currentPositionsValue = 0;
   livePrices.forEach(({ poolId, p, price }) => {
-    const card = posEl.querySelector(`.holding-card[data-pool-id="${CSS.escape(poolId)}"]`);
+    const card = posEl.querySelector(`.coin-card[data-pool-id="${CSS.escape(poolId)}"]`);
     const plEl = card?.querySelector('.h-pl');
+    const labelEl = card?.querySelector('.h-pl-label');
+    const valEl = card?.querySelector('.h-val');
     if (price == null || p.entry_price_usd <= 0) {
       currentPositionsValue += p.amount_usd; // fall back to cost basis if the live fetch failed
       if (plEl) { plEl.textContent = '—'; plEl.classList.remove('pending'); }
@@ -992,10 +989,18 @@ async function renderPortfolio(portfolio) {
     currentPositionsValue += value;
     const pl = value - p.amount_usd;
     const plPct = (pl / p.amount_usd) * 100;
+    const plCls = pctClass(pl);
     if (plEl) {
       plEl.classList.remove('pending');
-      plEl.classList.add(pctClass(pl));
-      plEl.textContent = `${pl >= 0 ? '+' : ''}${fmtUsd(pl)} (${fmtPct(plPct)})`;
+      plEl.classList.add(plCls);
+      plEl.textContent = fmtPct(plPct);
+    }
+    if (labelEl) {
+      labelEl.innerHTML = `<span class="pl-dollar ${plCls}">${pl >= 0 ? '+' : ''}${fmtUsd(pl)}</span> · ${timeAgo(p.entry_ts)} tagasi ostetud`;
+    }
+    if (valEl) {
+      valEl.textContent = fmtUsd(value);
+      valEl.classList.add(plCls);
     }
   });
 
@@ -1125,7 +1130,7 @@ async function main() {
     fetchJson('data/memecoin_hot_state.json', {}),
   ]);
   const candidates = candData?.candidates ?? [];
-  renderPortfolio(portfolio);
+  renderPortfolio(portfolio, hotState);
   maybeFireConfetti(portfolio, candidates);
   renderLevelBadge(portfolio);
 
