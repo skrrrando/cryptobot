@@ -1,5 +1,5 @@
 {
-  "balance": 447.7046891313868,
+  "balance": 586.968561598897,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -11,17 +11,6 @@
       "peak_price_usd": 4.31870874486934,
       "amount_usd": 128.0,
       "qty": 32.67234715676524
-    },
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
-      "network": "base",
-      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "name": "WETH / USDC 0.3%",
-      "entry_ts": "2026-09-03T12:35:30.562390+00:00",
-      "entry_price_usd": 2416.3,
-      "peak_price_usd": 2515.89,
-      "amount_usd": 52.4288,
-      "qty": 0.0216979679675537
     },
     "eth_0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640": {
       "network": "eth",
@@ -44,17 +33,6 @@
       "peak_price_usd": 0.737423476970995,
       "amount_usd": 15.799320127183345,
       "qty": 21.471850525715606
-    },
-    "eth_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36": {
-      "network": "eth",
-      "pool_address": "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
-      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "name": "WETH / USDT 0.3%",
-      "entry_ts": "2026-09-03T13:25:24.604798+00:00",
-      "entry_price_usd": 2416.7,
-      "peak_price_usd": 2514.43,
-      "amount_usd": 81.26677242685776,
-      "qty": 0.03362716614675291
     },
     "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": {
       "network": "base",
@@ -96,7 +74,7 @@
       "name": "TIBBIR / VIRTUAL",
       "entry_ts": "2026-09-03T14:30:50.516565+00:00",
       "entry_price_usd": 0.225127357604014,
-      "peak_price_usd": 0.248237812262674,
+      "peak_price_usd": 0.251284821914648,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
     },
@@ -428,6 +406,40 @@
       "proceeds_usd": 17.772641234223308,
       "pnl_usd": -0.20226855823880285,
       "pnl_pct": -1.13,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-03T12:35:30.562390+00:00",
+      "entry_price_usd": 2416.3,
+      "peak_price_usd": 2515.89,
+      "amount_usd": 52.4288,
+      "qty": 0.0216979679675537,
+      "exit_ts": "2026-09-03T19:26:00.740734+00:00",
+      "exit_price_usd": 2516.57,
+      "proceeds_usd": 54.60445524810662,
+      "pnl_usd": 2.175655248106615,
+      "pnl_pct": 4.15,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "eth",
+      "pool_address": "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
+      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "name": "WETH / USDT 0.3%",
+      "entry_ts": "2026-09-03T13:25:24.604798+00:00",
+      "entry_price_usd": 2416.7,
+      "peak_price_usd": 2514.43,
+      "amount_usd": 81.26677242685776,
+      "qty": 0.03362716614675291,
+      "exit_ts": "2026-09-03T19:26:00.740734+00:00",
+      "exit_price_usd": 2517.59,
+      "proceeds_usd": 84.65941721940366,
+      "pnl_usd": 3.3926447925459087,
+      "pnl_pct": 4.17,
       "exit_reason": "timeout"
     }
   ]
