@@ -124,6 +124,14 @@ STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
 TRAILING_STOP_PCT = 25.0        # exit if price pulls back this much from its peak (only once ever in profit)
 MOMENTUM_COLLAPSE_H1_PCT = -15.0  # exit if 1h change turns this negative AND sell pressure exceeds buy pressure
 
+# Averaging down: only on a moderate dip, well clear of the stop-loss zone,
+# and only if the token still looks healthy right now - not just cheaper.
+# Capped at one add per position, sized smaller than the original buy.
+DCA_TRIGGER_MIN_PCT = -20.0      # must be down at least this much from entry...
+DCA_TRIGGER_MAX_PCT = -10.0      # ...but not more than this (stay clear of the -30% stop-loss)
+DCA_SIZE_FRACTION_OF_ORIGINAL = 0.5  # the add is half the size of the original position
+DCA_MAX_ADDS = 1
+
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
@@ -487,15 +495,56 @@ def maybe_sell(portfolio, pool_id, price_now, timestamp, reason="timeout"):
     return closed
 
 
-def check_open_positions(portfolio, now_wall):
-    """Smart exit: re-checks every open position once per run (not every tick
-    - each check costs a GeckoTerminal call, and open-position count isn't
-    bounded the way checkpoint lookups are) against a stop-loss, a trailing
-    stop from the peak price seen, and a momentum-collapse signal. Checked in
-    that priority order - a hard stop-loss always wins over "well the trend
-    just turned." The fixed 6h checkpoint exit (process_due_checkpoints)
-    still applies underneath as a fallback if none of these fire first."""
+def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick, timestamp):
+    """Adds to an existing position on a moderate dip - but only if the token
+    still looks healthy right now (still-positive h1/h6 momentum, security
+    still passes), not just "it got cheaper." See DCA_* constants for the
+    exact band/sizing/cap. Mutates pos in place; returns a summary dict or
+    None if nothing fired."""
+    if pos.get("dca_count", 0) >= DCA_MAX_ADDS:
+        return None
+    price = _as_float(current.get("price_usd"))
+    if price <= 0:
+        return None
+    change_pct = (price - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
+    if not (DCA_TRIGGER_MIN_PCT <= change_pct <= DCA_TRIGGER_MAX_PCT):
+        return None
+
+    h1 = _as_float(current.get("price_change_pct", {}).get("h1"))
+    h6 = _as_float(current.get("price_change_pct", {}).get("h6"))
+    if not (h1 > 0 and h6 > 0):
+        return None  # dipped, but not "still strong" - just cheaper
+
+    pseudo_pool = {"network": pos["network"], "base_token_address": pos["base_token_address"]}
+    security = check_security_cached(pseudo_pool, security_cache, checks_this_tick)
+    if security is None or not security["passed"]:
+        return None
+
+    add_amount = pos["amount_usd"] * DCA_SIZE_FRACTION_OF_ORIGINAL
+    if add_amount < MIN_TRADE_USD or add_amount > portfolio["balance"]:
+        return None
+
+    portfolio["balance"] -= add_amount
+    pos["amount_usd"] += add_amount
+    pos["qty"] += add_amount / price
+    pos["dca_count"] = pos.get("dca_count", 0) + 1
+    # cost basis is now the blended average - stop-loss/trailing-stop from
+    # here on are measured against this, same as a real average-down would be
+    pos["entry_price_usd"] = pos["amount_usd"] / pos["qty"]
+    return {"name": pos["name"], "network": pos["network"], "add_amount": add_amount,
+            "price": price, "new_entry_price": pos["entry_price_usd"], "timestamp": timestamp}
+
+
+def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
+    """Smart exit + DCA: re-checks every open position once per run (not every
+    tick - each check costs a GeckoTerminal call, and open-position count
+    isn't bounded the way checkpoint lookups are). Priority order: a hard
+    stop-loss/trailing-stop/momentum-collapse exit always wins over "should
+    we average down" - never add to a position in the same breath as cutting
+    it. The fixed 6h checkpoint exit (process_due_checkpoints) still applies
+    underneath as a fallback if none of the exit conditions fire first."""
     closed_positions = []
+    dca_events = []
     for i, (pool_id, pos) in enumerate(list(portfolio["positions"].items())):
         if i > 0:
             time.sleep(1.5)  # shares GeckoTerminal's rate limit with everything else
@@ -527,7 +576,12 @@ def check_open_positions(portfolio, now_wall):
             closed = maybe_sell(portfolio, pool_id, price, now_wall.isoformat(), reason=reason)
             if closed is not None:
                 closed_positions.append(closed)
-    return closed_positions
+            continue
+
+        dca = maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick, now_wall.isoformat())
+        if dca is not None:
+            dca_events.append(dca)
+    return closed_positions, dca_events
 
 
 # --- Outcome checkpoints / labels table -----------------------------------
@@ -673,6 +727,12 @@ SELL_LOSS_INTROS = [
     "📚 Jälle üks õppetund kirja saanud.",
     "🫠 NGMI see kord, aga oleme siin lõbu pärast.",
 ]
+DCA_INTROS = [
+    "📉➕ Dip osteti juurde.",
+    "🛍️ Bot lisas positsiooni - hind meeldis veel rohkem.",
+    "🧮 Keskmine sisenemishind just paranes.",
+    "🎯 Ikka tugev, lihtsalt odavam. Lisasime.",
+]
 
 
 def format_alert(pool, features, security):
@@ -700,6 +760,16 @@ def format_buy_alert(position, balance_after):
         f"[MÄNGURAHA] {random.choice(BUY_INTROS)}",
         f"{position['name']} ({position['network']})",
         f"Ostsime ${position['amount_usd']:.2f} eest hinnaga ${position['entry_price_usd']:.8f}",
+        f"Ülejäänud saldo: ${balance_after:.2f}",
+    ])
+
+
+def format_dca_alert(dca, balance_after):
+    return "\n".join([
+        f"[MÄNGURAHA] {random.choice(DCA_INTROS)}",
+        f"{dca['name']} ({dca['network']})",
+        f"Lisasime ${dca['add_amount']:.2f} hinnaga ${dca['price']:.8f}",
+        f"Uus keskmine sisenemishind: ${dca['new_entry_price']:.8f}",
         f"Ülejäänud saldo: ${balance_after:.2f}",
     ])
 
@@ -812,8 +882,12 @@ def main():
 
     prune_hot_state(hot_state, datetime.now(timezone.utc))
 
-    for closed in check_open_positions(portfolio, datetime.now(timezone.utc)):
+    exit_checks_this_tick = [0]
+    closed_early, dca_events = check_open_positions(portfolio, security_cache, exit_checks_this_tick, datetime.now(timezone.utc))
+    for closed in closed_early:
         send_telegram(format_sell_alert(closed, portfolio["balance"]))
+    for dca in dca_events:
+        send_telegram(format_dca_alert(dca, portfolio["balance"]))
 
     # Overwritten fresh each run (not appended) - the workflow uploads this
     # as a per-run artifact instead of committing an ever-growing file to git.
