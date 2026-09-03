@@ -1,5 +1,5 @@
 {
-  "balance": 112.40306939775724,
+  "balance": 143.7038559357524,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -74,7 +74,7 @@
       "name": "aeon / WETH",
       "entry_ts": "2026-09-03T12:53:31.702315+00:00",
       "entry_price_usd": 1.87524449266581e-05,
-      "peak_price_usd": 2.23620145312348e-05,
+      "peak_price_usd": 2.33174311521214e-05,
       "amount_usd": 19.74915015897918,
       "qty": 1053150.68174946
     },
@@ -155,18 +155,6 @@
       "amount_usd": 52.01073435318897,
       "qty": 0.509254711143194
     },
-    "solana_3VLpiEBR9S31uDgBQUTz3hEtZt5YAUK2225iY54npghL": {
-      "network": "solana",
-      "pool_address": "3VLpiEBR9S31uDgBQUTz3hEtZt5YAUK2225iY54npghL",
-      "base_token_address": "H76u9jTTbMtEF5JGmqXM2wW6xqMXpvTdVyer4RvKpump",
-      "name": "Pumpooor / SOL",
-      "entry_ts": "2026-09-03T14:00:56.555891+00:00",
-      "entry_price_usd": 0.0012356963474282237,
-      "peak_price_usd": 0.0014619466884194892,
-      "amount_usd": 62.41288122382676,
-      "qty": 50508.267143236866,
-      "dca_count": 1
-    },
     "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5": {
       "network": "bsc",
       "pool_address": "0x4a4bea953813c118c260be9a26b2321e57aa62e5",
@@ -185,7 +173,7 @@
       "name": "TIBBIR / VIRTUAL",
       "entry_ts": "2026-09-03T14:30:50.516565+00:00",
       "entry_price_usd": 0.225127357604014,
-      "peak_price_usd": 0.225127357604014,
+      "peak_price_usd": 0.227033160282198,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
     },
@@ -218,7 +206,7 @@
       "name": "NPC / WETH",
       "entry_ts": "2026-09-03T14:35:27.901367+00:00",
       "entry_price_usd": 0.0182705298171245,
-      "peak_price_usd": 0.0195143802733104,
+      "peak_price_usd": 0.0195376618018929,
       "amount_usd": 11.503942267175749,
       "qty": 629.6447000892879
     },
@@ -243,6 +231,17 @@
       "peak_price_usd": 0.00238787966528342,
       "amount_usd": 28.10076734943931,
       "qty": 12575.33090178281
+    },
+    "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
+      "network": "solana",
+      "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-03T16:05:31.323189+00:00",
+      "entry_price_usd": 0.025679639825418574,
+      "peak_price_usd": 0.02650063147498667,
+      "amount_usd": 22.48061387955145,
+      "qty": 875.4255913394618
     }
   },
   "closed": [
@@ -347,6 +346,24 @@
       "pnl_usd": 0.2571730543422177,
       "pnl_pct": 0.39,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "3VLpiEBR9S31uDgBQUTz3hEtZt5YAUK2225iY54npghL",
+      "base_token_address": "H76u9jTTbMtEF5JGmqXM2wW6xqMXpvTdVyer4RvKpump",
+      "name": "Pumpooor / SOL",
+      "entry_ts": "2026-09-03T14:00:56.555891+00:00",
+      "entry_price_usd": 0.0012356963474282237,
+      "peak_price_usd": 0.0014619466884194892,
+      "amount_usd": 62.41288122382676,
+      "qty": 50508.267143236866,
+      "dca_count": 1,
+      "exit_ts": "2026-09-03T16:06:14.834550+00:00",
+      "exit_price_usd": 0.0010648039115067525,
+      "proceeds_usd": 53.7814004175466,
+      "pnl_usd": -8.631480806280159,
+      "pnl_pct": -13.83,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
