@@ -1,5 +1,5 @@
 {
-  "balance": 172.90541670845937,
+  "balance": 253.9132042155248,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -30,7 +30,7 @@
       "name": "memestock / GMEB",
       "entry_ts": "2026-09-03T12:37:30.024230+00:00",
       "entry_price_usd": 0.0100828767921292,
-      "peak_price_usd": 0.010257221669366,
+      "peak_price_usd": 0.0102592103288781,
       "amount_usd": 60.26962328790032,
       "qty": 5977.4233614505165
     },
@@ -100,17 +100,6 @@
       "amount_usd": 10.111564881397342,
       "qty": 117842306.76435858
     },
-    "solana_gjL62zuUAdJm7cZhrWtnBoCGN31kSFyWHScEYfTWiWh": {
-      "network": "solana",
-      "pool_address": "gjL62zuUAdJm7cZhrWtnBoCGN31kSFyWHScEYfTWiWh",
-      "base_token_address": "4ChT49V1iazP2XUGtycGkEsS6pRMqvGfUbqvRC9Z91ZT",
-      "name": "MOS / USDC",
-      "entry_ts": "2026-09-03T13:20:28.166499+00:00",
-      "entry_price_usd": 0.0024584599678774857,
-      "peak_price_usd": 0.002847262874667656,
-      "amount_usd": 101.58346553357221,
-      "qty": 41319.959186186956
-    },
     "eth_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36": {
       "network": "eth",
       "pool_address": "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
@@ -162,7 +151,7 @@
       "name": "TIBBIR / VIRTUAL",
       "entry_ts": "2026-09-03T14:30:50.516565+00:00",
       "entry_price_usd": 0.225127357604014,
-      "peak_price_usd": 0.227555085321323,
+      "peak_price_usd": 0.228243202337648,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
     },
@@ -239,7 +228,7 @@
       "name": "SHIB / WETH",
       "entry_ts": "2026-09-03T16:20:32.347888+00:00",
       "entry_price_usd": 5.44272142108258e-06,
-      "peak_price_usd": 5.44423807529396e-06,
+      "peak_price_usd": 5.45560529025816e-06,
       "amount_usd": 43.22635417711484,
       "qty": 7942047.88980674
     }
@@ -380,6 +369,23 @@
       "proceeds_usd": 72.42791494982184,
       "pnl_usd": -9.492085050178176,
       "pnl_pct": -11.59,
+      "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "gjL62zuUAdJm7cZhrWtnBoCGN31kSFyWHScEYfTWiWh",
+      "base_token_address": "4ChT49V1iazP2XUGtycGkEsS6pRMqvGfUbqvRC9Z91ZT",
+      "name": "MOS / USDC",
+      "entry_ts": "2026-09-03T13:20:28.166499+00:00",
+      "entry_price_usd": 0.0024584599678774857,
+      "peak_price_usd": 0.002847262874667656,
+      "amount_usd": 101.58346553357221,
+      "qty": 41319.959186186956,
+      "exit_ts": "2026-09-03T16:59:43.524076+00:00",
+      "exit_price_usd": 0.0019605001820559853,
+      "proceeds_usd": 81.00778750706542,
+      "pnl_usd": -20.575678026506793,
+      "pnl_pct": -20.25,
       "exit_reason": "trailing_stop"
     }
   ]
