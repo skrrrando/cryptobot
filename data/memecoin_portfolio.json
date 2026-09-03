@@ -1,5 +1,5 @@
 {
-  "balance": 253.9132042155248,
+  "balance": 276.23639509847976,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -199,17 +199,6 @@
       "amount_usd": 18.677665923213585,
       "qty": 40906.18428134683
     },
-    "bsc_0x19ae1813d020302e624bd4a02703e0241264baf8": {
-      "network": "bsc",
-      "pool_address": "0x19ae1813d020302e624bd4a02703e0241264baf8",
-      "base_token_address": "0xc269d59a0d608ea0bd672f2f4616c372d8554444",
-      "name": "ClipX / WBNB",
-      "entry_ts": "2026-09-03T15:25:23.582553+00:00",
-      "entry_price_usd": 0.00223459466545373,
-      "peak_price_usd": 0.00238787966528342,
-      "amount_usd": 28.10076734943931,
-      "qty": 12575.33090178281
-    },
     "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
       "network": "solana",
       "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
@@ -386,6 +375,23 @@
       "proceeds_usd": 81.00778750706542,
       "pnl_usd": -20.575678026506793,
       "pnl_pct": -20.25,
+      "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x19ae1813d020302e624bd4a02703e0241264baf8",
+      "base_token_address": "0xc269d59a0d608ea0bd672f2f4616c372d8554444",
+      "name": "ClipX / WBNB",
+      "entry_ts": "2026-09-03T15:25:23.582553+00:00",
+      "entry_price_usd": 0.00223459466545373,
+      "peak_price_usd": 0.00238787966528342,
+      "amount_usd": 28.10076734943931,
+      "qty": 12575.33090178281,
+      "exit_ts": "2026-09-03T18:33:15.126052+00:00",
+      "exit_price_usd": 0.00177515733441179,
+      "proceeds_usd": 22.323190882954986,
+      "pnl_usd": -5.777576466484323,
+      "pnl_pct": -20.56,
       "exit_reason": "trailing_stop"
     }
   ]
