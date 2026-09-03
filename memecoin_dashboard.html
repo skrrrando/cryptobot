@@ -278,13 +278,46 @@
   .portfolio-stats .stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
   .portfolio-stats .stat .val { font-size: 18px; font-weight: 800; }
 
-  .pos-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 14px; padding: 12px 14px; border-top: 1px solid var(--border); font-size: 13px; }
-  .pos-row:first-child { border-top: none; }
-  .pos-row .pos-name { font-weight: 700; display: flex; align-items: center; gap: 8px; }
-  .pos-row .pos-meta { color: var(--text-faint); font-size: 11px; }
-  .pos-row .pos-val { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
-  .pos-row .pos-pl { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 70px; }
-  .pos-row .pos-pl.pending { color: var(--text-faint); font-weight: 600; }
+  /* ---- holdings: numbered columns, biggest position first ---- */
+  .holdings-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); margin: 24px 0 12px; }
+  .holdings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+  .holding-card {
+    background: linear-gradient(165deg, var(--card) 0%, var(--card2) 160%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px 16px;
+    position: relative; text-align: center; animation: cardIn 0.4s cubic-bezier(.2,.8,.2,1) both;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .holding-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+  .holding-rank {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 28px; height: 28px; border-radius: 50%; background: var(--card2); border: 1px solid var(--border2);
+    color: var(--text-muted); font-weight: 900; font-size: 12px; display: flex; align-items: center; justify-content: center;
+  }
+  .holding-card.rank-1 .holding-rank { background: linear-gradient(135deg, var(--gold), #f59e0b); border-color: transparent; color: #1a1305; }
+  .holding-card.rank-1 { border-color: rgba(251,191,36,0.4); }
+  .holding-card .h-net { display: flex; justify-content: center; margin-bottom: 10px; }
+  .holding-card .h-name { font-weight: 800; font-size: 14px; margin-bottom: 2px; word-break: break-word; }
+  .holding-card .h-age { font-size: 11px; color: var(--text-faint); margin-bottom: 12px; }
+  .holding-card .h-pl { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; margin-bottom: 2px; }
+  .holding-card .h-pl.pending { color: var(--text-faint); font-size: 14px; font-weight: 600; }
+  .holding-card .h-pl-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 12px; }
+  .holding-card .h-detail { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-top: 1px solid var(--border); color: var(--text-muted); }
+  .holding-card .h-detail b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .holding-card .h-dca-tag {
+    display: inline-block; margin-top: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.03em;
+    padding: 2px 7px; border-radius: 999px; background: rgba(124,127,242,0.14); color: var(--accent2);
+  }
+
+  /* ---- bottom "Andmed" / "Reeglid" panels ---- */
+  .bottom-panel { margin-top: 20px; }
+  .rules-group { margin-bottom: 22px; }
+  .rules-group h3 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent3); margin: 0 0 10px; }
+  .rules-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .rules-list li {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px;
+    font-size: 13px; color: var(--text-muted); line-height: 1.5;
+  }
+  .rules-list li b { color: var(--text); font-weight: 800; }
 
   footer { color: var(--text-faint); font-size: 12px; text-align: center; margin-top: 48px; line-height: 1.6; }
   footer a { color: var(--accent3); text-decoration: none; }
@@ -330,11 +363,8 @@
   <section id="portfolio-section">
     <div class="section-head"><h2>Mänguraha portfell</h2></div>
     <div id="portfolio-hero"></div>
-    <div id="portfolio-positions" style="margin-top: 14px;"></div>
-    <details class="raw-table" id="closed-trades-wrap" style="margin-top: 10px;">
-      <summary>Suletud tehingud</summary>
-      <div id="portfolio-closed"></div>
-    </details>
+    <h3 class="holdings-title" id="holdings-title"></h3>
+    <div id="portfolio-positions" style="margin-top: 12px;"></div>
   </section>
 
   <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
@@ -353,18 +383,28 @@
   </section>
 
   <section>
-    <div class="section-head"><h2>Turu kaart</h2></div>
-    <div id="scatter-wrap"></div>
-  </section>
+    <div class="section-head chips" style="margin-bottom: 0;">
+      <button class="chip" id="data-toggle">Andmed</button>
+      <button class="chip" id="rules-toggle">Reeglid</button>
+    </div>
 
-  <section>
-    <div class="section-head"><h2>Tulemused checkpointide kaupa</h2></div>
-    <div id="outcomes"></div>
-  </section>
+    <div id="data-panel" class="bottom-panel" hidden>
+      <div class="section-head" style="margin-top: 24px;"><h2>Turu kaart</h2></div>
+      <div id="scatter-wrap"></div>
 
-  <section>
-    <div class="section-head"><h2>Viimased leiud</h2></div>
-    <div id="feed"></div>
+      <div class="section-head" style="margin-top: 24px;"><h2>Tulemused checkpointide kaupa</h2></div>
+      <div id="outcomes"></div>
+
+      <div class="section-head" style="margin-top: 24px;"><h2>Suletud tehingud</h2></div>
+      <div id="portfolio-closed"></div>
+
+      <div class="section-head" style="margin-top: 24px;"><h2>Viimased leiud</h2></div>
+      <div id="feed"></div>
+    </div>
+
+    <div id="rules-panel" class="bottom-panel" hidden>
+      <div id="rules-content"></div>
+    </div>
   </section>
 
   <footer>
@@ -393,6 +433,15 @@ const fmtUsd = (n) => {
 const fmtUsdFull = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
   return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+// Memecoin entry prices are often fractions of a cent (e.g. $0.00000734) -
+// toFixed(2) would just print "$0.00" for almost every token, so this shows
+// enough decimal places to keep the first couple of significant digits.
+const fmtPrice = (n) => {
+  if (n === null || n === undefined || isNaN(n) || n <= 0) return '—';
+  if (n >= 1) return '$' + n.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  const decimals = Math.min(12, Math.max(2, -Math.floor(Math.log10(n)) + 2));
+  return '$' + n.toFixed(decimals);
 };
 const fmtPct = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
@@ -880,11 +929,15 @@ function maybeFireConfetti(portfolio, candidates) {
 
 async function renderPortfolio(portfolio) {
   const heroEl = document.getElementById('portfolio-hero');
+  const holdingsTitleEl = document.getElementById('holdings-title');
   const posEl = document.getElementById('portfolio-positions');
   const closedEl = document.getElementById('portfolio-closed');
 
   const balance = portfolio?.balance ?? 1000;
-  const positions = Object.entries(portfolio?.positions ?? {});
+  // Biggest position first, smallest last - "column 1" is always the trade
+  // with the most money in it, matching how big a bet the bot actually made.
+  const positions = Object.entries(portfolio?.positions ?? {})
+    .sort((a, b) => b[1].amount_usd - a[1].amount_usd);
   const closed = portfolio?.closed ?? [];
 
   const invested = positions.reduce((s, [, p]) => s + p.amount_usd, 0);
@@ -892,22 +945,34 @@ async function renderPortfolio(portfolio) {
   const wins = closed.filter(c => c.pnl_usd >= 0).length;
   const winRate = closed.length ? (wins / closed.length * 100) : null;
 
+  holdingsTitleEl.textContent = positions.length
+    ? `Sinu positsioonid (${positions.length}) — suurimast väikseimani`
+    : '';
+
   // Render positions with a loading placeholder first (net worth needs
-  // every live price in hand before it can be computed, but the position
-  // rows themselves can still appear immediately).
+  // every live price in hand before it can be computed, but the cards
+  // themselves can still appear immediately).
   if (positions.length === 0) {
     posEl.innerHTML = `<div class="empty">Bot ei hoia hetkel ühtegi positsiooni. Iga uus "tänane soovitus" saab automaatselt 20% hetke saldost investeeritud.</div>`;
   } else {
-    posEl.innerHTML = `<div class="table-wrap">${positions.map(([poolId, p]) => `<div class="pos-row" data-pool-id="${poolId}">
-      <span class="pos-name"><span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span>${p.name}</span>
-      <span class="pos-meta">${timeAgo(p.entry_ts)} tagasi</span>
-      <span class="pos-val">${fmtUsd(p.amount_usd)}</span>
-      <span class="pos-pl pending">laen...</span>
-    </div>`).join('')}</div>`;
+    posEl.innerHTML = `<div class="holdings-grid">${positions.map(([poolId, p], i) => {
+      const rank = i + 1;
+      return `<div class="holding-card ${rank === 1 ? 'rank-1' : ''}" data-pool-id="${poolId}">
+        <div class="holding-rank">${rank}</div>
+        <div class="h-net"><span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span></div>
+        <div class="h-name">${p.name}</div>
+        <div class="h-age">${timeAgo(p.entry_ts)} tagasi ostetud</div>
+        <div class="h-pl pending">laen...</div>
+        <div class="h-pl-label">praegune tulemus</div>
+        <div class="h-detail"><span>Alghind</span><b>${fmtPrice(p.entry_price_usd)}</b></div>
+        <div class="h-detail"><span>Investeeritud</span><b>${fmtUsd(p.amount_usd)}</b></div>
+        ${p.dca_count ? `<div class="h-dca-tag">+ juurde ostetud</div>` : ''}
+      </div>`;
+    }).join('')}</div>`;
   }
 
   // Fetch every open position's live price in parallel, once, so both the
-  // per-position P/L rows AND the net-worth hero number use the same
+  // per-position P/L cards AND the net-worth hero number use the same
   // figures (fetching twice could show two slightly different prices).
   const livePrices = await Promise.all(positions.map(async ([poolId, p]) => {
     const price = await fetchLivePrice(p.network, p.pool_address);
@@ -916,8 +981,8 @@ async function renderPortfolio(portfolio) {
 
   let currentPositionsValue = 0;
   livePrices.forEach(({ poolId, p, price }) => {
-    const row = posEl.querySelector(`.pos-row[data-pool-id="${CSS.escape(poolId)}"]`);
-    const plEl = row?.querySelector('.pos-pl');
+    const card = posEl.querySelector(`.holding-card[data-pool-id="${CSS.escape(poolId)}"]`);
+    const plEl = card?.querySelector('.h-pl');
     if (price == null || p.entry_price_usd <= 0) {
       currentPositionsValue += p.amount_usd; // fall back to cost basis if the live fetch failed
       if (plEl) { plEl.textContent = '—'; plEl.classList.remove('pending'); }
@@ -992,6 +1057,66 @@ function renderFilterChips(networksPresent, activeNetworks, onChange) {
   });
 }
 
+// ---- "Reeglid" panel: plain-language readout of the live trading params --
+// Mirrors the actual constants in scan_memecoins.py - if those numbers ever
+// change, update them here too so this never drifts from what the bot
+// really does.
+function renderRules() {
+  const el = document.getElementById('rules-content');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="rules-group">
+      <h3>1. Kandidaatide valik</h3>
+      <ul class="rules-list">
+        <li>Skannitakse <b>6 võrku</b> iga tsükli järel: Solana, Base, BSC, Ethereum, Arbitrum, Polygon.</li>
+        <li>Token peab olema hetkel <b>tõusutrendis</b>: 1h ja 6h hinnamuutus mõlemad plussis, ostutehinguid rohkem kui müügitehinguid viimase tunni jooksul.</li>
+        <li>Turukapitalisatsioon vähemalt <b>$50,000</b> - alla selle mikro-rug'e ei vaadata üldse.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>2. Turvakontroll</h3>
+      <ul class="rules-list">
+        <li><b>Solana</b> (RugCheck): mint- ja freeze-õigus peavad olema kustutatud, top 10 hoidja kokku ≤ 40%, ei tohi olla "danger" taseme riskimärget.</li>
+        <li><b>EVM võrgud</b> (GoPlus): ei tohi olla honeypot, mintitav, mustas nimekirjas ega ostmatu; omaniku+looja osalus kokku ≤ 20%.</li>
+        <li>Turvakontrolli mitte läbinud token ei jõua kunagi soovituste sekka ega osta ka bot seda.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>3. "Soovitatud" tase</h3>
+      <ul class="rules-list">
+        <li>Iga turvalist tokenit hinnatakse 5 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M.</li>
+        <li>Ja 4 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal.</li>
+        <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>4. Ostmine</h3>
+      <ul class="rules-list">
+        <li>Algsaldo <b>$1,000</b> mänguraha.</li>
+        <li>Iga ost on <b>20% hetke vabast saldost</b>, minimaalselt $20 (väiksemat tehingut ei tehta).</li>
+        <li>Korraga hoitakse maksimaalselt <b>6 positsiooni</b> - kui täis, oodatakse kuni mõni positsioon suletakse.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>5. Juurdeostmine (DCA)</h3>
+      <ul class="rules-list">
+        <li>Käivitub kui positsioon on <b>10-20% miinuses</b> alghinnast (mitte lähemal stop-lossile kui see).</li>
+        <li>Ainult siis kui token näeb hetkel ikka veel terve välja, mitte lihtsalt odavam.</li>
+        <li>Juurdeost on <b>50% originaaltehingu suurusest</b>, maksimaalselt <b>1 kord</b> positsiooni kohta.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>6. Väljumine</h3>
+      <ul class="rules-list">
+        <li><b>Stop-loss:</b> müüakse kui hind on 30% alghinnast madalamal.</li>
+        <li><b>Trailing stop (astmeline):</b> lubatud tagasitõmbumine tipust sõltub sellest kui kaugel kasumis positsioon on käinud - 25% tavaliselt, 35% kui tipp oli +50-150%, 45% kui tipp oli +150% või rohkem. Nii ei müüda tugevat võitjat tavalise kõikumise peale liiga vara maha.</li>
+        <li><b>Momentumi kokkuvarisemine:</b> müüakse kui 1h tootlus langeb alla -15% ja müügisurve ületab ostusurve.</li>
+        <li><b>6h ajapiirang:</b> tavaliselt suletakse positsioon 6 tunni pärast. Erand - kui tootlus on siis juba ≥ 40% JA token näitab endiselt positiivset momentumit (1h ja 6h plussis), jäetakse positsioon lahti ilma edasise ajapiiranguta ja lastakse "lennata" - ainult stop-loss/trailing-stop/momentumi-kollaps saavad selle veel sulgeda.</li>
+      </ul>
+    </div>
+  `;
+}
+
 async function main() {
   const [candData, labelRows, portfolio, hotState] = await Promise.all([
     fetchJson('data/memecoin_candidates.json', null),
@@ -1060,6 +1185,35 @@ async function main() {
 
   renderFilterChips(networksPresent, activeNetworks, rerender);
   rerender();
+
+  renderRules();
+
+  // Same clone-and-replace guard as the toggle button above - these two
+  // buttons are persistent DOM nodes too, so a naive addEventListener on
+  // every main() call would stack duplicate listeners.
+  const oldDataToggle = document.getElementById('data-toggle');
+  const dataToggle = oldDataToggle.cloneNode(true);
+  oldDataToggle.replaceWith(dataToggle);
+  const oldRulesToggle = document.getElementById('rules-toggle');
+  const rulesToggle = oldRulesToggle.cloneNode(true);
+  oldRulesToggle.replaceWith(rulesToggle);
+
+  const dataPanel = document.getElementById('data-panel');
+  const rulesPanel = document.getElementById('rules-panel');
+  dataToggle.addEventListener('click', () => {
+    const opening = dataPanel.hidden;
+    dataPanel.hidden = !opening;
+    rulesPanel.hidden = true;
+    dataToggle.classList.toggle('active', opening);
+    rulesToggle.classList.remove('active');
+  });
+  rulesToggle.addEventListener('click', () => {
+    const opening = rulesPanel.hidden;
+    rulesPanel.hidden = !opening;
+    dataPanel.hidden = true;
+    rulesToggle.classList.toggle('active', opening);
+    dataToggle.classList.remove('active');
+  });
 }
 
 async function refreshDashboard() {
