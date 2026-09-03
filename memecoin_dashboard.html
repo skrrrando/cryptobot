@@ -69,8 +69,19 @@
     animation: pulse 1.8s ease-out infinite;
   }
   @keyframes pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.1); opacity: 0; } }
-  .updated { font-size: 12px; color: var(--text-faint); }
+  .updated { font-size: 12px; color: var(--text-faint); display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
   .updated .mono { color: var(--text-muted); }
+  .refresh-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;
+    border-radius: 50%; border: 1px solid var(--border2); background: var(--card);
+    color: var(--text-muted); cursor: pointer; padding: 0; transition: color 0.15s, border-color 0.15s, transform 0.1s;
+  }
+  .refresh-btn svg { width: 13px; height: 13px; }
+  .refresh-btn:hover { color: var(--accent3); border-color: var(--accent3); }
+  .refresh-btn:active { transform: scale(0.9); }
+  .refresh-btn:disabled { cursor: default; opacity: 0.6; }
+  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .subtitle { color: var(--text-muted); font-size: 14px; margin: 10px 0 28px; max-width: 660px; line-height: 1.55; }
 
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 32px; }
@@ -289,7 +300,12 @@
       <span class="level-badge" id="level-badge"></span>
       <div class="pulse-wrap"><span class="pulse-dot" id="pulse-dot"></span><span id="pulse-label">—</span></div>
     </div>
-    <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
+    <div class="updated">
+      <button class="refresh-btn" id="refresh-btn" title="Värskenda andmeid" aria-label="Värskenda andmeid">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M16.2 7.5A6.5 6.5 0 1 0 17 10.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16.3 3.5v4.3h-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      Uuendatud <span class="mono" id="updated-ts">—</span>
+    </div>
   </header>
   <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
 
@@ -994,7 +1010,14 @@ async function main() {
     renderFeed(labelRows, activeNetworks);
   }
 
-  document.getElementById('show-all-toggle').addEventListener('click', () => {
+  // main() can be called again by the refresh button - clone-and-replace the
+  // toggle button first so we don't stack a second click listener on the
+  // same persistent DOM node (unlike the chip/grid content, this button
+  // isn't rebuilt via innerHTML on every render).
+  const oldToggle = document.getElementById('show-all-toggle');
+  const toggleBtn = oldToggle.cloneNode(true);
+  oldToggle.replaceWith(toggleBtn);
+  toggleBtn.addEventListener('click', () => {
     showAll = !showAll;
     rerender();
   });
@@ -1003,6 +1026,17 @@ async function main() {
   rerender();
 }
 
+async function refreshDashboard() {
+  const btn = document.getElementById('refresh-btn');
+  if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
+  try {
+    await main();
+  } finally {
+    if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
+  }
+}
+
+document.getElementById('refresh-btn').addEventListener('click', refreshDashboard);
 main();
 </script>
 </body>
