@@ -1,5 +1,5 @@
 {
-  "balance": 262.144,
+  "balance": 192.86279452128105,
   "positions": {
     "eth_0xb07d640fd9e2eb9dc81b953c8e4fd006bdfeaf276010fb5418eb763ca15abfb3": {
       "network": "eth",
@@ -19,7 +19,7 @@
       "name": "ETHCAT / WETH",
       "entry_ts": "2026-09-03T07:08:56.125999+00:00",
       "entry_price_usd": 0.000332379595176907,
-      "peak_price_usd": 0.000347462453550755,
+      "peak_price_usd": 0.000505568746321893,
       "amount_usd": 160.0,
       "qty": 481377.3237639362
     },
@@ -34,17 +34,6 @@
       "amount_usd": 128.0,
       "qty": 32.67234715676524
     },
-    "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": {
-      "network": "base",
-      "pool_address": "0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a",
-      "base_token_address": "0xc52aedec3374422d7510e294cfaa90799595cba3",
-      "name": "Surplus / WETH",
-      "entry_ts": "2026-09-03T07:11:07.214366+00:00",
-      "entry_price_usd": 4.51104705598522e-05,
-      "peak_price_usd": 4.51104705598522e-05,
-      "amount_usd": 102.4,
-      "qty": 2269982.971340025
-    },
     "solana_6imhRyMYu5xoGJ5W7yveymB5o5yfyAvXxveozWpbU5ix": {
       "network": "solana",
       "pool_address": "6imhRyMYu5xoGJ5W7yveymB5o5yfyAvXxveozWpbU5ix",
@@ -52,7 +41,7 @@
       "name": "SOLCAT / SOL",
       "entry_ts": "2026-09-03T09:00:58.080772+00:00",
       "entry_price_usd": 0.0013604862739813356,
-      "peak_price_usd": 0.0013604862739813356,
+      "peak_price_usd": 0.0015411176510985731,
       "amount_usd": 81.92000000000002,
       "qty": 60213.76442135562
     },
@@ -66,7 +55,58 @@
       "peak_price_usd": 0.0163249840487168,
       "amount_usd": 65.536,
       "qty": 4014.4602778433564
+    },
+    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-03T12:35:30.562390+00:00",
+      "entry_price_usd": 2416.3,
+      "peak_price_usd": 2416.3,
+      "amount_usd": 52.4288,
+      "qty": 0.0216979679675537
+    },
+    "bsc_0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb": {
+      "network": "bsc",
+      "pool_address": "0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
+      "base_token_address": "0x6ff45323817d1d53bbb8a8dfba9245ae74057777",
+      "name": "memestock / GMEB",
+      "entry_ts": "2026-09-03T12:37:30.024230+00:00",
+      "entry_price_usd": 0.0100828767921292,
+      "peak_price_usd": 0.0100828767921292,
+      "amount_usd": 60.26962328790032,
+      "qty": 5977.4233614505165
+    },
+    "solana_DKj8pa8oYRntMP3UN7p4JWt9PMbabcgc9MgyboTZ8Jek": {
+      "network": "solana",
+      "pool_address": "DKj8pa8oYRntMP3UN7p4JWt9PMbabcgc9MgyboTZ8Jek",
+      "base_token_address": "43uJZGxfZcsiL29k1vpwd7H6up5qgMAoU1aMb5Rmpump",
+      "name": "BEN / USDC",
+      "entry_ts": "2026-09-03T12:39:30.805896+00:00",
+      "entry_price_usd": 0.000468785681099262,
+      "peak_price_usd": 0.000468785681099262,
+      "amount_usd": 48.21569863032026,
+      "qty": 102852.3279918845
     }
   },
-  "closed": []
+  "closed": [
+    {
+      "network": "base",
+      "pool_address": "0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a",
+      "base_token_address": "0xc52aedec3374422d7510e294cfaa90799595cba3",
+      "name": "Surplus / WETH",
+      "entry_ts": "2026-09-03T07:11:07.214366+00:00",
+      "entry_price_usd": 4.51104705598522e-05,
+      "peak_price_usd": 4.51104705598522e-05,
+      "amount_usd": 102.4,
+      "qty": 2269982.971340025,
+      "exit_ts": "2026-09-03T12:36:00.007313+00:00",
+      "exit_price_usd": 4.03672263609134e-05,
+      "proceeds_usd": 91.63291643950157,
+      "pnl_usd": -10.767083560498435,
+      "pnl_pct": -10.51,
+      "exit_reason": "timeout"
+    }
+  ]
 }
