@@ -1,5 +1,5 @@
 {
-  "balance": 418.93841079538856,
+  "balance": 429.93204789716344,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -19,7 +19,7 @@
       "name": "WETH / USDC 0.3%",
       "entry_ts": "2026-09-03T12:35:30.562390+00:00",
       "entry_price_usd": 2416.3,
-      "peak_price_usd": 2515.54,
+      "peak_price_usd": 2515.89,
       "amount_usd": 52.4288,
       "qty": 0.0216979679675537
     },
@@ -30,7 +30,7 @@
       "name": "WETH / USDC 0.05%",
       "entry_ts": "2026-09-03T12:51:20.339452+00:00",
       "entry_price_usd": 2416.68,
-      "peak_price_usd": 2514.92,
+      "peak_price_usd": 2518.86,
       "amount_usd": 30.858047123404972,
       "qty": 0.012768776637124061
     },
@@ -44,17 +44,6 @@
       "peak_price_usd": 0.737423476970995,
       "amount_usd": 15.799320127183345,
       "qty": 21.471850525715606
-    },
-    "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": {
-      "network": "bsc",
-      "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
-      "base_token_address": "0x6ec90334d89dbdc89e08a133271be3d104128edb",
-      "name": "WKC / WBNB",
-      "entry_ts": "2026-09-03T13:05:24.756658+00:00",
-      "entry_price_usd": 8.58058973812925e-08,
-      "peak_price_usd": 9.36872003690388e-08,
-      "amount_usd": 10.111564881397342,
-      "qty": 117842306.76435858
     },
     "eth_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36": {
       "network": "eth",
@@ -416,6 +405,23 @@
       "proceeds_usd": 24.54812141194297,
       "pnl_usd": 4.7989712529637885,
       "pnl_pct": 24.3,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
+      "base_token_address": "0x6ec90334d89dbdc89e08a133271be3d104128edb",
+      "name": "WKC / WBNB",
+      "entry_ts": "2026-09-03T13:05:24.756658+00:00",
+      "entry_price_usd": 8.58058973812925e-08,
+      "peak_price_usd": 9.36872003690388e-08,
+      "amount_usd": 10.111564881397342,
+      "qty": 117842306.76435858,
+      "exit_ts": "2026-09-03T19:05:51.653492+00:00",
+      "exit_price_usd": 9.32910887747483e-08,
+      "proceeds_usd": 10.993637101774898,
+      "pnl_usd": 0.8820722203775553,
+      "pnl_pct": 8.72,
       "exit_reason": "timeout"
     }
   ]
