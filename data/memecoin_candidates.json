@@ -1,282 +1,48 @@
 {
-  "timestamp": "2026-09-03T12:42:02.232837+00:00",
+  "timestamp": "2026-09-03T12:56:37.168010+00:00",
   "candidates": [
     {
-      "id": "base_0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "timestamp": "2026-09-03T12:37:30.024230+00:00",
-      "network": "base",
-      "name": "WETH / USDC 0.3%",
-      "address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "rank": 12,
-      "features": {
-        "rank_velocity": 1,
-        "h1_accel": 0.524,
-        "history_len": 20
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.0,
-        "checked_at": 1788438935.2491987
-      },
-      "price_change_pct": {
-        "m5": "0.344",
-        "m15": "0.344",
-        "m30": "0.37",
-        "h1": "0.425",
-        "h6": "0.374",
-        "h24": "1.314"
-      },
-      "volume_usd": {
-        "m5": "3472247.03017994",
-        "m15": "3491045.44900439",
-        "m30": "3756284.81649676",
-        "h1": "5052263.87022313",
-        "h6": "15609933.1478871",
-        "h24": "72894650.4615931"
-      },
-      "market_cap_usd": 596248930.198946
-    },
-    {
-      "id": "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d",
-      "timestamp": "2026-09-03T12:39:30.805896+00:00",
-      "network": "bsc",
-      "name": "Max / WBNB",
-      "address": "0xa2b1926cb477e92445cf70602f1a7200361f761d",
-      "base_token_address": "0xe9bc5c6a86caa44fd7b469bf3cc7c563e4f77777",
-      "rank": 5,
-      "features": {
-        "rank_velocity": 0,
-        "h1_accel": 1.4149999999999996,
-        "history_len": 20
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.9,
-        "checked_at": 1788438939.6683147
-      },
-      "price_change_pct": {
-        "m5": "7.827",
-        "m15": "0.243",
-        "m30": "7.882",
-        "h1": "4.704",
-        "h6": "57.587",
-        "h24": "76.656"
-      },
-      "volume_usd": {
-        "m5": "16084.8809850827",
-        "m15": "54336.1510339234",
-        "m30": "95600.6655653602",
-        "h1": "375683.838356762",
-        "h6": "1257688.80730346",
-        "h24": "2164821.9030626"
-      },
-      "market_cap_usd": 12813601.67
-    },
-    {
-      "id": "eth_0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
-      "timestamp": "2026-09-03T12:39:30.805896+00:00",
-      "network": "eth",
-      "name": "WETH / USDC 0.05%",
-      "address": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
-      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "rank": 8,
-      "features": {
-        "rank_velocity": 0,
-        "h1_accel": 0.10999999999999999,
-        "history_len": 7
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.0,
-        "checked_at": 1788438943.883594
-      },
-      "price_change_pct": {
-        "m5": "-0.103",
-        "m15": "0.268",
-        "m30": "0.35",
-        "h1": "0.382",
-        "h6": "0.239",
-        "h24": "1.344"
-      },
-      "volume_usd": {
-        "m5": "415067.936157123",
-        "m15": "1539107.76898446",
-        "m30": "2952939.4850584",
-        "h1": "3616937.59431721",
-        "h6": "15138800.1950384",
-        "h24": "69006710.8310848"
-      },
-      "market_cap_usd": 4910352450.41211
-    },
-    {
-      "id": "eth_0xc56c9d4aee66e16aa4a31a710a6d2fc720a626b6",
-      "timestamp": "2026-09-03T12:35:30.562390+00:00",
-      "network": "eth",
-      "name": "ETHCAT / WETH",
-      "address": "0xc56c9d4aee66e16aa4a31a710a6d2fc720a626b6",
-      "base_token_address": "0x777777780838c00038ecd48f63f3c37669322bc8",
-      "rank": 11,
-      "features": {
-        "rank_velocity": 1,
-        "h1_accel": 17.83,
-        "history_len": 5
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.0,
-        "checked_at": 1788426070.0197308
-      },
-      "price_change_pct": {
-        "m5": "-0.217",
-        "m15": "-5.093",
-        "m30": "3.365",
-        "h1": "24.416",
-        "h6": "37.713",
-        "h24": "87.318"
-      },
-      "volume_usd": {
-        "m5": "50.374064911",
-        "m15": "4991.0958875684",
-        "m30": "8623.0214590959",
-        "h1": "19919.1064818922",
-        "h6": "50727.9811667063",
-        "h24": "137995.037463864"
-      },
-      "market_cap_usd": 467243.8288
-    },
-    {
-      "id": "solana_DKj8pa8oYRntMP3UN7p4JWt9PMbabcgc9MgyboTZ8Jek",
-      "timestamp": "2026-09-03T12:39:30.805896+00:00",
+      "id": "solana_4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama",
+      "timestamp": "2026-09-03T12:51:20.339452+00:00",
       "network": "solana",
-      "name": "BEN / USDC",
-      "address": "DKj8pa8oYRntMP3UN7p4JWt9PMbabcgc9MgyboTZ8Jek",
-      "base_token_address": "43uJZGxfZcsiL29k1vpwd7H6up5qgMAoU1aMb5Rmpump",
-      "rank": 17,
+      "name": "TROLL / SOL",
+      "address": "4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama",
+      "base_token_address": "5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2",
+      "rank": 15,
       "features": {
-        "rank_velocity": 1,
-        "h1_accel": 12.465,
-        "history_len": 3
+        "rank_velocity": 0,
+        "h1_accel": 0.416,
+        "history_len": 20
       },
       "security": {
         "passed": true,
         "mint_authority_active": false,
         "freeze_authority_active": false,
-        "top10_pct": 25.2,
+        "top10_pct": 26.3,
         "has_danger_risk": false,
-        "checked_at": 1788439050.0742977
+        "checked_at": 1788439766.1066618
       },
       "price_change_pct": {
-        "m5": "8.986",
-        "m15": "1.081",
-        "m30": "8.881",
-        "h1": "12.377",
-        "h6": "674.416",
-        "h24": "674.416"
+        "m5": "-0.1",
+        "m15": "0.24",
+        "m30": "0.106",
+        "h1": "0.849",
+        "h6": "0.069",
+        "h24": "1.475"
       },
       "volume_usd": {
-        "m5": "2372.1658940074",
-        "m15": "13587.9723834604",
-        "m30": "53396.2279207174",
-        "h1": "163568.649075362",
-        "h6": "3216880.49716104",
-        "h24": "3216880.49716104"
+        "m5": "2459.3962766155",
+        "m15": "6065.8772198519",
+        "m30": "12647.4572961039",
+        "h1": "30302.3615386627",
+        "h6": "101682.508776607",
+        "h24": "860657.261053497"
       },
-      "market_cap_usd": 460670.947271995
-    },
-    {
-      "id": "base_0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9",
-      "timestamp": "2026-09-03T12:39:30.805896+00:00",
-      "network": "base",
-      "name": "GITLAWB / WETH",
-      "address": "0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9",
-      "base_token_address": "0x5f980dcfc4c0fa3911554cf5ab288ed0eb13dba3",
-      "rank": 18,
-      "features": {
-        "rank_velocity": 0,
-        "h1_accel": 0.16000000000000003,
-        "history_len": 3
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.0,
-        "checked_at": 1788439054.5242789
-      },
-      "price_change_pct": {
-        "m5": "0.159",
-        "m15": "0.534",
-        "m30": "0.707",
-        "h1": "0.56",
-        "h6": "1.447",
-        "h24": "-1.029"
-      },
-      "volume_usd": {
-        "m5": "10.0607908895",
-        "m15": "442.0672045718",
-        "m30": "732.2254838676",
-        "h1": "4585.2799284085",
-        "h6": "20386.981422365",
-        "h24": "64985.3192549647"
-      },
-      "market_cap_usd": 2710682.598
-    },
-    {
-      "id": "bsc_0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
-      "timestamp": "2026-09-03T12:37:30.024230+00:00",
-      "network": "bsc",
-      "name": "memestock / GMEB",
-      "address": "0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
-      "base_token_address": "0x6ff45323817d1d53bbb8a8dfba9245ae74057777",
-      "rank": 11,
-      "features": {
-        "rank_velocity": null,
-        "h1_accel": null,
-        "history_len": 2
-      },
-      "security": {
-        "passed": true,
-        "is_honeypot": false,
-        "is_mintable": false,
-        "is_blacklisted": false,
-        "owner_creator_pct": 0.0,
-        "checked_at": 1788439058.240451
-      },
-      "price_change_pct": {
-        "m5": "0.039",
-        "m15": "0.283",
-        "m30": "0.343",
-        "h1": "0.523",
-        "h6": "60.076",
-        "h24": "158.009"
-      },
-      "volume_usd": {
-        "m5": "663.8042314046",
-        "m15": "13425.0611337984",
-        "m30": "57106.2040887121",
-        "h1": "182378.020117685",
-        "h6": "1698722.34645258",
-        "h24": "2598152.15254947"
-      },
-      "market_cap_usd": 10083724.82
+      "market_cap_usd": 42397316.5207824
     },
     {
       "id": "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703",
-      "timestamp": "2026-09-03T12:39:30.805896+00:00",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
       "network": "base",
       "name": "BNKR / WETH 1%",
       "address": "0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703",
@@ -284,8 +50,8 @@
       "rank": 3,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.0,
-        "history_len": 12
+        "h1_accel": 0.645,
+        "history_len": 15
       },
       "security": {
         "passed": true,
@@ -297,21 +63,450 @@
       },
       "price_change_pct": {
         "m5": "0",
-        "m15": "0.13",
-        "m30": "0.66",
-        "h1": "1.097",
-        "h6": "1.391",
-        "h24": "16.295"
+        "m15": "0.702",
+        "m30": "0.969",
+        "h1": "1.943",
+        "h6": "2.425",
+        "h24": "17.269"
       },
       "volume_usd": {
-        "m5": "0.0",
-        "m15": "478.6073863607",
-        "m30": "4114.2378415981",
-        "h1": "5383.9706633958",
-        "h6": "26289.9956790487",
-        "h24": "1111042.98894689"
+        "m5": "77.3001588738",
+        "m15": "3777.121642203",
+        "m30": "4255.7290285637",
+        "h1": "9161.0923055988",
+        "h6": "29162.4456046997",
+        "h24": "1114820.11058909"
       },
-      "market_cap_usd": 27175053.69
+      "market_cap_usd": 27402720.08
+    },
+    {
+      "id": "bsc_0xe5ae318389b8d6d09370a675479c64862152d126",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "bsc",
+      "name": "\u725b\u6765 / USDT 0.25%",
+      "address": "0xe5ae318389b8d6d09370a675479c64862152d126",
+      "base_token_address": "0xbeea1d618e533a387d941f58a7d4c9b7bd377777",
+      "rank": 12,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.7830000000000004,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788439773.616014
+      },
+      "price_change_pct": {
+        "m5": "0.955",
+        "m15": "0.27",
+        "m30": "2.146",
+        "h1": "4.214",
+        "h6": "2.286",
+        "h24": "16.089"
+      },
+      "volume_usd": {
+        "m5": "31937.1573135473",
+        "m15": "232469.204546316",
+        "m30": "312215.537403163",
+        "h1": "587599.207788404",
+        "h6": "4626872.02493078",
+        "h24": "20213651.3170948"
+      },
+      "market_cap_usd": 82608168.02
+    },
+    {
+      "id": "eth_0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "eth",
+      "name": "WETH / USDC 0.05%",
+      "address": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "rank": 7,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.059,
+        "history_len": 10
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788438943.883594
+      },
+      "price_change_pct": {
+        "m5": "-0.029",
+        "m15": "-0.026",
+        "m30": "0.379",
+        "h1": "0.425",
+        "h6": "0.393",
+        "h24": "1.623"
+      },
+      "volume_usd": {
+        "m5": "55386.4306233011",
+        "m15": "515541.420098727",
+        "m30": "2222677.03759676",
+        "h1": "3846611.9374251",
+        "h6": "15138365.7440697",
+        "h24": "69355623.540014"
+      },
+      "market_cap_usd": 4915785246.58762
+    },
+    {
+      "id": "eth_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "eth",
+      "name": "WETH / USDT 0.3%",
+      "address": "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
+      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "rank": 19,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.11499999999999999,
+        "history_len": 8
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788438943.883594
+      },
+      "price_change_pct": {
+        "m5": "0.115",
+        "m15": "0.025",
+        "m30": "0.45",
+        "h1": "0.418",
+        "h6": "0.393",
+        "h24": "1.642"
+      },
+      "volume_usd": {
+        "m5": "31.4073886885",
+        "m15": "1568.4555331685",
+        "m30": "1930487.20327167",
+        "h1": "2083552.87686295",
+        "h6": "9376516.6741501",
+        "h24": "37096851.5502472"
+      },
+      "market_cap_usd": 4916680538.84127
+    },
+    {
+      "id": "solana_3VLpiEBR9S31uDgBQUTz3hEtZt5YAUK2225iY54npghL",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "solana",
+      "name": "Pumpooor / SOL",
+      "address": "3VLpiEBR9S31uDgBQUTz3hEtZt5YAUK2225iY54npghL",
+      "base_token_address": "H76u9jTTbMtEF5JGmqXM2wW6xqMXpvTdVyer4RvKpump",
+      "rank": 6,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 14.744,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "mint_authority_active": false,
+        "freeze_authority_active": false,
+        "top10_pct": 6.8,
+        "has_danger_risk": false,
+        "checked_at": 1788440011.7412488
+      },
+      "price_change_pct": {
+        "m5": "2.572",
+        "m15": "5.261",
+        "m30": "-0.732",
+        "h1": "10.45",
+        "h6": "83.028",
+        "h24": "27.856"
+      },
+      "volume_usd": {
+        "m5": "4220.8768347446",
+        "m15": "18369.9723035949",
+        "m30": "46366.9753610498",
+        "h1": "96430.8891648463",
+        "h6": "995525.897309509",
+        "h24": "3284257.25720106"
+      },
+      "market_cap_usd": 992535.0151
+    },
+    {
+      "id": "solana_Nx9dcwNs3iJxM5YAxshMHE4aYJHdDyyGMhVcmaSgfu8",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "solana",
+      "name": "TOAD / SOL",
+      "address": "Nx9dcwNs3iJxM5YAxshMHE4aYJHdDyyGMhVcmaSgfu8",
+      "base_token_address": "A13oRB9FFaiUjfi6LdCg6p9ka1u8SfGkUFs4SKvPpump",
+      "rank": 20,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.3999999999999999,
+        "history_len": 15
+      },
+      "security": {
+        "passed": true,
+        "mint_authority_active": false,
+        "freeze_authority_active": false,
+        "top10_pct": 29.0,
+        "has_danger_risk": false,
+        "checked_at": 1788440012.4480298
+      },
+      "price_change_pct": {
+        "m5": "0.844",
+        "m15": "1.03",
+        "m30": "1.77",
+        "h1": "2.122",
+        "h6": "4.753",
+        "h24": "1.01"
+      },
+      "volume_usd": {
+        "m5": "115.3460962432",
+        "m15": "664.2784632408",
+        "m30": "1743.7374817962",
+        "h1": "11464.6076201452",
+        "h6": "146126.340530901",
+        "h24": "682211.255339059"
+      },
+      "market_cap_usd": 4050851.9369777
+    },
+    {
+      "id": "base_0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "base",
+      "name": "SOL / USDC 0.029%",
+      "address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "rank": 12,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.291,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788440016.490637
+      },
+      "price_change_pct": {
+        "m5": "0.012",
+        "m15": "-0.467",
+        "m30": "-0.155",
+        "h1": "0.422",
+        "h6": "0.28",
+        "h24": "3.299"
+      },
+      "volume_usd": {
+        "m5": "15940.7576014332",
+        "m15": "65769.512540869",
+        "m30": "175130.396546098",
+        "h1": "251190.29422813",
+        "h6": "1355295.01536904",
+        "h24": "5498976.57347726"
+      },
+      "market_cap_usd": 4826364.35731652
+    },
+    {
+      "id": "base_0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "base",
+      "name": "WETH / USDC 0.3%",
+      "address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "rank": 13,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.203,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788438935.2491987
+      },
+      "price_change_pct": {
+        "m5": "0.007",
+        "m15": "0.085",
+        "m30": "0.418",
+        "h1": "0.49",
+        "h6": "0.397",
+        "h24": "1.669"
+      },
+      "volume_usd": {
+        "m5": "5594.7440185826",
+        "m15": "14651.6858917508",
+        "m30": "3523408.84223619",
+        "h1": "3791694.30995617",
+        "h6": "15327283.1904184",
+        "h24": "72840017.5588581"
+      },
+      "market_cap_usd": 596641449.347616
+    },
+    {
+      "id": "base_0x4a9b9e13975d26f4e3e17c655593bb82145dd4452aedafb826d856b817c9cfd4",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "base",
+      "name": "aeon / WETH",
+      "address": "0x4a9b9e13975d26f4e3e17c655593bb82145dd4452aedafb826d856b817c9cfd4",
+      "base_token_address": "0xbf8e8f0e8866a7052f948c16508644347c57aba3",
+      "rank": 16,
+      "features": {
+        "rank_velocity": null,
+        "h1_accel": null,
+        "history_len": 1
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788440017.1287985
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "0.638",
+        "m30": "2.735",
+        "h1": "2.735",
+        "h6": "22.302",
+        "h24": "9.454"
+      },
+      "volume_usd": {
+        "m5": "767.4732520322",
+        "m15": "1030.9191190197",
+        "m30": "2592.0824741986",
+        "h1": "2592.0824741986",
+        "h6": "71287.0151916971",
+        "h24": "153520.439167592"
+      },
+      "market_cap_usd": 1875244.493
+    },
+    {
+      "id": "bsc_0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "bsc",
+      "name": "memestock / GMEB",
+      "address": "0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
+      "base_token_address": "0x6ff45323817d1d53bbb8a8dfba9245ae74057777",
+      "rank": 11,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.16,
+        "history_len": 6
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788439058.240451
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "-0.095",
+        "m30": "0.287",
+        "h1": "0.253",
+        "h6": "29.323",
+        "h24": "158.269"
+      },
+      "volume_usd": {
+        "m5": "110.9932722551",
+        "m15": "18249.3033078228",
+        "m30": "38461.8510622735",
+        "h1": "143244.614798213",
+        "h6": "1670339.22616693",
+        "h24": "2619248.68965059"
+      },
+      "market_cap_usd": 10084148.83
+    },
+    {
+      "id": "eth_0x69c7bd26512f52bf6f76fab834140d13dda673ca",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "eth",
+      "name": "NPC / WETH",
+      "address": "0x69c7bd26512f52bf6f76fab834140d13dda673ca",
+      "base_token_address": "0x8ed97a637a790be1feff5e888d43629dc05408f6",
+      "rank": 11,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 3.524,
+        "history_len": 10
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788440033.3964942
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "-0.385",
+        "m30": "1.16",
+        "h1": "0.863",
+        "h6": "8.167",
+        "h24": "13.748"
+      },
+      "volume_usd": {
+        "m5": "2297.6212874502",
+        "m15": "8160.0742089975",
+        "m30": "40241.8888697574",
+        "h1": "98989.6538595905",
+        "h6": "475630.172449186",
+        "h24": "674888.220905229"
+      },
+      "market_cap_usd": 148731079.501458
+    },
+    {
+      "id": "eth_0xc56c9d4aee66e16aa4a31a710a6d2fc720a626b6",
+      "timestamp": "2026-09-03T12:53:31.702315+00:00",
+      "network": "eth",
+      "name": "ETHCAT / WETH",
+      "address": "0xc56c9d4aee66e16aa4a31a710a6d2fc720a626b6",
+      "base_token_address": "0x777777780838c00038ecd48f63f3c37669322bc8",
+      "rank": 12,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 1.2070000000000007,
+        "history_len": 10
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "checked_at": 1788440033.98948
+      },
+      "price_change_pct": {
+        "m5": "-1.587",
+        "m15": "1.053",
+        "m30": "9.266",
+        "h1": "23.454",
+        "h6": "47.955",
+        "h24": "96.999"
+      },
+      "volume_usd": {
+        "m5": "1133.3024810228",
+        "m15": "2821.4854015569",
+        "m30": "7114.1638505093",
+        "h1": "19622.617208188",
+        "h6": "54522.5573570882",
+        "h24": "141578.046437475"
+      },
+      "market_cap_usd": 501995.6871
     }
   ]
 }
