@@ -47,20 +47,20 @@
   .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 20px 90px; }
 
   header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
-  .h1-row { display: flex; align-items: center; gap: 12px; }
+  .h1-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; row-gap: 8px; }
   h1 { font-size: 30px; font-weight: 900; margin: 0; letter-spacing: -0.03em; }
   h1 span { background: linear-gradient(100deg, var(--text) 15%, var(--accent2) 65%, var(--accent3) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .mascot { display: flex; animation: mascotBob 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(124,127,242,0.35)); }
+  .mascot { display: flex; flex-shrink: 0; animation: mascotBob 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(124,127,242,0.35)); }
   @keyframes mascotBob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
   .mascot-eye { animation: mascotBlink 4.5s ease-in-out infinite; transform-origin: center; }
   @keyframes mascotBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
   .level-badge {
     font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
     padding: 4px 10px; border-radius: 999px; background: linear-gradient(120deg, rgba(124,127,242,0.18), rgba(34,211,238,0.14));
-    color: var(--accent2); border: 1px solid var(--border2);
+    color: var(--accent2); border: 1px solid var(--border2); flex-shrink: 0; white-space: nowrap;
   }
-  .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+  .pulse-wrap { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-faint); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
   .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); position: relative; flex-shrink: 0; }
   .pulse-dot.live { background: var(--good); box-shadow: 0 0 10px var(--good-glow); }
   .pulse-dot.live::after {

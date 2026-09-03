@@ -684,10 +684,17 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
             entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp)
             if entry_row is not None:
                 label_rows_out.append(entry_row)
-                if classify_recommendation(pool, features, security):
-                    position = maybe_buy(portfolio, pool, timestamp)
-                    if position is not None:
-                        send_telegram(format_buy_alert(position, portfolio["balance"]))
+
+            # Checked every tick a pool is still a candidate, NOT gated on
+            # entry_row (which only fires once, the first time this pool_id
+            # is ever seen). A pool that didn't qualify on first sight but
+            # improves later (rank climbs, momentum accelerates) must still
+            # get a buy chance - maybe_buy's own "already holding" guard is
+            # what prevents buying the same open position twice.
+            if classify_recommendation(pool, features, security):
+                position = maybe_buy(portfolio, pool, timestamp)
+                if position is not None:
+                    send_telegram(format_buy_alert(position, portfolio["balance"]))
 
             last_alert = alerted.get(pool["id"])
             if last_alert:
@@ -738,6 +745,13 @@ def main():
         for row in label_rows:
             f.write(json.dumps(row) + "\n")
 
+    # A pool that's still a candidate several ticks in a row gets appended to
+    # candidates_out once per tick - dedupe to the latest observation per
+    # pool_id so the dashboard doesn't show the same token twice (it did:
+    # BNBCAT/WKC each showed up as two separate "today's recommendations"
+    # slots, wasting the RECOMMENDED_CAP on itself).
+    deduped_candidates = list({c["id"]: c for c in candidates_out}.values())
+
     engine.save_json(HOT_STATE_PATH, hot_state)
     engine.save_json(SECURITY_CACHE_PATH, security_cache)
     engine.save_json(ALERTED_PATH, alerted)
@@ -745,7 +759,7 @@ def main():
     engine.save_json(PORTFOLIO_PATH, portfolio)
     engine.save_json(CANDIDATES_PATH, {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "candidates": candidates_out,
+        "candidates": deduped_candidates,
     })
 
     print(f"Completed {ticks} ticks over ~{int(time.monotonic() - loop_start)}s. "
