@@ -1,5 +1,5 @@
 {
-  "balance": 586.968561598897,
+  "balance": 601.6495749304311,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -74,20 +74,9 @@
       "name": "TIBBIR / VIRTUAL",
       "entry_ts": "2026-09-03T14:30:50.516565+00:00",
       "entry_price_usd": 0.225127357604014,
-      "peak_price_usd": 0.251284821914648,
+      "peak_price_usd": 0.251461977277476,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
-    },
-    "arbitrum_0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e": {
-      "network": "arbitrum",
-      "pool_address": "0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e",
-      "base_token_address": "0x13a7dedb7169a17be92b0e3c7c2315b46f4772b3",
-      "name": "Boop / WETH",
-      "entry_ts": "2026-09-03T14:30:50.516565+00:00",
-      "entry_price_usd": 1.1580850920317e-05,
-      "peak_price_usd": 1.18331196928008e-05,
-      "amount_usd": 14.379927833969687,
-      "qty": 1241698.7260186635
     },
     "eth_0x69c7bd26512f52bf6f76fab834140d13dda673ca": {
       "network": "eth",
@@ -440,6 +429,23 @@
       "proceeds_usd": 84.65941721940366,
       "pnl_usd": 3.3926447925459087,
       "pnl_pct": 4.17,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "arbitrum",
+      "pool_address": "0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e",
+      "base_token_address": "0x13a7dedb7169a17be92b0e3c7c2315b46f4772b3",
+      "name": "Boop / WETH",
+      "entry_ts": "2026-09-03T14:30:50.516565+00:00",
+      "entry_price_usd": 1.1580850920317e-05,
+      "peak_price_usd": 1.18331196928008e-05,
+      "amount_usd": 14.379927833969687,
+      "qty": 1241698.7260186635,
+      "exit_ts": "2026-09-03T19:40:56.389743+00:00",
+      "exit_price_usd": 1.18233296240922e-05,
+      "proceeds_usd": 14.68101333153401,
+      "pnl_usd": 0.3010854975643227,
+      "pnl_pct": 2.09,
       "exit_reason": "timeout"
     }
   ]
