@@ -143,6 +143,25 @@ STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
 TRAILING_STOP_PCT = 25.0        # exit if price pulls back this much from its peak (only once ever in profit)
 MOMENTUM_COLLAPSE_H1_PCT = -15.0  # exit if 1h change turns this negative AND sell pressure exceeds buy pressure
 
+# "Let winners run": a flat 25% trail is too tight for a real moonshot -
+# memecoins pull back 20-30% from a local high routinely even mid-rally, so
+# a fixed trail would stop out a genuine winner on ordinary noise. Widen the
+# trail as the position banks more profit, so an average trade is still
+# protected tightly but a 3x+ isn't cut short by a normal wobble.
+TRAILING_STOP_TIERS = [
+    (150.0, 45.0),  # up 150%+ from entry at peak -> allow a 45% pullback from peak
+    (50.0, 35.0),   # up 50-150% -> allow 35%
+    (0.0, TRAILING_STOP_PCT),  # below that -> the default 25%
+]
+
+# The fixed 6h checkpoint exit (EXIT_OFFSET_MINUTES) is a fallback for
+# average/mediocre trades - it shouldn't force-sell a token that's still
+# clearly mooning. If a position is up at least this much AND still shows
+# positive momentum right at the 6h mark, skip the automatic sell entirely
+# and let it keep running under stop-loss/trailing-stop/momentum-collapse
+# instead, with no further time limit.
+MOONSHOT_EXTEND_MIN_RETURN_PCT = 40.0
+
 # Averaging down: only on a moderate dip, well clear of the stop-loss zone,
 # and only if the token still looks healthy right now - not just cheaper.
 # Capped at one add per position, sized smaller than the original buy.
@@ -556,6 +575,15 @@ def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick
             "price": price, "new_entry_price": pos["entry_price_usd"], "timestamp": timestamp}
 
 
+def trailing_stop_pct_for(peak_profit_pct):
+    """Wider trail the further a position is up at its peak - see
+    TRAILING_STOP_TIERS. Tiers are checked highest-threshold-first."""
+    for threshold, trail in TRAILING_STOP_TIERS:
+        if peak_profit_pct >= threshold:
+            return trail
+    return TRAILING_STOP_PCT
+
+
 def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
     """Smart exit + DCA: re-checks every open position once per run (not every
     tick - each check costs a GeckoTerminal call, and open-position count
@@ -580,6 +608,8 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
         was_in_profit = pos["peak_price_usd"] > pos["entry_price_usd"]
         loss_pct = (price - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
         drawdown_from_peak_pct = (price - pos["peak_price_usd"]) / pos["peak_price_usd"] * 100.0
+        peak_profit_pct = (pos["peak_price_usd"] - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
+        trail = trailing_stop_pct_for(peak_profit_pct)
 
         h1 = _as_float(current.get("price_change_pct", {}).get("h1"))
         txns_h1 = current.get("transactions", {}).get("h1", {}) or {}
@@ -588,7 +618,7 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
         reason = None
         if loss_pct <= -STOP_LOSS_PCT:
             reason = "stop_loss"
-        elif was_in_profit and drawdown_from_peak_pct <= -TRAILING_STOP_PCT:
+        elif was_in_profit and drawdown_from_peak_pct <= -trail:
             reason = "trailing_stop"
         elif h1 <= MOMENTUM_COLLAPSE_H1_PCT and sell_pressure:
             reason = "momentum_collapse"
@@ -684,9 +714,21 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick, portfolio):
             return_pct = (price_now - entry["entry_price_usd"]) / entry["entry_price_usd"] * 100.0
 
             if offset == EXIT_OFFSET_MINUTES:
-                closed = maybe_sell(portfolio, pool_id, price_now, checkpoint_ts)
-                if closed is not None:
-                    send_telegram(format_sell_alert(closed, portfolio["balance"]))
+                h1_now = _as_float(current.get("price_change_pct", {}).get("h1"))
+                h6_now = _as_float(current.get("price_change_pct", {}).get("h6"))
+                still_mooning = (
+                    return_pct >= MOONSHOT_EXTEND_MIN_RETURN_PCT
+                    and h1_now > 0 and h6_now > 0
+                )
+                if still_mooning:
+                    # Let it run - no forced sell. check_open_positions' own
+                    # stop-loss/trailing-stop/momentum-collapse keeps watching
+                    # it every run from here on, with no further time limit.
+                    send_telegram(format_moonshot_alert(entry["name"], entry["network"], return_pct))
+                else:
+                    closed = maybe_sell(portfolio, pool_id, price_now, checkpoint_ts)
+                    if closed is not None:
+                        send_telegram(format_sell_alert(closed, portfolio["balance"]))
 
             label_rows.append({
                 "row_type": "checkpoint",
@@ -754,6 +796,12 @@ DCA_INTROS = [
     "🧮 Keskmine sisenemishind just paranes.",
     "🎯 Ikka tugev, lihtsalt odavam. Lisasime.",
 ]
+MOONSHOT_INTROS = [
+    "🌙🚀 See üks lihtsalt ei taha maha rahuneda.",
+    "🔥 6h täis, aga see läheb ikka üles - jätame sõidu peale.",
+    "🐂 Bot otsustas: ei müü, see on alles algus.",
+    "📈 Diamond hands aktiveeritud - jätkame sõitu.",
+]
 
 
 def format_alert(pool, features, security):
@@ -792,6 +840,15 @@ def format_dca_alert(dca, balance_after):
         f"Lisasime ${dca['add_amount']:.2f} hinnaga ${dca['price']:.8f}",
         f"Uus keskmine sisenemishind: ${dca['new_entry_price']:.8f}",
         f"Ülejäänud saldo: ${balance_after:.2f}",
+    ])
+
+
+def format_moonshot_alert(name, network, return_pct):
+    return "\n".join([
+        f"[MÄNGURAHA] {random.choice(MOONSHOT_INTROS)}",
+        f"{name} ({network})",
+        f"6h juures juba {return_pct:+.0f}% ja endiselt tõusuteel - EI müü, jätkame jälgimist.",
+        f"Väljub alles siis, kui stop-loss/trailing-stop päriselt vallandub.",
     ])
 
 
