@@ -447,7 +447,11 @@ def main():
 
     with open(summary_path) as f:
         summary = f.read()
-    send_telegram(summary)
+    print(summary)
+    # Telegram silenced 2026-09-03: this chat is memecoin-scanner-only now
+    # (see scan_memecoins.py). Summary still lands in data/summary_latest.txt
+    # and this run's logs either way - re-enable by uncommenting if wanted.
+    # send_telegram(summary)
 
 
 if __name__ == "__main__":

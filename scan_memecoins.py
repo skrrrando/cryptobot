@@ -66,12 +66,12 @@ PENDING_CHECKPOINTS_PATH = os.path.join(DATA_DIR, "memecoin_pending_checkpoints.
 LABELS_JSONL_PATH = os.path.join(DATA_DIR, "memecoin_labels.jsonl")
 PORTFOLIO_PATH = os.path.join(DATA_DIR, "memecoin_portfolio.json")
 
-NETWORKS = ["solana", "base", "bsc"]
+NETWORKS = ["solana", "base", "bsc", "eth", "arbitrum", "polygon_pos"]
 GECKOTERMINAL_TRENDING_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/trending_pools"
 GECKOTERMINAL_POOL_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}"
 RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
 GOPLUS_TOKEN_SECURITY_URL = "https://api.gopluslabs.io/api/v1/token_security/{chain_id}?contract_addresses={address}"
-EVM_CHAIN_IDS = {"base": "8453", "bsc": "56"}
+EVM_CHAIN_IDS = {"base": "8453", "bsc": "56", "eth": "1", "arbitrum": "42161", "polygon_pos": "137"}
 
 # --- Timing ------------------------------------------------------------
 TICK_INTERVAL_SECONDS = 30
@@ -113,6 +113,16 @@ EXIT_OFFSET_MINUTES = 360  # sell at the 6h checkpoint
 GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
 RECOMMENDED_MIN_GOOD = 2
+
+# Smart exit: open positions are re-checked once per run (not every tick -
+# conserves API calls) against a stop-loss, a trailing-stop from the peak
+# price seen, and a momentum-collapse signal. The fixed 6h checkpoint exit
+# still applies as a fallback if none of these fire first. Starting
+# thresholds, not tuned against outcome data yet - same caveat as the rest
+# of this file's constants.
+STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
+TRAILING_STOP_PCT = 25.0        # exit if price pulls back this much from its peak (only once ever in profit)
+MOMENTUM_COLLAPSE_H1_PCT = -15.0  # exit if 1h change turns this negative AND sell pressure exceeds buy pressure
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -212,9 +222,10 @@ def fetch_trending_pools(network):
 
 
 def fetch_pool_price(network, pool_address):
-    """Single-pool lookup, used only at checkpoint time (not every tick) to
-    get this specific token's current price/mcap without re-fetching the
-    whole trending list."""
+    """Single-pool lookup, used at checkpoint/exit-check time (not every tick)
+    to get this specific token's current price/momentum without re-fetching
+    the whole trending list. Also returns price_change_pct/transactions (same
+    response, no extra cost) so exit logic can see momentum, not just price."""
     url = GECKOTERMINAL_POOL_URL.format(network=network, pool_address=pool_address)
     try:
         data = geckoterminal_get_json(url, timeout=15)
@@ -226,6 +237,8 @@ def fetch_pool_price(network, pool_address):
         "price_usd": attrs.get("base_token_price_usd"),
         "market_cap_usd": attrs.get("market_cap_usd"),
         "fdv_usd": attrs.get("fdv_usd"),
+        "price_change_pct": attrs.get("price_change_percentage", {}) or {},
+        "transactions": attrs.get("transactions", {}) or {},
     }
 
 
@@ -445,6 +458,7 @@ def maybe_buy(portfolio, pool, timestamp):
         "name": pool["name"],
         "entry_ts": timestamp,
         "entry_price_usd": price,
+        "peak_price_usd": price,
         "amount_usd": amount,
         "qty": amount / price,
     }
@@ -452,7 +466,7 @@ def maybe_buy(portfolio, pool, timestamp):
     return position
 
 
-def maybe_sell(portfolio, pool_id, price_now, timestamp):
+def maybe_sell(portfolio, pool_id, price_now, timestamp, reason="timeout"):
     pos = portfolio["positions"].pop(pool_id, None)
     if pos is None:
         return None
@@ -467,23 +481,74 @@ def maybe_sell(portfolio, pool_id, price_now, timestamp):
         "proceeds_usd": proceeds,
         "pnl_usd": pnl_usd,
         "pnl_pct": round(pnl_pct, 2),
+        "exit_reason": reason,
     }
     portfolio["closed"].append(closed)
     return closed
 
 
+def check_open_positions(portfolio, now_wall):
+    """Smart exit: re-checks every open position once per run (not every tick
+    - each check costs a GeckoTerminal call, and open-position count isn't
+    bounded the way checkpoint lookups are) against a stop-loss, a trailing
+    stop from the peak price seen, and a momentum-collapse signal. Checked in
+    that priority order - a hard stop-loss always wins over "well the trend
+    just turned." The fixed 6h checkpoint exit (process_due_checkpoints)
+    still applies underneath as a fallback if none of these fire first."""
+    closed_positions = []
+    for i, (pool_id, pos) in enumerate(list(portfolio["positions"].items())):
+        if i > 0:
+            time.sleep(1.5)  # shares GeckoTerminal's rate limit with everything else
+        current = fetch_pool_price(pos["network"], pos["pool_address"])
+        if current is None:
+            continue
+        price = _as_float(current.get("price_usd"))
+        if price <= 0:
+            continue
+
+        pos["peak_price_usd"] = max(pos.get("peak_price_usd", pos["entry_price_usd"]), price)
+        was_in_profit = pos["peak_price_usd"] > pos["entry_price_usd"]
+        loss_pct = (price - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
+        drawdown_from_peak_pct = (price - pos["peak_price_usd"]) / pos["peak_price_usd"] * 100.0
+
+        h1 = _as_float(current.get("price_change_pct", {}).get("h1"))
+        txns_h1 = current.get("transactions", {}).get("h1", {}) or {}
+        sell_pressure = _as_float(txns_h1.get("sells")) > _as_float(txns_h1.get("buys"))
+
+        reason = None
+        if loss_pct <= -STOP_LOSS_PCT:
+            reason = "stop_loss"
+        elif was_in_profit and drawdown_from_peak_pct <= -TRAILING_STOP_PCT:
+            reason = "trailing_stop"
+        elif h1 <= MOMENTUM_COLLAPSE_H1_PCT and sell_pressure:
+            reason = "momentum_collapse"
+
+        if reason is not None:
+            closed = maybe_sell(portfolio, pool_id, price, now_wall.isoformat(), reason=reason)
+            if closed is not None:
+                closed_positions.append(closed)
+    return closed_positions
+
+
 # --- Outcome checkpoints / labels table -----------------------------------
 
-def register_pending_checkpoint(pending, pool, timestamp):
+def register_pending_checkpoint(pending, pool, timestamp, features=None, security=None):
     """Called the first time a pool qualifies (passes momentum + security).
     Writes the T0 entry row straight to the labels buffer, and schedules
     future checkpoint lookups (10m/30m/1h/3h/6h) so we eventually learn what
-    actually happened after entry - not just that entry looked good."""
+    actually happened after entry - not just that entry looked good.
+
+    Persists features/security onto the entry row (not just price/mcap) so
+    analyze_labels.py can actually test whether rank_velocity, h1_accel, and
+    holder concentration predict outcomes - not just guess from the name."""
     pool_id = pool["id"]
     if pool_id in pending:
         return None
     entry_price = _as_float(pool.get("price_usd"))
     entry_mcap = _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"])
+    features = features or {}
+    security = security or {}
+    concentration = security.get("top10_pct") if pool["network"] == "solana" else security.get("owner_creator_pct")
     pending[pool_id] = {
         "network": pool["network"],
         "pool_address": pool["address"],
@@ -503,6 +568,9 @@ def register_pending_checkpoint(pending, pool, timestamp):
         "entry_ts": timestamp,
         "entry_price_usd": entry_price,
         "entry_mcap_usd": entry_mcap,
+        "rank_velocity": features.get("rank_velocity"),
+        "h1_accel": features.get("h1_accel"),
+        "concentration_pct": concentration,
     }
 
 
@@ -636,14 +704,24 @@ def format_buy_alert(position, balance_after):
     ])
 
 
+EXIT_REASON_LABELS = {
+    "stop_loss": "stop-loss vallandus",
+    "trailing_stop": "trailing-stop lukustas kasumi",
+    "momentum_collapse": "hoog kadus, väljusime",
+    "timeout": "6h hoidmise piir täis",
+}
+
+
 def format_sell_alert(closed, balance_after):
     win = closed["pnl_usd"] >= 0
     intro = random.choice(SELL_WIN_INTROS if win else SELL_LOSS_INTROS)
     sign = "+" if win else ""
+    reason_label = EXIT_REASON_LABELS.get(closed.get("exit_reason"), closed.get("exit_reason", ""))
     return "\n".join([
         f"[MÄNGURAHA] {intro}",
         f"{closed['name']} ({closed['network']})",
         f"Tulemus: {sign}${closed['pnl_usd']:.2f} ({sign}{closed['pnl_pct']:.1f}%)",
+        f"Põhjus: {reason_label}",
         f"Uus saldo: ${balance_after:.2f}",
     ])
 
@@ -681,7 +759,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
                 "market_cap_usd": _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"]),
             })
 
-            entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp)
+            entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp, features=features, security=security)
             if entry_row is not None:
                 label_rows_out.append(entry_row)
 
@@ -733,6 +811,9 @@ def main():
         time.sleep(TICK_INTERVAL_SECONDS)
 
     prune_hot_state(hot_state, datetime.now(timezone.utc))
+
+    for closed in check_open_positions(portfolio, datetime.now(timezone.utc)):
+        send_telegram(format_sell_alert(closed, portfolio["balance"]))
 
     # Overwritten fresh each run (not appended) - the workflow uploads this
     # as a per-run artifact instead of committing an ever-growing file to git.

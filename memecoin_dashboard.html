@@ -15,8 +15,9 @@
     --bad: #fb7185; --bad-glow: rgba(251,113,133,0.35);
     --caution: #f5a524;
     --gold: #fbbf24; --silver: #cbd5e1; --bronze: #d97757;
-    /* validated categorical triple (dataviz skill: blue/aqua/orange, dark mode, all checks pass) */
+    /* validated 6-slot categorical set (dataviz skill, dark mode, all checks pass) */
     --net-solana: #3987e5; --net-base: #199e70; --net-bsc: #d95926;
+    --net-eth: #c98500; --net-arbitrum: #9085e9; --net-polygon_pos: #d55181;
   }
   @property --gx1 { syntax: '<percentage>'; inherits: false; initial-value: 15%; }
   @property --gx2 { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
@@ -343,9 +344,9 @@
 <div id="tooltip"></div>
 
 <script>
-const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: 'var(--net-bsc)' };
-const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926' };
-const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC' };
+const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: 'var(--net-bsc)', eth: 'var(--net-eth)', arbitrum: 'var(--net-arbitrum)', polygon_pos: 'var(--net-polygon_pos)' };
+const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926', eth: '#c98500', arbitrum: '#9085e9', polygon_pos: '#d55181' };
+const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC', eth: 'Ethereum', arbitrum: 'Arbitrum', polygon_pos: 'Polygon' };
 const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M10 2l6 2.5v4.7c0 4-2.6 7.3-6 8.3-3.4-1-6-4.3-6-8.3V4.5L10 2z" fill="currentColor" opacity="0.18"/><path d="M6.5 10l2.3 2.3L13.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const TROPHY_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M6 3h8v4a4 4 0 0 1-8 0V3z" fill="currentColor" opacity="0.85"/><path d="M6 4H3.5a1 1 0 0 0-1 1.2c.3 1.6 1.3 2.7 3 3M14 4h2.5a1 1 0 0 1 1 1.2c-.3 1.6-1.3 2.7-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 11v2.5M7.5 16.5h5M8 14.2h4l.6 2.3H7.4l.6-2.3z" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 
@@ -643,7 +644,7 @@ function renderScatter(candidates, activeNetworks) {
   svg += `</svg>`;
 
   wrap.innerHTML = `<div class="chart-card">
-    <div class="chart-legend">${['solana','base','bsc'].filter(n => activeNetworks.has(n)).map(n =>
+    <div class="chart-legend">${['solana','base','bsc','eth','arbitrum','polygon_pos'].filter(n => activeNetworks.has(n)).map(n =>
       `<span class="item"><span class="swatch" style="background:${NET_COLOR[n]}"></span>${NET_LABEL[n]}</span>`
     ).join('')}<span class="item" style="margin-left:auto; color:var(--text-faint);">suurus = 24h volume</span></div>
     ${svg}
@@ -900,7 +901,7 @@ async function renderPortfolio(portfolio) {
 // ---- Network filter chips --------------------------------------------------
 function renderFilterChips(networksPresent, activeNetworks, onChange) {
   const el = document.getElementById('net-filter');
-  const order = ['solana', 'base', 'bsc'].filter(n => networksPresent.has(n));
+  const order = ['solana', 'base', 'bsc', 'eth', 'arbitrum', 'polygon_pos'].filter(n => networksPresent.has(n));
   if (order.length <= 1) { el.innerHTML = ''; return; }
   el.innerHTML = `<button class="chip ${activeNetworks.size === order.length ? 'active' : ''}" data-net="__all">Kõik</button>` +
     order.map(n => `<button class="chip ${activeNetworks.has(n) ? 'active' : ''}" data-net="${n}"><span class="dot" style="background:${NET_COLOR_HEX[n]}"></span>${NET_LABEL[n]}</button>`).join('');
