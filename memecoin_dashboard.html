@@ -388,6 +388,12 @@ const fmtUsd = (n) => {
   if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
   return (n < 0 ? '-$' : '$') + Math.abs(n).toFixed(Math.abs(n) < 1 ? 4 : 2);
 };
+// Full precision, never abbreviated to K/M - for the Net Worth hero number,
+// which is exactly the figure the user wants to read exactly, not rounded.
+const fmtUsdFull = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
 const fmtPct = (n) => {
   if (n === null || n === undefined || isNaN(n)) return '—';
   return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
@@ -473,7 +479,7 @@ function animateNetWorth(el, target) {
   function step(t) {
     const p = Math.min((t - t0) / dur, 1);
     const eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = fmtUsd(start + (target - start) * eased);
+    el.textContent = fmtUsdFull(start + (target - start) * eased);
     if (p < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -936,8 +942,8 @@ async function renderPortfolio(portfolio) {
   heroEl.innerHTML = `<div class="portfolio-hero ${moodClass}">
     <div class="portfolio-balance">
       <div class="label">Net worth</div>
-      <div class="value ${pctClass(totalReturn)}" id="net-worth-value">${fmtUsd(balance)}</div>
-      <div class="starting ${pctClass(totalReturn)}">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsd(totalReturn)} (${fmtPct(totalReturnPct)})</div>
+      <div class="value ${pctClass(totalReturn)}" id="net-worth-value">${fmtUsdFull(balance)}</div>
+      <div class="starting ${pctClass(totalReturn)}">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsdFull(totalReturn)} (${fmtPct(totalReturnPct)})</div>
     </div>
     <div class="portfolio-stats">
       <div class="stat"><div class="label">Vaba saldo</div><div class="val">${fmtUsd(balance)}</div></div>
