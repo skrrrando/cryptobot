@@ -841,46 +841,66 @@ async function renderPortfolio(portfolio) {
   const realizedPl = closed.reduce((s, c) => s + c.pnl_usd, 0);
   const wins = closed.filter(c => c.pnl_usd >= 0).length;
   const winRate = closed.length ? (wins / closed.length * 100) : null;
-  const equity = balance + invested; // cost-basis estimate; live P/L shown per-position below
 
-  heroEl.innerHTML = `<div class="portfolio-hero">
-    <div class="portfolio-balance">
-      <div class="label">Vaba saldo</div>
-      <div class="value ${pctClass(realizedPl)}">${fmtUsd(balance)}</div>
-      <div class="starting">Algne mänguraha: $1,000 · investeeritud hetkel: ${fmtUsd(invested)}</div>
-    </div>
-    <div class="portfolio-stats">
-      <div class="stat"><div class="label">Realiseeritud P/L</div><div class="val ${pctClass(realizedPl)}">${realizedPl >= 0 ? '+' : ''}${fmtUsd(realizedPl)}</div></div>
-      <div class="stat"><div class="label">Suletud tehinguid</div><div class="val">${closed.length}</div></div>
-      <div class="stat"><div class="label">Võiduprotsent</div><div class="val">${winRate != null ? winRate.toFixed(0) + '%' : '—'}</div></div>
-    </div>
-  </div>`;
-
+  // Render positions with a loading placeholder first (net worth needs
+  // every live price in hand before it can be computed, but the position
+  // rows themselves can still appear immediately).
   if (positions.length === 0) {
     posEl.innerHTML = `<div class="empty">Bot ei hoia hetkel ühtegi positsiooni. Iga uus "tänane soovitus" saab automaatselt 20% hetke saldost investeeritud.</div>`;
   } else {
-    posEl.innerHTML = `<div class="table-wrap">${positions.map(([poolId, p]) => `<div class="pos-row" data-pool-id="${poolId}" data-network="${p.network}" data-address="${p.pool_address}" data-entry="${p.entry_price_usd}" data-qty="${p.qty}" data-amount="${p.amount_usd}">
+    posEl.innerHTML = `<div class="table-wrap">${positions.map(([poolId, p]) => `<div class="pos-row" data-pool-id="${poolId}">
       <span class="pos-name"><span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span>${p.name}</span>
       <span class="pos-meta">${timeAgo(p.entry_ts)} tagasi</span>
       <span class="pos-val">${fmtUsd(p.amount_usd)}</span>
       <span class="pos-pl pending">laen...</span>
     </div>`).join('')}</div>`;
+  }
 
-    // fetch live prices for open positions in parallel (small count, capped by position sizing anyway)
-    posEl.querySelectorAll('.pos-row').forEach(async (row) => {
-      const network = row.dataset.network, address = row.dataset.address;
-      const entry = parseFloat(row.dataset.entry), qty = parseFloat(row.dataset.qty), amount = parseFloat(row.dataset.amount);
-      const plEl = row.querySelector('.pos-pl');
-      const price = await fetchLivePrice(network, address);
-      if (price == null || entry <= 0) { plEl.textContent = '—'; plEl.classList.remove('pending'); return; }
-      const value = qty * price;
-      const pl = value - amount;
-      const plPct = (pl / amount) * 100;
+  // Fetch every open position's live price in parallel, once, so both the
+  // per-position P/L rows AND the net-worth hero number use the same
+  // figures (fetching twice could show two slightly different prices).
+  const livePrices = await Promise.all(positions.map(async ([poolId, p]) => {
+    const price = await fetchLivePrice(p.network, p.pool_address);
+    return { poolId, p, price };
+  }));
+
+  let currentPositionsValue = 0;
+  livePrices.forEach(({ poolId, p, price }) => {
+    const row = posEl.querySelector(`.pos-row[data-pool-id="${CSS.escape(poolId)}"]`);
+    const plEl = row?.querySelector('.pos-pl');
+    if (price == null || p.entry_price_usd <= 0) {
+      currentPositionsValue += p.amount_usd; // fall back to cost basis if the live fetch failed
+      if (plEl) { plEl.textContent = '—'; plEl.classList.remove('pending'); }
+      return;
+    }
+    const value = p.qty * price;
+    currentPositionsValue += value;
+    const pl = value - p.amount_usd;
+    const plPct = (pl / p.amount_usd) * 100;
+    if (plEl) {
       plEl.classList.remove('pending');
       plEl.classList.add(pctClass(pl));
       plEl.textContent = `${pl >= 0 ? '+' : ''}${fmtUsd(pl)} (${fmtPct(plPct)})`;
-    });
-  }
+    }
+  });
+
+  const netWorth = balance + currentPositionsValue;
+  const totalReturn = netWorth - 1000;
+  const totalReturnPct = (totalReturn / 1000) * 100;
+
+  heroEl.innerHTML = `<div class="portfolio-hero">
+    <div class="portfolio-balance">
+      <div class="label">Net worth</div>
+      <div class="value ${pctClass(totalReturn)}">${fmtUsd(netWorth)}</div>
+      <div class="starting">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsd(totalReturn)} (${fmtPct(totalReturnPct)})</div>
+    </div>
+    <div class="portfolio-stats">
+      <div class="stat"><div class="label">Vaba saldo</div><div class="val">${fmtUsd(balance)}</div></div>
+      <div class="stat"><div class="label">Positsioonides</div><div class="val">${fmtUsd(currentPositionsValue)}</div></div>
+      <div class="stat"><div class="label">Realiseeritud P/L</div><div class="val ${pctClass(realizedPl)}">${realizedPl >= 0 ? '+' : ''}${fmtUsd(realizedPl)}</div></div>
+      <div class="stat"><div class="label">Võiduprotsent</div><div class="val">${winRate != null ? winRate.toFixed(0) + '%' : '—'}</div></div>
+    </div>
+  </div>`;
 
   if (closed.length === 0) {
     closedEl.innerHTML = `<div class="empty">Ühtegi tehingut pole veel suletud - positsioonid müüakse 6h checkpointi juures.</div>`;
