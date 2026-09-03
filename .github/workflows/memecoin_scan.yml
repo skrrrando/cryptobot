@@ -2,11 +2,13 @@ name: Memecoin trend scan
 
 on:
   schedule:
-    # GitHub Actions cron is always UTC. */5 * * * * = every 5 minutes, the
-    # practical floor for scheduled Actions cron. Each invocation internally
-    # loops (see scan_memecoins.py LOOP_DURATION_SECONDS/TICK_INTERVAL_SECONDS)
-    # taking a snapshot every ~30s for ~4 minutes, so real sampling density
-    # is much higher than the 5-minute trigger alone would suggest.
+    # Kept only as a redundant backup - confirmed empirically that GitHub's
+    # own `schedule:` trigger is unreliable on this account (runs meant to
+    # be 5 minutes apart landed 2-4 HOURS apart). The real trigger is an
+    # external cron service (cron-job.org) calling this workflow's
+    # workflow_dispatch API every 5 minutes instead, which GitHub does not
+    # throttle the same way. If that external service ever goes down, this
+    # schedule still fires occasionally so the bot doesn't go fully silent.
     - cron: "*/5 * * * *"
   workflow_dispatch:
 

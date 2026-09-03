@@ -37,12 +37,21 @@ Two kinds of historical record are kept, deliberately NOT the same file:
      so the raw firehose is still fully recoverable without living in git
      history forever.
 
-Runs as a short-lived burst loop (not a long-running daemon): each GitHub
-Actions invocation (triggered every 5 minutes, the practical floor for
-scheduled Actions cron) takes a snapshot every TICK_INTERVAL_SECONDS for
-LOOP_DURATION_SECONDS, then commits once. This approximates much denser
-polling than a single per-invocation snapshot would give, without needing
-a persistent server.
+Runs as a short-lived single-tick script, not a long-running daemon: each
+invocation takes one snapshot across all networks, then commits once and
+exits. It used to loop internally for ~4 minutes to fake density, back when
+this ran on GitHub Actions' own `schedule:` trigger - which turned out to
+be unreliable on this account (confirmed empirically: runs meant to be 5
+minutes apart landed 2-4 HOURS apart). The fix was to stop relying on
+`schedule:` at all: an external cron service (cron-job.org) now calls this
+workflow's `workflow_dispatch` API every 5 minutes instead, which GitHub
+does NOT throttle the way it throttles `schedule:`. With a genuinely
+reliable external trigger, internal looping is redundant - it was only
+ever a workaround for GitHub's unreliable scheduler, and looping for 4
+minutes across 6 networks risked runs overlapping the next 5-minute
+trigger and queueing up behind each other (concurrency group serializes,
+doesn't run in parallel). One fast tick per invocation now IS the polling
+density, at whatever cadence the external trigger actually delivers.
 """
 import json
 import os
@@ -74,15 +83,22 @@ GOPLUS_TOKEN_SECURITY_URL = "https://api.gopluslabs.io/api/v1/token_security/{ch
 EVM_CHAIN_IDS = {"base": "8453", "bsc": "56", "eth": "1", "arbitrum": "42161", "polygon_pos": "137"}
 
 # --- Timing ------------------------------------------------------------
+# One tick per invocation now (see module docstring for why) - an external
+# cron service triggers a fresh invocation every 5 minutes, so that IS the
+# polling cadence. LOOP_DURATION_SECONDS just needs to be smaller than one
+# tick's own runtime so the while-loop in main() never attempts a second
+# tick; TICK_INTERVAL_SECONDS is dead code left in place only in case
+# someone wants multi-tick behavior back for local testing.
 TICK_INTERVAL_SECONDS = 30
-LOOP_DURATION_SECONDS = 240  # ~4 min of ticks per 5-min cron invocation,
-                              # leaving ~1 min headroom for setup/commit/push
+LOOP_DURATION_SECONDS = 1
 
 # --- Momentum pre-filter (cheap, runs every tick on every trending pool) -
+# One "tick" = one invocation now (~5 min apart, set by the external cron -
+# see Timing section above), not a sub-loop within a single run.
 MIN_MARKET_CAP_USD = 50_000
-HOT_STATE_WINDOW = 20          # keep last N ticks per pool (~10 min at 30s cadence)
+HOT_STATE_WINDOW = 20          # keep last N ticks per pool (~100 min at ~5 min/tick)
 HOT_STATE_MAX_AGE_SECONDS = 7200  # drop a pool from hot state if unseen for 2h
-MIN_HISTORY_FOR_VELOCITY = 3   # need this many prior ticks before trusting
+MIN_HISTORY_FOR_VELOCITY = 3   # need this many prior ticks (~15 min) before trusting
                                 # rank_velocity/h1_accel; below that, fall back
                                 # to the base momentum conditions only
 
