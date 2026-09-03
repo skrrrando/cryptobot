@@ -251,12 +251,28 @@
   /* ---- play-money portfolio ---- */
   .portfolio-hero {
     background: linear-gradient(135deg, var(--card) 0%, var(--card2) 130%);
-    border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px;
+    border: 1px solid var(--border); border-radius: 16px; padding: 26px 28px;
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    position: relative; overflow: hidden; transition: border-color 0.3s;
   }
-  .portfolio-balance .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 800; margin-bottom: 6px; }
-  .portfolio-balance .value { font-size: 44px; font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
-  .portfolio-balance .starting { font-size: 12px; color: var(--text-faint); margin-top: 6px; }
+  .portfolio-hero.winning { border-color: rgba(52,211,153,0.4); }
+  .portfolio-hero.winning::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 420px 220px at 0% 0%, rgba(52,211,153,0.14), transparent 70%);
+  }
+  .portfolio-hero.losing { border-color: rgba(251,113,133,0.35); }
+  .portfolio-hero.losing::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 420px 220px at 0% 0%, rgba(251,113,133,0.10), transparent 70%);
+  }
+  .portfolio-balance { position: relative; }
+  .portfolio-balance .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); font-weight: 800; margin-bottom: 8px; }
+  .portfolio-balance .value { font-size: 60px; font-weight: 900; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .portfolio-balance .value.good { color: var(--good); text-shadow: 0 0 44px var(--good-glow); }
+  .portfolio-balance .value.bad { color: var(--bad); text-shadow: 0 0 44px var(--bad-glow); }
+  .portfolio-balance .starting { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 600; }
+  .portfolio-balance .starting.good { color: var(--good); }
+  .portfolio-balance .starting.bad { color: var(--bad); }
   .portfolio-stats { display: flex; gap: 24px; flex-wrap: wrap; }
   .portfolio-stats .stat { text-align: right; }
   .portfolio-stats .stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
@@ -451,6 +467,18 @@ async function fetchLivePrice(network, poolAddress) {
 }
 
 // ---- animated count-up for stat tiles -------------------------------------
+function animateNetWorth(el, target) {
+  if (!el) return;
+  const start = 0, dur = 900, t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmtUsd(start + (target - start) * eased);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function animateCount(el, target, isPct) {
   const start = 0, dur = 700, t0 = performance.now();
   function step(t) {
@@ -903,12 +931,13 @@ async function renderPortfolio(portfolio) {
   const netWorth = balance + currentPositionsValue;
   const totalReturn = netWorth - 1000;
   const totalReturnPct = (totalReturn / 1000) * 100;
+  const moodClass = totalReturn > 0 ? 'winning' : totalReturn < 0 ? 'losing' : '';
 
-  heroEl.innerHTML = `<div class="portfolio-hero">
+  heroEl.innerHTML = `<div class="portfolio-hero ${moodClass}">
     <div class="portfolio-balance">
       <div class="label">Net worth</div>
-      <div class="value ${pctClass(totalReturn)}">${fmtUsd(netWorth)}</div>
-      <div class="starting">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsd(totalReturn)} (${fmtPct(totalReturnPct)})</div>
+      <div class="value ${pctClass(totalReturn)}" id="net-worth-value">${fmtUsd(balance)}</div>
+      <div class="starting ${pctClass(totalReturn)}">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsd(totalReturn)} (${fmtPct(totalReturnPct)})</div>
     </div>
     <div class="portfolio-stats">
       <div class="stat"><div class="label">Vaba saldo</div><div class="val">${fmtUsd(balance)}</div></div>
@@ -917,6 +946,7 @@ async function renderPortfolio(portfolio) {
       <div class="stat"><div class="label">Võiduprotsent</div><div class="val">${winRate != null ? winRate.toFixed(0) + '%' : '—'}</div></div>
     </div>
   </div>`;
+  animateNetWorth(document.getElementById('net-worth-value'), netWorth);
 
   if (closed.length === 0) {
     closedEl.innerHTML = `<div class="empty">Ühtegi tehingut pole veel suletud - positsioonid müüakse 6h checkpointi juures.</div>`;

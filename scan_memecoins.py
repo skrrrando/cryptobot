@@ -124,7 +124,10 @@ MAX_CHECKPOINT_LOOKUPS_PER_TICK = 8  # defensive cap, same rationale as security
 # never touches broker.py/engine.py or anything resembling real trading.
 STARTING_BALANCE_USD = 1000.0
 POSITION_SIZE_FRACTION = 0.20  # 20% of current balance per buy
-MIN_TRADE_USD = 1.0
+MIN_TRADE_USD = 20.0            # below this, a trade is too small to matter even if it triples - skip it
+MAX_CONCURRENT_POSITIONS = 6    # once full, hold off buying until a position closes and frees a slot -
+                                 # without this, 20%-of-current-balance sizing shrinks every subsequent
+                                 # buy geometrically (found in production: a real run reached $10 trades)
 EXIT_OFFSET_MINUTES = 360  # sell at the 6h checkpoint
 GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
@@ -468,6 +471,8 @@ def maybe_buy(portfolio, pool, timestamp):
     pool_id = pool["id"]
     if pool_id in portfolio["positions"]:
         return None
+    if len(portfolio["positions"]) >= MAX_CONCURRENT_POSITIONS:
+        return None  # full - wait for a position to close before opening another
     price = _as_float(pool.get("price_usd"))
     if price <= 0:
         return None
