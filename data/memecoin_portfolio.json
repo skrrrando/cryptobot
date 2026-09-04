@@ -1,5 +1,5 @@
 {
-  "balance": 711.8585171771131,
+  "balance": 764.6293768630082,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -33,17 +33,6 @@
       "peak_price_usd": 0.000183600002919383,
       "amount_usd": 65.01341794148621,
       "qty": 399340.9139052615
-    },
-    "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
-      "network": "base",
-      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
-      "name": "SOL / USDC 0.029%",
-      "entry_ts": "2026-09-03T13:50:35.395067+00:00",
-      "entry_price_usd": 102.131081392322,
-      "peak_price_usd": 105.868838834362,
-      "amount_usd": 52.01073435318897,
-      "qty": 0.509254711143194
     },
     "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5": {
       "network": "bsc",
@@ -470,6 +459,23 @@
       "proceeds_usd": 12.266510452062203,
       "pnl_usd": 0.7625681848864545,
       "pnl_pct": 6.63,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "name": "SOL / USDC 0.029%",
+      "entry_ts": "2026-09-03T13:50:35.395067+00:00",
+      "entry_price_usd": 102.131081392322,
+      "peak_price_usd": 105.868838834362,
+      "amount_usd": 52.01073435318897,
+      "qty": 0.509254711143194,
+      "exit_ts": "2026-09-04T01:40:53.326672+00:00",
+      "exit_price_usd": 103.623704466932,
+      "proceeds_usd": 52.770859685895154,
+      "pnl_usd": 0.7601253327061812,
+      "pnl_pct": 1.46,
       "exit_reason": "timeout"
     }
   ]
