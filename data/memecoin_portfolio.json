@@ -1,5 +1,5 @@
 {
-  "balance": 699.5920067250509,
+  "balance": 711.8585171771131,
   "positions": {
     "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1": {
       "network": "eth",
@@ -66,17 +66,6 @@
       "peak_price_usd": 0.261186598595593,
       "amount_usd": 22.468637240577635,
       "qty": 99.80411745470165
-    },
-    "eth_0x69c7bd26512f52bf6f76fab834140d13dda673ca": {
-      "network": "eth",
-      "pool_address": "0x69c7bd26512f52bf6f76fab834140d13dda673ca",
-      "base_token_address": "0x8ed97a637a790be1feff5e888d43629dc05408f6",
-      "name": "NPC / WETH",
-      "entry_ts": "2026-09-03T14:35:27.901367+00:00",
-      "entry_price_usd": 0.0182705298171245,
-      "peak_price_usd": 0.0197385096231665,
-      "amount_usd": 11.503942267175749,
-      "qty": 629.6447000892879
     },
     "eth_0xc56c9d4aee66e16aa4a31a710a6d2fc720a626b6": {
       "network": "eth",
@@ -464,6 +453,23 @@
       "proceeds_usd": 43.277348108697964,
       "pnl_usd": 0.05099393158312182,
       "pnl_pct": 0.12,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "eth",
+      "pool_address": "0x69c7bd26512f52bf6f76fab834140d13dda673ca",
+      "base_token_address": "0x8ed97a637a790be1feff5e888d43629dc05408f6",
+      "name": "NPC / WETH",
+      "entry_ts": "2026-09-03T14:35:27.901367+00:00",
+      "entry_price_usd": 0.0182705298171245,
+      "peak_price_usd": 0.0197385096231665,
+      "amount_usd": 11.503942267175749,
+      "qty": 629.6447000892879,
+      "exit_ts": "2026-09-04T01:15:53.828342+00:00",
+      "exit_price_usd": 0.0194816385341173,
+      "proceeds_usd": 12.266510452062203,
+      "pnl_usd": 0.7625681848864545,
+      "pnl_pct": 6.63,
       "exit_reason": "timeout"
     }
   ]
