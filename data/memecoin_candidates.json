@@ -1,17 +1,63 @@
 {
-  "timestamp": "2026-09-04T11:42:13.382239+00:00",
+  "timestamp": "2026-09-04T11:47:25.469140+00:00",
   "candidates": [
     {
-      "id": "base_0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "timestamp": "2026-09-04T11:40:32.120901+00:00",
-      "network": "base",
-      "name": "SOL / USDC 0.015%",
-      "address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "id": "solana_Bzc9NZfMqkXR6fz1DBph7BDf9BroyEf6pnzESP7v5iiw",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "solana",
+      "name": "Fartcoin / SOL",
+      "address": "Bzc9NZfMqkXR6fz1DBph7BDf9BroyEf6pnzESP7v5iiw",
+      "base_token_address": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump",
       "rank": 12,
       "features": {
+        "rank_velocity": 1,
+        "h1_accel": 1.1869999999999998,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "mint_authority_active": false,
+        "freeze_authority_active": false,
+        "top10_pct": 37.1,
+        "has_danger_risk": false,
+        "whale_buyer_pct": 55.6,
+        "checked_at": 1788520830.2226756
+      },
+      "price_change_pct": {
+        "m5": "1.532",
+        "m15": "2.236",
+        "m30": "3.714",
+        "h1": "4.353",
+        "h6": "3.52",
+        "h24": "9.913"
+      },
+      "volume_usd": {
+        "m5": "29040.308415051",
+        "m15": "81095.4050196779",
+        "m30": "121002.567736157",
+        "h1": "125092.350215335",
+        "h6": "325756.811222598",
+        "h24": "1275226.83241559"
+      },
+      "market_cap_usd": 176699155.412745,
+      "transactions_h1": {
+        "buys": 139,
+        "sells": 54,
+        "buyers": 24,
+        "sellers": 15
+      }
+    },
+    {
+      "id": "base_0x5116773e18a9c7bb03ebb961b38678e45e238923",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "base",
+      "name": "DRB / WETH 1%",
+      "address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
+      "base_token_address": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
+      "rank": 2,
+      "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.89,
+        "h1_accel": 0.1070000000000002,
         "history_len": 20
       },
       "security": {
@@ -20,36 +66,82 @@
         "is_mintable": false,
         "is_blacklisted": false,
         "owner_creator_pct": 0.0,
-        "whale_buyer_pct": 5.9,
-        "checked_at": 1788520533.6158311
+        "whale_buyer_pct": 19.9,
+        "checked_at": 1788522334.2540317
       },
       "price_change_pct": {
-        "m5": "0.192",
-        "m15": "0.835",
-        "m30": "1.134",
-        "h1": "0.924",
-        "h6": "1.028",
-        "h24": "4.088"
+        "m5": "0.125",
+        "m15": "1.722",
+        "m30": "2.087",
+        "h1": "3.712",
+        "h6": "4.519",
+        "h24": "7.505"
       },
       "volume_usd": {
-        "m5": "16085.8294251369",
-        "m15": "56704.9326534044",
-        "m30": "109896.7961154",
-        "h1": "192435.249963168",
-        "h6": "1263159.45594949",
-        "h24": "5948203.28626457"
+        "m5": "558.9583908677",
+        "m15": "8063.9977490529",
+        "m30": "9193.214258416",
+        "h1": "16089.4064247745",
+        "h6": "44745.957613828",
+        "h24": "393672.580326062"
       },
-      "market_cap_usd": 5011576.43932395,
+      "market_cap_usd": 16413260.3,
       "transactions_h1": {
-        "buys": 169,
-        "sells": 134,
-        "buyers": 90,
-        "sellers": 75
+        "buys": 42,
+        "sells": 2,
+        "buyers": 25,
+        "sellers": 2
+      }
+    },
+    {
+      "id": "base_0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "base",
+      "name": "SOL / USDC 0.015%",
+      "address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "rank": 12,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 1.107,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": 5.5,
+        "checked_at": 1788522334.8541589
+      },
+      "price_change_pct": {
+        "m5": "-0.135",
+        "m15": "0.657",
+        "m30": "0.352",
+        "h1": "0.981",
+        "h6": "1.295",
+        "h24": "3.913"
+      },
+      "volume_usd": {
+        "m5": "6679.2384251248",
+        "m15": "40037.7556542371",
+        "m30": "106115.210568196",
+        "h1": "188320.889731922",
+        "h6": "1261154.35318899",
+        "h24": "5947672.51628517"
+      },
+      "market_cap_usd": 5005732.37858199,
+      "transactions_h1": {
+        "buys": 163,
+        "sells": 130,
+        "buyers": 87,
+        "sellers": 73
       }
     },
     {
       "id": "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16",
-      "timestamp": "2026-09-04T11:40:32.120901+00:00",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
       "network": "bsc",
       "name": "MarsCoin / USDT 0.25%",
       "address": "0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16",
@@ -57,7 +149,7 @@
       "rank": 1,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 3.9410000000000003,
+        "h1_accel": 8.129,
         "history_len": 20
       },
       "security": {
@@ -70,32 +162,32 @@
         "checked_at": 1788521732.121904
       },
       "price_change_pct": {
-        "m5": "2.93",
-        "m15": "3.659",
-        "m30": "-0.146",
-        "h1": "5.735",
-        "h6": "41.141",
-        "h24": "69.816"
+        "m5": "1.479",
+        "m15": "2.968",
+        "m30": "1.264",
+        "h1": "9.918",
+        "h6": "40.663",
+        "h24": "71.437"
       },
       "volume_usd": {
-        "m5": "160670.494974658",
-        "m15": "567445.60052673",
-        "m30": "1945790.20968297",
-        "h1": "6003642.67677836",
-        "h6": "21909487.8472002",
-        "h24": "39372567.2211852"
+        "m5": "198282.828715534",
+        "m15": "569675.886562586",
+        "m30": "1679142.90205092",
+        "h1": "5287679.29664463",
+        "h6": "22041067.8415592",
+        "h24": "39548313.0147651"
       },
-      "market_cap_usd": 184575864.3,
+      "market_cap_usd": 187221655.3,
       "transactions_h1": {
-        "buys": 5538,
-        "sells": 3205,
-        "buyers": 776,
-        "sellers": 847
+        "buys": 4842,
+        "sells": 3056,
+        "buyers": 716,
+        "sellers": 766
       }
     },
     {
       "id": "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d",
-      "timestamp": "2026-09-04T11:40:32.120901+00:00",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
       "network": "bsc",
       "name": "Max / WBNB",
       "address": "0xa2b1926cb477e92445cf70602f1a7200361f761d",
@@ -103,7 +195,7 @@
       "rank": 2,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 13.343,
+        "h1_accel": 26.939999999999998,
         "history_len": 20
       },
       "security": {
@@ -116,32 +208,308 @@
         "checked_at": 1788521732.550501
       },
       "price_change_pct": {
-        "m5": "16.963",
-        "m15": "19.76",
-        "m30": "33.671",
-        "h1": "32.911",
-        "h6": "67.065",
-        "h24": "59.336"
+        "m5": "11.453",
+        "m15": "22.633",
+        "m30": "40.547",
+        "h1": "39.772",
+        "h6": "73.866",
+        "h24": "54.264"
       },
       "volume_usd": {
-        "m5": "93162.0417608234",
-        "m15": "541507.895982288",
-        "m30": "684536.805957073",
-        "h1": "794784.954886622",
-        "h6": "1343536.52361936",
-        "h24": "3610970.54362091"
+        "m5": "244016.261008511",
+        "m15": "585453.603893272",
+        "m30": "937733.344750376",
+        "h1": "1029268.7833525",
+        "h6": "1599949.16346196",
+        "h24": "3808109.09964635"
       },
-      "market_cap_usd": 19499475.84,
+      "market_cap_usd": 20659442.5,
       "transactions_h1": {
-        "buys": 718,
-        "sells": 305,
+        "buys": 814,
+        "sells": 437,
+        "buyers": 198,
+        "sellers": 233
+      }
+    },
+    {
+      "id": "bsc_0x9793a9cbb04f781433254e4530398107e6a8dcee",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "bsc",
+      "name": "FLORK / BTCB",
+      "address": "0x9793a9cbb04f781433254e4530398107e6a8dcee",
+      "base_token_address": "0xf40592daacb3e5abf358789f5688c0b4f64d7777",
+      "rank": 3,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 15.885,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": null,
+        "checked_at": 1788522339.0543165
+      },
+      "price_change_pct": {
+        "m5": "0.024",
+        "m15": "-7.028",
+        "m30": "-2.428",
+        "h1": "3.358",
+        "h6": "13.977",
+        "h24": "-10.526"
+      },
+      "volume_usd": {
+        "m5": "921.5271316322",
+        "m15": "17365.7342571506",
+        "m30": "59348.8124254097",
+        "h1": "179077.454459326",
+        "h6": "1584053.03112517",
+        "h24": "3302722.79980312"
+      },
+      "market_cap_usd": 24534078.24,
+      "transactions_h1": {
+        "buys": 286,
+        "sells": 174,
+        "buyers": 203,
+        "sellers": 146
+      }
+    },
+    {
+      "id": "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "bsc",
+      "name": "MarsCoin / USDT 1%",
+      "address": "0x4a4bea953813c118c260be9a26b2321e57aa62e5",
+      "base_token_address": "0xfe189e97832da1573e4e4ff034f4ffc3a15c7777",
+      "rank": 10,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 4.6690000000000005,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": 22.7,
+        "checked_at": 1788521732.121904
+      },
+      "price_change_pct": {
+        "m5": "0.83",
+        "m15": "2.709",
+        "m30": "1.388",
+        "h1": "7.602",
+        "h6": "40.114",
+        "h24": "71.179"
+      },
+      "volume_usd": {
+        "m5": "36993.9735083553",
+        "m15": "83838.4707702713",
+        "m30": "234383.191589014",
+        "h1": "1405630.93818236",
+        "h6": "7530079.3091505",
+        "h24": "14122359.373324"
+      },
+      "market_cap_usd": 184092099.2,
+      "transactions_h1": {
+        "buys": 679,
+        "sells": 452,
         "buyers": 175,
-        "sellers": 177
+        "sellers": 184
+      }
+    },
+    {
+      "id": "bsc_0xffca411cfbcd3194503effa80fd394b55387915c",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "bsc",
+      "name": "Sue / WBNB",
+      "address": "0xffca411cfbcd3194503effa80fd394b55387915c",
+      "base_token_address": "0x2ab8a4dd2191989ac2898006df350b236d2b7777",
+      "rank": 12,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 16.058,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": null,
+        "checked_at": 1788522348.4264538
+      },
+      "price_change_pct": {
+        "m5": "9.352",
+        "m15": "14.027",
+        "m30": "46.721",
+        "h1": "56.702",
+        "h6": "6.507",
+        "h24": "9.463"
+      },
+      "volume_usd": {
+        "m5": "3254.1143253615",
+        "m15": "8701.5389301152",
+        "m30": "40166.2531110448",
+        "h1": "49797.3135905112",
+        "h6": "140314.54493695",
+        "h24": "389217.832205619"
+      },
+      "market_cap_usd": 549480.8707,
+      "transactions_h1": {
+        "buys": 249,
+        "sells": 184,
+        "buyers": 162,
+        "sellers": 114
+      }
+    },
+    {
+      "id": "bsc_0x52c231aa6f12c10ad6298c6ec652175e566bf429",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "bsc",
+      "name": "FLORK / USDT 1%",
+      "address": "0x52c231aa6f12c10ad6298c6ec652175e566bf429",
+      "base_token_address": "0xf40592daacb3e5abf358789f5688c0b4f64d7777",
+      "rank": 18,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 19.955,
+        "history_len": 18
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": null,
+        "checked_at": 1788522339.0543165
+      },
+      "price_change_pct": {
+        "m5": "0.116",
+        "m15": "-5.194",
+        "m30": "-2.102",
+        "h1": "3.933",
+        "h6": "11.848",
+        "h24": "-9.262"
+      },
+      "volume_usd": {
+        "m5": "4419.6234300117",
+        "m15": "47846.005985532",
+        "m30": "103699.095648753",
+        "h1": "295008.784445571",
+        "h6": "2378526.58386638",
+        "h24": "5955396.57386382"
+      },
+      "market_cap_usd": 24611524.9,
+      "transactions_h1": {
+        "buys": 344,
+        "sells": 257,
+        "buyers": 141,
+        "sellers": 118
+      }
+    },
+    {
+      "id": "eth_0xb07d640fd9e2eb9dc81b953c8e4fd006bdfeaf276010fb5418eb763ca15abfb3",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "eth",
+      "name": "VIBE / ETH 1%",
+      "address": "0xb07d640fd9e2eb9dc81b953c8e4fd006bdfeaf276010fb5418eb763ca15abfb3",
+      "base_token_address": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+      "rank": 4,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.8849999999999998,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.1,
+        "whale_buyer_pct": 22.0,
+        "checked_at": 1788521455.4957669
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "3.588",
+        "m30": "4.649",
+        "h1": "5.983",
+        "h6": "4.211",
+        "h24": "27.122"
+      },
+      "volume_usd": {
+        "m5": "25.1296205",
+        "m15": "15056.7399729485",
+        "m30": "19167.6351928004",
+        "h1": "35251.2182259481",
+        "h6": "147402.227840525",
+        "h24": "1592478.15570251"
+      },
+      "market_cap_usd": 11727202.106929,
+      "transactions_h1": {
+        "buys": 17,
+        "sells": 3,
+        "buyers": 11,
+        "sellers": 3
+      }
+    },
+    {
+      "id": "eth_0x69c7bd26512f52bf6f76fab834140d13dda673ca",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
+      "network": "eth",
+      "name": "NPC / WETH",
+      "address": "0x69c7bd26512f52bf6f76fab834140d13dda673ca",
+      "base_token_address": "0x8ed97a637a790be1feff5e888d43629dc05408f6",
+      "rank": 5,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 1.1179999999999999,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "whale_buyer_pct": null,
+        "checked_at": 1788522361.581808
+      },
+      "price_change_pct": {
+        "m5": "-0.215",
+        "m15": "0.375",
+        "m30": "0.852",
+        "h1": "2.19",
+        "h6": "10.484",
+        "h24": "12.799"
+      },
+      "volume_usd": {
+        "m5": "2231.4257495364",
+        "m15": "17360.603814714",
+        "m30": "92602.3098179487",
+        "h1": "160643.012167161",
+        "h6": "352434.16638435",
+        "h24": "1302253.22471169"
+      },
+      "market_cap_usd": 171294644.365248,
+      "transactions_h1": {
+        "buys": 79,
+        "sells": 39,
+        "buyers": 34,
+        "sellers": 25
       }
     },
     {
       "id": "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7",
-      "timestamp": "2026-09-04T11:40:32.120901+00:00",
+      "timestamp": "2026-09-04T11:45:30.780199+00:00",
       "network": "eth",
       "name": "ONDO / WETH 0.3%",
       "address": "0x7b1e5d984a43ee732de195628d20d05cfabc3cc7",
@@ -166,15 +534,15 @@
         "m15": "0.077",
         "m30": "0.205",
         "h1": "0.784",
-        "h6": "1.591",
+        "h6": "1.64",
         "h24": "3.7"
       },
       "volume_usd": {
-        "m5": "49.2264774174",
+        "m5": "0.0",
         "m15": "1068.5272337051",
         "m30": "2142.1584975962",
         "h1": "3209.4157902591",
-        "h6": "36375.8816544762",
+        "h6": "35632.5717611779",
         "h24": "219351.957601692"
       },
       "market_cap_usd": 1791800307.90521,
