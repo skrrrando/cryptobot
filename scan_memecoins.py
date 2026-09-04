@@ -76,6 +76,13 @@ LABELS_JSONL_PATH = os.path.join(DATA_DIR, "memecoin_labels.jsonl")
 PORTFOLIO_PATH = os.path.join(DATA_DIR, "memecoin_portfolio.json")
 
 NETWORKS = ["solana", "base", "bsc", "eth", "arbitrum", "polygon_pos"]
+# Still scanned/labeled/alerted on normally (keeps contributing to the
+# outcome dataset), just never actually bought - confirmed via the gas/
+# slippage/tax model that a small trade on these networks loses a big
+# chunk of its value to fees alone before the token even has to move
+# (Ethereum mainnet: ~$4 gas paid twice plus tax ate ~14% of a flat $100
+# trade at zero price change - see maybe_buy/estimate_gas_usd).
+TRADING_EXCLUDED_NETWORKS = {"eth"}
 GECKOTERMINAL_TRENDING_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/trending_pools"
 GECKOTERMINAL_POOL_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}"
 GECKOTERMINAL_TRADES_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}/trades"
@@ -727,6 +734,8 @@ def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick
     still passes), not just "it got cheaper." See DCA_* constants for the
     exact band/sizing/cap. Mutates pos in place; returns a summary dict or
     None if nothing fired."""
+    if pos["network"] in TRADING_EXCLUDED_NETWORKS:
+        return None  # don't add more capital to a network we've stopped trading
     if pos.get("dca_count", 0) >= DCA_MAX_ADDS:
         return None
     price = _as_float(current.get("price_usd"))
@@ -1130,7 +1139,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
             # improves later (rank climbs, momentum accelerates) must still
             # get a buy chance - maybe_buy's own "already holding" guard is
             # what prevents buying the same open position twice.
-            if classify_recommendation(pool, features, security):
+            if pool["network"] not in TRADING_EXCLUDED_NETWORKS and classify_recommendation(pool, features, security):
                 position = maybe_buy(portfolio, pool, security, timestamp)
                 if position is not None:
                     send_telegram(format_buy_alert(position, portfolio["balance"]))
