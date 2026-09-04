@@ -1,5 +1,5 @@
 {
-  "balance": 532.4317800395936,
+  "balance": 594.7487488781333,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -11,17 +11,6 @@
       "peak_price_usd": 0.737423476970995,
       "amount_usd": 15.799320127183345,
       "qty": 21.471850525715606
-    },
-    "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": {
-      "network": "base",
-      "pool_address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
-      "base_token_address": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
-      "name": "DRB / WETH 1%",
-      "entry_ts": "2026-09-03T13:50:35.395067+00:00",
-      "entry_price_usd": 0.000162801795853329,
-      "peak_price_usd": 0.000183600002919383,
-      "amount_usd": 65.01341794148621,
-      "qty": 399340.9139052615
     },
     "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5": {
       "network": "bsc",
@@ -527,6 +516,23 @@
       "proceeds_usd": 143.48516116189714,
       "pnl_usd": 15.485161161897139,
       "pnl_pct": 12.1,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
+      "base_token_address": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
+      "name": "DRB / WETH 1%",
+      "entry_ts": "2026-09-03T13:50:35.395067+00:00",
+      "entry_price_usd": 0.000162801795853329,
+      "peak_price_usd": 0.000183600002919383,
+      "amount_usd": 65.01341794148621,
+      "qty": 399340.9139052615,
+      "exit_ts": "2026-09-04T04:05:54.517688+00:00",
+      "exit_price_usd": 0.00015604954731316,
+      "proceeds_usd": 62.31696883853966,
+      "pnl_usd": -2.696449102946552,
+      "pnl_pct": -4.15,
       "exit_reason": "timeout"
     }
   ]
