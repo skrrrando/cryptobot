@@ -109,6 +109,19 @@ SECURITY_CACHE_TTL_SECONDS = 1800   # 30 min
 MAX_SECURITY_CHECKS_PER_TICK = 8    # defensive cap against a burst of new candidates
 SOLANA_MAX_TOP10_PCT = 40.0         # combined top-10 holder %, RugCheck's own pct scale (0-100)
 EVM_MAX_OWNER_CREATOR_FRACTION = 0.20  # combined owner+creator holding, GoPlus's 0-1 fraction scale
+EVM_MAX_TAX_FRACTION = 0.10         # buy_tax/sell_tax, GoPlus's 0-1 fraction scale - a high tax
+                                     # quietly eats returns on every trade even without being a
+                                     # literal honeypot, so it's a hard-fail alongside honeypot/mint
+
+# --- Liquidity-lock check (network-agnostic - GeckoTerminal reports this for
+# every network the same way, already fetched with the trending-pools call,
+# no extra request needed). The actual real rug mechanism this is aimed at
+# is far more common than minting/honeypot tricks: the deployer just pulls
+# the pool's liquidity and the price craters instantly. This is a soft
+# caution signal, not a hard gate - lock data is often missing for very new
+# legitimate pools too, so absence isn't itself proof of anything. ---------
+LOW_LIQUIDITY_LOCK_PCT = 50.0
+GOOD_LIQUIDITY_LOCK_PCT = 80.0
 
 # --- Alerting -------------------------------------------------------------
 ALERT_COOLDOWN_SECONDS = 7200  # don't re-alert the same token within 2h
@@ -284,6 +297,7 @@ def fetch_trending_pools(network):
             "market_cap_usd": attrs.get("market_cap_usd"),
             "fdv_usd": attrs.get("fdv_usd"),
             "pool_created_at": attrs.get("pool_created_at"),
+            "locked_liquidity_percentage": attrs.get("locked_liquidity_percentage"),
         })
     return pools
 
@@ -466,12 +480,18 @@ def check_security_evm(address, network):
     if not result:
         return None
     owner_creator_pct = _as_float(result.get("owner_percent")) + _as_float(result.get("creator_percent"))
+    buy_tax = _as_float(result.get("buy_tax"))
+    sell_tax = _as_float(result.get("sell_tax"))
+    honeypot_with_same_creator = result.get("honeypot_with_same_creator") == "1"
     passed = (
         result.get("is_honeypot") == "0"
         and result.get("is_mintable") == "0"
         and result.get("is_blacklisted") == "0"
         and result.get("cannot_buy") == "0"
         and owner_creator_pct <= EVM_MAX_OWNER_CREATOR_FRACTION
+        and buy_tax <= EVM_MAX_TAX_FRACTION
+        and sell_tax <= EVM_MAX_TAX_FRACTION
+        and not honeypot_with_same_creator
     )
     return {
         "passed": passed,
@@ -479,6 +499,9 @@ def check_security_evm(address, network):
         "is_mintable": result.get("is_mintable") == "1",
         "is_blacklisted": result.get("is_blacklisted") == "1",
         "owner_creator_pct": round(owner_creator_pct * 100, 1),
+        "buy_tax_pct": round(buy_tax * 100, 1),
+        "sell_tax_pct": round(sell_tax * 100, 1),
+        "honeypot_with_same_creator": honeypot_with_same_creator,
     }
 
 
@@ -549,6 +572,9 @@ def classify_recommendation(pool, features, security):
         good += 1
     if mcap >= 1_000_000:
         good += 1
+    liquidity_lock_pct = pool.get("locked_liquidity_percentage")
+    if liquidity_lock_pct is not None and liquidity_lock_pct >= GOOD_LIQUIDITY_LOCK_PCT:
+        good += 1
 
     if concentration is not None and concentration > conc_high:
         caution += 1
@@ -562,6 +588,8 @@ def classify_recommendation(pool, features, security):
         caution += 1
     whale_pct = security.get("whale_buyer_pct")
     if whale_pct is not None and whale_pct >= WHALE_MAX_BUYER_SHARE_PCT:
+        caution += 1
+    if liquidity_lock_pct is not None and liquidity_lock_pct < LOW_LIQUIDITY_LOCK_PCT:
         caution += 1
 
     return good >= RECOMMENDED_MIN_GOOD and caution == 0
@@ -767,6 +795,7 @@ def register_pending_checkpoint(pending, pool, timestamp, features=None, securit
         "concentration_pct": concentration,
         "buys_per_buyer_h1": buys_per_buyer,
         "whale_buyer_pct": security.get("whale_buyer_pct"),
+        "locked_liquidity_pct": pool.get("locked_liquidity_percentage"),
     }
 
 
@@ -999,6 +1028,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
                 # h1 buys/buyers only - dashboard's getTags() mirrors the wash-trade
                 # check in classify_recommendation(), which only looks at h1 too.
                 "transactions_h1": pool["transactions"].get("h1", {}) or {},
+                "locked_liquidity_percentage": pool.get("locked_liquidity_percentage"),
             })
 
             entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp, features=features, security=security)

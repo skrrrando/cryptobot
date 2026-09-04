@@ -465,12 +465,14 @@ function getTags(c) {
   // fake-volume/wash-trading red flag, not organic demand.
   const buysH1 = asFloat(c.transactions_h1?.buys);
   const buyersH1 = asFloat(c.transactions_h1?.buyers);
+  const lockPct = c.locked_liquidity_percentage;
 
   if (rv != null && rv > 0) good.push('Rank kerkib');
   if (accel != null && accel > 0) good.push('Hoog kasvab');
   if (h24 >= 20) good.push('Tugev 24h trend');
   if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
   if (mcap >= 1000000) good.push('Kindlam turusuurus');
+  if (lockPct != null && lockPct >= 80) good.push('Likviidsus lukus');
 
   if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
   if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
@@ -478,6 +480,7 @@ function getTags(c) {
   if (rv != null && rv === 0) caution.push('Rank paigal');
   if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
   if (sec.whale_buyer_pct != null && sec.whale_buyer_pct >= 40) caution.push('Üks rahakott domineerib');
+  if (lockPct != null && lockPct < 50) caution.push('Likviidsus lukustamata');
 
   return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
 }
@@ -1090,15 +1093,15 @@ function renderRules() {
       <h3>2. Turvakontroll</h3>
       <ul class="rules-list">
         <li><b>Solana</b> (RugCheck): mint- ja freeze-õigus peavad olema kustutatud, top 10 hoidja kokku ≤ 40%, ei tohi olla "danger" taseme riskimärget.</li>
-        <li><b>EVM võrgud</b> (GoPlus): ei tohi olla honeypot, mintitav, mustas nimekirjas ega ostmatu; omaniku+looja osalus kokku ≤ 20%.</li>
+        <li><b>EVM võrgud</b> (GoPlus): ei tohi olla honeypot, mintitav, mustas nimekirjas ega ostmatu; omaniku+looja osalus kokku ≤ 20%; ostu- ja müügimaks kumbki ≤ 10%; <b>arendaja pole varem honeypot'i teinud</b> (GoPlus jälgib sama rahakoti ajalugu teiste tokenite peal).</li>
         <li>Turvakontrolli mitte läbinud token ei jõua kunagi soovituste sekka ega osta ka bot seda.</li>
       </ul>
     </div>
     <div class="rules-group">
       <h3>3. "Soovitatud" tase</h3>
       <ul class="rules-list">
-        <li>Iga turvalist tokenit hinnatakse 5 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M.</li>
-        <li>Ja 6 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt) ja <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites - vaadatakse iga tehingu tegelikku suurust, mitte ainult tehingute arvu).</li>
+        <li>Iga turvalist tokenit hinnatakse 6 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, <b>likviidsus ≥ 80% lukustatud</b>.</li>
+        <li>Ja 7 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt), <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites) ja <b>likviidsus lukustamata</b> (alla 50% lukus - see on kõige levinum viis, kuidas memecoinid päriselt "rug'itakse": arendaja tõmbab likviidsuse poolist välja).</li>
         <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
       </ul>
     </div>
