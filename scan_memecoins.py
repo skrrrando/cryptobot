@@ -133,6 +133,16 @@ GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
 RECOMMENDED_MIN_GOOD = 2
 
+# Wallet-diversity check: GeckoTerminal's per-timeframe transactions object
+# reports both a buy COUNT and a distinct buyER count (see fetch_trending_pools).
+# A pump with plenty of buy transactions but only a handful of unique wallets
+# behind them is a wash-trading / fake-volume red flag - the holder-concentration
+# check above only looks at who holds supply right now, not who's been doing
+# the buying that drove the price up. Below MIN_BUYS_H1 the ratio is too noisy
+# to mean anything (e.g. 2 buys from 1 wallet isn't suspicious, it's just quiet).
+WASH_TRADE_MIN_BUYS_H1 = 8
+WASH_TRADE_MAX_BUYS_PER_BUYER = 3.5
+
 # Smart exit: open positions are re-checked once per run (not every tick -
 # conserves API calls) against a stop-loss, a trailing-stop from the peak
 # price seen, and a momentum-collapse signal. The fixed 6h checkpoint exit
@@ -301,6 +311,8 @@ def update_hot_state(hot_state, pool, timestamp):
         "h6": _as_float(pool["price_change_pct"].get("h6")),
         "buys_h1": _as_float(txns_h1.get("buys")),
         "sells_h1": _as_float(txns_h1.get("sells")),
+        "buyers_h1": _as_float(txns_h1.get("buyers")),
+        "sellers_h1": _as_float(txns_h1.get("sellers")),
     })
     entry["history"] = entry["history"][-HOT_STATE_WINDOW:]
     entry["last_seen"] = timestamp
@@ -459,6 +471,10 @@ def classify_recommendation(pool, features, security):
     conc_low = GOOD_CONCENTRATION_LOW[key]
     conc_high = GOOD_CONCENTRATION_HIGH[key]
 
+    txns_h1 = pool["transactions"].get("h1", {}) or {}
+    buys_h1 = _as_float(txns_h1.get("buys"))
+    buyers_h1 = _as_float(txns_h1.get("buyers"))
+
     if rv is not None and rv > 0:
         good += 1
     if accel is not None and accel > 0:
@@ -477,6 +493,8 @@ def classify_recommendation(pool, features, security):
     if h24 < 0 and h1 > 0:
         caution += 1
     if rv is not None and rv == 0:
+        caution += 1
+    if buys_h1 >= WASH_TRADE_MIN_BUYS_H1 and buyers_h1 > 0 and (buys_h1 / buyers_h1) >= WASH_TRADE_MAX_BUYS_PER_BUYER:
         caution += 1
 
     return good >= RECOMMENDED_MIN_GOOD and caution == 0
@@ -654,6 +672,10 @@ def register_pending_checkpoint(pending, pool, timestamp, features=None, securit
     features = features or {}
     security = security or {}
     concentration = security.get("top10_pct") if pool["network"] == "solana" else security.get("owner_creator_pct")
+    txns_h1 = pool["transactions"].get("h1", {}) or {}
+    buys_h1 = _as_float(txns_h1.get("buys"))
+    buyers_h1 = _as_float(txns_h1.get("buyers"))
+    buys_per_buyer = (buys_h1 / buyers_h1) if buyers_h1 > 0 else None
     pending[pool_id] = {
         "network": pool["network"],
         "pool_address": pool["address"],
@@ -676,6 +698,7 @@ def register_pending_checkpoint(pending, pool, timestamp, features=None, securit
         "rank_velocity": features.get("rank_velocity"),
         "h1_accel": features.get("h1_accel"),
         "concentration_pct": concentration,
+        "buys_per_buyer_h1": buys_per_buyer,
     }
 
 
@@ -905,6 +928,9 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
                 "price_change_pct": pool["price_change_pct"],
                 "volume_usd": pool["volume_usd"],
                 "market_cap_usd": _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"]),
+                # h1 buys/buyers only - dashboard's getTags() mirrors the wash-trade
+                # check in classify_recommendation(), which only looks at h1 too.
+                "transactions_h1": pool["transactions"].get("h1", {}) or {},
             })
 
             entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp, features=features, security=security)

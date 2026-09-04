@@ -460,6 +460,12 @@ function getTags(c) {
   const concLow = c.network === 'solana' ? 20 : 5;
   const concHigh = c.network === 'solana' ? 30 : 10;
 
+  // Mirrors scan_memecoins.py's WASH_TRADE_MIN_BUYS_H1/MAX_BUYS_PER_BUYER -
+  // lots of buy transactions from only a handful of distinct wallets is a
+  // fake-volume/wash-trading red flag, not organic demand.
+  const buysH1 = asFloat(c.transactions_h1?.buys);
+  const buyersH1 = asFloat(c.transactions_h1?.buyers);
+
   if (rv != null && rv > 0) good.push('Rank kerkib');
   if (accel != null && accel > 0) good.push('Hoog kasvab');
   if (h24 >= 20) good.push('Tugev 24h trend');
@@ -470,6 +476,7 @@ function getTags(c) {
   if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
   if (h24 < 0 && h1 > 0) caution.push('Alles pöördumas');
   if (rv != null && rv === 0) caution.push('Rank paigal');
+  if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
 
   return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
 }
@@ -1090,7 +1097,7 @@ function renderRules() {
       <h3>3. "Soovitatud" tase</h3>
       <ul class="rules-list">
         <li>Iga turvalist tokenit hinnatakse 5 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M.</li>
-        <li>Ja 4 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal.</li>
+        <li>Ja 5 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (kui viimase tunni ostutehinguid on palju aga need tulevad valdavalt samadelt rahakottidelt - märk võimalikust näidatud mahust, mitte päris inimestest).</li>
         <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
       </ul>
     </div>

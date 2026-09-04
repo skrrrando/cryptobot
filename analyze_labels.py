@@ -112,6 +112,7 @@ def main():
     split_by(lambda e: (e.get("rank_velocity") or 0) > 0, "rank_velocity > 0 (rank climbing)")
     split_by(lambda e: (e.get("h1_accel") or 0) > 0, "h1_accel > 0 (momentum accelerating)")
     split_by(lambda e: e.get("concentration_pct") is not None and e["concentration_pct"] < 20, "concentration < 20% (Solana top10 / EVM owner+creator scale differ - see scan_memecoins.py)")
+    split_by(lambda e: e.get("buys_per_buyer_h1") is not None and e["buys_per_buyer_h1"] >= 3.5, "buys_per_buyer_h1 >= 3.5 (wash-trade risk: few unique wallets behind the buy volume)")
 
     old_rows = [e for e in entries.values() if "rank_velocity" not in e]
     if old_rows:
