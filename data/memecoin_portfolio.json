@@ -1,5 +1,5 @@
 {
-  "balance": 510.2383253553633,
+  "balance": 595.576734535727,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -44,17 +44,6 @@
       "peak_price_usd": 2517.06,
       "amount_usd": 118.94974977562666,
       "qty": 0.04742926456598908
-    },
-    "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": {
-      "network": "bsc",
-      "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
-      "base_token_address": "0x3efbfff95576e1d23cf6ead0acd2e73f4d6a7777",
-      "name": "BNBCAT / WBNB",
-      "entry_ts": "2026-09-04T06:10:28.362735+00:00",
-      "entry_price_usd": 0.00241591548425247,
-      "peak_price_usd": 0.00241591548425247,
-      "amount_usd": 102.90018771083868,
-      "qty": 42592.6272593422
     }
   },
   "closed": [
@@ -568,6 +557,23 @@
       "pnl_usd": -34.47037049788979,
       "pnl_pct": -25.9,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
+      "base_token_address": "0x3efbfff95576e1d23cf6ead0acd2e73f4d6a7777",
+      "name": "BNBCAT / WBNB",
+      "entry_ts": "2026-09-04T06:10:28.362735+00:00",
+      "entry_price_usd": 0.00241591548425247,
+      "peak_price_usd": 0.00241591548425247,
+      "amount_usd": 102.90018771083868,
+      "qty": 42592.6272593422,
+      "exit_ts": "2026-09-04T07:10:56.014077+00:00",
+      "exit_price_usd": 0.00200359580217362,
+      "proceeds_usd": 85.33840918036374,
+      "pnl_usd": -17.56177853047494,
+      "pnl_pct": -17.07,
+      "exit_reason": "timeout"
     }
   ]
 }
