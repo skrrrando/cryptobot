@@ -1,5 +1,5 @@
 {
-  "balance": 388.83848634075247,
+  "balance": 439.945397335634,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -67,18 +67,6 @@
       "peak_price_usd": 0.07715061282021297,
       "amount_usd": 54.391141220007825,
       "qty": 770.0414693208951,
-      "sell_tax_pct": 0.0
-    },
-    "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": {
-      "network": "base",
-      "pool_address": "0x7692acc1cdd771d09ebcae3663e1843b2911bec7",
-      "base_token_address": "0x5ab000ff9b9ffe0349ce5ffa5fd86f217c3680f5",
-      "name": "STONKEX / WETH 1%",
-      "entry_ts": "2026-09-04T20:00:55.561423+00:00",
-      "entry_price_usd": 0.00241144047954763,
-      "peak_price_usd": 0.00279574289329516,
-      "amount_usd": 48.952027098007036,
-      "qty": 20253.28595217434,
       "sell_tax_pct": 0.0
     },
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
@@ -825,6 +813,24 @@
       "pnl_usd": -8.030763488060998,
       "pnl_pct": -20.07,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x7692acc1cdd771d09ebcae3663e1843b2911bec7",
+      "base_token_address": "0x5ab000ff9b9ffe0349ce5ffa5fd86f217c3680f5",
+      "name": "STONKEX / WETH 1%",
+      "entry_ts": "2026-09-04T20:00:55.561423+00:00",
+      "entry_price_usd": 0.00241144047954763,
+      "peak_price_usd": 0.00279574289329516,
+      "amount_usd": 48.952027098007036,
+      "qty": 20253.28595217434,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-04T21:40:59.771304+00:00",
+      "exit_price_usd": 0.00252897582767248,
+      "proceeds_usd": 51.106910994881574,
+      "pnl_usd": 2.154883896874537,
+      "pnl_pct": 4.4,
+      "exit_reason": "take_profit"
     }
   ]
 }
