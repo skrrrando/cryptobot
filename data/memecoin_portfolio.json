@@ -1,5 +1,5 @@
 {
-  "balance": 471.5118207088701,
+  "balance": 507.935770988738,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -55,18 +55,6 @@
       "peak_price_usd": 0.00119480011313434,
       "amount_usd": 92.54821079216657,
       "qty": 79704.42935640116
-    },
-    "solana_41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx": {
-      "network": "solana",
-      "pool_address": "41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx",
-      "base_token_address": "CbyTNf7UPzvewHh4Zp6umogM2RWahhmGRJWLJnPwpump",
-      "name": "biketyson / SOL",
-      "entry_ts": "2026-09-04T14:10:34.083164+00:00",
-      "entry_price_usd": 0.0008745013036947402,
-      "peak_price_usd": 0.0008956301117953491,
-      "amount_usd": 52.39020230098558,
-      "qty": 59850.79041288522,
-      "sell_tax_pct": 0.0
     }
   },
   "closed": [
@@ -699,6 +687,24 @@
       "pnl_usd": 4.835366659591699,
       "pnl_pct": 3.25,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx",
+      "base_token_address": "CbyTNf7UPzvewHh4Zp6umogM2RWahhmGRJWLJnPwpump",
+      "name": "biketyson / SOL",
+      "entry_ts": "2026-09-04T14:10:34.083164+00:00",
+      "entry_price_usd": 0.0008745013036947402,
+      "peak_price_usd": 0.0008956301117953491,
+      "amount_usd": 52.39020230098558,
+      "qty": 59850.79041288522,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-04T14:56:01.961866+00:00",
+      "exit_price_usd": 0.0006092176237042726,
+      "proceeds_usd": 36.423950279867874,
+      "pnl_usd": -15.966252021117704,
+      "pnl_pct": -30.48,
+      "exit_reason": "stop_loss"
     }
   ]
 }
