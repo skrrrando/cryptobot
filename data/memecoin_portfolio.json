@@ -1,5 +1,5 @@
 {
-  "balance": 356.8602775444713,
+  "balance": 388.83848634075247,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -55,18 +55,6 @@
       "peak_price_usd": 0.0244324014194755,
       "amount_usd": 49.39379294363235,
       "qty": 2450.848164574103,
-      "sell_tax_pct": 0.0
-    },
-    "solana_Fz6guwvrqthJLkKRXveSwKrjvNvbR9kcFkRReTqrBhKp": {
-      "network": "solana",
-      "pool_address": "Fz6guwvrqthJLkKRXveSwKrjvNvbR9kcFkRReTqrBhKp",
-      "base_token_address": "2R9VkKSwXpHTjmCcutzdCmY4Mw2h5yZ8GatRjTQppump",
-      "name": "CAT / SOL",
-      "entry_ts": "2026-09-04T19:05:23.011791+00:00",
-      "entry_price_usd": 0.00031672707980387677,
-      "peak_price_usd": 0.00034862881393986003,
-      "amount_usd": 40.00897228434221,
-      "qty": 126173.32776562544,
       "sell_tax_pct": 0.0
     },
     "solana_4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama": {
@@ -819,6 +807,24 @@
       "pnl_usd": 26.281279968253187,
       "pnl_pct": 59.12,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "solana",
+      "pool_address": "Fz6guwvrqthJLkKRXveSwKrjvNvbR9kcFkRReTqrBhKp",
+      "base_token_address": "2R9VkKSwXpHTjmCcutzdCmY4Mw2h5yZ8GatRjTQppump",
+      "name": "CAT / SOL",
+      "entry_ts": "2026-09-04T19:05:23.011791+00:00",
+      "entry_price_usd": 0.00031672707980387677,
+      "peak_price_usd": 0.00034862881393986003,
+      "amount_usd": 40.00897228434221,
+      "qty": 126173.32776562544,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-04T21:32:01.964912+00:00",
+      "exit_price_usd": 0.00025375476619494595,
+      "proceeds_usd": 31.97820879628121,
+      "pnl_usd": -8.030763488060998,
+      "pnl_pct": -20.07,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
