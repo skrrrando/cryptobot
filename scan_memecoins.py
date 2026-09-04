@@ -78,6 +78,7 @@ PORTFOLIO_PATH = os.path.join(DATA_DIR, "memecoin_portfolio.json")
 NETWORKS = ["solana", "base", "bsc", "eth", "arbitrum", "polygon_pos"]
 GECKOTERMINAL_TRENDING_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/trending_pools"
 GECKOTERMINAL_POOL_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}"
+GECKOTERMINAL_TRADES_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}/trades"
 RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
 GOPLUS_TOKEN_SECURITY_URL = "https://api.gopluslabs.io/api/v1/token_security/{chain_id}?contract_addresses={address}"
 EVM_CHAIN_IDS = {"base": "8453", "bsc": "56", "eth": "1", "arbitrum": "42161", "polygon_pos": "137"}
@@ -142,6 +143,16 @@ RECOMMENDED_MIN_GOOD = 2
 # to mean anything (e.g. 2 buys from 1 wallet isn't suspicious, it's just quiet).
 WASH_TRADE_MIN_BUYS_H1 = 8
 WASH_TRADE_MAX_BUYS_PER_BUYER = 3.5
+
+# Whale-buyer check: buys_per_buyer above only catches one wallet buying
+# MANY times. It misses one wallet doing a single huge buy, which needs the
+# actual per-trade $ size, not just a transaction count - GeckoTerminal's
+# /trades endpoint gives tx_from_address + volume_in_usd per trade, so the
+# real signal is "what share of the last hour's buy $ came from one wallet".
+# Below MIN_BUY_VOLUME_USD the share is too noisy (one $5 buy in a dead pool
+# is 100% of volume and means nothing).
+WHALE_MIN_BUY_VOLUME_USD = 200.0
+WHALE_MAX_BUYER_SHARE_PCT = 40.0
 
 # Smart exit: open positions are re-checked once per run (not every tick -
 # conserves API calls) against a stop-loss, a trailing-stop from the peak
@@ -298,6 +309,49 @@ def fetch_pool_price(network, pool_address):
     }
 
 
+def fetch_recent_trades(network, pool_address):
+    """Recent individual trades (wallet, side, $ size) for one pool - used
+    only for the whale-buyer check below, only on candidates that already
+    passed momentum + the honeypot/mint security gate (see check_security_cached),
+    to keep this heavier call off the common path."""
+    url = GECKOTERMINAL_TRADES_URL.format(network=network, pool_address=pool_address)
+    try:
+        data = geckoterminal_get_json(url, timeout=15)
+    except (urllib.error.URLError, urllib.error.HTTPError) as e:
+        print(f"WARN: trades lookup failed for {network}/{pool_address}: {e}", file=sys.stderr)
+        return None
+    return data.get("data") or []
+
+
+def whale_buyer_share_pct(trades):
+    """Largest single wallet's share of the last hour's buy volume, or None
+    if there isn't enough buy volume in the window to judge fairly."""
+    if not trades:
+        return None
+    cutoff = time.time() - 3600
+    vol_by_wallet = {}
+    total = 0.0
+    for t in trades:
+        attrs = t.get("attributes", {}) or {}
+        if attrs.get("kind") != "buy":
+            continue
+        try:
+            ts = datetime.fromisoformat(attrs.get("block_timestamp", "").replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            continue
+        if ts < cutoff:
+            continue
+        wallet = attrs.get("tx_from_address")
+        if not wallet:
+            continue
+        vol = _as_float(attrs.get("volume_in_usd"))
+        vol_by_wallet[wallet] = vol_by_wallet.get(wallet, 0.0) + vol
+        total += vol
+    if total < WHALE_MIN_BUY_VOLUME_USD or not vol_by_wallet:
+        return None
+    return round(max(vol_by_wallet.values()) / total * 100.0, 1)
+
+
 # --- Hot state: bounded rolling window per pool, for velocity/acceleration -
 
 def update_hot_state(hot_state, pool, timestamp):
@@ -446,6 +500,16 @@ def check_security_cached(pool, security_cache, checks_this_tick):
         result = check_security_evm(address, pool["network"])
     if result is None:
         return None
+
+    # Only spend the extra (heavier) trades call on tokens that already
+    # cleared the honeypot/mint gate - a failing token never reaches
+    # classify_recommendation() anyway, so the whale check would be wasted.
+    if result["passed"]:
+        trades = fetch_recent_trades(pool["network"], pool["address"])
+        result["whale_buyer_pct"] = whale_buyer_share_pct(trades)
+    else:
+        result["whale_buyer_pct"] = None
+
     result["checked_at"] = now
     security_cache[address] = result
     return result
@@ -495,6 +559,9 @@ def classify_recommendation(pool, features, security):
     if rv is not None and rv == 0:
         caution += 1
     if buys_h1 >= WASH_TRADE_MIN_BUYS_H1 and buyers_h1 > 0 and (buys_h1 / buyers_h1) >= WASH_TRADE_MAX_BUYS_PER_BUYER:
+        caution += 1
+    whale_pct = security.get("whale_buyer_pct")
+    if whale_pct is not None and whale_pct >= WHALE_MAX_BUYER_SHARE_PCT:
         caution += 1
 
     return good >= RECOMMENDED_MIN_GOOD and caution == 0
@@ -699,6 +766,7 @@ def register_pending_checkpoint(pending, pool, timestamp, features=None, securit
         "h1_accel": features.get("h1_accel"),
         "concentration_pct": concentration,
         "buys_per_buyer_h1": buys_per_buyer,
+        "whale_buyer_pct": security.get("whale_buyer_pct"),
     }
 
 
