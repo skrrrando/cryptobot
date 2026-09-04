@@ -1,5 +1,5 @@
 {
-  "balance": 376.141754590292,
+  "balance": 478.8587000569307,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -30,7 +30,7 @@
       "name": "LIT / USDC 0.3%",
       "entry_ts": "2026-09-04T08:05:40.193174+00:00",
       "entry_price_usd": 4.418769433914,
-      "peak_price_usd": 4.61730054831156,
+      "peak_price_usd": 4.63948368014074,
       "amount_usd": 148.87381318159777,
       "qty": 33.691238116882296
     },
@@ -44,17 +44,6 @@
       "peak_price_usd": 0.369635696707,
       "amount_usd": 145.19378588112022,
       "qty": 393.9763785721547
-    },
-    "eth_0x96aa22baedc5a605357e0b9ae20ab6b10a472e03": {
-      "network": "eth",
-      "pool_address": "0x96aa22baedc5a605357e0b9ae20ab6b10a472e03",
-      "base_token_address": "0x7f792db54b0e580cdc755178443f0430cf799aca",
-      "name": "VOLT / WETH",
-      "entry_ts": "2026-09-04T09:00:56.905013+00:00",
-      "entry_price_usd": 6.19053897702807e-08,
-      "peak_price_usd": 7.81673931424949e-08,
-      "amount_usd": 116.15502870489618,
-      "qty": 1876331433.109875
     },
     "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5": {
       "network": "bsc",
@@ -646,6 +635,23 @@
       "proceeds_usd": 98.48110138219725,
       "pnl_usd": 5.557078418280298,
       "pnl_pct": 5.98,
+      "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "eth",
+      "pool_address": "0x96aa22baedc5a605357e0b9ae20ab6b10a472e03",
+      "base_token_address": "0x7f792db54b0e580cdc755178443f0430cf799aca",
+      "name": "VOLT / WETH",
+      "entry_ts": "2026-09-04T09:00:56.905013+00:00",
+      "entry_price_usd": 6.19053897702807e-08,
+      "peak_price_usd": 7.81673931424949e-08,
+      "amount_usd": 116.15502870489618,
+      "qty": 1876331433.109875,
+      "exit_ts": "2026-09-04T11:11:37.093905+00:00",
+      "exit_price_usd": 5.47434976860102e-08,
+      "proceeds_usd": 102.71694546663865,
+      "pnl_usd": -13.438083238257533,
+      "pnl_pct": -11.57,
       "exit_reason": "trailing_stop"
     }
   ]
