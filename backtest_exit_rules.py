@@ -24,6 +24,11 @@ approximation, not a precise backtest, and does NOT include gas/slippage/tax
 (see GAS_COST_USD/estimate_slippage_pct in scan_memecoins.py for that model)
 - these are raw price returns only. Same "don't declare a pattern found on
 too little data" caution as analyze_labels.py applies here too.
+
+Profit factor and max drawdown are both equal-weighted, non-compounding
+approximations (every trade sized the same, no reinvestment) - a rough
+robustness signal, not a real portfolio simulation. Drawdown in particular
+depends on trade ORDER, which we only have to entry-timestamp resolution.
 """
 import json
 import statistics
@@ -62,17 +67,21 @@ def load_rows():
 
 
 def build_sequences(rows):
-    """pool_id -> [(offset_minutes, return_pct), ...] sorted by offset,
-    entries with no checkpoints yet are skipped entirely (nothing to
-    simulate an exit against)."""
+    """pool_id -> {"entry_ts": str, "checkpoints": [(offset_minutes, return_pct), ...]}
+    sorted by offset. Entries with no checkpoints yet are skipped entirely -
+    nothing to simulate an exit against. entry_ts is kept so trades can be
+    ordered chronologically for the drawdown calc below."""
+    entry_ts_by_pool = {r["pool_id"]: r.get("entry_ts") for r in rows if r.get("row_type") == "entry"}
     by_pool = defaultdict(list)
     for r in rows:
         if r.get("row_type") != "checkpoint" or r.get("return_pct") is None:
             continue
         by_pool[r["pool_id"]].append((r["offset_minutes"], r["return_pct"]))
-    for pool_id in by_pool:
-        by_pool[pool_id].sort(key=lambda t: t[0])
-    return by_pool
+    sequences = {}
+    for pool_id, checkpoints in by_pool.items():
+        checkpoints.sort(key=lambda t: t[0])
+        sequences[pool_id] = {"entry_ts": entry_ts_by_pool.get(pool_id) or "", "checkpoints": checkpoints}
+    return sequences
 
 
 def simulate(sequences, take_profit_pct, stop_loss_pct):
@@ -80,21 +89,49 @@ def simulate(sequences, take_profit_pct, stop_loss_pct):
     first one that crosses take_profit_pct or -stop_loss_pct. If neither
     ever triggers, "hold" to the last checkpoint we actually have (a stand-in
     for the real bot's 6h-timeout fallback - slightly generous, since a real
-    6h checkpoint may not exist yet for very recent entries)."""
-    returns = []
-    for pool_id, checkpoints in sequences.items():
+    6h checkpoint may not exist yet for very recent entries). Returns a list
+    of (entry_ts, exit_return_pct) tuples, unsorted."""
+    results = []
+    for pool_id, data in sequences.items():
         exit_return = None
-        for _offset, ret in checkpoints:
+        for _offset, ret in data["checkpoints"]:
             if ret >= take_profit_pct or ret <= -stop_loss_pct:
                 exit_return = ret
                 break
         if exit_return is None:
-            exit_return = checkpoints[-1][1]
-        returns.append(exit_return)
-    return returns
+            exit_return = data["checkpoints"][-1][1]
+        results.append((data["entry_ts"], exit_return))
+    return results
 
 
-def summarize(returns):
+def profit_factor(returns):
+    gains = sum(r for r in returns if r > 0)
+    losses = sum(-r for r in returns if r < 0)
+    if losses == 0:
+        return None  # undefined (no losing trades in this sample) - not "infinite edge"
+    return gains / losses
+
+
+def max_drawdown(entry_ts_and_returns):
+    """Equal-weighted, non-compounding equity curve (each trade contributes
+    its return_pct at 1x size, summed in chronological order by entry_ts).
+    Returns the largest peak-to-trough decline in percentage-points, or None
+    if there's nothing to order."""
+    ordered = sorted((r for r in entry_ts_and_returns if r[0]), key=lambda t: t[0])
+    if not ordered:
+        return None
+    equity = 0.0
+    peak = 0.0
+    worst = 0.0
+    for _ts, ret in ordered:
+        equity += ret
+        peak = max(peak, equity)
+        worst = min(worst, equity - peak)
+    return -worst  # report as a positive magnitude
+
+
+def summarize(entry_ts_and_returns):
+    returns = [r for _ts, r in entry_ts_and_returns]
     if not returns:
         return None
     n = len(returns)
@@ -103,15 +140,19 @@ def summarize(returns):
         "avg": statistics.mean(returns),
         "median": statistics.median(returns),
         "win_rate": sum(1 for r in returns if r > 0) / n * 100.0,
+        "profit_factor": profit_factor(returns),
+        "max_drawdown": max_drawdown(entry_ts_and_returns),
     }
 
 
 def fmt_row(tp, sl, stat, is_live=False):
     flag = "" if stat["n"] >= MIN_TRUSTWORTHY_N else "  (< %d samples - too thin to trust)" % MIN_TRUSTWORTHY_N
     marker = "  <- current live setting" if is_live else ""
+    pf = f"{stat['profit_factor']:.2f}" if stat["profit_factor"] is not None else "  n/a"
+    dd = f"{stat['max_drawdown']:.1f}%" if stat["max_drawdown"] is not None else "n/a"
     return (f"  TP={tp:>4.0f}%  SL={sl:>4.0f}%   n={stat['n']:<4} "
             f"avg={stat['avg']:+6.1f}%  median={stat['median']:+6.1f}%  "
-            f"win_rate={stat['win_rate']:5.1f}%{flag}{marker}")
+            f"win_rate={stat['win_rate']:5.1f}%  profit_factor={pf}  max_drawdown={dd}{flag}{marker}")
 
 
 def main():
@@ -124,7 +165,9 @@ def main():
 
     # ---- Full grid: take-profit x stop-loss ----
     print("=== Take-profit / stop-loss grid (avg return per rule, all tokens) ===")
-    print("Every token is walked with the SAME rule - not cherry-picked per-token.\n")
+    print("Every token is walked with the SAME rule - not cherry-picked per-token.")
+    print("Profit factor = gross gains / gross losses (>1 means winners outweigh losers in $ terms).")
+    print("Max drawdown = worst peak-to-trough dip of an equal-weighted, non-compounding equity curve.\n")
     results = []
     for tp in TAKE_PROFIT_SWEEP:
         for sl in STOP_LOSS_SWEEP:
