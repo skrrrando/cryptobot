@@ -466,6 +466,8 @@ function getTags(c) {
   const buysH1 = asFloat(c.transactions_h1?.buys);
   const buyersH1 = asFloat(c.transactions_h1?.buyers);
   const lockPct = c.locked_liquidity_percentage;
+  const holderGrowth = sec.holder_growth_pct;
+  const solH1 = c.sol_h1;
 
   if (rv != null && rv > 0) good.push('Rank kerkib');
   if (accel != null && accel > 0) good.push('Hoog kasvab');
@@ -473,6 +475,7 @@ function getTags(c) {
   if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
   if (mcap >= 1000000) good.push('Kindlam turusuurus');
   if (lockPct != null && lockPct >= 80) good.push('Likviidsus lukus');
+  if (holderGrowth != null && holderGrowth >= 5) good.push('Hoidjaid juurde tuleb');
 
   if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
   if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
@@ -481,6 +484,8 @@ function getTags(c) {
   if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
   if (sec.whale_buyer_pct != null && sec.whale_buyer_pct >= 40) caution.push('Üks rahakott domineerib');
   if (lockPct != null && lockPct < 50) caution.push('Likviidsus lukustamata');
+  if (holderGrowth != null && holderGrowth < 0) caution.push('Hoidjad lahkumas');
+  if (solH1 != null && solH1 <= -5) caution.push('Turg risk-off (SOL langeb)');
 
   return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
 }
@@ -1100,8 +1105,8 @@ function renderRules() {
     <div class="rules-group">
       <h3>3. "Soovitatud" tase</h3>
       <ul class="rules-list">
-        <li>Iga turvalist tokenit hinnatakse 6 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, <b>likviidsus ≥ 80% lukustatud</b>.</li>
-        <li>Ja 7 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt), <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites) ja <b>likviidsus lukustamata</b> (alla 50% lukus - see on kõige levinum viis, kuidas memecoinid päriselt "rug'itakse": arendaja tõmbab likviidsuse poolist välja).</li>
+        <li>Iga turvalist tokenit hinnatakse 7 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, <b>likviidsus ≥ 80% lukustatud</b>, <b>hoidjate arv kasvab</b> (≥5% juurdekasvu alates esimesest jälgitud kontrollist).</li>
+        <li>Ja 9 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt), <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites), <b>likviidsus lukustamata</b> (alla 50% lukus - see on kõige levinum viis, kuidas memecoinid päriselt "rug'itakse"), <b>hoidjate arv kahaneb</b> (inimesed lahkuvad) ja <b>turg on risk-off</b> (SOL on languses ≥5% viimase tunni jooksul - kogu memecoini turg kipub siis koos kukkuma, sõltumata konkreetse tokeni kvaliteedist).</li>
         <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
       </ul>
     </div>

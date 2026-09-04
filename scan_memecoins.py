@@ -90,6 +90,17 @@ RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
 GOPLUS_TOKEN_SECURITY_URL = "https://api.gopluslabs.io/api/v1/token_security/{chain_id}?contract_addresses={address}"
 EVM_CHAIN_IDS = {"base": "8453", "bsc": "56", "eth": "1", "arbitrum": "42161", "polygon_pos": "137"}
 
+# Broad market-condition proxy: memecoins across every chain tend to get
+# dragged down together when the market turns risk-off, regardless of any
+# individual token's own quality - checking SOL's own momentum once per
+# tick (not per-candidate - one extra call, shared across everything that
+# tick) catches that macro condition instead of only ever judging a token in
+# isolation. The Raydium SOL/USDC pool - Solana's original, still by far its
+# most liquid ($14M+ reserve, verified live) - is used as the reference
+# price rather than any single memecoin.
+SOL_USDC_POOL_ADDRESS = "58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"
+MARKET_RISK_OFF_SOL_H1_PCT = -5.0
+
 # --- Timing ------------------------------------------------------------
 # One tick per invocation now (see module docstring for why) - an external
 # cron service triggers a fresh invocation every 5 minutes, so that IS the
@@ -177,6 +188,19 @@ WASH_TRADE_MAX_BUYS_PER_BUYER = 3.5
 # is 100% of volume and means nothing).
 WHALE_MIN_BUY_VOLUME_USD = 200.0
 WHALE_MAX_BUYER_SHARE_PCT = 40.0
+
+# Holder-count growth: GoPlus's token_security response already includes
+# holder_count (EVM only - RugCheck doesn't return an equivalent total for
+# Solana), but security_cache only ever kept the latest value, so growth was
+# invisible. A short bounded history is now kept per token (same idea as
+# hot_state's rolling window, just on the security-check cadence - every
+# ~30min via SECURITY_CACHE_TTL_SECONDS instead of every ~5min tick) so
+# growth since the earliest tracked check can be computed. Needs at least
+# 2 checks (~30-60 min apart) before growth means anything.
+HOLDER_HISTORY_WINDOW = 10
+MIN_HOLDER_HISTORY_FOR_GROWTH = 2
+GOOD_HOLDER_GROWTH_PCT = 5.0   # holder count grew at least this much since the earliest tracked check -> good sign
+BAD_HOLDER_GROWTH_PCT = 0.0    # holder count is net SHRINKING since the earliest tracked check -> caution
 
 # Smart exit: open positions are re-checked once per run (not every tick -
 # conserves API calls) against a stop-loss, a trailing-stop from the peak
@@ -384,6 +408,17 @@ def fetch_pool_price(network, pool_address):
     }
 
 
+def fetch_market_condition():
+    """SOL's own h1 price change, as a broad risk-on/risk-off proxy - see
+    MARKET_RISK_OFF_SOL_H1_PCT. Reuses fetch_pool_price rather than a
+    separate HTTP path. None on failure - a market-condition lookup
+    failing should never block the rest of a tick from scanning."""
+    result = fetch_pool_price("solana", SOL_USDC_POOL_ADDRESS)
+    if result is None:
+        return None
+    return _as_float(result.get("price_change_pct", {}).get("h1"))
+
+
 def fetch_recent_trades(network, pool_address):
     """Recent individual trades (wallet, side, $ size) for one pool - used
     only for the whale-buyer check below, only on candidates that already
@@ -563,6 +598,7 @@ def check_security_evm(address, network):
         "buy_tax_pct": round(buy_tax * 100, 1),
         "sell_tax_pct": round(sell_tax * 100, 1),
         "honeypot_with_same_creator": honeypot_with_same_creator,
+        "holder_count": int(_as_float(result.get("holder_count"))),
     }
 
 
@@ -594,6 +630,22 @@ def check_security_cached(pool, security_cache, checks_this_tick):
     else:
         result["whale_buyer_pct"] = None
 
+    # Carry the holder-count history forward across cache refreshes (each
+    # refresh is a new check ~30min apart, not a new tick) so growth since
+    # the earliest tracked point can be computed, same rolling-window idea
+    # as hot_state but on the security-check cadence, EVM only.
+    history = list((cached or {}).get("holder_count_history") or [])
+    if result.get("holder_count") is not None:
+        history.append({"ts": now, "holder_count": result["holder_count"]})
+        history = history[-HOLDER_HISTORY_WINDOW:]
+    result["holder_count_history"] = history
+    if len(history) >= MIN_HOLDER_HISTORY_FOR_GROWTH and history[0]["holder_count"] > 0:
+        result["holder_growth_pct"] = round(
+            (history[-1]["holder_count"] - history[0]["holder_count"]) / history[0]["holder_count"] * 100.0, 1
+        )
+    else:
+        result["holder_growth_pct"] = None
+
     result["checked_at"] = now
     security_cache[address] = result
     return result
@@ -605,7 +657,7 @@ def check_security_cached(pool, security_cache, checks_this_tick):
 # the dashboard shows as today's recommendations - one definition, two places
 # it's read, kept in sync deliberately rather than reimplemented differently.
 
-def classify_recommendation(pool, features, security):
+def classify_recommendation(pool, features, security, sol_h1):
     good = 0
     caution = 0
     rv = features.get("rank_velocity")
@@ -636,6 +688,9 @@ def classify_recommendation(pool, features, security):
     liquidity_lock_pct = pool.get("locked_liquidity_percentage")
     if liquidity_lock_pct is not None and liquidity_lock_pct >= GOOD_LIQUIDITY_LOCK_PCT:
         good += 1
+    holder_growth_pct = security.get("holder_growth_pct")
+    if holder_growth_pct is not None and holder_growth_pct >= GOOD_HOLDER_GROWTH_PCT:
+        good += 1
 
     if concentration is not None and concentration > conc_high:
         caution += 1
@@ -651,6 +706,10 @@ def classify_recommendation(pool, features, security):
     if whale_pct is not None and whale_pct >= WHALE_MAX_BUYER_SHARE_PCT:
         caution += 1
     if liquidity_lock_pct is not None and liquidity_lock_pct < LOW_LIQUIDITY_LOCK_PCT:
+        caution += 1
+    if holder_growth_pct is not None and holder_growth_pct < BAD_HOLDER_GROWTH_PCT:
+        caution += 1
+    if sol_h1 is not None and sol_h1 <= MARKET_RISK_OFF_SOL_H1_PCT:
         caution += 1
 
     return good >= RECOMMENDED_MIN_GOOD and caution == 0
@@ -847,7 +906,7 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
 
 # --- Outcome checkpoints / labels table -----------------------------------
 
-def register_pending_checkpoint(pending, pool, timestamp, features=None, security=None):
+def register_pending_checkpoint(pending, pool, timestamp, features=None, security=None, sol_h1=None):
     """Called the first time a pool qualifies (passes momentum + security).
     Writes the T0 entry row straight to the labels buffer, and schedules
     future checkpoint lookups (10m/30m/1h/3h/6h) so we eventually learn what
@@ -893,6 +952,8 @@ def register_pending_checkpoint(pending, pool, timestamp, features=None, securit
         "buys_per_buyer_h1": buys_per_buyer,
         "whale_buyer_pct": security.get("whale_buyer_pct"),
         "locked_liquidity_pct": pool.get("locked_liquidity_percentage"),
+        "holder_growth_pct": security.get("holder_growth_pct"),
+        "sol_h1": sol_h1,
     }
 
 
@@ -1098,6 +1159,9 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
     timestamp = datetime.now(timezone.utc).isoformat()
     checks_this_tick = [0]
     checkpoint_lookups_this_tick = [0]
+    # Once per tick, not per-candidate - shared broad-market reading (see
+    # fetch_market_condition/MARKET_RISK_OFF_SOL_H1_PCT).
+    sol_h1 = fetch_market_condition()
 
     for i, network in enumerate(NETWORKS):
         if i > 0:
@@ -1127,9 +1191,10 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
                 # check in classify_recommendation(), which only looks at h1 too.
                 "transactions_h1": pool["transactions"].get("h1", {}) or {},
                 "locked_liquidity_percentage": pool.get("locked_liquidity_percentage"),
+                "sol_h1": sol_h1,
             })
 
-            entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp, features=features, security=security)
+            entry_row = register_pending_checkpoint(pending_checkpoints, pool, timestamp, features=features, security=security, sol_h1=sol_h1)
             if entry_row is not None:
                 label_rows_out.append(entry_row)
 
@@ -1139,7 +1204,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
             # improves later (rank climbs, momentum accelerates) must still
             # get a buy chance - maybe_buy's own "already holding" guard is
             # what prevents buying the same open position twice.
-            if pool["network"] not in TRADING_EXCLUDED_NETWORKS and classify_recommendation(pool, features, security):
+            if pool["network"] not in TRADING_EXCLUDED_NETWORKS and classify_recommendation(pool, features, security, sol_h1):
                 position = maybe_buy(portfolio, pool, security, timestamp)
                 if position is not None:
                     send_telegram(format_buy_alert(position, portfolio["balance"]))

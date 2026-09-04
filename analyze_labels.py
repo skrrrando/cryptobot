@@ -115,6 +115,8 @@ def main():
     split_by(lambda e: e.get("buys_per_buyer_h1") is not None and e["buys_per_buyer_h1"] >= 3.5, "buys_per_buyer_h1 >= 3.5 (wash-trade risk: few unique wallets behind the buy volume)")
     split_by(lambda e: e.get("whale_buyer_pct") is not None and e["whale_buyer_pct"] >= 40, "whale_buyer_pct >= 40% (one wallet dominates the last hour's buy $ volume)")
     split_by(lambda e: e.get("locked_liquidity_pct") is not None and e["locked_liquidity_pct"] < 50, "locked_liquidity_pct < 50% (liquidity not well locked)")
+    split_by(lambda e: e.get("holder_growth_pct") is not None and e["holder_growth_pct"] >= 5, "holder_growth_pct >= 5% (holder count growing since first tracked check)")
+    split_by(lambda e: e.get("sol_h1") is not None and e["sol_h1"] <= -5, "sol_h1 <= -5% (broad market was risk-off at entry)")
 
     old_rows = [e for e in entries.values() if "rank_velocity" not in e]
     if old_rows:
