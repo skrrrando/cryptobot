@@ -1,5 +1,5 @@
 {
-  "balance": 398.06017973779,
+  "balance": 437.7824272218765,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -45,18 +45,6 @@
       "amount_usd": 92.54821079216657,
       "qty": 79704.42935640116
     },
-    "solana_4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama": {
-      "network": "solana",
-      "pool_address": "4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama",
-      "base_token_address": "5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2",
-      "name": "TROLL / SOL",
-      "entry_ts": "2026-09-04T19:50:29.042485+00:00",
-      "entry_price_usd": 0.0706070599832427,
-      "peak_price_usd": 0.08172561331322085,
-      "amount_usd": 54.391141220007825,
-      "qty": 770.0414693208951,
-      "sell_tax_pct": 0.0
-    },
     "base_0xade9bcd4b968ee26bed102dd43a55f6a8c2416df": {
       "network": "base",
       "pool_address": "0xade9bcd4b968ee26bed102dd43a55f6a8c2416df",
@@ -76,7 +64,7 @@
       "name": "HeeHaw / SOL",
       "entry_ts": "2026-09-04T21:55:24.565235+00:00",
       "entry_price_usd": 0.0010696543684181555,
-      "peak_price_usd": 0.0015819291663027705,
+      "peak_price_usd": 0.0016275208869423565,
       "amount_usd": 49.416947870772674,
       "qty": 46162.67867527594,
       "sell_tax_pct": 0.0
@@ -99,11 +87,12 @@
       "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
       "name": "ZCAT / SOL",
       "entry_ts": "2026-09-04T23:10:32.455642+00:00",
-      "entry_price_usd": 0.014990365456947123,
+      "entry_price_usd": 0.014395011517816903,
       "peak_price_usd": 0.01573379190046573,
-      "amount_usd": 40.027727775325864,
-      "qty": 2668.466593027168,
-      "sell_tax_pct": 0.0
+      "amount_usd": 60.04159166298879,
+      "qty": 4170.999904284515,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1
     }
   },
   "closed": [
@@ -879,6 +868,24 @@
       "pnl_usd": -6.246194628349109,
       "pnl_pct": -14.18,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama",
+      "base_token_address": "5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2",
+      "name": "TROLL / SOL",
+      "entry_ts": "2026-09-04T19:50:29.042485+00:00",
+      "entry_price_usd": 0.0706070599832427,
+      "peak_price_usd": 0.08172561331322085,
+      "amount_usd": 54.391141220007825,
+      "qty": 770.0414693208951,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-04T23:31:43.363423+00:00",
+      "exit_price_usd": 0.07760231958358632,
+      "proceeds_usd": 59.73611137174943,
+      "pnl_usd": 5.344970151741606,
+      "pnl_pct": 9.83,
+      "exit_reason": "take_profit"
     }
   ]
 }
