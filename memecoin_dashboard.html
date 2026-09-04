@@ -1126,8 +1126,18 @@ function renderRules() {
       <ul class="rules-list">
         <li><b>Stop-loss:</b> müüakse kui hind on 30% alghinnast madalamal.</li>
         <li><b>Trailing stop (astmeline):</b> lubatud tagasitõmbumine tipust sõltub sellest kui kaugel kasumis positsioon on käinud - 25% tavaliselt, 35% kui tipp oli +50-150%, 45% kui tipp oli +150% või rohkem. Nii ei müüda tugevat võitjat tavalise kõikumise peale liiga vara maha.</li>
+        <li><b>Varajane kasumi realiseerimine:</b> kui positsioon on kunagi käinud tipus vähemalt +15% kasumis JA hoog on hetkel peatunud (1h tootlus ≤ 0%), müüakse kohe ära - selle asemel, et oodata trailing-stop'i suuremat tagasitõmbumist või 6h piirangut. Kui token näitab veel jätkuvalt kasvu (1h tootlus üle 0%), jäetakse rahulikult lahti - see reegel ei sega kunagi tõelise "lennuki" jätkumist.</li>
         <li><b>Momentumi kokkuvarisemine:</b> müüakse kui 1h tootlus langeb alla -15% ja müügisurve ületab ostusurve.</li>
         <li><b>6h ajapiirang:</b> tavaliselt suletakse positsioon 6 tunni pärast. Erand - kui tootlus on siis juba ≥ 40% JA token näitab endiselt positiivset momentumit (1h ja 6h plussis), jäetakse positsioon lahti ilma edasise ajapiiranguta ja lastakse "lennata" - ainult stop-loss/trailing-stop/momentumi-kollaps saavad selle veel sulgeda.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>7. Tehingukulud (realistlik simulatsioon)</h3>
+      <ul class="rules-list">
+        <li><b>Gas:</b> iga ost ja müük maksab võrgupõhise hinnangulise summa (nt Solana ~$0.02, Ethereum ~$4 - Ethereumil on väikeste tehingute puhul see suur osa kogu tehingust).</li>
+        <li><b>Slippage:</b> hinnamõju sõltub tehingu suurusest võrreldes pooli enda likviidsusega ("reserve_in_usd") - suurem tehing väikeses poolis liigutab hinda rohkem, maksimaalselt 8%.</li>
+        <li><b>Ostu-/müügimaks:</b> kui token'il on GoPlus'i järgi maks (kuni lubatud 10% piirini), arvestatakse see reaalselt tehingu tulemusse sisse, mitte ei eirata.</li>
+        <li>Need kulud tähendavad, et isegi täpselt sama hinnaga ostmine ja müümine näitab väikest miinust - täpselt nagu päris kauplemisel.</li>
       </ul>
     </div>
   `;

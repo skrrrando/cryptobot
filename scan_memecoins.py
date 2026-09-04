@@ -200,6 +200,18 @@ TRAILING_STOP_TIERS = [
 # instead, with no further time limit.
 MOONSHOT_EXTEND_MIN_RETURN_PCT = 40.0
 
+# Early profit-taking: without this, a position that peaks at a modest gain
+# and then just stalls (rather than sharply reversing) sits open bleeding
+# back toward flat/red while waiting for trailing-stop (needs a real
+# pullback) or the 6h timeout - occupying a slot the whole time. Confirmed
+# by production data: median return at every checkpoint offset (10m-6h) is
+# at or below 0%, so "hold and hope it keeps climbing" is the wrong default
+# once a position has already banked a real gain and momentum has stopped
+# pushing higher. Only fires when momentum has actually flattened (h1 <= 0)
+# - a position with h1 > 0 is still climbing and is deliberately left alone
+# to ride toward trailing-stop/the moonshot-extend path instead.
+TAKE_PROFIT_MIN_PCT = 15.0
+
 # Averaging down: only on a moderate dip, well clear of the stop-loss zone,
 # and only if the token still looks healthy right now - not just cheaper.
 # Capped at one add per position, sized smaller than the original buy.
@@ -207,6 +219,42 @@ DCA_TRIGGER_MIN_PCT = -20.0      # must be down at least this much from entry...
 DCA_TRIGGER_MAX_PCT = -10.0      # ...but not more than this (stay clear of the -30% stop-loss)
 DCA_SIZE_FRACTION_OF_ORIGINAL = 0.5  # the add is half the size of the original position
 DCA_MAX_ADDS = 1
+
+# --- Realistic execution costs (gas + slippage + on-chain tax) -------------
+# The paper portfolio used to fill every trade exactly at the displayed
+# price, which meaningfully overstates real returns. A real swap always
+# pays network gas, moves the price against itself (slippage, sized to how
+# big the trade is relative to the pool's own liquidity - GeckoTerminal's
+# reserve_in_usd), and for EVM tokens often a buy/sell tax on top (already
+# enforced as a hard ceiling at the security gate via EVM_MAX_TAX_FRACTION,
+# but "under the cap" was never "zero" - a token that passes at 6% tax still
+# has a real 6% tax). Gas figures below are rough per-network ballparks for
+# a small ($10-150) trade, not a live gas-price oracle - same "explicit,
+# untuned, easy to find and retune" spirit as every other threshold here.
+GAS_COST_USD = {
+    "solana": 0.02, "base": 0.10, "bsc": 0.15,
+    "polygon_pos": 0.02, "arbitrum": 0.15, "eth": 4.00,
+}
+GAS_COST_USD_DEFAULT = 0.20
+SLIPPAGE_MAX_PCT = 8.0  # cap - beyond this the trade realistically wouldn't fill this way at all
+
+
+def estimate_gas_usd(network):
+    return GAS_COST_USD.get(network, GAS_COST_USD_DEFAULT)
+
+
+def estimate_slippage_pct(trade_usd, reserve_usd):
+    """Rough constant-product-style approximation: a trade that's X% of the
+    pool's total reserve moves the price by roughly X%. Not exact AMM math,
+    just enough to stop pretending a $100 trade in an $8,000 pool (a real,
+    observed case - see Pumpooor/SOL) fills at zero cost. Missing reserve
+    data (rare - see live check that motivated this) falls back to the max,
+    since assuming the worst is safer than assuming frictionless."""
+    reserve_usd = _as_float(reserve_usd)
+    if reserve_usd <= 0:
+        return SLIPPAGE_MAX_PCT
+    return min(SLIPPAGE_MAX_PCT, (trade_usd / reserve_usd) * 100.0)
+
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -302,6 +350,7 @@ def fetch_trending_pools(network):
             "fdv_usd": attrs.get("fdv_usd"),
             "pool_created_at": attrs.get("pool_created_at"),
             "locked_liquidity_percentage": attrs.get("locked_liquidity_percentage"),
+            "reserve_in_usd": attrs.get("reserve_in_usd"),
         })
     return pools
 
@@ -324,6 +373,7 @@ def fetch_pool_price(network, pool_address):
         "fdv_usd": attrs.get("fdv_usd"),
         "price_change_pct": attrs.get("price_change_percentage", {}) or {},
         "transactions": attrs.get("transactions", {}) or {},
+        "reserve_in_usd": attrs.get("reserve_in_usd"),
     }
 
 
@@ -603,7 +653,7 @@ def default_portfolio():
     return {"balance": STARTING_BALANCE_USD, "positions": {}, "closed": []}
 
 
-def maybe_buy(portfolio, pool, timestamp):
+def maybe_buy(portfolio, pool, security, timestamp):
     pool_id = pool["id"]
     if pool_id in portfolio["positions"]:
         return None
@@ -615,6 +665,16 @@ def maybe_buy(portfolio, pool, timestamp):
     amount = portfolio["balance"] * POSITION_SIZE_FRACTION
     if amount < MIN_TRADE_USD:
         return None
+
+    gas_usd = estimate_gas_usd(pool["network"])
+    net_usd = amount - gas_usd
+    if net_usd <= 0:
+        return None  # trade too small to survive gas alone
+    slippage_pct = estimate_slippage_pct(amount, pool.get("reserve_in_usd"))
+    buy_tax_pct = _as_float((security or {}).get("buy_tax_pct"))
+    execution_price = price * (1 + slippage_pct / 100.0)
+    qty = (net_usd / execution_price) * (1 - buy_tax_pct / 100.0)
+
     portfolio["balance"] -= amount
     position = {
         "network": pool["network"],
@@ -625,17 +685,26 @@ def maybe_buy(portfolio, pool, timestamp):
         "entry_price_usd": price,
         "peak_price_usd": price,
         "amount_usd": amount,
-        "qty": amount / price,
+        "qty": qty,
+        "sell_tax_pct": _as_float((security or {}).get("sell_tax_pct")),
     }
     portfolio["positions"][pool_id] = position
     return position
 
 
-def maybe_sell(portfolio, pool_id, price_now, timestamp, reason="timeout"):
+def maybe_sell(portfolio, pool_id, price_now, reserve_usd_now, timestamp, reason="timeout"):
     pos = portfolio["positions"].pop(pool_id, None)
     if pos is None:
         return None
-    proceeds = pos["qty"] * price_now if price_now and price_now > 0 else 0.0
+    if price_now and price_now > 0:
+        gross_proceeds = pos["qty"] * price_now
+        gas_usd = estimate_gas_usd(pos["network"])
+        slippage_pct = estimate_slippage_pct(gross_proceeds, reserve_usd_now)
+        sell_tax_pct = _as_float(pos.get("sell_tax_pct"))
+        execution_price = price_now * (1 - slippage_pct / 100.0)
+        proceeds = max(0.0, pos["qty"] * execution_price * (1 - sell_tax_pct / 100.0) - gas_usd)
+    else:
+        proceeds = 0.0
     pnl_usd = proceeds - pos["amount_usd"]
     pnl_pct = (pnl_usd / pos["amount_usd"] * 100.0) if pos["amount_usd"] else 0.0
     portfolio["balance"] += proceeds
@@ -672,7 +741,11 @@ def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick
     if not (h1 > 0 and h6 > 0):
         return None  # dipped, but not "still strong" - just cheaper
 
-    pseudo_pool = {"network": pos["network"], "base_token_address": pos["base_token_address"]}
+    # Includes "address" (the pool/pair address, not just the token address) -
+    # needed if the security cache has expired and check_security_cached has
+    # to run a fresh whale-buyer check, which fetches trades by pool address.
+    pseudo_pool = {"network": pos["network"], "base_token_address": pos["base_token_address"],
+                   "address": pos["pool_address"]}
     security = check_security_cached(pseudo_pool, security_cache, checks_this_tick)
     if security is None or not security["passed"]:
         return None
@@ -681,9 +754,18 @@ def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick
     if add_amount < MIN_TRADE_USD or add_amount > portfolio["balance"]:
         return None
 
+    gas_usd = estimate_gas_usd(pos["network"])
+    net_amount = add_amount - gas_usd
+    if net_amount <= 0:
+        return None
+    slippage_pct = estimate_slippage_pct(add_amount, current.get("reserve_in_usd"))
+    buy_tax_pct = _as_float(security.get("buy_tax_pct"))
+    execution_price = price * (1 + slippage_pct / 100.0)
+    add_qty = (net_amount / execution_price) * (1 - buy_tax_pct / 100.0)
+
     portfolio["balance"] -= add_amount
     pos["amount_usd"] += add_amount
-    pos["qty"] += add_amount / price
+    pos["qty"] += add_qty
     pos["dca_count"] = pos.get("dca_count", 0) + 1
     # cost basis is now the blended average - stop-loss/trailing-stop from
     # here on are measured against this, same as a real average-down would be
@@ -737,11 +819,13 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
             reason = "stop_loss"
         elif was_in_profit and drawdown_from_peak_pct <= -trail:
             reason = "trailing_stop"
+        elif peak_profit_pct >= TAKE_PROFIT_MIN_PCT and h1 <= 0:
+            reason = "take_profit"
         elif h1 <= MOMENTUM_COLLAPSE_H1_PCT and sell_pressure:
             reason = "momentum_collapse"
 
         if reason is not None:
-            closed = maybe_sell(portfolio, pool_id, price, now_wall.isoformat(), reason=reason)
+            closed = maybe_sell(portfolio, pool_id, price, current.get("reserve_in_usd"), now_wall.isoformat(), reason=reason)
             if closed is not None:
                 closed_positions.append(closed)
             continue
@@ -850,7 +934,7 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick, portfolio):
                     # it every run from here on, with no further time limit.
                     send_telegram(format_moonshot_alert(entry["name"], entry["network"], return_pct))
                 else:
-                    closed = maybe_sell(portfolio, pool_id, price_now, checkpoint_ts)
+                    closed = maybe_sell(portfolio, pool_id, price_now, current.get("reserve_in_usd"), checkpoint_ts)
                     if closed is not None:
                         send_telegram(format_sell_alert(closed, portfolio["balance"]))
 
@@ -979,6 +1063,7 @@ def format_moonshot_alert(name, network, return_pct):
 EXIT_REASON_LABELS = {
     "stop_loss": "stop-loss vallandus",
     "trailing_stop": "trailing-stop lukustas kasumi",
+    "take_profit": "kasum realiseeriti varakult",
     "momentum_collapse": "hoog kadus, väljusime",
     "timeout": "6h hoidmise piir täis",
 }
@@ -1046,7 +1131,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
             # get a buy chance - maybe_buy's own "already holding" guard is
             # what prevents buying the same open position twice.
             if classify_recommendation(pool, features, security):
-                position = maybe_buy(portfolio, pool, timestamp)
+                position = maybe_buy(portfolio, pool, security, timestamp)
                 if position is not None:
                     send_telegram(format_buy_alert(position, portfolio["balance"]))
 
