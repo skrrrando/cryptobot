@@ -1,5 +1,5 @@
 {
-  "balance": 516.5243911751068,
+  "balance": 534.3136696682852,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -46,18 +46,6 @@
       "qty": 221.2675725466446,
       "sell_tax_pct": 0.0
     },
-    "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
-      "network": "base",
-      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
-      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
-      "name": "BSTONK / USDC 0.3%",
-      "entry_ts": "2026-09-05T02:00:51.053169+00:00",
-      "entry_price_usd": 0.00293152447215847,
-      "peak_price_usd": 0.00349090565867878,
-      "amount_usd": 66.23494612463256,
-      "qty": 22547.69774271981,
-      "sell_tax_pct": 0.0
-    },
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
       "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
@@ -82,6 +70,18 @@
       "qty": 7297.795276295281,
       "sell_tax_pct": 0.0,
       "dca_count": 1
+    },
+    "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": {
+      "network": "solana",
+      "pool_address": "7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs",
+      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
+      "name": "ZCAT / SOL",
+      "entry_ts": "2026-09-05T04:50:29.474812+00:00",
+      "entry_price_usd": 0.023068151608690954,
+      "peak_price_usd": 0.025410019694678453,
+      "amount_usd": 51.65243911751068,
+      "qty": 2237.9001967033837,
+      "sell_tax_pct": 0.0
     }
   },
   "closed": [
@@ -964,6 +964,24 @@
       "proceeds_usd": 75.7920526471687,
       "pnl_usd": 16.1806011349994,
       "pnl_pct": 27.14,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
+      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
+      "name": "BSTONK / USDC 0.3%",
+      "entry_ts": "2026-09-05T02:00:51.053169+00:00",
+      "entry_price_usd": 0.00293152447215847,
+      "peak_price_usd": 0.00349090565867878,
+      "amount_usd": 66.23494612463256,
+      "qty": 22547.69774271981,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T04:51:18.722492+00:00",
+      "exit_price_usd": 0.00308593693670717,
+      "proceeds_usd": 69.44171761068912,
+      "pnl_usd": 3.2067714860565673,
+      "pnl_pct": 4.84,
       "exit_reason": "take_profit"
     }
   ]
