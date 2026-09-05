@@ -1,5 +1,5 @@
 {
-  "balance": 542.3000276873539,
+  "balance": 593.9159354221865,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -47,18 +47,6 @@
       "qty": 0.018427261446277314,
       "sell_tax_pct": 0.0
     },
-    "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
-      "network": "solana",
-      "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
-      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-      "name": "STONK / SOL",
-      "entry_ts": "2026-09-05T16:50:30.396533+00:00",
-      "entry_price_usd": 0.0408204830680497,
-      "peak_price_usd": 0.04866433857370075,
-      "amount_usd": 45.89081035965722,
-      "qty": 1123.6663620200877,
-      "sell_tax_pct": 0.0
-    },
     "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": {
       "network": "bsc",
       "pool_address": "0xe5ae318389b8d6d09370a675479c64862152d126",
@@ -78,7 +66,7 @@
       "name": "b-money / BTCB",
       "entry_ts": "2026-09-05T20:10:30.294454+00:00",
       "entry_price_usd": 0.0130828904394735,
-      "peak_price_usd": 0.0131933111793488,
+      "peak_price_usd": 0.0137097876699855,
       "amount_usd": 66.95062070214247,
       "qty": 5054.117894582437,
       "sell_tax_pct": 1.0
@@ -1447,6 +1435,24 @@
       "pnl_usd": 2.4517863720972457,
       "pnl_pct": 3.87,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-05T16:50:30.396533+00:00",
+      "entry_price_usd": 0.0408204830680497,
+      "peak_price_usd": 0.04866433857370075,
+      "amount_usd": 45.89081035965722,
+      "qty": 1123.6663620200877,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T20:36:06.700801+00:00",
+      "exit_price_usd": 0.04595548246013604,
+      "proceeds_usd": 51.6159077348326,
+      "pnl_usd": 5.725097375175373,
+      "pnl_pct": 12.48,
+      "exit_reason": "take_profit"
     }
   ]
 }
