@@ -1,5 +1,5 @@
 {
-  "balance": 492.26918668300533,
+  "balance": 540.073761483345,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -45,18 +45,6 @@
       "peak_price_usd": 0.000767563606456504,
       "amount_usd": 44.194652272260704,
       "qty": 58126.419528444305,
-      "sell_tax_pct": 0.0
-    },
-    "base_0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06": {
-      "network": "base",
-      "pool_address": "0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06",
-      "base_token_address": "0xc6405d7a226e1c18e559be2f335f74c01ad07bf5",
-      "name": "STFY / ETH 1%",
-      "entry_ts": "2026-09-05T15:05:41.675929+00:00",
-      "entry_price_usd": 0.000828653982259947,
-      "peak_price_usd": 0.0012096310130214,
-      "amount_usd": 42.795679051320974,
-      "qty": 51502.629257412664,
       "sell_tax_pct": 0.0
     },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
@@ -1404,6 +1392,24 @@
       "proceeds_usd": 47.79523343168487,
       "pnl_usd": -1.5907613740174043,
       "pnl_pct": -3.22,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06",
+      "base_token_address": "0xc6405d7a226e1c18e559be2f335f74c01ad07bf5",
+      "name": "STFY / ETH 1%",
+      "entry_ts": "2026-09-05T15:05:41.675929+00:00",
+      "entry_price_usd": 0.000828653982259947,
+      "peak_price_usd": 0.0012096310130214,
+      "amount_usd": 42.795679051320974,
+      "qty": 51502.629257412664,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T19:26:01.444718+00:00",
+      "exit_price_usd": 0.000930555422627155,
+      "proceeds_usd": 47.80457480033973,
+      "pnl_usd": 5.008895749018755,
+      "pnl_pct": 11.7,
       "exit_reason": "take_profit"
     }
   ]
