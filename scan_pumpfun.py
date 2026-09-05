@@ -70,6 +70,7 @@ BONDING_STATE_PATH = os.path.join(DATA_DIR, "pumpfun_bonding_state.json")
 SECURITY_CACHE_PATH = os.path.join(DATA_DIR, "pumpfun_security_cache.json")
 CANDIDATES_PATH = os.path.join(DATA_DIR, "pumpfun_candidates.json")
 ALERTS_PATH = os.path.join(DATA_DIR, "pumpfun_alerts.json")
+OUTCOMES_PATH = os.path.join(DATA_DIR, "pumpfun_pending_outcomes.json")
 PORTFOLIO_PATH = os.path.join(DATA_DIR, "pumpfun_portfolio.json")
 TELEGRAM_OFFSET_PATH = os.path.join(DATA_DIR, "pumpfun_telegram_offset.json")
 DECISION_LABELS_PATH = os.path.join(DATA_DIR, "pumpfun_decision_labels.jsonl")
@@ -135,6 +136,18 @@ SECURITY_CACHE_TTL_SECONDS = 900   # 15 min - shorter than the memecoin sleeve's
 PUMPFUN_MAX_DEV_HOLDING_PCT = 5.0  # creator holding more than this can dump on us
 
 RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
+
+# --- Outcome tracking ------------------------------------------------------
+# Denser and shorter than scan_memecoins.py's 10m/30m/1h/3h/6h schedule,
+# because these move far faster - live observation caught tokens doing 30-40%
+# of the graduation path inside two minutes.
+OUTCOME_CHECKPOINT_OFFSETS_MINUTES = [5, 15, 30, 60, 180]
+# Stop watching a token that has neither graduated nor died by this point.
+# Longer than TRACKED_MAX_AGE_SECONDS on purpose: alerted tokens are rare
+# (<= DAILY_SIGNAL_CAP a day) so watching them longer costs almost nothing,
+# and the whole question this half of the bot exists to answer - did the
+# signal graduate? - can't be answered by giving up after two hours.
+OUTCOME_MAX_AGE_SECONDS = 6 * 3600
 
 # --- Stage 3: alerting -----------------------------------------------------
 # The whole point of the funnel: few enough signals a day that each one can
@@ -854,12 +867,23 @@ def score_candidate(entry, security):
     return round(progress_pts + velocity_pts + holder_pts + dev_pts, 1)
 
 
-def prune_bonding_state(bonding_state, now_wall):
+def prune_bonding_state(bonding_state, now_wall, protected_keys=frozenset()):
     """Drop graduated, dead, and stale curves so the tracked set (and the RPC
-    work it implies) stays bounded."""
+    work it implies) stays bounded.
+
+    `protected_keys` are curves still under outcome watch after being alerted
+    on. They are exempt from BOTH rules, and that exemption is load-bearing:
+    without it a token would be dropped the instant it graduated, which is
+    precisely the success outcome this sleeve exists to measure, and any
+    checkpoint past TRACKED_MAX_AGE_SECONDS would find no curve to read.
+    Alerted tokens are capped at DAILY_SIGNAL_CAP a day, so keeping them
+    costs almost nothing.
+    """
     cutoff = now_wall.timestamp() - TRACKED_MAX_AGE_SECONDS
     drop = []
     for key, entry in bonding_state.items():
+        if key in protected_keys:
+            continue
         history = entry.get("history") or []
         if history and history[-1].get("complete"):
             drop.append(key)
@@ -876,7 +900,131 @@ def prune_bonding_state(bonding_state, now_wall):
     return len(drop)
 
 
-def send_moonshot_alerts(candidates, alerts_state, portfolio, sol_usd, timestamp, now_wall):
+def register_outcome_watch(pending_outcomes, alert, timestamp):
+    """Start watching an alerted token's outcome.
+
+    Deliberately called when the ALERT is sent, not when the user decides -
+    ignored tokens have to be followed exactly as closely as bought ones.
+    Otherwise the only data ever collected would be about coins the user
+    already liked, which cannot answer whether the ignores were right.
+    """
+    mint = alert["mint"]
+    if mint in pending_outcomes:
+        return
+    pending_outcomes[mint] = {
+        "mint": mint,
+        "alert_id": alert.get("alert_id"),
+        "name": alert.get("name"),
+        "symbol": alert.get("symbol"),
+        "bonding_curve_key": alert.get("bonding_curve_key"),
+        "signal_ts": alert.get("signal_ts") or timestamp,
+        "alert_score": alert.get("score"),
+        "alert_graduation_pct": alert.get("graduation_pct"),
+        "decision": None,          # filled in when the user presses a button
+        "graduated": False,
+        "checkpoints_done": {},
+    }
+
+
+def record_decision_on_outcome(pending_outcomes, mint, decision, timestamp):
+    watch = pending_outcomes.get(mint)
+    if watch is not None and watch.get("decision") is None:
+        watch["decision"] = decision
+        watch["decided_ts"] = timestamp
+
+
+def process_outcome_checkpoints(pending_outcomes, bonding_state, portfolio,
+                                sol_usd, now_wall, timestamp):
+    """Record what happened to every alerted token at fixed offsets, and
+    detect the terminal outcome (graduated, or gave up).
+
+    Graduation is the verdict this whole sleeve is judged on, so it is checked
+    on every tick rather than only at checkpoint boundaries - a token can
+    graduate between two offsets and must not be missed."""
+    label_rows = []
+    finished = []
+
+    for mint, watch in pending_outcomes.items():
+        history = (bonding_state.get(watch.get("bonding_curve_key")) or {}).get("history") or []
+        latest = history[-1] if history else None
+        try:
+            signal_ts = datetime.fromisoformat(watch["signal_ts"])
+        except (KeyError, ValueError):
+            finished.append(mint)
+            continue
+        elapsed_min = (now_wall - signal_ts).total_seconds() / 60.0
+
+        # --- terminal: graduated ------------------------------------------
+        if latest and latest.get("complete") and not watch["graduated"]:
+            watch["graduated"] = True
+            label_rows.append({
+                "row_type": "outcome",
+                "outcome": "graduated",
+                "minutes_to_graduate": round(elapsed_min, 1),
+                "decision": watch.get("decision"),
+                "mint": mint,
+                "name": watch.get("name"),
+                "alert_score": watch.get("alert_score"),
+                "alert_graduation_pct": watch.get("alert_graduation_pct"),
+                "signal_ts": watch["signal_ts"],
+                "recorded_ts": timestamp,
+            })
+            finished.append(mint)
+            continue
+
+        # --- scheduled checkpoints ----------------------------------------
+        if latest:
+            for offset in OUTCOME_CHECKPOINT_OFFSETS_MINUTES:
+                key = str(offset)
+                if key in watch["checkpoints_done"] or elapsed_min < offset:
+                    continue
+                value_usd = None
+                pos = portfolio.get("positions", {}).get(mint)
+                if pos and sol_usd:
+                    sol_out = simulate_curve_sell(latest, pos["qty"])
+                    if sol_out:
+                        value_usd = round(sol_out * sol_usd, 2)
+                label_rows.append({
+                    "row_type": "checkpoint",
+                    "mint": mint,
+                    "name": watch.get("name"),
+                    "offset_minutes": offset,
+                    "decision": watch.get("decision"),
+                    "graduation_pct": latest.get("graduation_pct"),
+                    "real_sol_reserves": latest.get("real_sol_reserves"),
+                    "progress_since_alert_pct": round(
+                        (latest.get("graduation_pct") or 0)
+                        - (watch.get("alert_graduation_pct") or 0), 2),
+                    # only present when the user actually bought it
+                    "position_value_usd": value_usd,
+                    "signal_ts": watch["signal_ts"],
+                    "checkpoint_ts": timestamp,
+                })
+                watch["checkpoints_done"][key] = timestamp
+
+        # --- terminal: gave up --------------------------------------------
+        if elapsed_min >= OUTCOME_MAX_AGE_SECONDS / 60.0:
+            label_rows.append({
+                "row_type": "outcome",
+                "outcome": "did_not_graduate",
+                "final_graduation_pct": (latest or {}).get("graduation_pct"),
+                "decision": watch.get("decision"),
+                "mint": mint,
+                "name": watch.get("name"),
+                "alert_score": watch.get("alert_score"),
+                "alert_graduation_pct": watch.get("alert_graduation_pct"),
+                "signal_ts": watch["signal_ts"],
+                "recorded_ts": timestamp,
+            })
+            finished.append(mint)
+
+    for mint in finished:
+        del pending_outcomes[mint]
+    return label_rows
+
+
+def send_moonshot_alerts(candidates, alerts_state, portfolio, pending_outcomes,
+                         sol_usd, timestamp, now_wall):
     """Stage 3: send at most DAILY_SIGNAL_CAP alerts per UTC day, strongest
     first. Returns the label rows to append."""
     today = now_wall.strftime("%Y-%m-%d")
@@ -922,7 +1070,7 @@ def send_moonshot_alerts(candidates, alerts_state, portfolio, sol_usd, timestamp
         if result is None and TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
             continue
 
-        pending[alert_id] = {
+        alert_row = {
             "alert_id": alert_id,
             "mint": mint,
             "name": candidate.get("name"),
@@ -936,14 +1084,19 @@ def send_moonshot_alerts(candidates, alerts_state, portfolio, sol_usd, timestamp
             "alert_price_usd": curve_price,
             "message_id": (result or {}).get("message_id"),
         }
+        pending[alert_id] = alert_row
         recent[mint] = timestamp
         daily["count"] += 1
-        label_rows.append({"row_type": "alert", **pending[alert_id]})
+        # Outcome tracking starts at the ALERT, not at the decision - see
+        # register_outcome_watch on why ignored tokens must be followed too.
+        register_outcome_watch(pending_outcomes, alert_row, timestamp)
+        label_rows.append({"row_type": "alert", **alert_row})
 
     return label_rows
 
 
-def poll_telegram_decisions(alerts_state, portfolio, bonding_state, sol_usd, offset_state, timestamp):
+def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outcomes,
+                            sol_usd, offset_state, timestamp):
     """Read button presses since the last tick and act on them.
 
     There is no always-on server here to receive a webhook - everything in
@@ -988,9 +1141,10 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, sol_usd, off
             if alert is None:
                 note = "That signal has already been answered."
             elif action == "ignore":
+                record_decision_on_outcome(pending_outcomes, alert["mint"], "ignore", timestamp)
                 label_rows.append({"row_type": "decision", "decision": "ignore",
                                    "decided_ts": timestamp, **alert})
-                note = f"Ignored {alert.get('name')}."
+                note = f"Ignored {alert.get('name')} - still tracking how it turns out."
             else:
                 history = (bonding_state.get(alert.get("bonding_curve_key")) or {}).get("history") or []
                 curve = history[-1] if history else None
@@ -1001,6 +1155,7 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, sol_usd, off
                     # can still be answered next tick rather than vanishing.
                     pending[key] = alert
                 else:
+                    record_decision_on_outcome(pending_outcomes, alert["mint"], "buy", timestamp)
                     label_rows.append({"row_type": "decision", "decision": "buy",
                                        "decided_ts": timestamp,
                                        "entry_price_usd": pos["entry_price_usd"],
@@ -1078,6 +1233,7 @@ def main():
     alerts_state = engine.load_json(ALERTS_PATH, {})
     portfolio = engine.load_json(PORTFOLIO_PATH, default_portfolio())
     offset_state = engine.load_json(TELEGRAM_OFFSET_PATH, {})
+    pending_outcomes = engine.load_json(OUTCOMES_PATH, {})
 
     timestamp = datetime.now(timezone.utc).isoformat()
     now_wall = datetime.now(timezone.utc)
@@ -1168,12 +1324,33 @@ def main():
     # blocks nothing in this tick's own alerting, and so a position opened now
     # is immediately excluded from being re-alerted below.
     label_rows += poll_telegram_decisions(
-        alerts_state, portfolio, bonding_state, sol_usd, offset_state, timestamp)
+        alerts_state, portfolio, bonding_state, pending_outcomes,
+        sol_usd, offset_state, timestamp)
     label_rows += send_moonshot_alerts(
-        candidates, alerts_state, portfolio, sol_usd, timestamp, now_wall)
+        candidates, alerts_state, portfolio, pending_outcomes,
+        sol_usd, timestamp, now_wall)
+
+    # ---- Phase 4: did the signals actually pan out? -----------------------
+    outcome_rows = process_outcome_checkpoints(
+        pending_outcomes, bonding_state, portfolio, sol_usd, now_wall, timestamp)
+    label_rows += outcome_rows
+    # Tell the user when something they're holding graduates - it's the good
+    # outcome, and it's the moment they may want to act on the position.
+    for row in outcome_rows:
+        if row.get("row_type") == "outcome" and row.get("outcome") == "graduated" \
+                and row.get("decision") == "buy":
+            telegram_call("sendMessage", {
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": (f"GRADUATED: {row.get('name')} made it to a real pool "
+                         f"in {row.get('minutes_to_graduate')} min.\n"
+                         f"You're holding it - /positions to sell."),
+            })
 
     dev_pruned = prune_dev_history(dev_history, now_wall)
-    curves_pruned = prune_bonding_state(bonding_state, now_wall)
+    # Curves under outcome watch are exempt - see prune_bonding_state.
+    watched_curves = {w.get("bonding_curve_key") for w in pending_outcomes.values()}
+    watched_curves |= {p.get("bonding_curve_key") for p in portfolio.get("positions", {}).values()}
+    curves_pruned = prune_bonding_state(bonding_state, now_wall, protected_keys=watched_curves)
 
     # Overwritten fresh each run (not appended) - the workflow uploads this as
     # a per-run artifact instead of committing an ever-growing file to git.
@@ -1199,6 +1376,7 @@ def main():
     engine.save_json(ALERTS_PATH, alerts_state)
     engine.save_json(PORTFOLIO_PATH, portfolio)
     engine.save_json(TELEGRAM_OFFSET_PATH, offset_state)
+    engine.save_json(OUTCOMES_PATH, pending_outcomes)
 
     for notice in notices:
         if "errors" in notice:
@@ -1216,6 +1394,7 @@ def main():
           f"{len(alerts_state.get('pending', {}))} awaiting a decision. "
           f"Moonshot: ${portfolio['balance']:.2f} free, {len(portfolio['positions'])} open, "
           f"{len(portfolio['closed'])} closed. "
+          f"Watching {len(pending_outcomes)} alerted token(s) for graduation. "
           f"Pruned {curves_pruned} curve(s), {dev_pruned} creator(s).")
     return 0
 
