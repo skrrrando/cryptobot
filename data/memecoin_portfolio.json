@@ -1,5 +1,5 @@
 {
-  "balance": 419.9516491307033,
+  "balance": 457.91467232356115,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -59,19 +59,6 @@
       "qty": 60120.00494787073,
       "sell_tax_pct": 0.0
     },
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
-      "network": "solana",
-      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
-      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
-      "name": "OTC / SOL",
-      "entry_ts": "2026-09-05T21:05:23.672473+00:00",
-      "entry_price_usd": 0.007935534155284727,
-      "peak_price_usd": 0.008561280123325543,
-      "amount_usd": 102.32739988564897,
-      "qty": 12894.834535807937,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
-    },
     "base_0xb5cd6e82b8fca463b1708af6fec2073c7c107f3e6c750a817c8f8885fb835748": {
       "network": "base",
       "pool_address": "0xb5cd6e82b8fca463b1708af6fec2073c7c107f3e6c750a817c8f8885fb835748",
@@ -106,6 +93,18 @@
       "peak_price_usd": 0.00674451451967494,
       "amount_usd": 46.66129434785592,
       "qty": 7077.1302296769345,
+      "sell_tax_pct": 0.0
+    },
+    "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": {
+      "network": "solana",
+      "pool_address": "7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs",
+      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
+      "name": "ZCAT / SOL",
+      "entry_ts": "2026-09-05T22:05:23.621095+00:00",
+      "entry_price_usd": 0.028797082703993702,
+      "peak_price_usd": 0.028797082703993702,
+      "amount_usd": 41.99516491307033,
+      "qty": 1457.376623553909,
       "sell_tax_pct": 0.0
     }
   },
@@ -1514,6 +1513,25 @@
       "pnl_usd": -5.392543379293272,
       "pnl_pct": -11.21,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
+      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
+      "name": "OTC / SOL",
+      "entry_ts": "2026-09-05T21:05:23.672473+00:00",
+      "entry_price_usd": 0.007935534155284727,
+      "peak_price_usd": 0.008561280123325543,
+      "amount_usd": 102.32739988564897,
+      "qty": 12894.834535807937,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-05T22:06:47.853591+00:00",
+      "exit_price_usd": 0.006203834305363752,
+      "proceeds_usd": 79.95818810592814,
+      "pnl_usd": -22.36921177972083,
+      "pnl_pct": -21.86,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
