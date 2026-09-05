@@ -1,5 +1,5 @@
 {
-  "balance": 395.3814578025641,
+  "balance": 455.61409004178853,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -35,18 +35,6 @@
       "qty": 686057697.6687012,
       "sell_tax_pct": 2.0
     },
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
-      "network": "solana",
-      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
-      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
-      "name": "OTC / SOL",
-      "entry_ts": "2026-09-05T10:55:23.707501+00:00",
-      "entry_price_usd": 0.003964150469451964,
-      "peak_price_usd": 0.004731329263678494,
-      "amount_usd": 51.93299820214957,
-      "qty": 13092.971886062547,
-      "sell_tax_pct": 0.0
-    },
     "base_0x3f53f1fd5b7723ddf38d93a584d280b9b94c3111": {
       "network": "base",
       "pool_address": "0x3f53f1fd5b7723ddf38d93a584d280b9b94c3111",
@@ -66,7 +54,7 @@
       "name": "memestock / GMEB",
       "entry_ts": "2026-09-05T12:35:23.618389+00:00",
       "entry_price_usd": 0.0117340740186873,
-      "peak_price_usd": 0.0119425686922571,
+      "peak_price_usd": 0.0154205799383759,
       "amount_usd": 50.89098334941607,
       "qty": 4323.732314344871,
       "sell_tax_pct": 0.0
@@ -114,7 +102,7 @@
       "name": "Sue / WBNB",
       "entry_ts": "2026-09-05T15:25:23.488764+00:00",
       "entry_price_usd": 0.00488457864723916,
-      "peak_price_usd": 0.00493895273874908,
+      "peak_price_usd": 0.00501746578889642,
       "amount_usd": 43.93127308917379,
       "qty": 8961.879137152186,
       "sell_tax_pct": 1.0
@@ -1290,6 +1278,24 @@
       "proceeds_usd": 54.15161942984918,
       "pnl_usd": 5.0464502384483865,
       "pnl_pct": 10.28,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
+      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
+      "name": "OTC / SOL",
+      "entry_ts": "2026-09-05T10:55:23.707501+00:00",
+      "entry_price_usd": 0.003964150469451964,
+      "peak_price_usd": 0.004731329263678494,
+      "amount_usd": 51.93299820214957,
+      "qty": 13092.971886062547,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T15:52:02.279117+00:00",
+      "exit_price_usd": 0.0046028980099108744,
+      "proceeds_usd": 60.23263223922441,
+      "pnl_usd": 8.299634037074838,
+      "pnl_pct": 15.98,
       "exit_reason": "take_profit"
     }
   ]
