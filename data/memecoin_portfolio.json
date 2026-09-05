@@ -1,5 +1,5 @@
 {
-  "balance": 454.87099769684426,
+  "balance": 458.90810359657223,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -54,7 +54,7 @@
       "name": "memestock / GMEB",
       "entry_ts": "2026-09-05T12:35:23.618389+00:00",
       "entry_price_usd": 0.0117340740186873,
-      "peak_price_usd": 0.0178054875556411,
+      "peak_price_usd": 0.0182162670535064,
       "amount_usd": 50.89098334941607,
       "qty": 4323.732314344871,
       "sell_tax_pct": 0.0
@@ -95,16 +95,16 @@
       "qty": 8961.879137152186,
       "sell_tax_pct": 1.0
     },
-    "bsc_0xdfeab54f1aabea0d3e1af8a778a76e648275d113": {
-      "network": "bsc",
-      "pool_address": "0xdfeab54f1aabea0d3e1af8a778a76e648275d113",
-      "base_token_address": "0xc9d825e83aada475bd4d38c8ca984ed746277777",
-      "name": "Stonks / USDT 1%",
-      "entry_ts": "2026-09-05T15:55:22.273206+00:00",
-      "entry_price_usd": 0.0101666009550744,
-      "peak_price_usd": 0.0101666009550744,
-      "amount_usd": 45.561409004178856,
-      "qty": 4465.067924340854,
+    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-05T16:30:41.857157+00:00",
+      "entry_price_usd": 2463.04,
+      "peak_price_usd": 2463.04,
+      "amount_usd": 45.48709976968443,
+      "qty": 0.018427261446277314,
       "sell_tax_pct": 0.0
     }
   },
@@ -1314,6 +1314,24 @@
       "proceeds_usd": 44.818316659234604,
       "pnl_usd": -2.53814593911914,
       "pnl_pct": -5.36,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xdfeab54f1aabea0d3e1af8a778a76e648275d113",
+      "base_token_address": "0xc9d825e83aada475bd4d38c8ca984ed746277777",
+      "name": "Stonks / USDT 1%",
+      "entry_ts": "2026-09-05T15:55:22.273206+00:00",
+      "entry_price_usd": 0.0101666009550744,
+      "peak_price_usd": 0.0101666009550744,
+      "amount_usd": 45.561409004178856,
+      "qty": 4465.067924340854,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T16:31:28.851759+00:00",
+      "exit_price_usd": 0.0111289261645445,
+      "proceeds_usd": 49.524205669412396,
+      "pnl_usd": 3.9627966652335402,
+      "pnl_pct": 8.7,
       "exit_reason": "timeout"
     }
   ]
