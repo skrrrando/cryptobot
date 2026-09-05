@@ -1,5 +1,5 @@
 {
-  "balance": 371.442724562372,
+  "balance": 427.9567905132097,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -71,19 +71,6 @@
       "qty": 4323.732314344871,
       "sell_tax_pct": 0.0
     },
-    "bsc_0xbae8327deb97de23940d877134cd16f1bed0f83d": {
-      "network": "bsc",
-      "pool_address": "0xbae8327deb97de23940d877134cd16f1bed0f83d",
-      "base_token_address": "0xf49725118cb0707b8706ffffe895f3ab16da7777",
-      "name": "b-money / BTCB",
-      "entry_ts": "2026-09-05T12:50:31.046073+00:00",
-      "entry_price_usd": 0.013695473200795068,
-      "peak_price_usd": 0.0143364322373162,
-      "amount_usd": 78.92743766392292,
-      "qty": 5763.031076526871,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
-    },
     "base_0x17a3ad8c74c4947005afeda9965305ae2eb2518a": {
       "network": "base",
       "pool_address": "0x17a3ad8c74c4947005afeda9965305ae2eb2518a",
@@ -115,7 +102,7 @@
       "name": "KEYCAT / WETH",
       "entry_ts": "2026-09-05T14:10:30.978143+00:00",
       "entry_price_usd": 0.00075856298754611,
-      "peak_price_usd": 0.00075856298754611,
+      "peak_price_usd": 0.000759390600740996,
       "amount_usd": 44.194652272260704,
       "qty": 58126.419528444305,
       "sell_tax_pct": 0.0
@@ -1255,6 +1242,25 @@
       "pnl_usd": 1.5276986811396238,
       "pnl_pct": 9.67,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xbae8327deb97de23940d877134cd16f1bed0f83d",
+      "base_token_address": "0xf49725118cb0707b8706ffffe895f3ab16da7777",
+      "name": "b-money / BTCB",
+      "entry_ts": "2026-09-05T12:50:31.046073+00:00",
+      "entry_price_usd": 0.013695473200795068,
+      "peak_price_usd": 0.0143364322373162,
+      "amount_usd": 78.92743766392292,
+      "qty": 5763.031076526871,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-05T15:02:15.903210+00:00",
+      "exit_price_usd": 0.00983384488686921,
+      "proceeds_usd": 56.514065950837654,
+      "pnl_usd": -22.41337171308526,
+      "pnl_pct": -28.4,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
