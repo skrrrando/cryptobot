@@ -1,5 +1,5 @@
 {
-  "balance": 529.379105467161,
+  "balance": 557.6022568081851,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -8,7 +8,7 @@
       "name": "ASTER / BNB 0.007%",
       "entry_ts": "2026-09-03T13:01:02.170490+00:00",
       "entry_price_usd": 0.735815485873535,
-      "peak_price_usd": 0.768834880463228,
+      "peak_price_usd": 0.7734273541646,
       "amount_usd": 15.799320127183345,
       "qty": 21.471850525715606
     },
@@ -33,19 +33,6 @@
       "peak_price_usd": 0.00119480011313434,
       "amount_usd": 92.54821079216657,
       "qty": 79704.42935640116
-    },
-    "bsc_0x4a4bea953813c118c260be9a26b2321e57aa62e5": {
-      "network": "bsc",
-      "pool_address": "0x4a4bea953813c118c260be9a26b2321e57aa62e5",
-      "base_token_address": "0xfe189e97832da1573e4e4ff034f4ffc3a15c7777",
-      "name": "MarsCoin / USDT 1%",
-      "entry_ts": "2026-09-04T23:05:24.307334+00:00",
-      "entry_price_usd": 0.19385969552614296,
-      "peak_price_usd": 0.243095366484254,
-      "amount_usd": 66.71287962554311,
-      "qty": 344.1297039308851,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": {
       "network": "bsc",
@@ -81,6 +68,18 @@
       "peak_price_usd": 0.004014439810677286,
       "amount_usd": 51.93299820214957,
       "qty": 13092.971886062547,
+      "sell_tax_pct": 0.0
+    },
+    "base_0x3f53f1fd5b7723ddf38d93a584d280b9b94c3111": {
+      "network": "base",
+      "pool_address": "0x3f53f1fd5b7723ddf38d93a584d280b9b94c3111",
+      "base_token_address": "0x1111111111166b7fe7bd91427724b487980afc69",
+      "name": "ZORA / USDC 0.27%",
+      "entry_ts": "2026-09-05T11:20:33.012453+00:00",
+      "entry_price_usd": 0.00908105482707599,
+      "peak_price_usd": 0.00908105482707599,
+      "amount_usd": 52.937910546716104,
+      "qty": 5812.929802721255,
       "sell_tax_pct": 0.0
     }
   },
@@ -1128,6 +1127,25 @@
       "pnl_usd": 4.985490220989099,
       "pnl_pct": 8.75,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x4a4bea953813c118c260be9a26b2321e57aa62e5",
+      "base_token_address": "0xfe189e97832da1573e4e4ff034f4ffc3a15c7777",
+      "name": "MarsCoin / USDT 1%",
+      "entry_ts": "2026-09-04T23:05:24.307334+00:00",
+      "entry_price_usd": 0.19385969552614296,
+      "peak_price_usd": 0.243095366484254,
+      "amount_usd": 66.71287962554311,
+      "qty": 344.1297039308851,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-05T11:21:04.269150+00:00",
+      "exit_price_usd": 0.236310471168913,
+      "proceeds_usd": 81.16106188774023,
+      "pnl_usd": 14.448182262197122,
+      "pnl_pct": 21.66,
+      "exit_reason": "take_profit"
     }
   ]
 }
