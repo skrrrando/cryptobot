@@ -1,0 +1,78 @@
+name: Pump.fun launch scan
+
+on:
+  # Same story as memecoin_scan.yml: GitHub's own `schedule:` trigger is
+  # unreliable on this account (runs meant to be minutes apart landed hours
+  # apart), so the real trigger is an external cron service calling this
+  # workflow's workflow_dispatch API. This schedule is only a backstop so the
+  # scanner doesn't go fully silent if that service stops.
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed so the workflow can commit the updated data back
+
+# Distinct group from both cryptobot-hourly and cryptobot-memecoin-scan, so
+# this sleeve never queues behind or blocks the other two.
+concurrency:
+  group: cryptobot-pumpfun-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    # This job spends most of its life holding a WebSocket open
+    # (LISTEN_WINDOW_SECONDS), unlike the other sleeves which just make a few
+    # quick HTTP calls. The cap is a safety net against a hung connection, not
+    # a normal-path constraint - a healthy run is ~5 minutes.
+    timeout-minutes: 8
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The only third-party dependency anywhere in this repo. Python's stdlib
+      # has no WebSocket client and PumpPortal's discovery stream is WebSocket-
+      # only (no REST equivalent exists for new-token events). Pinned so an
+      # unattended scheduled job can't be broken by an upstream release.
+      - name: Install WebSocket client
+        run: pip install websocket-client==1.9.0
+
+      - name: Run pump.fun scan
+        env:
+          PUMPPORTAL_API_KEY: ${{ secrets.PUMPPORTAL_API_KEY }}
+          # Optional - falls back to the public Solana endpoint if unset.
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: python3 scan_pumpfun.py
+
+      # Full unfiltered per-run launch firehose, kept out of git (~49k launches
+      # a day would bloat a public repo fast). Artifacts expire on their own.
+      - name: Upload raw snapshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pumpfun-run-snapshot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: data/pumpfun_run_snapshot.jsonl
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Commit updated pump.fun data
+        run: |
+          git config user.name "cryptobot"
+          git config user.email "actions@users.noreply.github.com"
+          # Directory-level add on purpose: memecoin_scan.yml lists each data
+          # file by name, and a file missing from that list silently never got
+          # committed for weeks. `git add data/` respects .gitignore and can't
+          # forget a newly-added file, so that failure mode can't recur here.
+          git add data/
+          git diff --staged --quiet || git commit -m "Pump.fun scan update [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main && git push && break
+            echo "Push attempt $i failed, retrying..."
+            sleep 5
+          done

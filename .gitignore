@@ -11,5 +11,7 @@ data/onchain_history.json
 # full per-tick memecoin firehose - overwritten every run, uploaded as a
 # GitHub Actions artifact instead (see memecoin_scan.yml), not committed
 data/memecoin_run_snapshot.jsonl
+# same rationale for the pump.fun launch firehose (~49k launches/day measured)
+data/pumpfun_run_snapshot.jsonl
 backtest_data/
 experiment_data/
