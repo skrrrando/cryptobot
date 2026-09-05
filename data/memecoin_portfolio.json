@@ -1,5 +1,5 @@
 {
-  "balance": 458.0188501447446,
+  "balance": 526.182917759486,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -8,7 +8,7 @@
       "name": "ASTER / BNB 0.007%",
       "entry_ts": "2026-09-03T13:01:02.170490+00:00",
       "entry_price_usd": 0.735815485873535,
-      "peak_price_usd": 0.825832651719188,
+      "peak_price_usd": 0.831927981355355,
       "amount_usd": 15.799320127183345,
       "qty": 21.471850525715606
     },
@@ -45,18 +45,6 @@
       "amount_usd": 63.32959047425096,
       "qty": 686057697.6687012,
       "sell_tax_pct": 2.0
-    },
-    "base_0xb5cd6e82b8fca463b1708af6fec2073c7c107f3e6c750a817c8f8885fb835748": {
-      "network": "base",
-      "pool_address": "0xb5cd6e82b8fca463b1708af6fec2073c7c107f3e6c750a817c8f8885fb835748",
-      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
-      "name": "BSTONK / USDC 2.5%",
-      "entry_ts": "2026-09-05T10:35:23.451166+00:00",
-      "entry_price_usd": 0.00416934374446181,
-      "peak_price_usd": 0.00554730249834876,
-      "amount_usd": 57.70333133572174,
-      "qty": 13812.667665535419,
-      "sell_tax_pct": 0.0
     },
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
@@ -1187,6 +1175,24 @@
       "proceeds_usd": 57.25200547953073,
       "pnl_usd": 1.4917797987122228,
       "pnl_pct": 2.68,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xb5cd6e82b8fca463b1708af6fec2073c7c107f3e6c750a817c8f8885fb835748",
+      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
+      "name": "BSTONK / USDC 2.5%",
+      "entry_ts": "2026-09-05T10:35:23.451166+00:00",
+      "entry_price_usd": 0.00416934374446181,
+      "peak_price_usd": 0.00554730249834876,
+      "amount_usd": 57.70333133572174,
+      "qty": 13812.667665535419,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T12:41:36.649016+00:00",
+      "exit_price_usd": 0.00494323416786478,
+      "proceeds_usd": 68.1640676147414,
+      "pnl_usd": 10.460736279019656,
+      "pnl_pct": 18.13,
       "exit_reason": "take_profit"
     }
   ]
