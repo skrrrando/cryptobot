@@ -1,5 +1,5 @@
 {
-  "balance": 534.3136696682852,
+  "balance": 548.1417881687819,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -53,23 +53,10 @@
       "name": "OTC / SOL",
       "entry_ts": "2026-09-05T03:35:23.545332+00:00",
       "entry_price_usd": 0.00339441137701782,
-      "peak_price_usd": 0.003792039112946393,
+      "peak_price_usd": 0.003953078335663779,
       "amount_usd": 57.61207039580891,
       "qty": 16962.558799054877,
       "sell_tax_pct": 0.0
-    },
-    "bsc_0xdfeab54f1aabea0d3e1af8a778a76e648275d113": {
-      "network": "bsc",
-      "pool_address": "0xdfeab54f1aabea0d3e1af8a778a76e648275d113",
-      "base_token_address": "0xc9d825e83aada475bd4d38c8ca984ed746277777",
-      "name": "Stonks / USDT 1%",
-      "entry_ts": "2026-09-05T04:00:52.703857+00:00",
-      "entry_price_usd": 0.01065750573833925,
-      "peak_price_usd": 0.0113026874595405,
-      "amount_usd": 77.77629503434203,
-      "qty": 7297.795276295281,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": {
       "network": "solana",
@@ -81,6 +68,18 @@
       "peak_price_usd": 0.025410019694678453,
       "amount_usd": 51.65243911751068,
       "qty": 2237.9001967033837,
+      "sell_tax_pct": 0.0
+    },
+    "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
+      "network": "solana",
+      "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-05T04:55:40.874087+00:00",
+      "entry_price_usd": 0.028546720424088682,
+      "peak_price_usd": 0.028691628762673435,
+      "amount_usd": 53.43136696682853,
+      "qty": 1870.9016672389262,
       "sell_tax_pct": 0.0
     }
   },
@@ -983,6 +982,25 @@
       "pnl_usd": 3.2067714860565673,
       "pnl_pct": 4.84,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xdfeab54f1aabea0d3e1af8a778a76e648275d113",
+      "base_token_address": "0xc9d825e83aada475bd4d38c8ca984ed746277777",
+      "name": "Stonks / USDT 1%",
+      "entry_ts": "2026-09-05T04:00:52.703857+00:00",
+      "entry_price_usd": 0.01065750573833925,
+      "peak_price_usd": 0.0113026874595405,
+      "amount_usd": 77.77629503434203,
+      "qty": 7297.795276295281,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-05T04:57:01.943232+00:00",
+      "exit_price_usd": 0.0092448870539219,
+      "proceeds_usd": 67.25948546732518,
+      "pnl_usd": -10.51680956701685,
+      "pnl_pct": -13.52,
+      "exit_reason": "momentum_collapse"
     }
   ]
 }
