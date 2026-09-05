@@ -1,5 +1,5 @@
 {
-  "balance": 466.6577702060521,
+  "balance": 516.5243911751068,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -58,18 +58,6 @@
       "qty": 22547.69774271981,
       "sell_tax_pct": 0.0
     },
-    "solana_6QyYdc6jgeKnfP1FWhiexMYq3JQ3sidSYoubjWUTo3rm": {
-      "network": "solana",
-      "pool_address": "6QyYdc6jgeKnfP1FWhiexMYq3JQ3sidSYoubjWUTo3rm",
-      "base_token_address": "EEpng77ZPn9FbgbT4xsRjwuxNCcMBYq3HTwEscyTpump",
-      "name": "HeeHaw / SOL",
-      "entry_ts": "2026-09-05T03:05:23.969861+00:00",
-      "entry_price_usd": 0.0019471117052771109,
-      "peak_price_usd": 0.0028264466185467293,
-      "amount_usd": 59.6114515121693,
-      "qty": 30594.64769908779,
-      "sell_tax_pct": 0.0
-    },
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
       "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
@@ -88,11 +76,12 @@
       "base_token_address": "0xc9d825e83aada475bd4d38c8ca984ed746277777",
       "name": "Stonks / USDT 1%",
       "entry_ts": "2026-09-05T04:00:52.703857+00:00",
-      "entry_price_usd": 0.0113026874595405,
+      "entry_price_usd": 0.01065750573833925,
       "peak_price_usd": 0.0113026874595405,
-      "amount_usd": 51.85086335622802,
-      "qty": 4571.977584733353,
-      "sell_tax_pct": 0.0
+      "amount_usd": 77.77629503434203,
+      "qty": 7297.795276295281,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1
     }
   },
   "closed": [
@@ -958,6 +947,24 @@
       "pnl_usd": -0.03350160082028708,
       "pnl_pct": -0.08,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "6QyYdc6jgeKnfP1FWhiexMYq3JQ3sidSYoubjWUTo3rm",
+      "base_token_address": "EEpng77ZPn9FbgbT4xsRjwuxNCcMBYq3HTwEscyTpump",
+      "name": "HeeHaw / SOL",
+      "entry_ts": "2026-09-05T03:05:23.969861+00:00",
+      "entry_price_usd": 0.0019471117052771109,
+      "peak_price_usd": 0.0028264466185467293,
+      "amount_usd": 59.6114515121693,
+      "qty": 30594.64769908779,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T04:31:35.961593+00:00",
+      "exit_price_usd": 0.0024788927122096523,
+      "proceeds_usd": 75.7920526471687,
+      "pnl_usd": 16.1806011349994,
+      "pnl_pct": 27.14,
+      "exit_reason": "take_profit"
     }
   ]
 }
