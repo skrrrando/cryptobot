@@ -1,5 +1,5 @@
 {
-  "balance": 458.90810359657223,
+  "balance": 481.17176371969623,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -47,18 +47,6 @@
       "qty": 5812.929802721255,
       "sell_tax_pct": 0.0
     },
-    "bsc_0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb": {
-      "network": "bsc",
-      "pool_address": "0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
-      "base_token_address": "0x6ff45323817d1d53bbb8a8dfba9245ae74057777",
-      "name": "memestock / GMEB",
-      "entry_ts": "2026-09-05T12:35:23.618389+00:00",
-      "entry_price_usd": 0.0117340740186873,
-      "peak_price_usd": 0.0182162670535064,
-      "amount_usd": 50.89098334941607,
-      "qty": 4323.732314344871,
-      "sell_tax_pct": 0.0
-    },
     "base_0x377feeed4820b3b28d1ab429509e7a0789824fca": {
       "network": "base",
       "pool_address": "0x377feeed4820b3b28d1ab429509e7a0789824fca",
@@ -102,9 +90,21 @@
       "name": "WETH / USDC 0.3%",
       "entry_ts": "2026-09-05T16:30:41.857157+00:00",
       "entry_price_usd": 2463.04,
-      "peak_price_usd": 2467.02,
+      "peak_price_usd": 2470.64,
       "amount_usd": 45.48709976968443,
       "qty": 0.018427261446277314,
+      "sell_tax_pct": 0.0
+    },
+    "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
+      "network": "solana",
+      "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-05T16:50:30.396533+00:00",
+      "entry_price_usd": 0.0408204830680497,
+      "peak_price_usd": 0.0408204830680497,
+      "amount_usd": 45.89081035965722,
+      "qty": 1123.6663620200877,
       "sell_tax_pct": 0.0
     }
   },
@@ -1333,6 +1333,24 @@
       "pnl_usd": 3.9627966652335402,
       "pnl_pct": 8.7,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x7bdc9582aca6ca25e5db1f2c8e59003b880672cb",
+      "base_token_address": "0x6ff45323817d1d53bbb8a8dfba9245ae74057777",
+      "name": "memestock / GMEB",
+      "entry_ts": "2026-09-05T12:35:23.618389+00:00",
+      "entry_price_usd": 0.0117340740186873,
+      "peak_price_usd": 0.0182162670535064,
+      "amount_usd": 50.89098334941607,
+      "qty": 4323.732314344871,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T16:51:48.893403+00:00",
+      "exit_price_usd": 0.0157997315225462,
+      "proceeds_usd": 68.15447048278122,
+      "pnl_usd": 17.263487133365153,
+      "pnl_pct": 33.92,
+      "exit_reason": "take_profit"
     }
   ]
 }
