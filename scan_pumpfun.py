@@ -75,6 +75,11 @@ PORTFOLIO_PATH = os.path.join(DATA_DIR, "pumpfun_portfolio.json")
 TELEGRAM_OFFSET_PATH = os.path.join(DATA_DIR, "pumpfun_telegram_offset.json")
 DECISION_LABELS_PATH = os.path.join(DATA_DIR, "pumpfun_decision_labels.jsonl")
 RUN_SNAPSHOT_PATH = os.path.join(DATA_DIR, "pumpfun_run_snapshot.jsonl")  # per-run only, not committed
+# Small pre-computed summary for the dashboard. The dashboard deliberately does
+# NOT read bonding_state.json directly: at MAX_TRACKED_CURVES x
+# BONDING_HISTORY_WINDOW that file is megabytes, and valuing a position needs
+# the curve invariant anyway - which is this script's job, not the browser's.
+DASHBOARD_PATH = os.path.join(DATA_DIR, "pumpfun_dashboard.json")
 
 PUMPPORTAL_WS_URL = "wss://pumpportal.fun/api/data?api-key={api_key}"
 PUMPPORTAL_API_KEY = os.environ.get("PUMPPORTAL_API_KEY")
@@ -1221,6 +1226,98 @@ def send_positions_list(portfolio, bonding_state, sol_usd):
         })
 
 
+def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd, timestamp):
+    """Compact, pre-computed view for the dashboard.
+
+    Includes the IGNORED signals and how they went, not just the bought ones -
+    seeing what passing on a coin actually cost (or saved) is the entire point
+    of practising the decision.
+    """
+    positions = []
+    positions_value = 0.0
+    for mint, pos in (portfolio.get("positions") or {}).items():
+        history = (bonding_state.get(pos.get("bonding_curve_key")) or {}).get("history") or []
+        latest = history[-1] if history else None
+        value = None
+        if latest and sol_usd:
+            sol_out = simulate_curve_sell(latest, pos["qty"])
+            if sol_out:
+                value = round(sol_out * sol_usd, 2)
+        positions_value += value if value is not None else pos["amount_usd"]
+        positions.append({
+            "mint": mint,
+            "name": pos.get("name"),
+            "symbol": pos.get("symbol"),
+            "entry_ts": pos.get("entry_ts"),
+            "amount_usd": pos.get("amount_usd"),
+            "value_usd": value,
+            "pnl_pct": round((value / pos["amount_usd"] - 1) * 100.0, 2)
+            if (value is not None and pos.get("amount_usd")) else None,
+            "entry_slippage_pct": pos.get("entry_slippage_pct"),
+            "entry_graduation_pct": pos.get("entry_graduation_pct"),
+            "graduation_pct": (latest or {}).get("graduation_pct"),
+            "graduated": bool((latest or {}).get("complete")),
+        })
+
+    watching = []
+    for mint, watch in (pending_outcomes or {}).items():
+        history = (bonding_state.get(watch.get("bonding_curve_key")) or {}).get("history") or []
+        latest = history[-1] if history else None
+        watching.append({
+            "mint": mint,
+            "name": watch.get("name"),
+            "symbol": watch.get("symbol"),
+            "decision": watch.get("decision"),      # None until the user presses a button
+            "signal_ts": watch.get("signal_ts"),
+            "alert_score": watch.get("alert_score"),
+            "alert_graduation_pct": watch.get("alert_graduation_pct"),
+            "graduation_pct": (latest or {}).get("graduation_pct"),
+        })
+    watching.sort(key=lambda w: w.get("graduation_pct") or 0, reverse=True)
+
+    # Verdicts so far, straight from the append-only decision log.
+    stats = {"alerts": 0, "graduated": 0, "did_not_graduate": 0,
+             "buy_graduated": 0, "buy_total": 0,
+             "ignore_graduated": 0, "ignore_total": 0}
+    try:
+        with open(DECISION_LABELS_PATH) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if row.get("row_type") == "alert":
+                    stats["alerts"] += 1
+                elif row.get("row_type") == "outcome":
+                    graduated = row.get("outcome") == "graduated"
+                    stats["graduated" if graduated else "did_not_graduate"] += 1
+                    decision = row.get("decision")
+                    if decision in ("buy", "ignore"):
+                        stats[f"{decision}_total"] += 1
+                        if graduated:
+                            stats[f"{decision}_graduated"] += 1
+    except FileNotFoundError:
+        pass
+    decided = stats["graduated"] + stats["did_not_graduate"]
+    stats["graduation_rate_pct"] = round(stats["graduated"] / decided * 100.0, 1) if decided else None
+
+    return {
+        "timestamp": timestamp,
+        "balance": round(portfolio.get("balance", 0.0), 2),
+        "positions_value": round(positions_value, 2),
+        "net_worth": round(portfolio.get("balance", 0.0) + positions_value, 2),
+        "starting_balance": MOONSHOT_STARTING_BALANCE_USD,
+        "positions": positions,
+        "closed": (portfolio.get("closed") or [])[-25:],
+        "watching": watching,
+        "stats": stats,
+        "daily_cap": DAILY_SIGNAL_CAP,
+    }
+
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     if not PUMPPORTAL_API_KEY:
@@ -1377,6 +1474,8 @@ def main():
     engine.save_json(PORTFOLIO_PATH, portfolio)
     engine.save_json(TELEGRAM_OFFSET_PATH, offset_state)
     engine.save_json(OUTCOMES_PATH, pending_outcomes)
+    engine.save_json(DASHBOARD_PATH, build_dashboard_summary(
+        portfolio, pending_outcomes, bonding_state, sol_usd, timestamp))
 
     for notice in notices:
         if "errors" in notice:

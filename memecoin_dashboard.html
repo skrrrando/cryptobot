@@ -290,6 +290,46 @@
   .card-hero-label .pl-dollar.good { color: var(--good); }
   .card-hero-label .pl-dollar.bad { color: var(--bad); }
 
+  /* ---- moonshot half (pump.fun manual-decision signals) ---- */
+  #moonshot-section { margin-bottom: 40px; }
+  .moon-hero {
+    background: linear-gradient(135deg, var(--card) 0%, var(--card2) 130%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px;
+    position: relative; overflow: hidden;
+  }
+  .moon-hero.winning { border-color: rgba(52,211,153,0.4); }
+  .moon-hero.losing { border-color: rgba(251,113,133,0.35); }
+  .moon-hero .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); font-weight: 800; margin-bottom: 6px; }
+  .moon-hero .value { font-size: 40px; font-weight: 900; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .moon-hero .value.good { color: var(--good); text-shadow: 0 0 34px var(--good-glow); }
+  .moon-hero .value.bad { color: var(--bad); text-shadow: 0 0 34px var(--bad-glow); }
+  .moon-stats { display: flex; gap: 22px; flex-wrap: wrap; }
+  .moon-stats .stat { text-align: right; }
+  .moon-stats .stat .val { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  .watch-row {
+    display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 12px;
+    padding: 11px 14px; border-top: 1px solid var(--border); font-size: 13px;
+  }
+  .watch-row:first-child { border-top: none; }
+  .watch-row .w-name { font-weight: 700; }
+  .watch-row .w-sub { color: var(--text-faint); font-size: 11px; }
+  .watch-row .w-prog { font-variant-numeric: tabular-nums; font-weight: 800; }
+  .decision-tag {
+    font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+  }
+  .decision-tag.buy { background: rgba(52,211,153,0.14); color: var(--good); }
+  .decision-tag.ignore { background: rgba(148,163,184,0.14); color: var(--text-muted); }
+  .decision-tag.pending { background: rgba(245,165,36,0.14); color: var(--caution); }
+  /* Four columns get too tight for token names on a phone - drop the name onto
+     its own row and let the tag + numbers share the one below it. */
+  @media (max-width: 560px) {
+    .watch-row { grid-template-columns: auto 1fr auto; row-gap: 6px; }
+    .watch-row > div:first-child { grid-column: 1 / -1; }
+  }
+
   /* ---- bottom "Andmed" / "Reeglid" panels ---- */
   .bottom-panel { margin-top: 20px; }
   .rules-group { margin-bottom: 22px; }
@@ -340,10 +380,24 @@
   </header>
   <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
 
+  <!-- Moonshot half: pump.fun signals the user decides on by hand. Sits above
+       cryptobot's own section because this is the part that wants attention. -->
+  <section id="moonshot-section">
+    <div class="section-head">
+      <h2>Moonshot <span class="count" id="moonshot-sub">— pump.fun signaalid</span></h2>
+      <span class="chip" id="moonshot-cap"></span>
+    </div>
+    <div id="moonshot-hero"></div>
+    <h3 class="holdings-title" id="moonshot-holdings-title"></h3>
+    <div id="moonshot-positions" style="margin-top: 12px;"></div>
+    <h3 class="holdings-title" id="moonshot-watching-title"></h3>
+    <div id="moonshot-watching"></div>
+  </section>
+
   <div class="tiles" id="tiles"></div>
 
   <section id="portfolio-section">
-    <div class="section-head"><h2>Mänguraha portfell</h2></div>
+    <div class="section-head"><h2>Cryptobot — mänguraha portfell</h2></div>
     <div id="portfolio-hero"></div>
     <h3 class="holdings-title" id="holdings-title"></h3>
     <div id="portfolio-positions" style="margin-top: 12px;"></div>
@@ -1056,6 +1110,109 @@ async function renderPortfolio(portfolio, hotState) {
   }
 }
 
+// ---- Moonshot half: pump.fun signals decided by hand -----------------------
+// Reads the pre-computed data/pumpfun_dashboard.json rather than the raw
+// bonding-curve state: valuing a position needs the curve invariant (fee +
+// exit slippage), which scan_pumpfun.py already does, and the raw file is
+// megabytes.
+function renderMoonshot(data) {
+  const section = document.getElementById('moonshot-section');
+  const heroEl = document.getElementById('moonshot-hero');
+  const posEl = document.getElementById('moonshot-positions');
+  const posTitle = document.getElementById('moonshot-holdings-title');
+  const watchEl = document.getElementById('moonshot-watching');
+  const watchTitle = document.getElementById('moonshot-watching-title');
+  const capEl = document.getElementById('moonshot-cap');
+
+  if (!data) {
+    // Scanner hasn't run yet - say so plainly instead of rendering a fake $1000.
+    heroEl.innerHTML = `<div class="empty">Pump.fun skanner pole veel jooksnud. Kui ta käivitub, tekivad siia signaalid ja sinu otsused.</div>`;
+    posTitle.textContent = ''; watchTitle.textContent = '';
+    posEl.innerHTML = ''; watchEl.innerHTML = ''; capEl.textContent = '';
+    return;
+  }
+
+  const start = data.starting_balance || 1000;
+  const net = data.net_worth ?? start;
+  const ret = net - start;
+  const s = data.stats || {};
+  const mood = ret > 0 ? 'winning' : ret < 0 ? 'losing' : '';
+
+  capEl.textContent = `max ${data.daily_cap ?? 4} signaali päevas`;
+
+  heroEl.innerHTML = `<div class="moon-hero ${mood}">
+    <div>
+      <div class="label">Moonshot net worth</div>
+      <div class="value ${pctClass(ret)}">${fmtUsdFull(net)}</div>
+      <div class="starting ${pctClass(ret)}" style="font-size:12.5px;margin-top:6px;font-weight:600;">
+        vs $${start.toLocaleString('en-US')}: ${ret >= 0 ? '+' : ''}${fmtUsdFull(ret)} (${fmtPct(ret / start * 100)})
+      </div>
+    </div>
+    <div class="moon-stats">
+      <div class="stat"><div class="label">Vaba</div><div class="val">${fmtUsd(data.balance)}</div></div>
+      <div class="stat"><div class="label">Positsioonides</div><div class="val">${fmtUsd(data.positions_value)}</div></div>
+      <div class="stat"><div class="label">Signaale antud</div><div class="val">${s.alerts ?? 0}</div></div>
+      <div class="stat">
+        <div class="label">Jõudis graduatsiooni</div>
+        <div class="val">${s.graduation_rate_pct != null ? s.graduation_rate_pct + '%' : '—'}</div>
+      </div>
+    </div>
+  </div>`;
+
+  // --- open positions (things the user pressed BUY on) ---
+  const positions = data.positions || [];
+  posTitle.textContent = positions.length ? `Ostetud (${positions.length})` : '';
+  if (!positions.length) {
+    posEl.innerHTML = `<div class="empty">Ühtegi avatud moonshot-positsiooni. Vajuta Telegramis signaali peal BUY, et üks avada.</div>`;
+  } else {
+    posEl.innerHTML = `<div class="coin-grid">${positions.map((p, i) => {
+      const pnl = p.pnl_pct;
+      const medal = i < 3 ? i + 1 : null;
+      return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX.solana}">
+        <div class="card-top">
+          <span class="pos-badge">#${i + 1}</span>
+          ${p.graduated ? `<span class="tag good"><span class="tag-dot"></span>Graduated</span>`
+                        : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR.solana}"></span>Pump.fun</span>`}
+        </div>
+        <div class="card-name">${p.name || p.symbol || p.mint.slice(0, 8)}</div>
+        <div class="card-hero ${pnl == null ? 'pending' : pctClass(pnl)}">${pnl == null ? 'hind puudub' : fmtPct(pnl)}</div>
+        <div class="card-hero-label">${timeAgo(p.entry_ts)} tagasi ostetud</div>
+        <div class="card-stats">
+          <div><span class="stat-label">Panus</span><span class="stat-val">${fmtUsd(p.amount_usd)}</span></div>
+          <div><span class="stat-label">Väärtus</span><span class="stat-val ${pnl == null ? '' : pctClass(pnl)}">${p.value_usd == null ? '—' : fmtUsd(p.value_usd)}</span></div>
+          <div><span class="stat-label">Graduatsioon</span><span class="stat-val">${p.graduation_pct == null ? '—' : p.graduation_pct.toFixed(1) + '%'}</span></div>
+        </div>
+        <div class="card-footer">
+          <span class="shield-badge">${SHIELD_SVG}sisenemisel ${p.entry_graduation_pct == null ? '—' : p.entry_graduation_pct.toFixed(1) + '%'}</span>
+          <a class="card-link" href="https://pump.fun/coin/${p.mint}" target="_blank" rel="noopener">Vaata →</a>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  // --- signals still being followed, INCLUDING the ignored ones ---
+  const watching = data.watching || [];
+  watchTitle.textContent = watching.length ? `Jälgimisel (${watching.length}) — ka need, mille sa ignoreerisid` : '';
+  if (!watching.length) {
+    watchEl.innerHTML = '';
+  } else {
+    watchEl.innerHTML = `<div class="table-wrap">${watching.map(w => {
+      const moved = (w.graduation_pct ?? 0) - (w.alert_graduation_pct ?? 0);
+      const tag = w.decision === 'buy' ? 'buy' : w.decision === 'ignore' ? 'ignore' : 'pending';
+      const tagText = w.decision === 'buy' ? 'Ostsid' : w.decision === 'ignore' ? 'Ignoreerisid' : 'Ootab otsust';
+      return `<div class="watch-row">
+        <div>
+          <div class="w-name">${w.name || w.symbol || w.mint.slice(0, 8)}</div>
+          <div class="w-sub">signaal ${timeAgo(w.signal_ts)} tagasi · skoor ${w.alert_score ?? '—'}</div>
+        </div>
+        <span class="decision-tag ${tag}">${tagText}</span>
+        <span class="w-prog">${w.graduation_pct == null ? '—' : w.graduation_pct.toFixed(1) + '%'}</span>
+        <span class="w-prog ${pctClass(moved)}">${moved >= 0 ? '+' : ''}${moved.toFixed(1)}pp</span>
+      </div>`;
+    }).join('')}</div>`;
+  }
+}
+
 // ---- Network filter chips --------------------------------------------------
 function renderFilterChips(networksPresent, activeNetworks, onChange) {
   const el = document.getElementById('net-filter');
@@ -1150,13 +1307,16 @@ function renderRules() {
 }
 
 async function main() {
-  const [candData, labelRows, portfolio, hotState] = await Promise.all([
+  const [candData, labelRows, portfolio, hotState, moonshot] = await Promise.all([
     fetchJson('data/memecoin_candidates.json', null),
     fetchJsonl('data/memecoin_labels.jsonl'),
     fetchJson('data/memecoin_portfolio.json', { balance: 1000, positions: {}, closed: [] }),
     fetchJson('data/memecoin_hot_state.json', {}),
+    // null until the pump.fun scanner has run at least once
+    fetchJson('data/pumpfun_dashboard.json', null),
   ]);
   const candidates = candData?.candidates ?? [];
+  renderMoonshot(moonshot);
   renderPortfolio(portfolio, hotState);
   maybeFireConfetti(portfolio, candidates);
   renderLevelBadge(portfolio);
