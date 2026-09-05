@@ -1,5 +1,5 @@
 {
-  "balance": 548.1417881687819,
+  "balance": 603.1741228734479,
   "positions": {
     "bsc_0x1b451880bd8ed2db08f707d18bee6a874e068d1879cab60dc7262b65d1e1ca2f": {
       "network": "bsc",
@@ -58,18 +58,6 @@
       "qty": 16962.558799054877,
       "sell_tax_pct": 0.0
     },
-    "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": {
-      "network": "solana",
-      "pool_address": "7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs",
-      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
-      "name": "ZCAT / SOL",
-      "entry_ts": "2026-09-05T04:50:29.474812+00:00",
-      "entry_price_usd": 0.023068151608690954,
-      "peak_price_usd": 0.02743512227517438,
-      "amount_usd": 51.65243911751068,
-      "qty": 2237.9001967033837,
-      "sell_tax_pct": 0.0
-    },
     "solana_48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m": {
       "network": "solana",
       "pool_address": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
@@ -77,7 +65,7 @@
       "name": "STONK / SOL",
       "entry_ts": "2026-09-05T04:55:40.874087+00:00",
       "entry_price_usd": 0.028546720424088682,
-      "peak_price_usd": 0.028691628762673435,
+      "peak_price_usd": 0.028888099952511754,
       "amount_usd": 53.43136696682853,
       "qty": 1870.9016672389262,
       "sell_tax_pct": 0.0
@@ -1001,6 +989,24 @@
       "pnl_usd": -10.51680956701685,
       "pnl_pct": -13.52,
       "exit_reason": "momentum_collapse"
+    },
+    {
+      "network": "solana",
+      "pool_address": "7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs",
+      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
+      "name": "ZCAT / SOL",
+      "entry_ts": "2026-09-05T04:50:29.474812+00:00",
+      "entry_price_usd": 0.023068151608690954,
+      "peak_price_usd": 0.02743512227517438,
+      "amount_usd": 51.65243911751068,
+      "qty": 2237.9001967033837,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-05T05:06:50.428624+00:00",
+      "exit_price_usd": 0.024604347609144855,
+      "proceeds_usd": 55.032334704666034,
+      "pnl_usd": 3.379895587155353,
+      "pnl_pct": 6.54,
+      "exit_reason": "take_profit"
     }
   ]
 }
