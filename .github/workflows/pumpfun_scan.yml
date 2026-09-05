@@ -48,6 +48,11 @@ jobs:
           PUMPPORTAL_API_KEY: ${{ secrets.PUMPPORTAL_API_KEY }}
           # Optional - falls back to the public Solana endpoint if unset.
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+          # Telegram is now reserved exclusively for this sleeve's moonshot
+          # signals - scan_memecoins.py's send_telegram() is deliberately
+          # silenced so a few hand-picked alerts a day don't get buried.
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python3 scan_pumpfun.py
 
       # Full unfiltered per-run launch firehose, kept out of git (~49k launches

@@ -69,6 +69,10 @@ DEV_HISTORY_PATH = os.path.join(DATA_DIR, "pumpfun_dev_history.json")
 BONDING_STATE_PATH = os.path.join(DATA_DIR, "pumpfun_bonding_state.json")
 SECURITY_CACHE_PATH = os.path.join(DATA_DIR, "pumpfun_security_cache.json")
 CANDIDATES_PATH = os.path.join(DATA_DIR, "pumpfun_candidates.json")
+ALERTS_PATH = os.path.join(DATA_DIR, "pumpfun_alerts.json")
+PORTFOLIO_PATH = os.path.join(DATA_DIR, "pumpfun_portfolio.json")
+TELEGRAM_OFFSET_PATH = os.path.join(DATA_DIR, "pumpfun_telegram_offset.json")
+DECISION_LABELS_PATH = os.path.join(DATA_DIR, "pumpfun_decision_labels.jsonl")
 RUN_SNAPSHOT_PATH = os.path.join(DATA_DIR, "pumpfun_run_snapshot.jsonl")  # per-run only, not committed
 
 PUMPPORTAL_WS_URL = "wss://pumpportal.fun/api/data?api-key={api_key}"
@@ -131,6 +135,37 @@ SECURITY_CACHE_TTL_SECONDS = 900   # 15 min - shorter than the memecoin sleeve's
 PUMPFUN_MAX_DEV_HOLDING_PCT = 5.0  # creator holding more than this can dump on us
 
 RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
+
+# --- Stage 3: alerting -----------------------------------------------------
+# The whole point of the funnel: few enough signals a day that each one can
+# actually be researched by hand before deciding. Counted per UTC day.
+DAILY_SIGNAL_CAP = 4
+MIN_SCORE_TO_ALERT = 25.0     # untuned starting guess; keeps the cap from being
+                               # spent on weak candidates just to fill the quota
+ALERT_COOLDOWN_SECONDS = 3600  # never re-alert the same mint within this window
+
+# --- Moonshot paper portfolio ---------------------------------------------
+# Completely separate from scan_memecoins.py's own $1000 - different file,
+# different balance, different rules. This one NEVER auto-buys: a position is
+# only ever opened by the user pressing BUY on a Telegram alert, and only ever
+# closed by the user pressing SELL. That is the entire point of this half of
+# the bot - it is a practice ground for making the call, not an autonomous
+# trader.
+MOONSHOT_STARTING_BALANCE_USD = 1000.0
+MOONSHOT_POSITION_SIZE_USD = 100.0  # fixed size, so outcomes are comparable
+
+# Pump.fun's own trading fee. Widely documented as 1% per trade; recorded as a
+# named constant rather than folded into the maths so it's easy to correct.
+PUMPFUN_TRADE_FEE_PCT = 1.0
+# Solana transaction cost, both legs. Trivial next to slippage here, but it's
+# real and the memecoin sleeve already learned not to pretend fills are free.
+SOLANA_GAS_USD = 0.02
+
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+TELEGRAM_API = "https://api.telegram.org/bot{token}/{method}"
+GECKOTERMINAL_POOL_URL = "https://api.geckoterminal.com/api/v2/networks/{network}/pools/{pool_address}"
+SOL_USDC_POOL_ADDRESS = "58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"
 
 # --- Tracked-set bounds ----------------------------------------------------
 # Can't track 49k tokens/day forever. Drop anything that graduated, went dead,
@@ -490,6 +525,225 @@ def dev_stats(dev_history, creator):
     }
 
 
+# --- Telegram --------------------------------------------------------------
+
+def telegram_call(method, payload, timeout=15):
+    """One place for every Telegram Bot API call. Returns the parsed `result`
+    or None - a Telegram failure must never take down a scan tick."""
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print(f"WARN: TELEGRAM_* not set, skipping {method}. Payload: "
+              f"{json.dumps(payload)[:400]}", file=sys.stderr)
+        return None
+    req = urllib.request.Request(
+        TELEGRAM_API.format(token=TELEGRAM_TOKEN, method=method),
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = json.loads(resp.read().decode())
+        if not body.get("ok"):
+            print(f"ERROR: Telegram {method} returned not-ok: {str(body)[:300]}", file=sys.stderr)
+            return None
+        return body.get("result")
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, TimeoutError) as e:
+        print(f"ERROR: Telegram {method} failed: {e}", file=sys.stderr)
+        return None
+
+
+def fetch_sol_usd():
+    """SOL price, for denominating the moonshot portfolio in dollars. Same
+    free GeckoTerminal endpoint the other sleeve uses. None on failure -
+    callers fall back rather than guessing a price."""
+    url = GECKOTERMINAL_POOL_URL.format(network="solana", pool_address=SOL_USDC_POOL_ADDRESS)
+    try:
+        data = http_get_json(url, timeout=15)
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as e:
+        print(f"WARN: SOL price lookup failed: {e}", file=sys.stderr)
+        return None
+    attrs = (data.get("data") or {}).get("attributes") or {}
+    price = _as_float(attrs.get("base_token_price_usd"))
+    return price if price > 0 else None
+
+
+def token_price_usd(curve, sol_usd):
+    """Price of one token in USD, from the bonding curve's own reserves.
+
+    price_in_sol = virtual_sol_reserves / virtual_token_reserves. Verified
+    against RugCheck's independently-reported USD price for a real mint: the
+    implied SOL price came out at ~103, matching the live SOL/USDC quote.
+    """
+    if not curve or not sol_usd:
+        return None
+    v_tok = curve.get("virtual_token_reserves") or 0
+    v_sol = curve.get("virtual_sol_reserves") or 0
+    if v_tok <= 0:
+        return None
+    return (v_sol / v_tok) * sol_usd
+
+
+def simulate_curve_buy(curve, sol_in):
+    """Tokens actually received for `sol_in` SOL, using the curve's own
+    constant-product invariant - not an approximation.
+
+    This matters far more here than on a normal DEX: a $100 order into a curve
+    holding ~10 SOL is ~10% of the entire pool, so the price moves hard against
+    the buyer within the single trade. Quoting the position at the pre-trade
+    spot price would flatter every paper result, which defeats the point of
+    this half of the bot being a realistic practice ground.
+
+    Returns (tokens_out, effective_price_per_token, slippage_pct).
+    """
+    v_sol = _as_float((curve or {}).get("virtual_sol_reserves"))
+    v_tok = _as_float((curve or {}).get("virtual_token_reserves"))
+    if v_sol <= 0 or v_tok <= 0 or sol_in <= 0:
+        return None, None, None
+    sol_after_fee = sol_in * (1 - PUMPFUN_TRADE_FEE_PCT / 100.0)
+    k = v_sol * v_tok
+    tokens_out = v_tok - (k / (v_sol + sol_after_fee))
+    if tokens_out <= 0:
+        return None, None, None
+    spot = v_sol / v_tok
+    effective = sol_in / tokens_out
+    slippage_pct = (effective / spot - 1) * 100.0
+    return tokens_out, effective, round(slippage_pct, 2)
+
+
+def simulate_curve_sell(curve, tokens_in):
+    """SOL received for selling `tokens_in` back into the curve. Same exact
+    invariant, same reason - exiting a thin curve costs just as much as
+    entering one."""
+    v_sol = _as_float((curve or {}).get("virtual_sol_reserves"))
+    v_tok = _as_float((curve or {}).get("virtual_token_reserves"))
+    if v_sol <= 0 or v_tok <= 0 or tokens_in <= 0:
+        return None
+    k = v_sol * v_tok
+    sol_out = v_sol - (k / (v_tok + tokens_in))
+    if sol_out <= 0:
+        return None
+    return sol_out * (1 - PUMPFUN_TRADE_FEE_PCT / 100.0)
+
+
+def format_moonshot_alert(candidate, price_usd):
+    """The one message type this project still sends to Telegram. Kept dense
+    and scannable - the user reads these to decide, so every line has to earn
+    its place."""
+    sec = candidate.get("security") or {}
+    dev = candidate.get("dev_stats")
+    grad = candidate.get("graduation_pct") or 0
+    vel = candidate.get("sol_per_min")
+    holders = sec.get("total_holders")
+    dev_pct = sec.get("dev_holding_pct")
+    liq = sec.get("total_market_liquidity_usd")
+
+    age_min = None
+    try:
+        age_min = (datetime.now(timezone.utc)
+                   - datetime.fromisoformat(candidate["first_seen"])).total_seconds() / 60.0
+    except (KeyError, ValueError):
+        pass
+
+    lines = [
+        f"MOONSHOT SIGNAL  |  score {candidate.get('score')}",
+        f"{candidate.get('name')} (${candidate.get('symbol')})",
+        "",
+        f"Graduation:  {grad:.1f}% of the way ({candidate.get('real_sol_reserves', 0):.1f} / 85 SOL)",
+        f"Speed:       {vel if vel is not None else '?'} SOL/min",
+        f"Age:         {age_min:.0f} min" if age_min is not None else "Age:         ?",
+        f"Holders:     {holders if holders is not None else '?'}",
+        f"Dev holds:   {dev_pct if dev_pct is not None else '?'}%",
+        f"Liquidity:   ${liq:,.0f}" if liq else "Liquidity:   ?",
+    ]
+    if dev:
+        lines.append(f"Dev history: {dev['launches_seen']} launch(es) seen, "
+                     f"{dev['graduated']} graduated ({dev['graduation_rate_pct']}%)")
+    else:
+        lines.append("Dev history: first time we've seen this creator")
+    if price_usd:
+        lines.append(f"Price:       ${price_usd:.10f}")
+    lines += [
+        "",
+        f"mint: {candidate.get('mint')}",
+        "",
+        f"A BUY opens a ${MOONSHOT_POSITION_SIZE_USD:.0f} paper position. Play money only.",
+    ]
+    return "\n".join(lines)
+
+
+def alert_keyboard(alert_id, mint):
+    """Inline keyboard. callback_data is capped at 64 bytes by Telegram, so it
+    carries only a short alert id - the full context lives in the alerts state
+    file, keyed by that id. OPEN is a plain url button (no callback plumbing,
+    nothing to log) so the user can eyeball the chart before deciding."""
+    return {"inline_keyboard": [[
+        {"text": "BUY", "callback_data": f"buy:{alert_id}"},
+        {"text": "IGNORE", "callback_data": f"ignore:{alert_id}"},
+        {"text": "OPEN", "url": f"https://pump.fun/coin/{mint}"},
+    ]]}
+
+
+def default_portfolio():
+    return {"balance": MOONSHOT_STARTING_BALANCE_USD, "positions": {}, "closed": []}
+
+
+def open_position(portfolio, candidate, curve, sol_usd, timestamp):
+    """Only ever called from a user's BUY press. Fills against the curve's real
+    invariant (fee + slippage), not the quoted spot price."""
+    mint = candidate["mint"]
+    if mint in portfolio["positions"]:
+        return None, "already holding this one"
+    if not sol_usd or sol_usd <= 0:
+        return None, "no SOL price available"
+    if portfolio["balance"] < MOONSHOT_POSITION_SIZE_USD:
+        return None, f"balance ${portfolio['balance']:.2f} below the ${MOONSHOT_POSITION_SIZE_USD:.0f} trade size"
+
+    sol_in = MOONSHOT_POSITION_SIZE_USD / sol_usd
+    qty, effective_price_sol, slippage_pct = simulate_curve_buy(curve, sol_in)
+    if qty is None:
+        return None, "curve data unusable for pricing"
+
+    portfolio["balance"] -= MOONSHOT_POSITION_SIZE_USD
+    spot = _as_float(curve.get("virtual_sol_reserves")) / _as_float(curve.get("virtual_token_reserves"))
+    portfolio["positions"][mint] = {
+        "mint": mint,
+        "name": candidate.get("name"),
+        "symbol": candidate.get("symbol"),
+        "bonding_curve_key": candidate.get("bonding_curve_key"),
+        "entry_ts": timestamp,
+        "entry_price_usd": effective_price_sol * sol_usd,   # what we ACTUALLY paid
+        "entry_spot_price_usd": spot * sol_usd,             # what it was quoted at
+        "entry_slippage_pct": slippage_pct,
+        "amount_usd": MOONSHOT_POSITION_SIZE_USD,
+        "qty": qty,
+        "entry_graduation_pct": candidate.get("graduation_pct"),
+        "entry_score": candidate.get("score"),
+    }
+    return portfolio["positions"][mint], None
+
+
+def close_position(portfolio, mint, curve, sol_usd, timestamp, reason="manual"):
+    """Only ever called from a user's SELL press. Exits against the same
+    invariant - selling back into a thin curve costs as much as entering it."""
+    pos = portfolio["positions"].pop(mint, None)
+    if pos is None:
+        return None
+    sol_out = simulate_curve_sell(curve, pos["qty"])
+    proceeds = max(0.0, (sol_out or 0.0) * (sol_usd or 0.0) - SOLANA_GAS_USD)
+    pnl = proceeds - pos["amount_usd"]
+    portfolio["balance"] += proceeds
+    closed = {
+        **pos,
+        "exit_ts": timestamp,
+        "exit_price_usd": (proceeds / pos["qty"]) if pos["qty"] else None,
+        "proceeds_usd": round(proceeds, 2),
+        "pnl_usd": round(pnl, 2),
+        "pnl_pct": round(pnl / pos["amount_usd"] * 100.0, 2) if pos["amount_usd"] else 0.0,
+        "exit_reason": reason,
+    }
+    portfolio["closed"].append(closed)
+    return closed
+
+
 # --- Staged filter ---------------------------------------------------------
 
 def passes_stage0(token, dev_history, now_wall):
@@ -622,6 +876,196 @@ def prune_bonding_state(bonding_state, now_wall):
     return len(drop)
 
 
+def send_moonshot_alerts(candidates, alerts_state, portfolio, sol_usd, timestamp, now_wall):
+    """Stage 3: send at most DAILY_SIGNAL_CAP alerts per UTC day, strongest
+    first. Returns the label rows to append."""
+    today = now_wall.strftime("%Y-%m-%d")
+    daily = alerts_state.setdefault("daily", {"date": today, "count": 0})
+    if daily.get("date") != today:
+        daily["date"], daily["count"] = today, 0
+
+    pending = alerts_state.setdefault("pending", {})
+    recent = alerts_state.setdefault("recent_mints", {})
+    label_rows = []
+
+    for candidate in candidates:
+        if daily["count"] >= DAILY_SIGNAL_CAP:
+            break
+        if candidate["score"] < MIN_SCORE_TO_ALERT:
+            break  # sorted by score, so everything after this is weaker too
+        mint = candidate["mint"]
+        if mint in portfolio["positions"]:
+            continue
+        last = recent.get(mint)
+        if last:
+            try:
+                if now_wall.timestamp() - datetime.fromisoformat(last).timestamp() < ALERT_COOLDOWN_SECONDS:
+                    continue
+            except ValueError:
+                pass
+
+        curve_price = None
+        # The candidate's newest curve read is the basis for entry pricing.
+        curve_price = token_price_usd({
+            "virtual_token_reserves": candidate.get("virtual_token_reserves"),
+            "virtual_sol_reserves": candidate.get("virtual_sol_reserves"),
+        }, sol_usd)
+
+        alert_id = f"{int(time.time())}{daily['count']}"
+        result = telegram_call("sendMessage", {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": format_moonshot_alert(candidate, curve_price),
+            "reply_markup": alert_keyboard(alert_id, mint),
+        })
+        # A failed send must not consume the daily quota or leave a pending
+        # alert nobody can ever answer.
+        if result is None and TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
+            continue
+
+        pending[alert_id] = {
+            "alert_id": alert_id,
+            "mint": mint,
+            "name": candidate.get("name"),
+            "symbol": candidate.get("symbol"),
+            "bonding_curve_key": candidate.get("bonding_curve_key"),
+            "score": candidate.get("score"),
+            "graduation_pct": candidate.get("graduation_pct"),
+            "sol_per_min": candidate.get("sol_per_min"),
+            "signal_ts": timestamp,          # kept so a future tiered/delayed
+                                              # release needs no schema change
+            "alert_price_usd": curve_price,
+            "message_id": (result or {}).get("message_id"),
+        }
+        recent[mint] = timestamp
+        daily["count"] += 1
+        label_rows.append({"row_type": "alert", **pending[alert_id]})
+
+    return label_rows
+
+
+def poll_telegram_decisions(alerts_state, portfolio, bonding_state, sol_usd, offset_state, timestamp):
+    """Read button presses since the last tick and act on them.
+
+    There is no always-on server here to receive a webhook - everything in
+    this repo is a short scheduled job - so getUpdates with a persisted offset
+    is the only mechanism that fits. Latency is bounded by the tick cadence,
+    which is fine for a considered decision.
+    """
+    label_rows = []
+    params = {"timeout": 0, "allowed_updates": ["callback_query", "message"]}
+    if offset_state.get("offset"):
+        params["offset"] = offset_state["offset"]
+    updates = telegram_call("getUpdates", params)
+    if not updates:
+        return label_rows
+
+    pending = alerts_state.setdefault("pending", {})
+
+    for update in updates:
+        # Advance the offset for EVERY update, including ones we ignore, or a
+        # single unhandled message would be re-fetched forever.
+        offset_state["offset"] = update["update_id"] + 1
+
+        message = update.get("message")
+        if message and (message.get("text") or "").strip().lower().startswith("/positions"):
+            send_positions_list(portfolio, bonding_state, sol_usd)
+            continue
+
+        cq = update.get("callback_query")
+        if not cq:
+            continue
+        data = cq.get("data") or ""
+        cq_id = cq.get("id")
+        msg = cq.get("message") or {}
+        chat_id = (msg.get("chat") or {}).get("id")
+        message_id = msg.get("message_id")
+
+        action, _, key = data.partition(":")
+        note = "Unknown action"
+
+        if action in ("buy", "ignore"):
+            alert = pending.pop(key, None)
+            if alert is None:
+                note = "That signal has already been answered."
+            elif action == "ignore":
+                label_rows.append({"row_type": "decision", "decision": "ignore",
+                                   "decided_ts": timestamp, **alert})
+                note = f"Ignored {alert.get('name')}."
+            else:
+                history = (bonding_state.get(alert.get("bonding_curve_key")) or {}).get("history") or []
+                curve = history[-1] if history else None
+                pos, err = open_position(portfolio, alert, curve, sol_usd, timestamp)
+                if pos is None:
+                    note = f"Could not buy: {err}"
+                    # Put it back so a failed buy (e.g. a price lookup blip)
+                    # can still be answered next tick rather than vanishing.
+                    pending[key] = alert
+                else:
+                    label_rows.append({"row_type": "decision", "decision": "buy",
+                                       "decided_ts": timestamp,
+                                       "entry_price_usd": pos["entry_price_usd"],
+                                       "entry_slippage_pct": pos["entry_slippage_pct"], **alert})
+                    note = (f"Bought ${pos['amount_usd']:.0f} of {alert.get('name')} "
+                            f"(slippage {pos['entry_slippage_pct']:+.1f}%). "
+                            f"Balance ${portfolio['balance']:.2f}")
+
+        elif action == "sell":
+            held = portfolio["positions"].get(key) or {}
+            history = (bonding_state.get(held.get("bonding_curve_key")) or {}).get("history") or []
+            curve = history[-1] if history else None
+            if curve is None:
+                note = "No current curve data - try again next tick."
+            else:
+                closed = close_position(portfolio, key, curve, sol_usd, timestamp)
+                if closed is None:
+                    note = "That position is already closed."
+                else:
+                    label_rows.append({"row_type": "sell", "decided_ts": timestamp, **closed})
+                    note = (f"Sold {closed.get('name')}: {closed['pnl_pct']:+.1f}% "
+                            f"(${closed['pnl_usd']:+.2f}). Balance ${portfolio['balance']:.2f}")
+
+        # Always answer, or the user's client spins until it times out.
+        telegram_call("answerCallbackQuery", {"callback_query_id": cq_id, "text": note[:200]})
+        # Strip the buttons so the decision is visibly final and re-clicks are
+        # a no-op by construction rather than by careful state checking.
+        if chat_id and message_id and action in ("buy", "ignore", "sell"):
+            telegram_call("editMessageReplyMarkup",
+                          {"chat_id": chat_id, "message_id": message_id, "reply_markup": {}})
+        if chat_id:
+            telegram_call("sendMessage", {"chat_id": chat_id, "text": note})
+
+    return label_rows
+
+
+def send_positions_list(portfolio, bonding_state, sol_usd):
+    """Reply to /positions with one SELL button per open moonshot position."""
+    positions = portfolio.get("positions") or {}
+    if not positions:
+        telegram_call("sendMessage", {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": f"No open moonshot positions. Balance ${portfolio['balance']:.2f}",
+        })
+        return
+    for mint, pos in positions.items():
+        history = (bonding_state.get(pos.get("bonding_curve_key")) or {}).get("history") or []
+        curve = history[-1] if history else None
+        # Value the position at what it would ACTUALLY fetch if sold now
+        # (fee + exit slippage), not at spot - same reason as on entry.
+        sol_out = simulate_curve_sell(curve, pos["qty"]) if curve else None
+        if sol_out and sol_usd:
+            value = sol_out * sol_usd
+            pnl_pct = (value / pos["amount_usd"] - 1) * 100.0
+            line = (f"{pos.get('name')} (${pos.get('symbol')})\n"
+                    f"in ${pos['amount_usd']:.0f} -> now ${value:.2f}  ({pnl_pct:+.1f}%)")
+        else:
+            line = f"{pos.get('name')} (${pos.get('symbol')})\nin ${pos['amount_usd']:.0f} -> price unavailable"
+        telegram_call("sendMessage", {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": line,
+            "reply_markup": {"inline_keyboard": [[{"text": "SELL", "callback_data": f"sell:{mint}"}]]},
+        })
+
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     if not PUMPPORTAL_API_KEY:
@@ -631,6 +1075,9 @@ def main():
     dev_history = engine.load_json(DEV_HISTORY_PATH, {})
     bonding_state = engine.load_json(BONDING_STATE_PATH, {})
     security_cache = engine.load_json(SECURITY_CACHE_PATH, {})
+    alerts_state = engine.load_json(ALERTS_PATH, {})
+    portfolio = engine.load_json(PORTFOLIO_PATH, default_portfolio())
+    offset_state = engine.load_json(TELEGRAM_OFFSET_PATH, {})
 
     timestamp = datetime.now(timezone.utc).isoformat()
     now_wall = datetime.now(timezone.utc)
@@ -702,6 +1149,9 @@ def main():
             "timestamp": timestamp,
             "graduation_pct": latest.get("graduation_pct"),
             "real_sol_reserves": latest.get("real_sol_reserves"),
+            # carried so alerts/positions can price off the curve directly
+            "virtual_sol_reserves": latest.get("virtual_sol_reserves"),
+            "virtual_token_reserves": latest.get("virtual_token_reserves"),
             "sol_per_min": compute_velocity(entry["history"]),
             "samples": len(entry["history"]),
             "security": security,
@@ -709,9 +1159,18 @@ def main():
             "score": score_candidate(entry, security),
         })
 
-    # ---- Stage 3: rank ----------------------------------------------------
-    # Ranked only; the daily alert cap and the actual Telegram send are phase 3.
+    # ---- Stage 3: rank, alert, and collect the user's decisions -----------
     candidates.sort(key=lambda c: c["score"], reverse=True)
+
+    sol_usd = fetch_sol_usd()
+    label_rows = []
+    # Decisions on PREVIOUS alerts are read first, so a BUY frees nothing and
+    # blocks nothing in this tick's own alerting, and so a position opened now
+    # is immediately excluded from being re-alerted below.
+    label_rows += poll_telegram_decisions(
+        alerts_state, portfolio, bonding_state, sol_usd, offset_state, timestamp)
+    label_rows += send_moonshot_alerts(
+        candidates, alerts_state, portfolio, sol_usd, timestamp, now_wall)
 
     dev_pruned = prune_dev_history(dev_history, now_wall)
     curves_pruned = prune_bonding_state(bonding_state, now_wall)
@@ -724,10 +1183,22 @@ def main():
         for mig in migrations:
             f.write(json.dumps({"row_type": "migration", **mig}) + "\n")
 
+    # Append-only forever - the permanent record of every signal and every
+    # call the user made on it, including the ignores. Analysis later needs
+    # both halves: whether the BUYs went on to graduate AND whether the
+    # IGNOREs correctly skipped losers.
+    if label_rows:
+        with open(DECISION_LABELS_PATH, "a") as f:
+            for row in label_rows:
+                f.write(json.dumps(row) + "\n")
+
     engine.save_json(DEV_HISTORY_PATH, dev_history)
     engine.save_json(BONDING_STATE_PATH, bonding_state)
     engine.save_json(SECURITY_CACHE_PATH, security_cache)
     engine.save_json(CANDIDATES_PATH, {"timestamp": timestamp, "candidates": candidates})
+    engine.save_json(ALERTS_PATH, alerts_state)
+    engine.save_json(PORTFOLIO_PATH, portfolio)
+    engine.save_json(TELEGRAM_OFFSET_PATH, offset_state)
 
     for notice in notices:
         if "errors" in notice:
@@ -741,7 +1212,11 @@ def main():
           f"security-checked {checks_this_tick[0]}; candidates: {len(candidates)}. "
           + (f"Top: {top['name']} score={top['score']} grad={top['graduation_pct']:.2f}% "
              f"vel={top['sol_per_min']} SOL/min. " if top else "")
-          + f"Pruned {curves_pruned} curve(s), {dev_pruned} creator(s).")
+          + f"Alerts today: {alerts_state.get('daily', {}).get('count', 0)}/{DAILY_SIGNAL_CAP}, "
+          f"{len(alerts_state.get('pending', {}))} awaiting a decision. "
+          f"Moonshot: ${portfolio['balance']:.2f} free, {len(portfolio['positions'])} open, "
+          f"{len(portfolio['closed'])} closed. "
+          f"Pruned {curves_pruned} curve(s), {dev_pruned} creator(s).")
     return 0
 
 

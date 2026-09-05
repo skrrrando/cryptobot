@@ -323,20 +323,20 @@ def geckoterminal_get_json(url, timeout=15, max_retries=2):
 
 
 def send_telegram(text):
-    """Duplicated from fetch_and_run.py rather than imported, so this sleeve
-    stays fully decoupled from the Crypto.com-specific trading script."""
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        print("WARN: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set, skipping send. "
-              "Message would have been:\n" + text, file=sys.stderr)
-        return
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = json.dumps({"chat_id": TELEGRAM_CHAT_ID, "text": text}).encode()
-    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            resp.read()
-    except (urllib.error.URLError, urllib.error.HTTPError) as e:
-        print(f"ERROR sending Telegram message: {e}", file=sys.stderr)
+    """DELIBERATELY SILENCED - logs instead of sending.
+
+    Telegram is now reserved exclusively for scan_pumpfun.py's moonshot
+    signals: at most a few hand-picked candidates a day that the user is
+    expected to actually read and act on. This sleeve runs unattended every
+    5 minutes and its alerts (candidates, buys, sells, DCA adds, moonshot
+    holds) would bury those signals completely.
+
+    Nothing else about this sleeve changes - it keeps scanning, buying with
+    its own play money, and writing its labels/dashboard data. Every message
+    it would have sent still goes to stdout, so a workflow run's logs remain
+    a complete record. Restore by deleting this early return.
+    """
+    print("[telegram-silenced] " + text.replace("\n", " | "))
 
 
 def _as_float(v, default=0.0):
