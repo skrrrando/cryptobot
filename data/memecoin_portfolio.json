@@ -1,5 +1,5 @@
 {
-  "balance": 664.660037264062,
+  "balance": 739.8609677681403,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -35,18 +35,6 @@
       "qty": 58126.419528444305,
       "sell_tax_pct": 0.0
     },
-    "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": {
-      "network": "solana",
-      "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
-      "base_token_address": "CaWZeUM4FvX9dPkjGc2xHS6tSN3qJfTWyvaG77aM5o7h",
-      "name": "AGI / ANTHRP",
-      "entry_ts": "2026-09-06T07:40:30.292038+00:00",
-      "entry_price_usd": 0.005646248942699431,
-      "peak_price_usd": 0.006614615606713523,
-      "amount_usd": 86.36231251357823,
-      "qty": 15288.062704159049,
-      "sell_tax_pct": 0.0
-    },
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": {
       "network": "arbitrum",
       "pool_address": "0x628854f0cfd7debd6e04361421ee9c06c77048c3",
@@ -54,7 +42,7 @@
       "name": "ODYS / WETH 1%",
       "entry_ts": "2026-09-06T08:00:51.771032+00:00",
       "entry_price_usd": 0.00285148369450953,
-      "peak_price_usd": 0.00296543270269889,
+      "peak_price_usd": 0.00308880170328389,
       "amount_usd": 77.72608126222042,
       "qty": 27196.047415012228,
       "sell_tax_pct": 0.0
@@ -1805,6 +1793,24 @@
       "proceeds_usd": 35.07877904007673,
       "pnl_usd": -8.448245009872764,
       "pnl_pct": -19.41,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
+      "base_token_address": "CaWZeUM4FvX9dPkjGc2xHS6tSN3qJfTWyvaG77aM5o7h",
+      "name": "AGI / ANTHRP",
+      "entry_ts": "2026-09-06T07:40:30.292038+00:00",
+      "entry_price_usd": 0.005646248942699431,
+      "peak_price_usd": 0.006614615606713523,
+      "amount_usd": 86.36231251357823,
+      "qty": 15288.062704159049,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T08:26:04.142311+00:00",
+      "exit_price_usd": 0.004921375807467739,
+      "proceeds_usd": 75.20093050407836,
+      "pnl_usd": -11.161382009499874,
+      "pnl_pct": -12.92,
       "exit_reason": "timeout"
     }
   ]
