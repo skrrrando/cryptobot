@@ -98,7 +98,13 @@ PUMPPORTAL_API_KEY = (os.environ.get("PUMPPORTAL_API_KEY") or "").strip() or Non
 # Actions runner IP (the public endpoint rate-limits datacenter IPs harder
 # than it documents) - SOLANA_RPC_URL exists so a provider URL can be dropped
 # in via secret without a code change if that turns out to be necessary.
-SOLANA_RPC_URL = os.environ.get("SOLANA_RPC_URL", "https://api.mainnet-beta.solana.com")
+# `or` rather than .get(key, default): the workflow references
+# ${{ secrets.SOLANA_RPC_URL }} unconditionally, which GitHub sets to an
+# EMPTY STRING (not an absent key) when that secret doesn't exist - confirmed
+# live as the actual cause of a production crash (urllib rejecting "" as an
+# unknown URL type). .get()'s default only fires on a missing key, not a
+# present-but-empty one, so it silently let "" through.
+SOLANA_RPC_URL = os.environ.get("SOLANA_RPC_URL") or "https://api.mainnet-beta.solana.com"
 
 # --- Timing ---------------------------------------------------------------
 # The external cron trigger fires every ~5 minutes; listen for most of that
