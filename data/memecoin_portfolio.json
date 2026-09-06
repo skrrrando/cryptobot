@@ -1,5 +1,5 @@
 {
-  "balance": 565.2971640756098,
+  "balance": 656.1526018174517,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -58,19 +58,6 @@
       "amount_usd": 82.10561569725633,
       "qty": 639.5988085198933,
       "sell_tax_pct": 0.0
-    },
-    "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": {
-      "network": "solana",
-      "pool_address": "Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ",
-      "base_token_address": "8RNUw4N655VSrZKuhGdywhbSMDTrheguFPfxbpE2NZHQ",
-      "name": "PURR / HYPE",
-      "entry_ts": "2026-09-06T08:55:23.843409+00:00",
-      "entry_price_usd": 0.011446581349128307,
-      "peak_price_usd": 0.01275840958279698,
-      "amount_usd": 110.84258119129605,
-      "qty": 9683.465989584485,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
       "network": "base",
@@ -1855,6 +1842,25 @@
       "pnl_usd": 11.241716068424566,
       "pnl_pct": 16.07,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ",
+      "base_token_address": "8RNUw4N655VSrZKuhGdywhbSMDTrheguFPfxbpE2NZHQ",
+      "name": "PURR / HYPE",
+      "entry_ts": "2026-09-06T08:55:23.843409+00:00",
+      "entry_price_usd": 0.011446581349128307,
+      "peak_price_usd": 0.01275840958279698,
+      "amount_usd": 110.84258119129605,
+      "qty": 9683.465989584485,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-06T09:56:26.054272+00:00",
+      "exit_price_usd": 0.009386443145241643,
+      "proceeds_usd": 90.85543774184188,
+      "pnl_usd": -19.987143449454166,
+      "pnl_pct": -18.03,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
