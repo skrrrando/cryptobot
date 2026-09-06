@@ -1,5 +1,5 @@
 {
-  "balance": 629.5812582239853,
+  "balance": 664.660037264062,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -35,18 +35,6 @@
       "qty": 58126.419528444305,
       "sell_tax_pct": 0.0
     },
-    "bsc_0x19b2caf222446d28906d0f3e66c877379951cbcb": {
-      "network": "bsc",
-      "pool_address": "0x19b2caf222446d28906d0f3e66c877379951cbcb",
-      "base_token_address": "0x932fb7f52adbc34ff81b4342b8c036b7b8ac4444",
-      "name": "Dust / WBNB",
-      "entry_ts": "2026-09-06T02:20:30.671087+00:00",
-      "entry_price_usd": 0.000334397956907446,
-      "peak_price_usd": 0.000335042510405631,
-      "amount_usd": 43.527024049949496,
-      "qty": 129677.38842278621,
-      "sell_tax_pct": 0.0
-    },
     "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": {
       "network": "solana",
       "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
@@ -78,7 +66,7 @@
       "name": "BALD / wtCOIN 0.3%",
       "entry_ts": "2026-09-06T08:05:23.448717+00:00",
       "entry_price_usd": 0.000506483342038276,
-      "peak_price_usd": 0.000591094487954077,
+      "peak_price_usd": 0.000595594887137845,
       "amount_usd": 69.95347313599837,
       "qty": 137838.88373074692,
       "sell_tax_pct": 0.0
@@ -1800,6 +1788,24 @@
       "pnl_usd": 24.1143711991824,
       "pnl_pct": 36.46,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x19b2caf222446d28906d0f3e66c877379951cbcb",
+      "base_token_address": "0x932fb7f52adbc34ff81b4342b8c036b7b8ac4444",
+      "name": "Dust / WBNB",
+      "entry_ts": "2026-09-06T02:20:30.671087+00:00",
+      "entry_price_usd": 0.000334397956907446,
+      "peak_price_usd": 0.000335042510405631,
+      "amount_usd": 43.527024049949496,
+      "qty": 129677.38842278621,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T08:21:15.625371+00:00",
+      "exit_price_usd": 0.000271739255750643,
+      "proceeds_usd": 35.07877904007673,
+      "pnl_usd": -8.448245009872764,
+      "pnl_pct": -19.41,
+      "exit_reason": "timeout"
     }
   ]
 }
