@@ -3,1111 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080b13">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Cryptobot Dashboard</title>
+<meta name="theme-color" content="#06070d">
+<title>Cryptobot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
-<style>
-  :root {
-    --bg: #080b13; --bg2: #0d1220; --card: #121826; --card2: #171f33; --border: #242f47;
-    --text: #f1eefb; --text2: #c7c2e0; --muted: #9a94b8;
-    --accent: #7c7ff2; --accent2: #a78bfa; --accent3: #22d3ee; --pink: #ec4899;
-    --good: #0ca30c; --warning: #fab219; --critical: #f4756f;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    overflow-x: hidden; width: 100%; max-width: 100vw; background: var(--bg);
-  }
-  html { scroll-behavior: smooth; min-height: 100%; }
-  body {
-    background:
-      radial-gradient(900px 480px at 12% -8%, rgba(124,127,242,0.13) 0%, transparent 60%),
-      radial-gradient(700px 420px at 100% 0%, rgba(34,211,238,0.08) 0%, transparent 55%),
-      var(--bg);
-    color: var(--text);
-    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-    margin: 0; padding: 0; line-height: 1.55; -webkit-font-smoothing: antialiased;
-    min-height: 100vh; min-height: 100dvh;
-  }
-  .wrap { max-width: 1080px; width: 100%; margin: 0 auto; padding: 28px 20px 60px; }
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    margin-bottom: 24px; flex-wrap: wrap;
-  }
-  h1 {
-    font-size: clamp(20px, 5vw, 27px); margin: 0; font-weight: 800; letter-spacing: -.01em;
-    display: flex; align-items: center; gap: 12px;
-  }
-  h1 .title-text {
-    background: linear-gradient(100deg, var(--text) 30%, var(--accent2) 70%, var(--accent3) 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .logo-badge {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 42px; height: 42px; border-radius: 13px; font-size: 21px; flex-shrink: 0;
-    background: linear-gradient(140deg, var(--accent), var(--accent3) 60%, var(--pink) 120%);
-    box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 18px -4px rgba(124,127,242,.55);
-  }
-  .subtitle { color: var(--muted); font-size: 12.5px; margin-top: 4px; font-weight: 500; }
-  .method-btn {
-    background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--border);
-    color: var(--text2); font: inherit; font-size: 12.5px; font-weight: 700;
-    padding: 9px 15px; border-radius: 10px; cursor: pointer; flex-shrink: 0;
-    transition: border-color .2s ease, color .2s ease, transform .2s ease;
-  }
-  .method-btn:hover, .method-btn.open { border-color: rgba(124,127,242,.55); color: var(--text); transform: translateY(-1px); }
-  .method-panel {
-    display: none; margin: 0 0 20px; background: linear-gradient(160deg, var(--card2), var(--card));
-    border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px;
-  }
-  .method-panel.open { display: block; }
-  .method-panel .desc { color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }
-  .stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px; margin-bottom: 20px; width: 100%;
-  }
-  .stat-card {
-    background: linear-gradient(160deg, var(--card2), var(--card));
-    border: 1px solid var(--border); border-radius: 14px;
-    padding: 14px 16px; min-width: 0; position: relative; overflow: hidden;
-    transition: transform .2s ease, border-color .2s ease;
-  }
-  .stat-card::after {
-    content: ""; position: absolute; width: 80px; height: 80px; border-radius: 50%;
-    top: -40px; right: -30px; filter: blur(24px); opacity: .22; pointer-events: none;
-    background: var(--accent);
-  }
-  .stat-card:hover { transform: translateY(-2px); border-color: rgba(124,127,242,.4); }
-  .stat-card .label {
-    color: var(--muted); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative;
-  }
-  .stat-card .value {
-    font-size: clamp(18px, 4vw, 23px); font-weight: 800; margin-top: 6px; letter-spacing: -.02em;
-    position: relative; color: var(--text);
-  }
-  .card {
-    background: linear-gradient(160deg, var(--card2), var(--card));
-    border: 1px solid var(--border); border-radius: 16px;
-    padding: 20px; margin-bottom: 16px; width: 100%;
-    animation: fadeInUp .4s cubic-bezier(.16,.8,.4,1) both;
-  }
-  .card > table, .card > .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; display: block; max-width: 100%; }
-  .card h2 { font-size: 14.5px; margin: 0 0 12px; color: var(--text); font-weight: 700; display: flex; align-items: center; gap: 7px; letter-spacing: -.005em; }
-  .card .desc { color: var(--muted); font-size: 12.5px; margin-bottom: 14px; }
-  .info {
-    position: relative; display: inline-flex; align-items: center; justify-content: center;
-    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(124,127,242,0.15); border: 1px solid rgba(124,127,242,0.4);
-    color: var(--accent2); font-size: 10px; font-weight: 800; cursor: help; user-select: none;
-  }
-  .info .info-pop {
-    position: absolute; top: calc(100% + 8px); left: 0; z-index: 40;
-    width: max-content; max-width: min(300px, 78vw);
-    background: #1c2440; border: 1px solid var(--border); border-radius: 10px;
-    padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--text2);
-    line-height: 1.55; box-shadow: 0 14px 30px -10px rgba(0,0,0,.7);
-    opacity: 0; visibility: hidden; transform: translateY(-4px); pointer-events: none;
-    transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
-  }
-  .info:hover .info-pop, .info:focus .info-pop, .info.open .info-pop {
-    opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
-  }
-  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; max-width: 100%; }
-  table { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 480px; }
-  th { text-align: left; color: var(--muted); font-weight: 700; padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; }
-  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
-  tr:last-child td { border-bottom: none; }
-  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--text); }
-  .why { color: var(--muted); max-width: 420px; }
-  .why .clip {
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow: hidden; cursor: pointer;
-  }
-  .why .clip.expanded { display: block; -webkit-line-clamp: unset; }
-  .why .clip:not(.expanded)::after { content: ""; }
-  details.card { padding: 0; }
-  details.card > summary {
-    list-style: none; cursor: pointer; padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  }
-  details.card > summary::-webkit-details-marker { display: none; }
-  details.card > summary h2 { margin: 0; }
-  details.card > summary .chev {
-    color: var(--muted); font-size: 12px; flex-shrink: 0; transition: transform .2s ease;
-  }
-  details.card[open] > summary .chev { transform: rotate(180deg); }
-  details.card > .body { padding: 0 20px 20px; }
-  .dot {
-    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
-  }
-  .thresholds { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 10px; font-size: 13px; color: var(--muted); width: 100%; }
-  .thresholds > div {
-    background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
-  }
-  .thresholds b { color: var(--text); display: block; font-size: 17px; margin-top: 2px; font-weight: 700; }
-  .tag {
-    display: inline-block; font-size: 10px; background: linear-gradient(120deg, var(--accent), var(--accent3));
-    color: white; padding: 2px 7px; border-radius: 6px; margin-left: 4px; font-weight: 700;
-  }
-  .log-entry { font-size: 13px; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .log-entry:last-child { border-bottom: none; }
-  .log-ts { color: var(--text); font-family: ui-monospace, monospace; margin-right: 8px; font-weight: 700; }
-  .model-status {
-    font-size: 13px; padding: 12px 14px; background: rgba(124,127,242,0.10);
-    border: 1px solid rgba(124,127,242,.35); border-radius: 10px; margin-bottom: 14px; color: var(--text2);
-  }
-  canvas { max-width: 100%; }
-  ::-webkit-scrollbar { height: 8px; width: 8px; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
-  }
-  @media (max-width: 640px) {
-    .wrap { padding: 18px 14px 48px; }
-    .card { padding: 16px; border-radius: 14px; }
-    details.card { padding: 0; }
-    details.card > summary { padding: 14px 16px; }
-    details.card > .body { padding: 0 16px 16px; }
-    .stats { gap: 8px; }
-    .stat-card { padding: 12px 12px; border-radius: 12px; }
-    table { font-size: 11.5px; min-width: 420px; }
-    th, td { padding: 6px 7px; }
-    .why { max-width: 190px; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <div>
-      <h1><span class="logo-badge">🤖</span><span class="title-text">Cryptobot Dashboard</span></h1>
-      <div class="subtitle">Uuendatud 06.09.2026 18:51 UTC · V4 · <span class="tag">📄 PAPER</span></div>
-    </div>
-    <button type="button" class="method-btn" id="methodBtn">📐 Metoodika</button>
+<div class="landing">
+  <div class="landing-head">
+    <h1>Cryptobot</h1>
+    <div class="updated" id="updated">&nbsp;</div>
   </div>
 
-  <div class="method-panel" id="methodPanel">
-    <div class="desc">Iga number sellel lehel tuleb ühest neist viiest arvutusest.</div>
-    <div class="table-scroll"><table>
-      <tr><th>Mõõdik</th><th>Idee</th><th>Miks see loeb</th></tr>
-      <tr><td class="mono">Riskiga momentum</td><td>24h liikumine jagatuna tokeni enda tavapärase kõikumisega (Sharpe-loogika, √24h-reegel)</td><td>5% tõus rahulikul BTC-l ≠ 5% tõus meemikoinil, mis teeb seda iga päev</td></tr>
-      <tr><td class="mono">OLS trend + R²</td><td>Sirge joon läbi viimaste tundide hinna/mahu, R² = kui hästi punktid joonel püsivad</td><td>üks müratund enam ei kustuta terve trendi kinnitust</td></tr>
-      <tr><td class="mono">Alpha vs BTC</td><td>r_token − r_BTC (lihtsustatud CAPM, beeta=1)</td><td>enamik altcoine on lihtsalt BTC laine - see leiab pärisliku oma jõu</td></tr>
-      <tr><td class="mono">Credibility segamine</td><td>Z = n/(n+25) - mudeli mõju kasvab sujuvalt kogemuse kasvades</td><td>skoor ei hüppa ühe andmepunkti pealt 15 protsendipunkti</td></tr>
-      <tr><td class="mono">Veerand-Kelly</td><td>f* = p − (1−p)/b, kasutusel ¼ ulatuses, 1–15% piirides</td><td>suurem, tõestatud edge → suurem (aga piiratud) panus, mitte alati sama 5%</td></tr>
-    </table></div>
+  <div class="balances">
+    <a class="balance-card" href="cryptobot.html" style="--card-glow: rgba(124,127,242,0.16)">
+      <div class="label">Bot</div>
+      <div class="amount" id="bot-amount">—</div>
+      <div class="week" id="bot-week"><span class="week-label">7 päeva</span><span>—</span></div>
+      <div class="enter">Vaata <span class="arrow">&rarr;</span></div>
+    </a>
+
+    <a class="balance-card" href="moonshot.html" style="--card-glow: rgba(34,211,238,0.16)">
+      <div class="label">Moonshot</div>
+      <div class="amount" id="moon-amount">—</div>
+      <div class="week" id="moon-week"><span class="week-label">7 päeva</span><span>—</span></div>
+      <div class="enter">Vaata <span class="arrow">&rarr;</span></div>
+    </a>
   </div>
-
-
-  <div class="card" style="border-color:#f4756f;background:linear-gradient(160deg,#2a1520,#1c1220)">
-    <h2>⛔ Kill-switch aktiivne (alates 23.08 04:35 UTC)</h2>
-    <div class="desc" style="margin-bottom:0">Põhjus: päevakaotus 5.2% > 5% lubatud. Bot EI ava uusi positsioone
-    (olemasolevaid haldab edasi), kuni käivitad ühe korra keskkonna­muutujaga <span class="mono">KILLSWITCH_RESET=1</span>.</div>
-  </div>
-  <div class="stats">
-    <div class="stat-card"><div class="label">Aktiivseid soovitusi (ootel)</div><div class="value">16</div></div>
-    <div class="stat-card"><div class="label">Lõpetatud soovitusi</div><div class="value">289</div></div>
-    <div class="stat-card"><div class="label">24h tabamusprotsent</div><div class="value">24%</div></div>
-    <div class="stat-card"><div class="label">Mudeli treeningsamme</div><div class="value">302</div></div>
-    <div class="stat-card"><div class="label">Turu meeleolu (F&G)</div><div class="value">73 · Greed</div></div>
-  </div>
-
-  <div class="card">
-    <h2>Tulemuste kokkuvõte<span class="info" tabindex="0">?<span class="info-pop">Kõik 24h tulemuse saanud soovitused, ilma tabamuslävendita - lihtsalt kas hind läks üles või alla.</span></span></h2>
-    <div class="stats" style="margin-bottom:0">
-      <div class="stat-card"><div class="label">Plussis</div><div class="value" style="color:var(--good)">148</div></div>
-      <div class="stat-card"><div class="label">Miinuses</div><div class="value" style="color:var(--critical)">154</div></div>
-      <div class="stat-card"><div class="label">Keskmine tootlus</div><div class="value">+0.7%</div></div>
-      <div class="stat-card"><div class="label">Parim</div><div class="value" style="color:var(--good)">ARBUSD +30.1%</div></div>
-      <div class="stat-card"><div class="label">Halvim</div><div class="value" style="color:var(--critical)">TRUMPUSD -16.9%</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>💰 Virtuaalne portfell<span class="info" tabindex="0">?<span class="info-pop">Mängu raha, mitte päris. Kui bot alert annab ja on ruumi/raha, ostab positsiooni ja müüb 24h pärast automaatselt maha, või varem, kui hind kukub stop-lossini (-8% sisenemisest). Kui raamat on täis, aga tuleb selgelt tugevam signaal (≥12p kõrgem skoor), vahetatakse nõrgim miinuses olev positsioon välja (max 1/tunnis, et fee'd ei sööks kasumit). P&L on NETO: sisaldab 0.50% teenustasu mõlemal pool tehingut ja 0.15% simuleeritud slippage'it. Suurus on kas fikseeritud 5% (kuni mudel on piisavalt treenitud) või pärast seda veerand-Kelly kriteeriumi järgi (1–15% vahemikus). Algsaldo $1000.</span></span></h2>
-    <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital (raha+avatud)</div><div class="value" style="color:var(--critical)">$984.90</div></div>
-      <div class="stat-card"><div class="label">Tootlus algusest</div><div class="value" style="color:var(--critical)">-1.5%</div></div>
-      <div class="stat-card"><div class="label">Vaba sularaha</div><div class="value">$984.90</div></div>
-      <div class="stat-card"><div class="label">Avatud positsioone</div><div class="value">0/5</div></div>
-      <div class="stat-card"><div class="label">Suletud kauplusi</div><div class="value">40✅ / 34❌</div></div>
-      <div class="stat-card"><div class="label">Sharpe (aastastatud)</div><div class="value">1.60</div></div>
-      <div class="stat-card"><div class="label">Max languse sügavus</div><div class="value" style="color:var(--critical)">-5.7%</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.91</div></div>
-      <div class="stat-card"><div class="label">Oodatav väärtus/kauplus</div><div class="value" style="color:var(--good)">+0.44%</div></div>
-      <div class="stat-card"><div class="label">Teenustasud kokku</div><div class="value" style="color:var(--warning)">$33.42</div></div>
-    </div>
-    <canvas id="portfolioChart" height="70"></canvas>
-    
-        <script>
-          const ctx2 = document.getElementById('portfolioChart');
-          new Chart(ctx2, {
-            type: 'line',
-            data: {
-              labels: ["02.08 21:55", "02.08 22:56", "02.08 23:58", "03.08 03:38", "03.08 06:59", "03.08 10:50", "03.08 13:40", "03.08 16:25", "03.08 18:50", "03.08 20:27", "03.08 22:08", "04.08 00:09", "04.08 04:13", "04.08 07:38", "04.08 10:38", "04.08 13:01", "04.08 16:11", "04.08 18:27", "04.08 20:23", "04.08 22:10", "05.08 00:01", "05.08 04:07", "05.08 07:37", "05.08 10:33", "05.08 12:51", "05.08 15:12", "05.08 17:28", "05.08 19:28", "05.08 21:06", "05.08 22:57", "06.08 00:03", "06.08 04:11", "06.08 07:37", "06.08 10:37", "06.08 12:55", "06.08 15:12", "06.08 23:58", "07.08 02:52", "07.08 04:54", "07.08 06:08", "07.08 08:13", "07.08 10:00", "07.08 11:02", "07.08 13:00", "07.08 14:17", "07.08 15:55", "07.08 16:53", "07.08 17:48", "07.08 18:54", "07.08 19:52", "07.08 20:39", "07.08 21:38", "07.08 22:33", "07.08 23:32", "08.08 01:26", "08.08 03:24", "08.08 04:55", "08.08 05:41", "08.08 06:51", "08.08 07:49", "08.08 08:39", "08.08 09:36", "08.08 10:31", "08.08 11:27", "08.08 12:44", "08.08 13:44", "08.08 14:31", "08.08 15:28", "08.08 16:32", "08.08 17:29", "08.08 18:35", "08.08 19:29", "08.08 20:28", "08.08 21:29", "08.08 22:27", "08.08 23:27", "09.08 01:39", "09.08 03:41", "09.08 05:04", "09.08 06:54", "09.08 07:53", "09.08 08:41", "09.08 09:38", "09.08 10:33", "09.08 11:28", "09.08 12:46", "09.08 13:49", "09.08 14:33", "09.08 15:30", "09.08 16:33", "09.08 17:30", "09.08 18:38", "09.08 19:32", "09.08 20:31", "09.08 21:30", "09.08 22:29", "09.08 23:30", "10.08 01:42", "10.08 03:53", "10.08 05:25", "10.08 07:38", "10.08 09:19", "10.08 11:07", "10.08 13:07", "10.08 14:57", "10.08 16:02", "10.08 17:51", "10.08 18:55", "10.08 19:55", "10.08 20:41", "10.08 21:40", "10.08 22:36", "10.08 23:34", "11.08 01:39", "11.08 03:43", "11.08 05:07", "11.08 07:05", "11.08 08:54", "11.08 09:59", "11.08 10:58", "11.08 11:48", "11.08 13:01", "11.08 14:56", "11.08 16:00", "11.08 17:56", "11.08 19:01", "11.08 20:41", "11.08 21:44", "11.08 22:40", "11.08 23:38", "12.08 01:49", "12.08 04:07", "12.08 06:13", "12.08 08:16", "12.08 10:03", "12.08 11:44", "12.08 13:06", "12.08 14:56", "12.08 15:58", "12.08 17:03", "12.08 19:00", "12.08 20:03", "12.08 21:43", "12.08 22:39", "12.08 23:40", "13.08 01:52", "13.08 04:11", "13.08 06:15", "13.08 08:20", "13.08 10:04", "13.08 11:44", "13.08 13:06", "13.08 14:56", "13.08 15:59", "13.08 17:05", "13.08 19:01", "13.08 20:41", "13.08 21:43", "13.08 22:40", "13.08 23:40", "14.08 01:49", "14.08 04:08", "14.08 06:12", "14.08 08:14", "14.08 09:59", "14.08 11:03", "14.08 13:03", "14.08 14:50", "14.08 15:50", "14.08 16:51", "14.08 17:51", "14.08 18:52", "14.08 19:47", "14.08 20:29", "14.08 21:24", "14.08 22:21", "14.08 23:20", "15.08 01:08", "15.08 02:51", "15.08 03:37", "15.08 04:29", "15.08 05:23", "15.08 06:35", "15.08 07:30", "15.08 08:27", "15.08 09:24", "15.08 10:21", "15.08 11:19", "15.08 12:34", "15.08 13:29", "15.08 14:21", "15.08 15:19", "15.08 16:22", "15.08 17:19", "15.08 18:27", "15.08 19:20", "15.08 20:20", "15.08 21:20", "15.08 22:20", "15.08 23:19", "16.08 01:13", "16.08 02:59", "16.08 03:55", "16.08 04:34", "16.08 05:26", "16.08 06:37", "16.08 07:29", "16.08 08:27", "16.08 09:25", "16.08 10:21", "16.08 11:18", "16.08 12:36", "16.08 13:30", "16.08 14:21", "16.08 15:20", "16.08 16:23", "16.08 17:18", "16.08 18:27", "16.08 19:20", "16.08 20:20", "16.08 21:19", "16.08 22:19", "16.08 23:18", "17.08 01:10", "17.08 02:58", "17.08 03:55", "17.08 04:40", "17.08 05:34", "17.08 06:52", "17.08 07:52", "17.08 08:41", "17.08 09:39", "17.08 10:31", "17.08 11:24", "17.08 12:40", "17.08 13:38", "17.08 14:26", "17.08 15:23", "17.08 16:25", "17.08 17:26", "17.08 18:37", "17.08 19:27", "17.08 20:25", "17.08 21:24", "17.08 22:23", "17.08 23:21", "18.08 01:08", "18.08 02:54", "18.08 03:43", "18.08 04:33", "18.08 05:27", "18.08 06:40", "18.08 07:37", "18.08 08:35", "18.08 09:31", "18.08 10:27", "18.08 11:24", "18.08 12:42", "18.08 13:41", "18.08 14:32", "18.08 15:30", "18.08 16:29", "18.08 17:26", "18.08 18:36", "18.08 19:26", "18.08 20:22", "18.08 21:22", "18.08 22:21", "18.08 23:20", "19.08 01:09", "19.08 02:56", "19.08 03:46", "19.08 04:35", "19.08 05:28", "19.08 06:41", "19.08 07:37", "19.08 08:36", "19.08 09:32", "19.08 10:27", "19.08 11:24", "19.08 12:43", "19.08 13:43", "19.08 14:32", "19.08 15:30", "19.08 16:30", "19.08 17:25", "19.08 18:33", "19.08 19:23", "19.08 20:25", "19.08 21:24", "19.08 22:23", "19.08 23:21", "20.08 01:09", "20.08 02:56", "20.08 03:46", "20.08 04:36", "20.08 05:29", "20.08 06:42", "20.08 07:40", "20.08 08:36", "20.08 09:33", "20.08 10:29", "20.08 11:26", "20.08 12:46", "20.08 13:45", "20.08 14:35", "20.08 15:32", "20.08 16:34", "20.08 17:27", "20.08 18:37", "20.08 19:30", "20.08 20:26", "20.08 21:26", "20.08 22:26", "20.08 23:24", "21.08 01:12", "21.08 03:01", "21.08 04:36", "21.08 05:31", "21.08 06:43", "21.08 07:41", "21.08 08:39", "21.08 09:35", "21.08 10:29", "21.08 11:25", "21.08 12:43", "21.08 13:44", "21.08 14:34", "21.08 15:31", "21.08 16:33", "21.08 17:27", "21.08 18:35", "21.08 19:25", "21.08 20:24", "21.08 21:22", "21.08 22:23", "21.08 23:22", "22.08 01:09", "22.08 02:53", "22.08 03:41", "22.08 04:31", "22.08 05:25", "22.08 06:37", "22.08 07:31", "22.08 08:27", "22.08 09:25", "22.08 10:22", "22.08 11:19", "22.08 12:35", "22.08 13:31", "22.08 14:20", "22.08 15:19", "22.08 16:21", "22.08 17:19", "22.08 18:28", "22.08 19:21", "22.08 20:21", "22.08 21:20", "22.08 22:20", "22.08 23:19", "23.08 01:14", "23.08 03:01", "23.08 04:35", "23.08 05:27", "23.08 06:38", "23.08 07:32", "23.08 08:28", "23.08 09:26", "23.08 10:22", "23.08 11:20", "23.08 12:37", "23.08 13:31", "23.08 14:22", "23.08 15:21", "23.08 16:23", "23.08 17:19", "23.08 18:27", "23.08 19:21", "23.08 20:21", "23.08 21:20", "23.08 22:20", "23.08 23:19", "24.08 03:02", "24.08 04:43", "24.08 05:37", "24.08 06:55", "24.08 07:57", "24.08 08:52", "24.08 09:45", "24.08 10:36", "24.08 11:27", "24.08 12:46", "24.08 13:51", "24.08 14:40", "24.08 15:38", "24.08 16:35", "24.08 17:29", "24.08 18:38", "24.08 19:28", "24.08 20:28", "24.08 21:27", "24.08 22:24", "24.08 23:21", "25.08 01:10", "25.08 02:57", "25.08 03:52", "25.08 04:37", "25.08 05:30", "25.08 06:43", "25.08 07:42", "25.08 08:40", "25.08 09:33", "25.08 10:31", "25.08 11:26", "25.08 12:43", "25.08 13:49", "25.08 14:43", "25.08 15:40", "25.08 16:36", "25.08 17:30", "25.08 18:37", "25.08 19:31", "25.08 20:27", "25.08 21:26", "25.08 22:25", "25.08 23:24", "26.08 03:03", "26.08 04:38", "26.08 05:33", "26.08 06:46", "26.08 07:44", "26.08 08:41", "26.08 09:40", "26.08 10:34", "26.08 11:28", "26.08 12:49", "26.08 13:54", "26.08 14:43", "26.08 16:17", "26.08 19:00", "26.08 21:46", "27.08 02:56", "27.08 13:52", "27.08 23:37", "28.08 09:40", "28.08 21:06", "29.08 03:31", "29.08 10:49", "29.08 15:30", "29.08 19:13", "29.08 22:22", "30.08 01:04", "30.08 07:54", "30.08 13:34", "30.08 17:55", "30.08 20:37", "30.08 23:12", "31.08 03:48", "31.08 10:34", "31.08 17:54", "31.08 22:29", "01.09 01:40", "01.09 07:18", "01.09 13:07", "01.09 17:37", "01.09 20:35", "01.09 23:02", "02.09 03:00", "02.09 07:51", "02.09 12:34", "02.09 17:00", "02.09 19:43", "02.09 22:23", "03.09 00:58", "03.09 05:35", "03.09 10:43", "03.09 14:53", "03.09 18:22", "03.09 21:35", "03.09 23:48", "04.09 03:01", "04.09 08:30", "04.09 13:10", "04.09 17:22", "04.09 20:19", "04.09 22:48", "05.09 00:38", "05.09 05:17", "05.09 09:59", "05.09 13:23", "05.09 16:33", "05.09 18:48", "05.09 20:57", "05.09 22:42", "06.09 00:35", "06.09 05:31", "06.09 10:18", "06.09 13:56", "06.09 16:44", "06.09 18:51"],
-              datasets: [{
-                label: 'Virtuaalne saldo ($)',
-                data: [978.36, 978.52, 978.34, 975.46, 974.74, 975.46, 976.78, 977.33, 977.27, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.97, 976.49, 976.63, 976.36, 975.14, 975.26, 975.31, 974.7, 975.12, 975.77, 975.71, 975.69, 975.58, 975.47, 975.37, 975.55, 975.64, 975.46, 975.22, 974.92, 974.93, 975.08, 975.06, 975.07, 975.11, 974.89, 975.04, 975.16, 974.79, 974.93, 974.09, 973.94, 974.11, 974.3, 973.91, 973.42, 973.02, 973.19, 972.92, 973.3, 973.03, 972.88, 973.01, 973.17, 973.09, 973.08, 973.4, 973.36, 973.37, 973.4, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.11, 973.12, 972.72, 972.97, 972.78, 972.49, 972.41, 972.73, 972.64, 972.3, 971.62, 971.88, 971.91, 971.78, 971.77, 971.19, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.59, 970.19, 969.85, 969.72, 969.48, 969.07, 969.51, 969.6, 969.76, 970.09, 970.32, 969.99, 970.37, 970.81, 970.54, 970.68, 970.6, 970.57, 970.53, 970.37, 970.01, 970.19, 969.8, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.3, 969.04, 971.29, 971.29, 967.96, 969.43, 970.12, 971.26, 979.07, 978.24, 974.7, 973.52, 973.26, 972.0, 971.53, 972.0, 973.01, 972.54, 975.61, 976.65, 976.89, 977.12, 975.66, 976.29, 976.49, 979.12, 979.28, 981.74, 977.59, 976.38, 976.94, 977.6, 977.84, 978.54, 979.89, 980.3, 981.59, 981.71, 983.04, 985.11, 988.56, 987.37, 984.78, 986.5, 983.01, 986.97, 985.65, 988.93, 988.7, 983.57, 988.17, 980.55, 981.82, 986.64, 1001.28, 1009.89, 1011.13, 1030.03, 1038.58, 1042.66, 1020.01, 1021.77, 1032.6, 1014.47, 1015.69, 997.95, 1001.66, 1011.66, 1009.85, 1004.78, 1002.1, 1007.45, 1013.88, 1013.97, 1008.75, 1011.79, 1006.88, 999.05, 996.73, 1001.11, 993.25, 988.96, 988.53, 982.98, 984.17, 984.73, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9, 984.9],
-                borderColor: "#ef4444",
-                backgroundColor: "rgba(239,68,68,0.12)",
-                tension: 0.25, fill: true, pointRadius: 2
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: { y: { ticks: { color: '#8b94a8' } }, x: { ticks: { color: '#8b94a8' } } },
-              plugins: { legend: { labels: { color: '#e5e9f0' } } }
-            }
-          });
-        </script>
-    <h2 style="margin-top:20px">Avatud positsioonid</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal ostetud</th><th>Token</th><th>Suurus</th><th>Sisenemishind</th><th>Stop-loss</th><th>Risk</th></tr>
-      <tr><td colspan="6" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
-    </table></div>
-    <h2 style="margin-top:20px">Suletud kauplused (uusimad enne)</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal suletud</th><th>Token</th><th>Suurus</th><th>Tulemus</th><th>Risk</th></tr>
-      
-        <tr><td>23.08 09:26</td><td class="mono">PEPEUSD</td><td>$90.02</td>
-        <td style="color:#f4756f">-3.7% ($-3.35)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>23.08 09:26</td><td class="mono">AAVEUSD</td><td>$105.91</td>
-        <td style="color:#f4756f">-2.1% ($-2.28)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>23.08 05:27</td><td class="mono">DOTUSD <span class="tag" style="background:#f4756f">SL</span></td><td>$93.96</td>
-        <td style="color:#f4756f">-9.5% ($-8.91)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>23.08 03:01</td><td class="mono">AAVEUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$110.54</td>
-        <td style="color:#0ca30c">+0.0% ($+0.02)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>22.08 22:20</td><td class="mono">TRUMPUSD <span class="tag" style="background:#f4756f">SL</span></td><td>$91.88</td>
-        <td style="color:#f4756f">-14.7% ($-13.53)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>22.08 10:22</td><td class="mono">AAVEUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$103.03</td>
-        <td style="color:#f4756f">-0.6% ($-0.64)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 09:25</td><td class="mono">XRPUSD <span class="tag" style="background:#f4756f">SL</span></td><td>$87.57</td>
-        <td style="color:#f4756f">-9.2% ($-8.09)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 08:27</td><td class="mono">XRPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$130.05</td>
-        <td style="color:#0ca30c">+0.2% ($+0.29)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>22.08 06:37</td><td class="mono">TRUMPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$153.00</td>
-        <td style="color:#0ca30c">+0.9% ($+1.40)</td><td><span class="dot" style="background:#f4756f"></span>red</td></tr>
-        <tr><td>22.08 05:25</td><td class="mono">ADAUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$40.86</td>
-        <td style="color:#0ca30c">+2.3% ($+0.93)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>22.08 05:25</td><td class="mono">ARBUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$48.07</td>
-        <td style="color:#0ca30c">+1.1% ($+0.51)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 05:25</td><td class="mono">ADAUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$48.33</td>
-        <td style="color:#0ca30c">+5.3% ($+2.55)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 05:25</td><td class="mono">XRPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$59.37</td>
-        <td style="color:#0ca30c">+6.9% ($+4.12)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>22.08 05:25</td><td class="mono">XRPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$64.43</td>
-        <td style="color:#0ca30c">+6.1% ($+3.92)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 04:31</td><td class="mono">ARBUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$48.07</td>
-        <td style="color:#0ca30c">+7.8% ($+3.72)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>22.08 02:53</td><td class="mono">ADAUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$40.86</td>
-        <td style="color:#0ca30c">+7.6% ($+3.12)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>22.08 02:53</td><td class="mono">XRPUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$59.37</td>
-        <td style="color:#0ca30c">+10.5% ($+6.22)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>22.08 02:53</td><td class="mono">XRPUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$64.43</td>
-        <td style="color:#0ca30c">+9.6% ($+6.19)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>21.08 23:22</td><td class="mono">ADAUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$48.33</td>
-        <td style="color:#0ca30c">+7.3% ($+3.55)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>21.08 12:43</td><td class="mono">AVAXUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$25.74</td>
-        <td style="color:#0ca30c">+2.0% ($+0.51)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>21.08 12:43</td><td class="mono">DOGEUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$38.10</td>
-        <td style="color:#0ca30c">+1.0% ($+0.39)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>21.08 10:29</td><td class="mono">ADAUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$35.52</td>
-        <td style="color:#0ca30c">+2.0% ($+0.71)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>21.08 10:29</td><td class="mono">XRPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$23.11</td>
-        <td style="color:#0ca30c">+8.9% ($+2.05)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>21.08 09:35</td><td class="mono">SUIUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$47.97</td>
-        <td style="color:#0ca30c">+1.9% ($+0.89)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>21.08 08:39</td><td class="mono">XRPUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$23.11</td>
-        <td style="color:#0ca30c">+7.4% ($+1.70)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>21.08 04:36</td><td class="mono">ETHUSD</td><td>$40.57</td>
-        <td style="color:#0ca30c">+3.0% ($+1.24)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>20.08 23:24</td><td class="mono">ARBUSD</td><td>$41.35</td>
-        <td style="color:#0ca30c">+0.4% ($+0.16)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>20.08 18:37</td><td class="mono">LINKUSD <span class="tag" style="background:#f59e0b">SWAP</span></td><td>$40.80</td>
-        <td style="color:#f4756f">-2.4% ($-0.99)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>20.08 18:37</td><td class="mono">ADAUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$41.21</td>
-        <td style="color:#0ca30c">+1.9% ($+0.76)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>20.08 16:34</td><td class="mono">BTCUSD</td><td>$41.55</td>
-        <td style="color:#0ca30c">+3.6% ($+1.50)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>20.08 03:46</td><td class="mono">SOLUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$24.23</td>
-        <td style="color:#0ca30c">+5.8% ($+1.40)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>19.08 23:21</td><td class="mono">XRPUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$43.74</td>
-        <td style="color:#0ca30c">+1.0% ($+0.45)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>19.08 22:23</td><td class="mono">ETHUSD <span class="tag" style="background:#22d3ee">TSL</span></td><td>$46.04</td>
-        <td style="color:#0ca30c">+6.3% ($+2.90)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>19.08 21:24</td><td class="mono">SOLUSD <span class="tag" style="background:#22c55e">TP½</span></td><td>$24.23</td>
-        <td style="color:#0ca30c">+9.2% ($+2.23)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>16.08 04:34</td><td class="mono">LINKUSD</td><td>$48.53</td>
-        <td style="color:#f4756f">-2.6% ($-1.28)</td><td><span class="dot" style="background:#fab219"></span>yellow</td></tr>
-        <tr><td>12.08 22:39</td><td class="mono">DOGEUSD</td><td>$48.66</td>
-        <td style="color:#f4756f">-5.2% ($-2.53)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>09.08 17:30</td><td class="mono">XRPUSD</td><td>$44.21</td>
-        <td style="color:#f4756f">-1.7% ($-0.73)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>09.08 15:30</td><td class="mono">SOLUSD</td><td>$46.54</td>
-        <td style="color:#f4756f">-0.8% ($-0.39)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>09.08 05:04</td><td class="mono">DOGEUSD</td><td>$44.09</td>
-        <td style="color:#f4756f">-1.5% ($-0.65)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-        <tr><td>08.08 13:44</td><td class="mono">ETHUSD</td><td>$46.41</td>
-        <td style="color:#f4756f">-2.0% ($-0.91)</td><td><span class="dot" style="background:#0ca30c"></span>green</td></tr>
-    </table></div>
-  </div>
-
-  <div class="card" style="">
-    <h2>🎯 Go-live valmidus<span class="info" tabindex="0">?<span class="info-pop">RUNBOOK.md checklisti neli kriteeriumi. Ainult info - live-režiimi lülitamine jääb alati käsitsi GitHubi sammuks, see kaart lihtsalt ütleb ausalt, millal number seda õigustab.</span></span></h2>
-    
-    <div class="table-scroll"><table>
-      <tr><th>Kriteerium</th><th>Praegu</th><th>Vajalik</th><th>Staatus</th></tr>
-      
-        <tr><td>Profit factor</td><td class="mono" style="color:var(--muted)">0.91</td>
-        <td class="mono">> 1.3</td><td style="text-align:center">⏳</td></tr>
-        <tr><td>Max langus</td><td class="mono" style="color:var(--good)">5.7%</td>
-        <td class="mono">< 15%</td><td style="text-align:center">✅</td></tr>
-        <tr><td>Suletud kauplusi</td><td class="mono" style="color:var(--good)">74</td>
-        <td class="mono">>= 60</td><td style="text-align:center">✅</td></tr>
-        <tr><td>Oodatav väärtus/kauplus</td><td class="mono" style="color:var(--good)">+0.44%</td>
-        <td class="mono">> 0%</td><td style="text-align:center">✅</td></tr>
-    </table></div>
-  </div>
-
-  <details class="card">
-    <summary><h2>💹 Funding-arb sahtel<span class="info" tabindex="0">?<span class="info-pop">Turuneutraalne strateegia, eraldi kapitaliga (algsaldo $300): ostab spot + avab võrdse suurusega lühikese perpetual-positsiooni, teenib ainult funding-makseid, ei sõltu turusuunast. Sisenemine kui funding ≥10% aastas, väljumine kui langeb alla 1% või max 45 päeva täis.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$294.88</div></div>
-      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-1.7%</div></div>
-      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">0/18</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.07</div></div>
-    </div>
-    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Funding (aastas)</th><th>Notional</th><th>Kogutud funding</th></tr>
-      <tr><td colspan="5" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
-    </table></div>
-    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Sisenemis-APR</th><th>Kogutud funding</th><th>Netotulem</th></tr>
-      
-        <tr><td>25.08 12:43</td><td class="mono">SOLUSD</td><td>+13.6%</td>
-        <td>$+0.08</td>
-        <td style="color:#f4756f">-0.4% ($-0.31)</td></tr>
-        <tr><td>23.08 11:20</td><td class="mono">HBARUSD</td><td>+63.3%</td>
-        <td>$+0.19</td>
-        <td style="color:#f4756f">-0.2% ($-0.21)</td></tr>
-        <tr><td>23.08 11:20</td><td class="mono">XRPUSD</td><td>+15.1%</td>
-        <td>$+0.02</td>
-        <td style="color:#f4756f">-0.5% ($-0.19)</td></tr>
-        <tr><td>21.08 12:43</td><td class="mono">BTCUSD</td><td>+16.3%</td>
-        <td>$+0.01</td>
-        <td style="color:#f4756f">-0.4% ($-0.41)</td></tr>
-        <tr><td>20.08 11:26</td><td class="mono">LINKUSD</td><td>+11.4%</td>
-        <td>$+0.11</td>
-        <td style="color:#f4756f">-0.4% ($-0.59)</td></tr>
-        <tr><td>15.08 11:19</td><td class="mono">XRPUSD</td><td>+11.4%</td>
-        <td>$+0.00</td>
-        <td style="color:#f4756f">-0.4% ($-0.47)</td></tr>
-        <tr><td>15.08 05:23</td><td class="mono">SOLUSD</td><td>+10.2%</td>
-        <td>$+0.01</td>
-        <td style="color:#f4756f">-0.4% ($-0.31)</td></tr>
-        <tr><td>14.08 16:51</td><td class="mono">ETHUSD</td><td>+10.1%</td>
-        <td>$+0.01</td>
-        <td style="color:#f4756f">-0.4% ($-0.62)</td></tr>
-        <tr><td>12.08 22:39</td><td class="mono">ADAUSD</td><td>+10.9%</td>
-        <td>$+0.01</td>
-        <td style="color:#f4756f">-0.4% ($-0.30)</td></tr>
-        <tr><td>12.08 08:16</td><td class="mono">SOLUSD</td><td>+12.0%</td>
-        <td>$+0.08</td>
-        <td style="color:#f4756f">-0.4% ($-0.56)</td></tr>
-        <tr><td>10.08 20:41</td><td class="mono">ETHUSD</td><td>+10.5%</td>
-        <td>$+0.02</td>
-        <td style="color:#f4756f">-0.4% ($-0.29)</td></tr>
-        <tr><td>07.08 08:13</td><td class="mono">MELANIAUSD</td><td>+234.3%</td>
-        <td>$+1.55</td>
-        <td style="color:#0ca30c">+0.3% ($+0.40)</td></tr>
-        <tr><td>06.08 23:58</td><td class="mono">ADAUSD</td><td>+37.8%</td>
-        <td>$+0.01</td>
-        <td style="color:#f4756f">-0.4% ($-0.19)</td></tr>
-        <tr><td>05.08 04:07</td><td class="mono">RUNEUSD</td><td>+95.7%</td>
-        <td>$+0.06</td>
-        <td style="color:#f4756f">-0.3% ($-0.18)</td></tr>
-        <tr><td>03.08 18:50</td><td class="mono">FARTCOINUSD</td><td>+205.0%</td>
-        <td>$+0.15</td>
-        <td style="color:#f4756f">-0.1% ($-0.02)</td></tr>
-        <tr><td>02.08 15:01</td><td class="mono">WIFUSD</td><td>+178.8%</td>
-        <td>$+0.28</td>
-        <td style="color:#f4756f">-0.3% ($-0.27)</td></tr>
-        <tr><td>30.07 02:57</td><td class="mono">TURBOUSD</td><td>+193.7%</td>
-        <td>$+0.02</td>
-        <td style="color:#f4756f">-0.7% ($-0.26)</td></tr>
-        <tr><td>28.07 07:37</td><td class="mono">AIXBTUSD</td><td>+155.1%</td>
-        <td>$+0.05</td>
-        <td style="color:#f4756f">-0.9% ($-0.34)</td></tr>
-    </table></div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><h2>🔲 Grid/range sahtel<span class="info" tabindex="0">?<span class="info-pop">Mean-reversion strateegia likviidsetel majoritel (BTC, ETH), eraldi kapitaliga (algsaldo $300): ostab kui hind on oma 24h vahemiku põhjas JA trend on nõrk (madal R² - momentumi vastand), müüb +3% juures või vahemiku tipus. Monetiseerib tunde, mil momentum-strateegia lihtsalt ootab.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--critical)">$290.47</div></div>
-      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--critical)">-3.2%</div></div>
-      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">0/19</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">0.10</div></div>
-    </div>
-    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Sisenemishind</th><th>Suurus</th></tr>
-      <tr><td colspan="4" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
-    </table></div>
-    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
-      
-        <tr><td>23.08 12:37</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.3% ($-0.12)</td></tr>
-        <tr><td>23.08 12:37</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-1.5% ($-0.86)</td></tr>
-        <tr><td>15.08 02:51</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.7% ($-0.43)</td></tr>
-        <tr><td>13.08 22:40</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.5% ($-0.27)</td></tr>
-        <tr><td>13.08 14:56</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.7% ($-0.39)</td></tr>
-        <tr><td>12.08 04:07</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-2.8% ($-1.66)</td></tr>
-        <tr><td>10.08 07:38</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.5% ($-0.29)</td></tr>
-        <tr><td>09.08 14:33</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.6% ($-0.36)</td></tr>
-        <tr><td>04.08 13:01</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.6% ($-0.27)</td></tr>
-        <tr><td>03.08 16:25</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#0ca30c">+0.1% ($+0.07)</td></tr>
-        <tr><td>02.08 02:57</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.6% ($-0.27)</td></tr>
-        <tr><td>02.08 02:57</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-0.1% ($-0.09)</td></tr>
-        <tr><td>01.08 15:00</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-3.2% ($-1.55)</td></tr>
-        <tr><td>01.08 15:00</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-2.8% ($-1.67)</td></tr>
-        <tr><td>30.07 13:58</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#0ca30c">+1.2% ($+0.56)</td></tr>
-        <tr><td>30.07 11:07</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#0ca30c">+0.3% ($+0.19)</td></tr>
-        <tr><td>29.07 18:06</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#0ca30c">+0.4% ($+0.23)</td></tr>
-        <tr><td>28.07 22:57</td><td class="mono">ETHUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-1.9% ($-0.93)</td></tr>
-        <tr><td>28.07 22:57</td><td class="mono">BTCUSD</td><td>upper_band</td>
-        <td style="color:#f4756f">-2.3% ($-1.40)</td></tr>
-    </table></div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><h2>📉 Short-pöörduse sahtel (eksperimentaalne)<span class="info" tabindex="0">?<span class="info-pop">Režiimist sõltuv mean-reversion, eraldi kapitaliga (algsaldo $200). Andmepõhine leid: pime 'pööra kõik signaalid ümber' andis kogu ajaloo peal ainult +0.4%/tehing toorest edge'i - alla kauplemiskulu. Seetõttu shortitakse AINULT kui BTC 24h muutus ≤-3% JA Fear&Greed ≤40 (kinnitatud turu-hirm) JA kandidaat on üleostetud (momentum ≥60, trend nõrgalt kinnitatud). Väike, ettevaatlik katse, mitte peamine strateegia.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="stats" style="margin-bottom:14px">
-      <div class="stat-card"><div class="label">Omakapital</div><div class="value" style="color:var(--good)">$200.00</div></div>
-      <div class="stat-card"><div class="label">Tootlus</div><div class="value" style="color:var(--good)">+0.0%</div></div>
-      <div class="stat-card"><div class="label">Avatud/suletud</div><div class="value">0/0</div></div>
-      <div class="stat-card"><div class="label">Profit factor</div><div class="value">–</div></div>
-    </div>
-    <h2 style="margin-top:10px;font-size:13px">Avatud positsioonid</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Sisenemishind</th><th>Suurus</th></tr>
-      <tr><td colspan="4" style="color:var(--muted)">Hetkel pole avatud positsioone.</td></tr>
-    </table></div>
-    <h2 style="margin-top:14px;font-size:13px">Suletud (uusimad enne)</h2>
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Põhjus</th><th>Netotulem</th></tr>
-      <tr><td colspan="4" style="color:var(--muted)">Veel pole ühtegi suletud.</td></tr>
-    </table></div>
-    </div>
-  </details>
-
-  <div class="card">
-    <h2>Õppiv mudel<span class="info" tabindex="0">?<span class="info-pop">Iga kord kui üks soovitus saab tulemuse (24h hiljem), õpib see väike mudel sellest üht sammu - kaalud liiguvad selle poole, mis PÄRISELT ennustab tabamist, mitte selle poole, mida algul arvati.</span></span></h2>
-    <div class="model-status">Mudel aktiivne (treenitud 302 tulemuse pealt, mõjutab 50% lõppskoorist)</div>
-    <div class="table-scroll"><table>
-      <tr><th>Tunnus</th><th>Õpitud kaal</th><th>Mõju</th><th>Korrelatsioon tulemusega (n=302)</th></tr>
-      
-        <tr><td>Momentum (riskiga kohandatud)</td><td class="mono">+0.18</td>
-        <td>toetab tabamist</td><td class="mono">+0.26</td></tr>
-        <tr><td>Trendi kinnitus (OLS R²)</td><td class="mono">+0.70</td>
-        <td>toetab tabamist</td><td class="mono">+0.12</td></tr>
-        <tr><td>Likviidsus</td><td class="mono">+0.94</td>
-        <td>toetab tabamist</td><td class="mono">+0.26</td></tr>
-        <tr><td>Meemi/trend-kategooria</td><td class="mono">-0.26</td>
-        <td>vähendab tabamist</td><td class="mono">-0.14</td></tr>
-        <tr><td>Volatiilsus</td><td class="mono">+0.10</td>
-        <td>toetab tabamist</td><td class="mono">+0.26</td></tr>
-        <tr><td>Veebi hype-kinnitus</td><td class="mono">+0.63</td>
-        <td>toetab tabamist</td><td class="mono">+0.24</td></tr>
-        <tr><td>Alpha (BTC-suhteline üleliikumine)</td><td class="mono">-0.96</td>
-        <td>vähendab tabamist</td><td class="mono">+0.07</td></tr>
-        <tr><td>Orderiraamatu ostu/müügisurve</td><td class="mono">+0.60</td>
-        <td>toetab tabamist</td><td class="mono">+0.22</td></tr>
-        <tr><td>Turu meeleolu (Fear & Greed)</td><td class="mono">+1.07</td>
-        <td>toetab tabamist</td><td class="mono">+0.34</td></tr>
-        <tr><td>BTC on-chain aktiivsus</td><td class="mono">-0.14</td>
-        <td>vähendab tabamist</td><td class="mono">+0.21</td></tr>
-    </table></div>
-  </div>
-
-  <div class="card">
-    <h2>Tabamusprotsent üle aja<span class="info" tabindex="0">?<span class="info-pop">Libisev tabamusprotsent (viimase 10 lahendatud soovituse pealt) - kui see joon aja jooksul tõuseb, õpib süsteem päriselt paremaks.</span></span></h2>
-    <canvas id="hitRateChart" height="80"></canvas>
-    
-        <script>
-          const ctx = document.getElementById('hitRateChart');
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: ["20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "20.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "21.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "22.07", "23.07", "23.07", "23.07", "23.07", "23.07", "23.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "24.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "25.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "26.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "27.07", "28.07", "29.07", "30.07", "30.07", "02.08", "02.08", "02.08", "07.08", "07.08", "08.08", "08.08", "08.08", "11.08", "15.08", "19.08", "19.08", "19.08", "19.08", "19.08", "19.08", "19.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "20.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "21.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "22.08", "23.08", "23.08", "23.08", "24.08", "24.08", "25.08", "25.08", "28.08", "29.08", "31.08", "01.09", "02.09", "03.09", "03.09", "03.09", "03.09", "03.09", "03.09", "03.09", "05.09", "05.09", "05.09"],
-              datasets: [{
-                label: 'Libisev tabamusprotsent (10 viimase pealt)',
-                data: [0.0, 50.0, 33.3, 25.0, 20.0, 16.7, 28.6, 25.0, 22.2, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 30.0, 40.0, 50.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 30.0, 30.0, 40.0, 40.0, 50.0, 50.0, 50.0, 40.0, 50.0, 50.0, 40.0, 40.0, 30.0, 40.0, 30.0, 30.0, 20.0, 20.0, 10.0, 20.0, 20.0, 20.0, 30.0, 20.0, 30.0, 40.0, 40.0, 40.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 20.0, 30.0, 40.0, 40.0, 50.0, 50.0, 60.0, 70.0, 80.0, 80.0, 80.0, 80.0, 80.0, 90.0, 90.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 90.0, 80.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 60.0, 60.0, 70.0, 70.0, 70.0, 60.0, 60.0, 50.0, 40.0, 30.0, 30.0, 30.0, 20.0, 20.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 20.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 20.0, 20.0],
-                borderColor: '#6366f1',
-                backgroundColor: 'rgba(99,102,241,0.15)',
-                tension: 0.3,
-                fill: true,
-                pointRadius: 2
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: { y: { min: 0, max: 100, ticks: { color: '#8b94a8' } },
-                         x: { ticks: { color: '#8b94a8' } } },
-              plugins: { legend: { labels: { color: '#e5e9f0' } } }
-            }
-          });
-        </script>
-  </div>
-
-  <details class="card">
-    <summary><h2>📔 Õpipäevik<span class="info" tabindex="0">?<span class="info-pop">Mida süsteem viimati enda kohta õppis, tavakeeles.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="log-entry"><span class="log-ts">06.09 18:51</span> Tulemus (tabas, ennustus oli 53%) muutis kaalu 'bias' tugevammaks (-1.56 -> -1.44).</div><div class="log-entry"><span class="log-ts">06.09 18:51</span> Tulemus (ei tabanud, ennustus oli 52%) muutis kaalu 'bias' nõrgemmaks (-1.53 -> -1.56).</div><div class="log-entry"><span class="log-ts">04.09 22:48</span> Tulemus (ei tabanud, ennustus oli 67%) muutis kaalu 'liquidity' nõrgemmaks (0.93 -> 0.90).</div><div class="log-entry"><span class="log-ts">04.09 22:48</span> Tulemus (ei tabanud, ennustus oli 48%) muutis kaalu 'bias' nõrgemmaks (-1.43 -> -1.49).</div><div class="log-entry"><span class="log-ts">04.09 20:19</span> Tulemus (ei tabanud, ennustus oli 60%) muutis kaalu 'bias' nõrgemmaks (-1.39 -> -1.43).</div><div class="log-entry"><span class="log-ts">04.09 20:19</span> Tulemus (ei tabanud, ennustus oli 61%) muutis kaalu 'bias' nõrgemmaks (-1.35 -> -1.39).</div><div class="log-entry"><span class="log-ts">04.09 17:22</span> Tulemus (ei tabanud, ennustus oli 82%) muutis kaalu 'liquidity' nõrgemmaks (1.02 -> 0.99).</div><div class="log-entry"><span class="log-ts">04.09 08:30</span> Tulemus (tabas, ennustus oli 59%) muutis kaalu 'alpha' tugevammaks (-0.92 -> -0.88).</div><div class="log-entry"><span class="log-ts">03.09 18:22</span> Tulemus (tabas, ennustus oli 63%) muutis kaalu 'bias' tugevammaks (-1.40 -> -1.34).</div><div class="log-entry"><span class="log-ts">02.09 17:00</span> Tulemus (tabas, ennustus oli 33%) muutis kaalu 'alpha' tugevammaks (-1.11 -> -0.98).</div><div class="log-entry"><span class="log-ts">30.08 07:54</span> Tulemus (ei tabanud, ennustus oli 37%) muutis kaalu 'bias' nõrgemmaks (-1.46 -> -1.52).</div><div class="log-entry"><span class="log-ts">29.08 10:49</span> Täis-treening: mudel treeniti nullist uuesti kogu 288 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 76%, suurim muutus 'bias' (-1.89 -> -1.46).</div><div class="log-entry"><span class="log-ts">26.08 03:03</span> Tulemus (ei tabanud, ennustus oli 47%) muutis kaalu 'liquidity' nõrgemmaks (0.85 -> 0.82).</div><div class="log-entry"><span class="log-ts">25.08 05:30</span> Tulemus (ei tabanud, ennustus oli 15%) muutis kaalu 'bias' nõrgemmaks (-1.81 -> -1.83).</div><div class="log-entry"><span class="log-ts">24.08 13:51</span> Tulemus (ei tabanud, ennustus oli 23%) muutis kaalu 'bias' nõrgemmaks (-1.76 -> -1.79).</div><div class="log-entry"><span class="log-ts">23.08 19:21</span> Tulemus (tabas, ennustus oli 15%) muutis kaalu 'alpha' tugevammaks (-1.13 -> -1.05).</div><div class="log-entry"><span class="log-ts">23.08 07:32</span> Tulemus (ei tabanud, ennustus oli 37%) muutis kaalu 'liquidity' nõrgemmaks (0.93 -> 0.87).</div><div class="log-entry"><span class="log-ts">23.08 05:27</span> Tulemus (ei tabanud, ennustus oli 43%) muutis kaalu 'bias' nõrgemmaks (-1.68 -> -1.73).</div><div class="log-entry"><span class="log-ts">23.08 05:27</span> Tulemus (ei tabanud, ennustus oli 42%) muutis kaalu 'volatility' nõrgemmaks (0.08 -> -0.02).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Täis-treening: mudel treeniti nullist uuesti kogu 268 tulemuse peal (150 epohhi, segatud järjekord) - stabiilsemad kaalud kui ükshaaval õppides. Treeningtäpsus 76%, suurim muutus 'bias' (-2.63 -> -1.56).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Tulemus (ei tabanud, ennustus oli 14%) muutis kaalu 'bias' nõrgemmaks (-2.61 -> -2.63).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Tulemus (ei tabanud, ennustus oli 17%) muutis kaalu 'bias' nõrgemmaks (-2.55 -> -2.59).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Tulemus (ei tabanud, ennustus oli 32%) muutis kaalu 'liquidity' nõrgemmaks (0.60 -> 0.53).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Tulemus (ei tabanud, ennustus oli 27%) muutis kaalu 'bias' nõrgemmaks (-2.45 -> -2.49).</div><div class="log-entry"><span class="log-ts">23.08 04:35</span> Tulemus (ei tabanud, ennustus oli 38%) muutis kaalu 'bias' nõrgemmaks (-2.38 -> -2.45).</div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><h2>🎚️ Riski-lävendid<span class="info" tabindex="0">?<span class="info-pop">Kohandatakse automaatselt tagasiside põhjal.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="thresholds">
-      <div>Skanni lävi: <b>85</b></div>
-      <div>🟢 roheline tabamuslävi: <b>90</b></div>
-      <div>🟡 kollane tabamuslävi: <b>90</b></div>
-      <div>🔴 punane tabamuslävi: <b>90</b></div>
-    </div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><h2>📜 Soovituste ajalugu<span class="info" tabindex="0">?<span class="info-pop">Uusimad enne. Puuduta põhjendust, et seda täispikkuses lugeda. 🧪 EXPLORE = eksperimentaalne valik allpool tavalävendit, tehtud tahtlikult õppimise huvides.</span></span></h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Token</th><th>Skoor</th><th>Risk</th><th>24h</th><th>7p</th><th>Põhjendus</th></tr>
-      
-        <tr>
-          <td>06.09 10:18</td>
-          <td class="mono">ARBUSD</td>
-          <td>69.7</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 92.4/100 (24h +43.6%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +43.2pp üle BTC-turu (+0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $10,125,991). ostusurve raamatus (imbalance +0.48, spread 0.05%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 94% positiivne / 6% negatiivne, turu positsioon #64. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 53%.</div></td>
-        </tr>
-        <tr>
-          <td>06.09 05:31</td>
-          <td class="mono">SOLUSD</td>
-          <td>79.8</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>ootel</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 64.0/100 (24h +4.2%), trend kinnitatud küünaldelt (OLS R²=0.87, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +3.8pp üle BTC-turu (+0.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $24,420,755). raamat tasakaalus (imbalance +0.08, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 75% positiivne / 25% negatiivne, turu positsioon #7. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 70%.</div></td>
-        </tr>
-        <tr>
-          <td>05.09 20:57</td>
-          <td class="mono">ARBUSD</td>
-          <td>67.3</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>ootel</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 81.3/100 (24h +22.8%), trend kinnitatud küünaldelt (OLS R²=0.83, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +22.8pp üle BTC-turu (+0.0%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $5,053,917). raamat tasakaalus (imbalance +0.04, spread 0.10%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 93% positiivne / 7% negatiivne, turu positsioon #70. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 50%.</div></td>
-        </tr>
-        <tr>
-          <td>05.09 18:48</td>
-          <td class="mono">DOGEUSD</td>
-          <td>69.2</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-2.8% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 65.4/100 (24h +8.7%), trend kinnitatud küünaldelt (OLS R²=0.61, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +8.2pp üle BTC-turu (+0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $3,421,528). raamat tasakaalus (imbalance -0.12, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 92% positiivne / 8% negatiivne, turu positsioon #12. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 53%.</div></td>
-        </tr>
-        <tr>
-          <td>05.09 18:48</td>
-          <td class="mono">ARBUSD</td>
-          <td>71.9</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>+30.1% ✅</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 64.6/100 (24h +8.7%), trend kinnitatud küünaldelt (OLS R²=0.62, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +8.3pp üle BTC-turu (+0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $3,585,143). ostusurve raamatus (imbalance +0.50, spread 0.03%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 92% positiivne / 8% negatiivne, turu positsioon #75. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 57%.</div></td>
-        </tr>
-        <tr>
-          <td>05.09 16:33</td>
-          <td class="mono">LTCUSD</td>
-          <td>64.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+1.2% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 66.4/100 (24h +6.8%), trend kinnitatud küünaldelt (OLS R²=0.66, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +6.3pp üle BTC-turu (+0.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $563,005). raamat tasakaalus (imbalance +0.04, spread 0.04%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 91% positiivne / 9% negatiivne, turu positsioon #26. Mudel (treenitud 299 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 45%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 21:35</td>
-          <td class="mono">ARBUSD</td>
-          <td>70.2</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-7.9% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 73.2/100 (24h +16.7%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.68), aga veel ebakindel. alpha +10.5pp üle BTC-turu (+6.2%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,823,647). müügisurve raamatus (imbalance -0.85, spread 0.09%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #75. Mudel (treenitud 292 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 57%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 21:35</td>
-          <td class="mono">BTCUSD <span class="tag">EXPLORE</span></td>
-          <td>82.0</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-2.9% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 70.1/100 (24h +6.2%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.66), aga veel ebakindel. BTC ise on turu võrdlusalus Likviidsus: high (maht $487,307,427). raamat tasakaalus (imbalance -0.07, spread 0.00%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 82% positiivne / 18% negatiivne, turu positsioon #1. Mudel (treenitud 292 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 79%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>03.09 18:22</td>
-          <td class="mono">ADAUSD</td>
-          <td>73.8</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-4.6% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 77.2/100 (24h +13.4%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.94), aga veel ebakindel. alpha +8.6pp üle BTC-turu (+4.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,815,441). müügisurve raamatus (imbalance -0.45, spread 0.04%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 95% positiivne / 5% negatiivne, turu positsioon #19. Mudel (treenitud 292 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 61%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 18:22</td>
-          <td class="mono">SUIUSD</td>
-          <td>77.0</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-4.4% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 67.3/100 (24h +9.3%), trend kinnitatud küünaldelt (OLS R²=0.88, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +4.4pp üle BTC-turu (+4.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $670,488). raamat tasakaalus (imbalance +0.13, spread 0.03%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 83% positiivne / 17% negatiivne, turu positsioon #30. Mudel (treenitud 292 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 65%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 14:53</td>
-          <td class="mono">ADAUSD</td>
-          <td>77.5</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-1.2% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 71.1/100 (24h +9.8%), trend kinnitatud küünaldelt (OLS R²=0.69, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +6.0pp üle BTC-turu (+3.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,181,078). raamat tasakaalus (imbalance -0.14, spread 0.03%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 93% positiivne / 7% negatiivne, turu positsioon #19. Mudel (treenitud 291 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 65%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 14:53</td>
-          <td class="mono">XRPUSD</td>
-          <td>82.3</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-2.2% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 67.9/100 (24h +7.0%), trend kinnitatud küünaldelt (OLS R²=0.80, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +3.1pp üle BTC-turu (+3.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $16,159,351). müügisurve raamatus (imbalance -0.55, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 78% positiivne / 22% negatiivne, turu positsioon #5. Mudel (treenitud 291 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 76%.</div></td>
-        </tr>
-        <tr>
-          <td>03.09 05:35</td>
-          <td class="mono">ARBUSD</td>
-          <td>68.8</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+6.3% ✅</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 71.2/100 (24h +15.5%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.59), aga veel ebakindel. alpha +15.9pp üle BTC-turu (-0.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $5,504,667). raamat tasakaalus (imbalance +0.08, spread 0.03%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 90% positiivne / 10% negatiivne, turu positsioon #77. Mudel (treenitud 291 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 52%.</div></td>
-        </tr>
-        <tr>
-          <td>02.09 17:00</td>
-          <td class="mono">ARBUSD</td>
-          <td>76.0</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+10.3% ✅</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 67.5/100 (24h +12.4%), trend kinnitatud küünaldelt (OLS R²=0.90, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +12.9pp üle BTC-turu (-0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $4,676,593). ostusurve raamatus (imbalance +0.32, spread 0.06%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 96% positiivne / 4% negatiivne, turu positsioon #82. Mudel (treenitud 291 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 63%.</div></td>
-        </tr>
-        <tr>
-          <td>01.09 13:07</td>
-          <td class="mono">ARBUSD</td>
-          <td>57.2</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+12.1% ✅</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 85.9/100 (24h +27.2%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +27.4pp üle BTC-turu (-0.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $6,399,035). raamat tasakaalus (imbalance -0.19, spread 0.08%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 83% positiivne / 17% negatiivne, turu positsioon #86. Mudel (treenitud 289 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 34%.</div></td>
-        </tr>
-        <tr>
-          <td>31.08 22:29</td>
-          <td class="mono">ARBUSD</td>
-          <td>59.6</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+2.4% ❌</td>
-          <td>ootel</td>
-          <td class="why"><div class="clip">Momentum 79.5/100 (24h +19.8%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.94), aga veel ebakindel. alpha +19.3pp üle BTC-turu (+0.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $2,016,767). raamat tasakaalus (imbalance +0.08, spread 0.05%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 78% positiivne / 22% negatiivne, turu positsioon #88. Mudel (treenitud 289 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 38%.</div></td>
-        </tr>
-        <tr>
-          <td>29.08 03:31</td>
-          <td class="mono">TRUMPUSD <span class="tag">EXPLORE</span></td>
-          <td>39.8</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-8.9% ❌</td>
-          <td>-18.5% ❌</td>
-          <td class="why"><div class="clip">Momentum 57.8/100 (24h +5.7%), trend kinnitatud küünaldelt (OLS R²=0.76, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +8.5pp üle BTC-turu (-2.8%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $654,997). raamat tasakaalus (imbalance -0.30, spread 0.10%). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 37% positiivne / 63% negatiivne, turu positsioon #87. Mudel (treenitud 287 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 15%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>28.08 09:40</td>
-          <td class="mono">TRUMPUSD</td>
-          <td>42.3</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.2% ❌</td>
-          <td>-18.3% ❌</td>
-          <td class="why"><div class="clip">Momentum 71.4/100 (24h +16.8%), trend kinnitatud küünaldelt (OLS R²=0.59, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +17.8pp üle BTC-turu (-1.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $744,506). raamat tasakaalus (imbalance -0.22, spread 0.15%). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 49% positiivne / 51% negatiivne, turu positsioon #90. Mudel (treenitud 287 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 11%.</div></td>
-        </tr>
-        <tr>
-          <td>25.08 04:37</td>
-          <td class="mono">BTCUSD <span class="tag">EXPLORE</span></td>
-          <td>64.1</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-1.7% ❌</td>
-          <td>-2.0% ❌</td>
-          <td class="why"><div class="clip">Momentum 61.0/100 (24h +4.1%), trend kinnitatud küünaldelt (OLS R²=0.78, 24×15m punkti / 6h, hind+maht tõusuteel). BTC ise on turu võrdlusalus Likviidsus: high (maht $504,663,713). müügisurve raamatus (imbalance -0.61, spread 0.00%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 84% positiivne / 16% negatiivne, turu positsioon #1. Mudel (treenitud 283 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 53%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>25.08 01:10</td>
-          <td class="mono">SOLUSD</td>
-          <td>67.5</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-4.6% ❌</td>
-          <td>+1.1% ❌</td>
-          <td class="why"><div class="clip">Momentum 64.9/100 (24h +7.4%), trend kinnitatud küünaldelt (OLS R²=0.83, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +4.4pp üle BTC-turu (+3.0%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $66,257,966). raamat tasakaalus (imbalance -0.12, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 79% positiivne / 21% negatiivne, turu positsioon #7. Mudel (treenitud 283 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 50%.</div></td>
-        </tr>
-        <tr>
-          <td>24.08 06:55</td>
-          <td class="mono">HBARUSD <span class="tag">EXPLORE</span></td>
-          <td>66.5</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>+1.8% ❌</td>
-          <td>-6.8% ❌</td>
-          <td class="why"><div class="clip">Momentum 59.8/100 (24h +4.5%), trend kinnitatud küünaldelt (OLS R²=0.69, 24×15m punkti / 6h, hind+maht tõusuteel). liigub suuresti koos BTC-turuga (+1.7%), vähe oma alphat Likviidsus: medium (maht $1,119,116). ostusurve raamatus (imbalance +0.82, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #27. Mudel (treenitud 280 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 50%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>24.08 04:43</td>
-          <td class="mono">AAVEUSD</td>
-          <td>46.5</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-8.4% ❌</td>
-          <td>-13.6% ❌</td>
-          <td class="why"><div class="clip">Momentum 74.2/100 (24h +16.0%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +15.6pp üle BTC-turu (+0.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $522,744). raamat tasakaalus (imbalance -0.22, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #42. Mudel (treenitud 280 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 18%.</div></td>
-        </tr>
-        <tr>
-          <td>23.08 15:21</td>
-          <td class="mono">AAVEUSD</td>
-          <td>48.6</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-0.9% ❌</td>
-          <td>-6.3% ❌</td>
-          <td class="why"><div class="clip">Momentum 69.7/100 (24h +12.8%), trend kinnitatud küünaldelt (OLS R²=0.80, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +12.7pp üle BTC-turu (+0.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $507,691). raamat tasakaalus (imbalance -0.15, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #43. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 21%.</div></td>
-        </tr>
-        <tr>
-          <td>23.08 14:22</td>
-          <td class="mono">XRPUSD <span class="tag">EXPLORE</span></td>
-          <td>64.0</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-1.2% ❌</td>
-          <td>-8.0% ❌</td>
-          <td class="why"><div class="clip">Momentum 56.6/100 (24h +3.7%), trend kinnitatud küünaldelt (OLS R²=0.72, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +3.1pp üle BTC-turu (+0.6%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $47,002,885). raamat tasakaalus (imbalance +0.07, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 80% positiivne / 20% negatiivne, turu positsioon #4. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 51%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>23.08 13:31</td>
-          <td class="mono">TRUMPUSD</td>
-          <td>45.5</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-8.5% ❌</td>
-          <td>-5.9% ❌</td>
-          <td class="why"><div class="clip">Momentum 61.9/100 (24h +9.8%), trend kinnitatud küünaldelt (OLS R²=0.61, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +9.5pp üle BTC-turu (+0.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $589,457). ostusurve raamatus (imbalance +0.36, spread 0.18%). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 42% positiivne / 58% negatiivne, turu positsioon #91. Mudel (treenitud 277 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 18%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 20:21</td>
-          <td class="mono">XRPUSD <span class="tag">EXPLORE</span></td>
-          <td>83.6</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-0.3% ❌</td>
-          <td>-7.7% ❌</td>
-          <td class="why"><div class="clip">Momentum 62.2/100 (24h +9.4%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.85), aga veel ebakindel. alpha +9.5pp üle BTC-turu (-0.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $111,950,002). raamat tasakaalus (imbalance +0.20, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 87% positiivne / 13% negatiivne, turu positsioon #4. Mudel (treenitud 250 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 81%. [EKSPERIMENTAALNE - allpool tavalävendit, kogutakse andmeid õppimiseks]</div></td>
-        </tr>
-        <tr>
-          <td>22.08 19:21</td>
-          <td class="mono">DOGEUSD</td>
-          <td>87.4</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>+0.0% ❌</td>
-          <td>-8.2% ❌</td>
-          <td class="why"><div class="clip">Momentum 63.2/100 (24h +10.1%), trend kinnitatud küünaldelt (OLS R²=0.66, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +9.8pp üle BTC-turu (+0.3%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $16,799,916). müügisurve raamatus (imbalance -0.30, spread 0.03%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #11. Mudel (treenitud 250 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 83%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 18:28</td>
-          <td class="mono">TRUMPUSD</td>
-          <td>82.0</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+5.3% ✅</td>
-          <td>+4.4% ❌</td>
-          <td class="why"><div class="clip">Momentum 83.5/100 (24h +40.5%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +40.6pp üle BTC-turu (-0.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $1,977,318). raamat tasakaalus (imbalance +0.07, spread 0.12%). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 50% positiivne / 50% negatiivne, turu positsioon #94. Mudel (treenitud 249 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 73%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 09:25</td>
-          <td class="mono">AAVEUSD</td>
-          <td>85.7</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-0.9% ❌</td>
-          <td>-2.0% ❌</td>
-          <td class="why"><div class="clip">Momentum 74.4/100 (24h +17.5%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +18.1pp üle BTC-turu (-0.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $649,607). raamat tasakaalus (imbalance +0.00, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #46. Mudel (treenitud 241 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 78%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 09:25</td>
-          <td class="mono">PEPEUSD</td>
-          <td>83.3</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-2.5% ❌</td>
-          <td>-11.2% ❌</td>
-          <td class="why"><div class="clip">Momentum 72.7/100 (24h +19.0%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +19.5pp üle BTC-turu (-0.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $993,203). raamat tasakaalus (imbalance +0.12, spread 0.39%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 88% positiivne / 12% negatiivne, turu positsioon #51. Mudel (treenitud 241 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 75%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 07:31</td>
-          <td class="mono">XRPUSD</td>
-          <td>94.7</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-10.3% ❌</td>
-          <td>-14.2% ❌</td>
-          <td class="why"><div class="clip">Momentum 79.6/100 (24h +23.1%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +21.6pp üle BTC-turu (+1.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $104,816,539). müügisurve raamatus (imbalance -0.34, spread 0.05%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 91% positiivne / 9% negatiivne, turu positsioon #4. Mudel (treenitud 237 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 93%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 07:31</td>
-          <td class="mono">AAVEUSD</td>
-          <td>89.7</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+0.1% ❌</td>
-          <td>-0.8% ❌</td>
-          <td class="why"><div class="clip">Momentum 78.2/100 (24h +20.7%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +19.3pp üle BTC-turu (+1.5%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $710,996). ostusurve raamatus (imbalance +0.34, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #48. Mudel (treenitud 237 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 84%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 06:37</td>
-          <td class="mono">AAVEUSD</td>
-          <td>89.6</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>+2.8% ❌</td>
-          <td>+2.0% ❌</td>
-          <td class="why"><div class="clip">Momentum 75.1/100 (24h +18.7%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +16.6pp üle BTC-turu (+2.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $710,075). ostusurve raamatus (imbalance +0.97, spread 0.11%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #48. Mudel (treenitud 235 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 84%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 05:25</td>
-          <td class="mono">TRUMPUSD</td>
-          <td>92.4</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-16.9% ❌</td>
-          <td>-5.3% ❌</td>
-          <td class="why"><div class="clip">Momentum 92.3/100 (24h +73.0%), trend kinnitatud küünaldelt (OLS R²=0.85, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +70.6pp üle BTC-turu (+2.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $894,681). raamat tasakaalus (imbalance -0.05, spread 0.34%). mainitud veebis, neutraalne toon: CoinGecko kogukonna hääletus: 54% positiivne / 46% negatiivne, turu positsioon #87. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 88%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 05:25</td>
-          <td class="mono">XRPUSD</td>
-          <td>95.8</td>
-          <td><span class="dot" style="background:#0ca30c"></span>green</td>
-          <td>-1.5% ❌</td>
-          <td>-7.3% ❌</td>
-          <td class="why"><div class="clip">Momentum 68.4/100 (24h +14.3%), trend kinnitatud küünaldelt (OLS R²=0.65, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +11.9pp üle BTC-turu (+2.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $93,400,868). raamat tasakaalus (imbalance -0.26, spread 0.01%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 91% positiivne / 9% negatiivne, turu positsioon #5. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 94%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 05:25</td>
-          <td class="mono">AAVEUSD</td>
-          <td>87.3</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>+1.5% ❌</td>
-          <td>-0.2% ❌</td>
-          <td class="why"><div class="clip">Momentum 77.9/100 (24h +20.7%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +18.4pp üle BTC-turu (+2.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $683,506). raamat tasakaalus (imbalance +0.15, spread 0.17%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 100% positiivne / 0% negatiivne, turu positsioon #47. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 80%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 05:25</td>
-          <td class="mono">DOTUSD</td>
-          <td>92.2</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-6.7% ❌</td>
-          <td>-12.2% ❌</td>
-          <td class="why"><div class="clip">Momentum 69.7/100 (24h +13.2%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.49), aga veel ebakindel. alpha +10.8pp üle BTC-turu (+2.4%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: medium (maht $1,333,832). ostusurve raamatus (imbalance +0.47, spread 0.14%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 96% positiivne / 4% negatiivne, turu positsioon #52. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 88%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 04:31</td>
-          <td class="mono">ADAUSD</td>
-          <td>96.1</td>
-          <td><span class="dot" style="background:#fab219"></span>yellow</td>
-          <td>-12.0% ❌</td>
-          <td>-19.4% ❌</td>
-          <td class="why"><div class="clip">Momentum 80.4/100 (24h +20.0%), nõrk kinnitus küünaldelt - hind tõusuteel (R²=0.74), aga veel ebakindel. alpha +15.0pp üle BTC-turu (+5.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: high (maht $12,504,553). ostusurve raamatus (imbalance +0.72, spread 0.02%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 92% positiivne / 8% negatiivne, turu positsioon #15. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 94%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 04:31</td>
-          <td class="mono">DOTUSD</td>
-          <td>93.8</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-13.1% ❌</td>
-          <td>-17.7% ❌</td>
-          <td class="why"><div class="clip">Momentum 88.0/100 (24h +20.7%), trend kinnitatud küünaldelt (OLS R²=0.94, 24×15m punkti / 6h, hind+maht tõusuteel). alpha +15.7pp üle BTC-turu (+5.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $822,165). ostusurve raamatus (imbalance +0.34, spread 0.08%). hype kinnitatud veebist: CoinGecko kogukonna hääletus: 96% positiivne / 4% negatiivne, turu positsioon #52. Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 91%.</div></td>
-        </tr>
-        <tr>
-          <td>22.08 04:31</td>
-          <td class="mono">SHIBUSD</td>
-          <td>77.3</td>
-          <td><span class="dot" style="background:#f4756f"></span>red</td>
-          <td>-13.1% ❌</td>
-          <td>-16.5% ❌</td>
-          <td class="why"><div class="clip">Momentum 83.8/100 (24h +22.9%), küünlad ei kinnita trendi - ühekordne hüpe või müra (madal R²). alpha +17.8pp üle BTC-turu (+5.1%) - reaalne oma jõud, mitte lihtsalt BTC laine Likviidsus: low (maht $504,002). müügisurve raamatus (imbalance -0.81, spread 0.10%). veebist ei leidnud värsket kajastust - hinnang põhineb ainult turuandmetel Mudel (treenitud 234 tulemuse pealt, praegu 65% kaaluga lõppskooris) hindab tabamise tõenäosuseks 70%.</div></td>
-        </tr>
-    </table></div>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary><h2>⚙️ Käivituste logi</h2><span class="chev">▼</span></summary>
-    <div class="body">
-    <div class="table-scroll"><table>
-      <tr><th>Millal</th><th>Kandidaate</th><th>Alerte</th><th>Tagasivaade</th><th>Mudeli kohandused</th></tr>
-      
-        <tr><td>06.09 18:51</td><td>1</td><td>0</td>
-        <td>DOGEUSD 24h: -2.8%; ARBUSD 24h: +30.1%</td>
-        <td>-</td></tr>
-        <tr><td>06.09 16:44</td><td>1</td><td>0</td>
-        <td>LTCUSD 24h: +1.2%</td>
-        <td>-</td></tr>
-        <tr><td>06.09 13:56</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>06.09 10:18</td><td>1</td><td>1</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>06.09 05:31</td><td>2</td><td>1</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>06.09 00:35</td><td>2</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 22:42</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 20:57</td><td>1</td><td>1</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 18:48</td><td>3</td><td>2</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 16:33</td><td>1</td><td>1</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 13:23</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 09:59</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>05.09 05:17</td><td>0</td><td>0</td>
-        <td>TRUMPUSD 7d: -18.5%</td>
-        <td>green: tabamus 10% madal -> lävi tõstetud 90; yellow: tabamus 0% madal -> lävi tõstetud 90; red: tabamus 0% madal -> lävi tõstetud 90; ⚠️ DIAGNOSTIKA: screen_score on tõstetud 3 korda järjest (praegu 85), aga tabamus (2%) ei parane. Viga on tõenäoliselt SIGNAALIS endas, mitte lävendis - täiendav automaatne tõstmine peatatud. Vaja on strateegiat ennast üle vaadata.</td></tr>
-        <tr><td>05.09 00:38</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>04.09 22:48</td><td>0</td><td>0</td>
-        <td>ARBUSD 24h: -7.9%; BTCUSD 24h: -2.9%</td>
-        <td>-</td></tr>
-        <tr><td>04.09 20:19</td><td>0</td><td>0</td>
-        <td>ADAUSD 24h: -4.6%; SUIUSD 24h: -4.4%</td>
-        <td>-</td></tr>
-        <tr><td>04.09 17:22</td><td>0</td><td>0</td>
-        <td>ADAUSD 24h: -1.2%; XRPUSD 24h: -2.2%</td>
-        <td>-</td></tr>
-        <tr><td>04.09 13:10</td><td>0</td><td>0</td>
-        <td>TRUMPUSD 7d: -18.3%</td>
-        <td>green: tabamus 9% madal -> lävi tõstetud 90; yellow: tabamus 0% madal -> lävi tõstetud 90; red: tabamus 0% madal -> lävi tõstetud 90; ⚠️ DIAGNOSTIKA: screen_score on tõstetud 3 korda järjest (praegu 85), aga tabamus (2%) ei parane. Viga on tõenäoliselt SIGNAALIS endas, mitte lävendis - täiendav automaatne tõstmine peatatud. Vaja on strateegiat ennast üle vaadata.</td></tr>
-        <tr><td>04.09 08:30</td><td>0</td><td>0</td>
-        <td>ARBUSD 24h: +6.3%</td>
-        <td>-</td></tr>
-        <tr><td>04.09 03:01</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 23:48</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 21:35</td><td>3</td><td>2</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 18:22</td><td>2</td><td>2</td>
-        <td>ARBUSD 24h: +10.3%</td>
-        <td>-</td></tr>
-        <tr><td>03.09 14:53</td><td>2</td><td>2</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 10:43</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 05:35</td><td>1</td><td>1</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>03.09 00:58</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>02.09 22:23</td><td>0</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>02.09 19:43</td><td>1</td><td>0</td>
-        <td>-</td>
-        <td>-</td></tr>
-        <tr><td>02.09 17:00</td><td>1</td><td>1</td>
-        <td>ARBUSD 24h: +12.1%</td>
-        <td>-</td></tr>
-    </table></div>
-    </div>
-  </details>
 </div>
+
 <script>
-  document.querySelectorAll('.info').forEach(function(b) {
-    b.addEventListener('click', function(e) {
-      e.stopPropagation();
-      e.preventDefault();  // don't also toggle the surrounding <details> section
-      var wasOpen = b.classList.contains('open');
-      document.querySelectorAll('.info.open').forEach(function(o) { o.classList.remove('open'); });
-      if (!wasOpen) b.classList.add('open');
-    });
-  });
-  document.querySelectorAll('.why .clip').forEach(function(c) {
-    c.addEventListener('click', function() { c.classList.toggle('expanded'); });
-  });
-  var methodBtn = document.getElementById('methodBtn');
-  var methodPanel = document.getElementById('methodPanel');
-  if (methodBtn && methodPanel) {
-    methodBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      methodBtn.classList.toggle('open');
-      methodPanel.classList.toggle('open');
-    });
+const fmtUsd = (n) => (n === null || n === undefined || isNaN(n)) ? '—'
+  : (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtPct = (n) => (n === null || n === undefined || isNaN(n)) ? '—' : (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+
+async function fetchJson(path, fallback) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return fallback;
+    return await res.json();
+  } catch (e) { return fallback; }
+}
+
+// Percentage change over the trailing 7 days, from the hourly net-worth
+// snapshots each scanner writes. Returns null rather than a made-up number
+// when there isn't a data point old enough to compare against yet - a fresh
+// deploy has no week of history and shouldn't pretend otherwise.
+function weekChangePct(history, currentNetWorth) {
+  if (!Array.isArray(history) || history.length === 0 || currentNetWorth == null) return null;
+  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+  let baseline = null;
+  for (const point of history) {
+    const t = new Date(point.ts).getTime();
+    if (isNaN(t)) continue;
+    if (t <= weekAgo) baseline = point;      // keep walking forward to the newest point still older than a week
+    else { if (baseline === null) baseline = point; break; }
   }
-  document.addEventListener('click', function() {
-    document.querySelectorAll('.info.open').forEach(function(o) { o.classList.remove('open'); });
-  });
+  if (!baseline || !baseline.net_worth) return null;
+  return (currentNetWorth / baseline.net_worth - 1) * 100;
+}
+
+function paint(prefix, netWorth, startingBalance, history) {
+  const amountEl = document.getElementById(prefix + '-amount');
+  const weekEl = document.getElementById(prefix + '-week');
+
+  if (netWorth == null) {
+    amountEl.textContent = '—';
+    weekEl.innerHTML = '<span class="week-label">7 päeva</span><span>ootab andmeid</span>';
+    weekEl.className = 'week flat';
+    return;
+  }
+
+  amountEl.textContent = fmtUsd(netWorth);
+  // Colour the balance by whether the account is up or down overall, so the
+  // number itself carries the state without any extra label.
+  const vsStart = startingBalance ? netWorth - startingBalance : 0;
+  amountEl.className = 'amount ' + (vsStart > 0 ? 'good' : vsStart < 0 ? 'bad' : '');
+
+  const wk = weekChangePct(history, netWorth);
+  if (wk === null) {
+    weekEl.innerHTML = '<span class="week-label">7 päeva</span><span>vähe ajalugu</span>';
+    weekEl.className = 'week flat';
+  } else {
+    weekEl.innerHTML = '<span class="week-label">7 päeva</span><span>' + fmtPct(wk) + '</span>';
+    weekEl.className = 'week ' + (wk > 0 ? 'good' : wk < 0 ? 'bad' : 'flat');
+  }
+}
+
+async function main() {
+  const [botPortfolio, botHistory, moonDash, moonHistory] = await Promise.all([
+    fetchJson('data/memecoin_portfolio.json', null),
+    fetchJson('data/memecoin_networth_history.json', []),
+    fetchJson('data/pumpfun_dashboard.json', null),
+    fetchJson('data/pumpfun_networth_history.json', []),
+  ]);
+
+  // The bot sleeve has no pre-computed net worth file, but its hourly history
+  // does - so use the newest snapshot rather than re-valuing every position
+  // in the browser (which would need a live price call per holding).
+  let botNet = null;
+  if (Array.isArray(botHistory) && botHistory.length) {
+    botNet = botHistory[botHistory.length - 1].net_worth;
+  } else if (botPortfolio) {
+    // Fall back to cost basis until the first snapshot lands.
+    botNet = botPortfolio.balance
+      + Object.values(botPortfolio.positions || {}).reduce((s, p) => s + (p.amount_usd || 0), 0);
+  }
+  paint('bot', botNet, 1000, botHistory);
+
+  const moonNet = moonDash ? moonDash.net_worth : null;
+  paint('moon', moonNet, moonDash ? moonDash.starting_balance : 1000, moonHistory);
+
+  const stamp = moonDash?.timestamp
+    || (botHistory.length ? botHistory[botHistory.length - 1].ts : null);
+  document.getElementById('updated').textContent = stamp
+    ? new Date(stamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
+    : '';
+}
+
+main();
+setInterval(main, 60000);
 </script>
 </body>
 </html>

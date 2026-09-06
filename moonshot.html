@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moonshot — Cryptobot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html"><span class="arrow">&larr;</span> Tagasi</a>
+  <header>
+    <div class="h1-row">
+      <h1><span>moon</span>shot</h1>
+      <span class="chip" id="cap-chip"></span>
+    </div>
+    <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
+  </header>
+  <p class="subtitle">Pump.fun uued launchid. Bot filtreerib, sina otsustad Telegramis — BUY küsib summa, IGNORE jääb ikka jälgimisele, et hiljem näha, kas otsus oli õige.</p>
+
+  <div id="headline"></div>
+
+  <section>
+    <div class="section-head"><h2>Mis mul käes on <span class="count" id="pos-count"></span></h2></div>
+    <div id="positions"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Jälgimisel <span class="count" id="watch-count"></span></h2></div>
+    <p class="coin-section-sub">Kõik signaalid, mille kohta otsus on tehtud või ootel — ka need, mille sa ignoreerisid. Nii näed, mida ignoreerimine maksis või säästis.</p>
+    <div id="watching"></div>
+  </section>
+
+  <section>
+    <div class="section-head chips" style="margin-bottom: 0;">
+      <button class="chip" id="data-toggle">Andmed</button>
+      <button class="chip" id="rules-toggle">Reeglid</button>
+    </div>
+
+    <div id="data-panel" class="bottom-panel" hidden>
+      <div class="section-head" style="margin-top: 24px;"><h2>Suletud tehingud</h2></div>
+      <div id="closed"></div>
+    </div>
+
+    <div id="rules-panel" class="bottom-panel" hidden>
+      <div id="rules-content"></div>
+    </div>
+  </section>
+
+  <footer>
+    Avastus: PumpPortal (uued launchid). Turvakontroll: RugCheck.xyz. Hind: bonding curve otse Solana ahelast.<br>
+    Skann jookseb iga 5 min <a href="https://github.com/skrrrando/cryptobot" target="_blank" rel="noopener">GitHub Actions</a> kaudu.
+  </footer>
+</div>
+
+<script>
+const fmtUsd = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+  return (n < 0 ? '-$' : '$') + Math.abs(n).toFixed(Math.abs(n) > 0 && Math.abs(n) < 1 ? 4 : 2);
+};
+const fmtUsdFull = (n) => (n === null || n === undefined || isNaN(n)) ? '—'
+  : (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtPct = (n) => (n === null || n === undefined || isNaN(n)) ? '—' : (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+const pctClass = (n) => (n === null || n === undefined || isNaN(n)) ? '' : (n >= 0 ? 'good' : 'bad');
+const timeAgo = (isoStr) => {
+  if (!isoStr) return '—';
+  const mins = Math.round((Date.now() - new Date(isoStr).getTime()) / 60000);
+  if (mins < 1) return 'nüüd';
+  if (mins < 60) return mins + ' min';
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return hrs + ' h';
+  return Math.round(hrs / 24) + ' päeva';
+};
+const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M10 2l6 2.5v4.7c0 4-2.6 7.3-6 8.3-3.4-1-6-4.3-6-8.3V4.5L10 2z" fill="currentColor" opacity="0.18"/><path d="M6.5 10l2.3 2.3L13.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const TROPHY_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M6 3h8v4a4 4 0 0 1-8 0V3z" fill="currentColor" opacity="0.85"/><path d="M6 4H3.5a1 1 0 0 0-1 1.2c.3 1.6 1.3 2.7 3 3M14 4h2.5a1 1 0 0 1 1 1.2c-.3 1.6-1.3 2.7-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 11v2.5M7.5 16.5h5M8 14.2h4l.6 2.3H7.4l.6-2.3z" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+
+async function fetchJson(path, fallback) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return fallback;
+    return await res.json();
+  } catch (e) { return fallback; }
+}
+
+// The headline is the one number the page exists for: how the money is doing.
+function renderHeadline(d) {
+  const el = document.getElementById('headline');
+  if (!d) {
+    el.innerHTML = `<div class="empty">Pump.fun skanner pole veel jooksnud. Kui esimene signaal tuleb, ilmub siia sinu seis.</div>`;
+    return;
+  }
+  const start = d.starting_balance || 1000;
+  const ret = (d.net_worth ?? start) - start;
+  const retPct = start ? (ret / start) * 100 : 0;
+  const s = d.stats || {};
+  const mood = ret > 0 ? 'winning' : ret < 0 ? 'losing' : '';
+
+  el.innerHTML = `<div class="headline ${mood}">
+    <div>
+      <div class="label">Kokku</div>
+      <div class="pct ${pctClass(ret)}">${fmtPct(retPct)}</div>
+      <div class="sub">${fmtUsdFull(d.net_worth)} &nbsp;·&nbsp; alustasid ${fmtUsdFull(start)} &nbsp;·&nbsp; ${ret >= 0 ? '+' : ''}${fmtUsdFull(ret)}</div>
+    </div>
+    <div class="headline-side">
+      <div class="stat"><div class="k">Vaba</div><div class="v">${fmtUsd(d.balance)}</div></div>
+      <div class="stat"><div class="k">Positsioonides</div><div class="v">${fmtUsd(d.positions_value)}</div></div>
+      <div class="stat"><div class="k">Signaale</div><div class="v">${s.alerts ?? 0}</div></div>
+      <div class="stat"><div class="k">Graduatsioon</div><div class="v">${s.graduation_rate_pct != null ? s.graduation_rate_pct + '%' : '—'}</div></div>
+    </div>
+  </div>`;
+}
+
+function renderPositions(d) {
+  const el = document.getElementById('positions');
+  const countEl = document.getElementById('pos-count');
+  const positions = (d && d.positions) || [];
+  countEl.textContent = positions.length ? `(${positions.length})` : '';
+
+  if (!positions.length) {
+    el.innerHTML = `<div class="empty">Ühtegi avatud positsiooni. Kui Telegrami tuleb signaal, vajuta BUY ja ütle summa.</div>`;
+    return;
+  }
+  // Biggest position first, so the one that matters most is read first.
+  const sorted = [...positions].sort((a, b) => (b.value_usd ?? b.amount_usd) - (a.value_usd ?? a.amount_usd));
+  const medals = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
+
+  el.innerHTML = `<div class="coin-grid">${sorted.map((p, i) => {
+    const medal = i < 3 ? i + 1 : null;
+    const pnl = p.pnl_pct;
+    return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:#3987e5; animation-delay:${Math.min(i * 35, 400)}ms">
+      <div class="card-top">
+        ${medal ? `<span class="medal-badge medal-${medal}">${TROPHY_SVG}${medals[medal]}</span>` : `<span class="pos-badge">#${i + 1}</span>`}
+        ${p.graduated ? `<span class="tag good"><span class="tag-dot"></span>Graduated</span>`
+                      : `<span class="net-badge"><span class="dot" style="background:#3987e5"></span>Pump.fun</span>`}
+      </div>
+      <div class="card-name">${p.name || p.symbol || p.mint.slice(0, 8)}</div>
+      <div class="card-hero ${pnl == null ? 'pending' : pctClass(pnl)}">${pnl == null ? 'hind puudub' : fmtPct(pnl)}</div>
+      <div class="card-hero-label">${timeAgo(p.entry_ts)} tagasi ostetud</div>
+      <div class="card-stats">
+        <div><span class="stat-label">Panus</span><span class="stat-val">${fmtUsd(p.amount_usd)}</span></div>
+        <div><span class="stat-label">Väärtus</span><span class="stat-val ${pnl == null ? '' : pctClass(pnl)}">${p.value_usd == null ? '—' : fmtUsd(p.value_usd)}</span></div>
+        <div><span class="stat-label">Graduatsioon</span><span class="stat-val">${p.graduation_pct == null ? '—' : p.graduation_pct.toFixed(1) + '%'}</span></div>
+      </div>
+      <div class="card-footer">
+        <span class="shield-badge">${SHIELD_SVG}sisenemisel ${p.entry_graduation_pct == null ? '—' : p.entry_graduation_pct.toFixed(1) + '%'}</span>
+        <a class="card-link" href="https://pump.fun/coin/${p.mint}" target="_blank" rel="noopener">Vaata &rarr;</a>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderWatching(d) {
+  const el = document.getElementById('watching');
+  const countEl = document.getElementById('watch-count');
+  const watching = (d && d.watching) || [];
+  countEl.textContent = watching.length ? `(${watching.length})` : '';
+
+  if (!watching.length) {
+    el.innerHTML = `<div class="empty">Hetkel pole ühtegi signaali jälgimisel.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap">${watching.map(w => {
+    const moved = (w.graduation_pct ?? 0) - (w.alert_graduation_pct ?? 0);
+    const tag = w.decision === 'buy' ? 'buy' : w.decision === 'ignore' ? 'ignore' : 'pending';
+    const tagText = w.decision === 'buy' ? 'Ostsid' : w.decision === 'ignore' ? 'Ignoreerisid' : 'Ootab otsust';
+    return `<div class="watch-row">
+      <div>
+        <div class="w-name">${w.name || w.symbol || w.mint.slice(0, 8)}</div>
+        <div class="w-sub">signaal ${timeAgo(w.signal_ts)} tagasi · skoor ${w.alert_score ?? '—'}</div>
+      </div>
+      <span class="decision-tag ${tag}">${tagText}</span>
+      <span class="w-prog">${w.graduation_pct == null ? '—' : w.graduation_pct.toFixed(1) + '%'}</span>
+      <span class="w-prog ${pctClass(moved)}">${moved >= 0 ? '+' : ''}${moved.toFixed(1)}pp</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderClosed(d) {
+  const el = document.getElementById('closed');
+  const closed = (d && d.closed) || [];
+  if (!closed.length) {
+    el.innerHTML = `<div class="empty">Ühtegi tehingut pole veel suletud.</div>`;
+    return;
+  }
+  const sorted = [...closed].sort((a, b) => new Date(b.exit_ts) - new Date(a.exit_ts));
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Token</th><th class="num">Panus</th><th class="num">Tulemus</th></tr></thead>
+    <tbody>${sorted.map(c => `<tr>
+      <td class="row-name">${c.name || c.symbol || '—'}</td>
+      <td class="num mono">${fmtUsd(c.amount_usd)}</td>
+      <td class="num mono ${pctClass(c.pnl_usd)}">${c.pnl_usd >= 0 ? '+' : ''}${fmtUsd(c.pnl_usd)} (${fmtPct(c.pnl_pct)})</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderRules(d) {
+  const cap = (d && d.daily_cap) || 4;
+  document.getElementById('rules-content').innerHTML = `
+    <div class="rules-group">
+      <h3>1. Mida bot otsib</h3>
+      <ul class="rules-list">
+        <li>Kuulab <b>pump.fun</b> uusi launche reaalajas (~34 uut tokenit minutis, ~49 000 päevas).</li>
+        <li>Ainult ~3% neist jõuab kunagi graduatsioonini — seega filter peab olema väga range.</li>
+        <li>Graduatsioon tähendab, et kurvi on sisse voolanud <b>85 SOL</b> (~$8 600), misjärel token liigub päris pooli.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>2. Filter, astmete kaupa</h3>
+      <ul class="rules-list">
+        <li><b>Aste 0 (tasuta):</b> viskab välja need, kus arendaja on sama päeva jooksul juba mitu tokenit lasknud (seeriatootja), või kus nimi/sümbol puudub.</li>
+        <li><b>Aste 1 (odav):</b> nõuab tõestatud tõmmet — token peab olema vähemalt 3 min vana, jõudnud ≥2% graduatsiooniteest ja veel aktiivselt raha sisse võtma. <b>Siit tuleb suurim täpsus:</b> me ei ennusta võitjat sünnihetkel, vaid valime need, kes juba ronivad.</li>
+        <li><b>Aste 2 (kallis):</b> RugCheck ainult neile, kes juba ronivad — mint/freeze õigus peab olema kustutatud, ei tohi olla "rugged" märget, arendaja käes ≤5% supplyst.</li>
+        <li><b>Aste 3:</b> skoorib ja saadab <b>maksimaalselt ${cap} signaali päevas</b>.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>3. Sinu otsus</h3>
+      <ul class="rules-list">
+        <li>Signaal tuleb Telegrami. <b>BUY</b> küsib summa — vasta lihtsalt numbriga. <b>IGNORE</b> ei osta midagi.</li>
+        <li>Mõlemal juhul jääb token jälgimisele, et hiljem näha, kas otsus oli õige.</li>
+        <li>Müük käib samuti sinu käsul: saada <b>/positions</b> ja vajuta soovitud positsiooni juures SELL.</li>
+        <li>Bot ei osta ega müü <b>kunagi</b> ise.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>4. Tehingukulud</h3>
+      <ul class="rules-list">
+        <li>Ost ja müük arvestatakse bonding curve'i päris valemiga, mitte noteeritud hinnaga.</li>
+        <li>See on oluline: $100 tehing kurvi, kus on ~10 SOL, on ~10% kogu poolist ja liigutab hinda tugevalt vastu.</li>
+        <li>Mõõdetud: 12.5% graduatsioonis kurvis on edasi-tagasi kulu <b>~6.5%</b>, sügavamas (60%) ~4.3%. Ehk token peab ~7% tõusma, et lihtsalt nulli jõuda.</li>
+        <li>Lisaks 1% pump.fun tasu ja Solana gas mõlemal jalal.</li>
+      </ul>
+    </div>`;
+}
+
+function wireToggles() {
+  const dataPanel = document.getElementById('data-panel');
+  const rulesPanel = document.getElementById('rules-panel');
+  const dataBtn = document.getElementById('data-toggle');
+  const rulesBtn = document.getElementById('rules-toggle');
+  dataBtn.addEventListener('click', () => {
+    const opening = dataPanel.hidden;
+    dataPanel.hidden = !opening; rulesPanel.hidden = true;
+    dataBtn.classList.toggle('active', opening); rulesBtn.classList.remove('active');
+  });
+  rulesBtn.addEventListener('click', () => {
+    const opening = rulesPanel.hidden;
+    rulesPanel.hidden = !opening; dataPanel.hidden = true;
+    rulesBtn.classList.toggle('active', opening); dataBtn.classList.remove('active');
+  });
+}
+
+async function main() {
+  const d = await fetchJson('data/pumpfun_dashboard.json', null);
+  renderHeadline(d);
+  renderPositions(d);
+  renderWatching(d);
+  renderClosed(d);
+  renderRules(d);
+  document.getElementById('cap-chip').textContent = `max ${(d && d.daily_cap) || 4} signaali päevas`;
+  document.getElementById('updated-ts').textContent = d?.timestamp
+    ? new Date(d.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
+    : 'pole veel jooksnud';
+}
+
+wireToggles();
+main();
+setInterval(main, 60000);
+</script>
+</body>
+</html>

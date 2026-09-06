@@ -78,7 +78,11 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 STATE_PATH = os.path.join(DATA_DIR, "state.json")
 WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
 DASHBOARD_PATH = os.path.join(BASE_DIR, "dashboard.html")
-INDEX_PATH = os.path.join(BASE_DIR, "index.html")  # same content - lets GitHub Pages serve a clean root URL
+# This legacy Crypto.com sleeve no longer owns the site root. index.html is now
+# a hand-written landing page (the moonshot + cryptobot balances and links to
+# each), so rewriting it hourly from here would silently clobber that page.
+# The legacy dashboard is still generated and reachable at /dashboard.html.
+INDEX_PATH = None
 
 HISTORY_KEEP = 48  # keep last 48 hourly snapshots per instrument (~2 days)
 VOL_WINDOW = 24     # snapshots used for the rolling volatility estimate (~1 day at hourly cadence)
@@ -2983,8 +2987,9 @@ def render_dashboard(state):
 </html>"""
     with open(DASHBOARD_PATH, "w") as f:
         f.write(html)
-    with open(INDEX_PATH, "w") as f:
-        f.write(html)
+    if INDEX_PATH:  # None in production - see the constant for why
+        with open(INDEX_PATH, "w") as f:
+            f.write(html)
 
 
 # ---------------------------------------------------------------------------

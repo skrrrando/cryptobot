@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bot — Cryptobot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html"><span class="arrow">&larr;</span> Tagasi</a>
+  <header>
+    <div class="h1-row">
+      <div class="mascot" id="mascot" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="36" height="36">
+          <circle cx="20" cy="6" r="2.2" fill="var(--accent3)"/>
+          <line x1="20" y1="8" x2="20" y2="12" stroke="var(--accent3)" stroke-width="1.6"/>
+          <rect x="6" y="12" width="28" height="22" rx="9" fill="url(#mascotGrad)"/>
+          <circle class="mascot-eye" cx="15" cy="23" r="3.4" fill="var(--bg)"/>
+          <circle class="mascot-eye" cx="25" cy="23" r="3.4" fill="var(--bg)"/>
+          <circle class="mascot-pupil" cx="15" cy="23" r="1.5" fill="var(--accent3)"/>
+          <circle class="mascot-pupil" cx="25" cy="23" r="1.5" fill="var(--accent3)"/>
+          <path d="M14 29.5 Q20 33 26 29.5" stroke="var(--bg)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="mascotGrad" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="var(--accent)"/>
+              <stop offset="100%" stop-color="var(--accent2)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1><span>memecoin</span> scanner</h1>
+      <span class="level-badge" id="level-badge"></span>
+      <div class="pulse-wrap"><span class="pulse-dot" id="pulse-dot"></span><span id="pulse-label">—</span></div>
+    </div>
+    <div class="updated">
+      <button class="refresh-btn" id="refresh-btn" title="Värskenda andmeid" aria-label="Värskenda andmeid">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M16.2 7.5A6.5 6.5 0 1 0 17 10.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16.3 3.5v4.3h-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      Uuendatud <span class="mono" id="updated-ts">—</span>
+    </div>
+  </header>
+  <p class="subtitle">Solana / Base / BSC trending-tokenite jälgija. Momentum + security-filter (RugCheck / GoPlus), tulemused kogutakse õppimiseks — see EI OLE veel treenitud mudel, ainult käsitsi seatud sõel.</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section id="portfolio-section">
+    <div class="section-head"><h2>Mänguraha portfell</h2></div>
+    <div id="portfolio-hero"></div>
+    <h3 class="holdings-title" id="holdings-title"></h3>
+    <div id="portfolio-positions" style="margin-top: 12px;"></div>
+  </section>
+
+  <div class="chips" id="net-filter" style="margin-bottom: 28px;"></div>
+
+  <section>
+    <div class="section-head">
+      <h2><span id="coin-section-title">Tänased soovitused</span> <span class="count" id="cand-count"></span></h2>
+      <button class="chip" id="show-all-toggle"></button>
+    </div>
+    <p class="coin-section-sub" id="coin-section-sub"></p>
+    <div id="coin-grid"></div>
+    <details class="raw-table" id="raw-table-wrap">
+      <summary>Täpne tabel</summary>
+      <div id="candidates-table"></div>
+    </details>
+  </section>
+
+  <section>
+    <div class="section-head chips" style="margin-bottom: 0;">
+      <button class="chip" id="data-toggle">Andmed</button>
+      <button class="chip" id="rules-toggle">Reeglid</button>
+    </div>
+
+    <div id="data-panel" class="bottom-panel" hidden>
+      <div class="section-head" style="margin-top: 24px;"><h2>Turu kaart</h2></div>
+      <div id="scatter-wrap"></div>
+
+      <div class="section-head" style="margin-top: 24px;"><h2>Tulemused checkpointide kaupa</h2></div>
+      <div id="outcomes"></div>
+
+      <div class="section-head" style="margin-top: 24px;"><h2>Suletud tehingud</h2></div>
+      <div id="portfolio-closed"></div>
+
+      <div class="section-head" style="margin-top: 24px;"><h2>Viimased leiud</h2></div>
+      <div id="feed"></div>
+    </div>
+
+    <div id="rules-panel" class="bottom-panel" hidden>
+      <div id="rules-content"></div>
+    </div>
+  </section>
+
+  <footer>
+    Andmed: GeckoTerminal (hind/volume/rank), RugCheck.xyz + GoPlus Security (turvakontroll).<br>
+    Skann jookseb iga 5 min <a href="https://github.com/skrrrando/cryptobot" target="_blank" rel="noopener">GitHub Actions</a> kaudu.
+  </footer>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const NET_COLOR = { solana: 'var(--net-solana)', base: 'var(--net-base)', bsc: 'var(--net-bsc)', eth: 'var(--net-eth)', arbitrum: 'var(--net-arbitrum)', polygon_pos: 'var(--net-polygon_pos)' };
+const NET_COLOR_HEX = { solana: '#3987e5', base: '#199e70', bsc: '#d95926', eth: '#c98500', arbitrum: '#9085e9', polygon_pos: '#d55181' };
+const NET_LABEL = { solana: 'Solana', base: 'Base', bsc: 'BSC', eth: 'Ethereum', arbitrum: 'Arbitrum', polygon_pos: 'Polygon' };
+const SHIELD_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M10 2l6 2.5v4.7c0 4-2.6 7.3-6 8.3-3.4-1-6-4.3-6-8.3V4.5L10 2z" fill="currentColor" opacity="0.18"/><path d="M6.5 10l2.3 2.3L13.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const TROPHY_SVG = `<svg viewBox="0 0 20 20" fill="none"><path d="M6 3h8v4a4 4 0 0 1-8 0V3z" fill="currentColor" opacity="0.85"/><path d="M6 4H3.5a1 1 0 0 0-1 1.2c.3 1.6 1.3 2.7 3 3M14 4h2.5a1 1 0 0 1 1 1.2c-.3 1.6-1.3 2.7-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 11v2.5M7.5 16.5h5M8 14.2h4l.6 2.3H7.4l.6-2.3z" fill="currentColor" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+
+const fmtUsd = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+  return (n < 0 ? '-$' : '$') + Math.abs(n).toFixed(Math.abs(n) > 0 && Math.abs(n) < 1 ? 4 : 2);
+};
+// Full precision, never abbreviated to K/M - for the Net Worth hero number,
+// which is exactly the figure the user wants to read exactly, not rounded.
+const fmtUsdFull = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+// Memecoin entry prices are often fractions of a cent (e.g. $0.00000734) -
+// toFixed(2) would just print "$0.00" for almost every token, so this shows
+// enough decimal places to keep the first couple of significant digits.
+const fmtPrice = (n) => {
+  if (n === null || n === undefined || isNaN(n) || n <= 0) return '—';
+  if (n >= 1) return '$' + n.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  const decimals = Math.min(12, Math.max(2, -Math.floor(Math.log10(n)) + 2));
+  return '$' + n.toFixed(decimals);
+};
+const fmtPct = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+};
+const pctClass = (n) => (n === null || n === undefined || isNaN(n)) ? '' : (n >= 0 ? 'good' : 'bad');
+const timeAgo = (isoStr) => {
+  if (!isoStr) return '—';
+  const diffMs = Date.now() - new Date(isoStr).getTime();
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 1) return 'nüüd';
+  if (mins < 60) return mins + ' min';
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return hrs + ' h';
+  return Math.round(hrs / 24) + ' päeva';
+};
+const geckoterminalLink = (network, poolAddress) => `https://www.geckoterminal.com/${network}/pools/${poolAddress}`;
+const asFloat = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
+
+// ---- Quick-read tags: short, plain-language "what's good / what to watch" --
+// Simple threshold rules over the same fields already shown elsewhere on the
+// card - not a hidden score, just a faster way to read numbers you can also
+// see spelled out. Every candidate here already passed the hard security
+// gate, so "caution" tags are about degree, not a pass/fail result.
+function getTags(c) {
+  const good = [], caution = [];
+  const rv = c.features?.rank_velocity;
+  const accel = c.features?.h1_accel;
+  const h1 = asFloat(c.price_change_pct?.h1);
+  const h24 = asFloat(c.price_change_pct?.h24);
+  const mcap = c.market_cap_usd || 0;
+  const sec = c.security || {};
+  const concentration = c.network === 'solana' ? sec.top10_pct : sec.owner_creator_pct;
+  const concLow = c.network === 'solana' ? 20 : 5;
+  const concHigh = c.network === 'solana' ? 30 : 10;
+
+  // Mirrors scan_memecoins.py's WASH_TRADE_MIN_BUYS_H1/MAX_BUYS_PER_BUYER -
+  // lots of buy transactions from only a handful of distinct wallets is a
+  // fake-volume/wash-trading red flag, not organic demand.
+  const buysH1 = asFloat(c.transactions_h1?.buys);
+  const buyersH1 = asFloat(c.transactions_h1?.buyers);
+  const lockPct = c.locked_liquidity_percentage;
+  const holderGrowth = sec.holder_growth_pct;
+  const solH1 = c.sol_h1;
+
+  if (rv != null && rv > 0) good.push('Rank kerkib');
+  if (accel != null && accel > 0) good.push('Hoog kasvab');
+  if (h24 >= 20) good.push('Tugev 24h trend');
+  if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
+  if (mcap >= 1000000) good.push('Kindlam turusuurus');
+  if (lockPct != null && lockPct >= 80) good.push('Likviidsus lukus');
+  if (holderGrowth != null && holderGrowth >= 5) good.push('Hoidjaid juurde tuleb');
+
+  if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
+  if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
+  if (h24 < 0 && h1 > 0) caution.push('Alles pöördumas');
+  if (rv != null && rv === 0) caution.push('Rank paigal');
+  if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
+  if (sec.whale_buyer_pct != null && sec.whale_buyer_pct >= 40) caution.push('Üks rahakott domineerib');
+  if (lockPct != null && lockPct < 50) caution.push('Likviidsus lukustamata');
+  if (holderGrowth != null && holderGrowth < 0) caution.push('Hoidjad lahkumas');
+  if (solH1 != null && solH1 <= -5) caution.push('Turg risk-off (SOL langeb)');
+
+  return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
+}
+
+async function fetchJson(path, fallback) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return fallback;
+    return await res.json();
+  } catch (e) { return fallback; }
+}
+async function fetchJsonl(path) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return [];
+    const text = await res.text();
+    return text.split('\n').filter(Boolean).map(line => {
+      try { return JSON.parse(line); } catch (e) { return null; }
+    }).filter(Boolean);
+  } catch (e) { return []; }
+}
+
+// ---- live price lookup for open positions (mirrors scan_memecoins.py's
+// fetch_pool_price - same public, keyless GeckoTerminal endpoint) ----------
+async function fetchLivePrice(network, poolAddress) {
+  try {
+    const res = await fetch(`https://api.geckoterminal.com/api/v2/networks/${network}/pools/${poolAddress}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return asFloat(data?.data?.attributes?.base_token_price_usd) || null;
+  } catch (e) { return null; }
+}
+
+// ---- animated count-up for stat tiles -------------------------------------
+function animateNetWorth(el, target) {
+  if (!el) return;
+  const start = 0, dur = 900, t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmtUsdFull(start + (target - start) * eased);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function animateCount(el, target, isPct) {
+  const start = 0, dur = 700, t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = start + (target - start) * eased;
+    el.textContent = isPct ? (val >= 0 ? '+' : '') + val.toFixed(1) + '%' : Math.round(val).toLocaleString('et-EE');
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function renderTile(label, value, cls, animateTo, isPct) {
+  const id = 'tile-' + Math.random().toString(36).slice(2, 8);
+  return { html: `<div class="tile"><div class="label">${label}</div><div class="value ${cls || ''}" id="${id}">${animateTo == null ? value : '0'}</div></div>`, id, target: animateTo, isPct };
+}
+
+// ---- Tooltip -------------------------------------------------------------
+const tooltipEl = document.getElementById('tooltip');
+function showTooltip(evt, titleText, rows) {
+  tooltipEl.innerHTML = '';
+  const title = document.createElement('div');
+  title.className = 'tt-title';
+  title.textContent = titleText;
+  tooltipEl.appendChild(title);
+  rows.forEach(([label, value, color]) => {
+    const row = document.createElement('div');
+    row.className = 'tt-row';
+    const left = document.createElement('span');
+    if (color) {
+      const key = document.createElement('span');
+      key.className = 'tt-key';
+      key.style.background = color;
+      left.appendChild(key);
+    }
+    left.appendChild(document.createTextNode(label));
+    const right = document.createElement('b');
+    right.textContent = value;
+    row.appendChild(left);
+    row.appendChild(right);
+    tooltipEl.appendChild(row);
+  });
+  tooltipEl.classList.add('show');
+  moveTooltip(evt);
+}
+function moveTooltip(evt) {
+  const x = evt.clientX ?? (evt.target.getBoundingClientRect().left + evt.target.getBoundingClientRect().width / 2);
+  const y = evt.clientY ?? evt.target.getBoundingClientRect().top;
+  const pad = 16;
+  let left = x + pad, top = y + pad;
+  if (left + 230 > window.innerWidth) left = x - 230 - pad;
+  if (top + 120 > window.innerHeight) top = y - 120 - pad;
+  tooltipEl.style.left = left + 'px';
+  tooltipEl.style.top = top + 'px';
+}
+function hideTooltip() { tooltipEl.classList.remove('show'); }
+
+// ---- Coin card grid: the game-board (primary candidates view) -----------
+const RECOMMENDED_CAP = 6; // "a couple of good ones a day", not the whole list
+
+function renderSparkline(history) {
+  if (!history || history.length < 2) return '';
+  const values = history.map(h => h.h1);
+  const min = Math.min(...values), max = Math.max(...values);
+  const range = (max - min) || 1;
+  const w = 100, h = 26;
+  const points = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * w;
+    const y = h - ((v - min) / range) * h;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const rising = values[values.length - 1] >= values[0];
+  const color = rising ? 'var(--good)' : 'var(--bad)';
+  const lastX = w, lastY = h - ((values[values.length - 1] - min) / range) * h;
+  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <polyline points="${points}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX.toFixed(1)}" cy="${lastY.toFixed(1)}" r="2.4" fill="${color}"/>
+  </svg>`;
+}
+
+function renderCoinGrid(candidates, activeNetworks, showAll, hotState) {
+  const grid = document.getElementById('coin-grid');
+  const countEl = document.getElementById('cand-count');
+  const titleEl = document.getElementById('coin-section-title');
+  const subEl = document.getElementById('coin-section-sub');
+  const toggleBtn = document.getElementById('show-all-toggle');
+
+  const allVisible = candidates.filter(c => activeNetworks.has(c.network))
+    .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
+
+  const withTags = allVisible.map(c => ({ c, tags: getTags(c) }));
+  const recommended = withTags.filter(x => x.tags.caution.length === 0 && x.tags.good.length >= 2)
+    .slice(0, RECOMMENDED_CAP);
+
+  const shown = showAll ? withTags : recommended;
+
+  titleEl.textContent = showAll ? 'Kõik kandidaadid' : 'Tänased soovitused';
+  countEl.textContent = shown.length ? `(${shown.length})` : '';
+  subEl.textContent = showAll
+    ? 'Kõik momentum + security filtri läbinud tokenid, halvimast parimani.'
+    : 'Ainult need, millel on vähemalt 2 head märki ja ühtegi riskimärki. Kui siin midagi ei ole, ei leidnud süsteem täna midagi piisavalt head.';
+
+  toggleBtn.textContent = showAll ? `← Ainult soovitused` : `Kõik kandidaadid (${allVisible.length})`;
+  toggleBtn.style.display = allVisible.length > recommended.length || showAll ? '' : 'none';
+
+  if (candidates.length === 0) {
+    grid.innerHTML = `<div class="empty">Hetkel ühtegi kandidaati ei ole. Bot skannib iga 5 min ja alertib Telegramis, kui midagi läbi mõlema filtri (momentum + security) tuleb.</div>`;
+    return;
+  }
+  if (allVisible.length === 0) {
+    grid.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`;
+    return;
+  }
+  if (shown.length === 0) {
+    grid.innerHTML = `<div class="empty">Süsteem eelistab täna mitte midagi soovitada, kui midagi selget silma ei jää — vaata "Kõik kandidaadid", kui tahad ise kõiki läbi vaadata.</div>`;
+    return;
+  }
+
+  const medalNames = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
+
+  grid.innerHTML = `<div class="coin-grid">${shown.map(({ c, tags }, i) => {
+    const medal = i < 3 ? i + 1 : null;
+    const h1 = asFloat(c.price_change_pct?.h1);
+    const h24 = asFloat(c.price_change_pct?.h24);
+    const vol = asFloat(c.volume_usd?.h24);
+    const sec = c.security || {};
+    const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+    const tagRows = (tags.good.length || tags.caution.length) ? `<div class="tag-rows">
+        ${tags.good.length ? `<div class="tag-row">${tags.good.map(t => `<span class="tag good"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
+        ${tags.caution.length ? `<div class="tag-row">${tags.caution.map(t => `<span class="tag caution"><span class="tag-dot"></span>${t}</span>`).join('')}</div>` : ''}
+      </div>` : '';
+    return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[c.network]}; animation-delay:${Math.min(i * 35, 400)}ms">
+      <div class="card-top">
+        ${medal ? `<span class="medal-badge medal-${medal}">${TROPHY_SVG}${medalNames[medal]}</span>` : `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>`}
+        ${medal ? `<span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span>` : ''}
+      </div>
+      <div class="card-name">${c.name}</div>
+      <div class="card-hero ${pctClass(h1)}">${fmtPct(h1)}</div>
+      <div class="card-hero-label">1h muutus · rank #${c.rank}</div>
+      ${renderSparkline(hotState?.[c.id]?.history)}
+      <div class="card-stats">
+        <div><span class="stat-label">24h</span><span class="stat-val ${pctClass(h24)}">${fmtPct(h24)}</span></div>
+        <div><span class="stat-label">Mcap</span><span class="stat-val">${fmtUsd(c.market_cap_usd)}</span></div>
+        <div><span class="stat-label">Vol</span><span class="stat-val">${fmtUsd(vol)}</span></div>
+      </div>
+      ${tagRows}
+      <div class="card-footer">
+        <span class="shield-badge">${SHIELD_SVG}${secLine}</span>
+        <a class="card-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">Graafik →</a>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ---- Scatter chart: 1h% vs market cap (log), sized by 24h volume --------
+function renderScatter(candidates, activeNetworks) {
+  const wrap = document.getElementById('scatter-wrap');
+  const visible = candidates.filter(c => activeNetworks.has(c.network));
+  if (candidates.length === 0) { wrap.innerHTML = ''; return; }
+  if (visible.length === 0) { wrap.innerHTML = `<div class="empty">Valitud võrgul kandidaate pole.</div>`; return; }
+
+  const W = 900, H = 320, M = { top: 16, right: 24, bottom: 34, left: 54 };
+  const iw = W - M.left - M.right, ih = H - M.top - M.bottom;
+
+  const h1Vals = visible.map(c => asFloat(c.price_change_pct?.h1));
+  const mcapVals = visible.map(c => Math.max(c.market_cap_usd || 1, 1));
+  const volVals = visible.map(c => asFloat(c.volume_usd?.h24));
+
+  const xMax = Math.max(...h1Vals, 10) * 1.12;
+  const yMin = Math.min(...mcapVals, 50000) * 0.7;
+  const yMax = Math.max(...mcapVals) * 1.6;
+  const volMax = Math.max(...volVals, 1);
+
+  const xScale = (v) => M.left + (v / xMax) * iw;
+  const yScale = (v) => M.top + ih - ((Math.log(Math.max(v, yMin)) - Math.log(yMin)) / (Math.log(yMax) - Math.log(yMin))) * ih;
+  const rScale = (v) => 5 + Math.sqrt(Math.max(v, 0) / volMax) * 16;
+
+  const yTicks = [];
+  for (let p = 4; p <= 9; p++) { const v = Math.pow(10, p); if (v >= yMin && v <= yMax) yTicks.push(v); }
+  const xTicks = [0, xMax * 0.25, xMax * 0.5, xMax * 0.75, xMax].map(v => Math.round(v));
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kandidaadid: 1h muutus vs turukapitalisatsioon">`;
+  yTicks.forEach(v => {
+    const y = yScale(v);
+    svg += `<line class="grid-line" x1="${M.left}" x2="${W - M.right}" y1="${y}" y2="${y}"/>`;
+    svg += `<text class="axis-text" x="${M.left - 8}" y="${y + 3}" text-anchor="end">${fmtUsd(v)}</text>`;
+  });
+  xTicks.forEach(v => {
+    const x = xScale(v);
+    svg += `<text class="axis-text" x="${x}" y="${H - M.bottom + 18}" text-anchor="middle">${v >= 0 ? '+' : ''}${v}%</text>`;
+  });
+  svg += `<line class="zero-line" x1="${M.left}" x2="${M.left}" y1="${M.top}" y2="${H - M.bottom}"/>`;
+  svg += `<line class="zero-line" x1="${M.left}" x2="${W - M.right}" y1="${H - M.bottom}" y2="${H - M.bottom}"/>`;
+  svg += `<text class="axis-text" x="${M.left + iw / 2}" y="${H - 2}" text-anchor="middle">1h hinnamuutus</text>`;
+
+  const sorted = [...visible].sort((a, b) => asFloat(b.volume_usd?.h24) - asFloat(a.volume_usd?.h24));
+  sorted.forEach((c, i) => {
+    const h1 = asFloat(c.price_change_pct?.h1);
+    const mcap = Math.max(c.market_cap_usd || 1, 1);
+    const vol = asFloat(c.volume_usd?.h24);
+    const x = xScale(h1), y = yScale(mcap), r = rScale(vol);
+    const color = `var(--net-${c.network})`;
+    const hitR = Math.max(r + 8, 14);
+    svg += `<circle class="hit-area" data-idx="${i}" cx="${x}" cy="${y}" r="${hitR}" tabindex="0" role="button" aria-label="${c.name}"/>`;
+    svg += `<circle class="mark dot-ring" cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="0.9"/>`;
+  });
+  svg += `</svg>`;
+
+  wrap.innerHTML = `<div class="chart-card">
+    <div class="chart-legend">${['solana','base','bsc','eth','arbitrum','polygon_pos'].filter(n => activeNetworks.has(n)).map(n =>
+      `<span class="item"><span class="swatch" style="background:${NET_COLOR[n]}"></span>${NET_LABEL[n]}</span>`
+    ).join('')}<span class="item" style="margin-left:auto; color:var(--text-faint);">suurus = 24h volume</span></div>
+    ${svg}
+  </div>`;
+
+  wrap.querySelectorAll('.hit-area').forEach(el => {
+    const c = sorted[parseInt(el.dataset.idx, 10)];
+    const rows = [
+      ['1h muutus', fmtPct(asFloat(c.price_change_pct?.h1))],
+      ['24h muutus', fmtPct(asFloat(c.price_change_pct?.h24))],
+      ['Turukapital', fmtUsd(c.market_cap_usd)],
+      ['24h volume', fmtUsd(asFloat(c.volume_usd?.h24))],
+      ['Rank', '#' + c.rank],
+    ];
+    const title = `${c.name} · ${NET_LABEL[c.network]}`;
+    el.addEventListener('mouseenter', (e) => showTooltip(e, title, rows));
+    el.addEventListener('mousemove', moveTooltip);
+    el.addEventListener('mouseleave', hideTooltip);
+    el.addEventListener('focus', (e) => showTooltip(e, title, rows));
+    el.addEventListener('blur', hideTooltip);
+  });
+}
+
+// ---- Candidates table (accessibility fallback, collapsed by default) ----
+function renderCandidatesTable(candidates, activeNetworks) {
+  const el = document.getElementById('candidates-table');
+  const visible = candidates.filter(c => activeNetworks.has(c.network))
+    .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
+  if (visible.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Token</th><th>Võrk</th><th class="num">Rank</th><th class="num">1h</th><th class="num">24h</th><th class="num">Mcap</th><th class="num">Security</th><th></th></tr></thead>
+    <tbody>${visible.map(c => {
+      const sec = c.security || {};
+      const secLine = c.network === 'solana' ? `top10 ${sec.top10_pct?.toFixed(0) ?? '—'}%` : `owner ${sec.owner_creator_pct?.toFixed(0) ?? '—'}%`;
+      const rv = c.features?.rank_velocity;
+      return `<tr>
+        <td class="row-name">${c.name}</td>
+        <td><span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span></td>
+        <td class="num mono">#${c.rank}${rv != null ? `<span style="color:var(--text-faint)"> (${rv >= 0 ? '+' : ''}${rv})</span>` : ''}</td>
+        <td class="num mono ${pctClass(asFloat(c.price_change_pct?.h1))}">${fmtPct(asFloat(c.price_change_pct?.h1))}</td>
+        <td class="num mono ${pctClass(asFloat(c.price_change_pct?.h24))}">${fmtPct(asFloat(c.price_change_pct?.h24))}</td>
+        <td class="num mono">${fmtUsd(c.market_cap_usd)}</td>
+        <td class="num mono" style="color:var(--text-muted); font-size:12px;">${secLine}</td>
+        <td class="num"><a class="row-link" href="${geckoterminalLink(c.network, c.address)}" target="_blank" rel="noopener">graafik →</a></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+// ---- Checkpoint outcomes: diverging bars + table -------------------------
+function renderOutcomes(labelRows, activeNetworks) {
+  const el = document.getElementById('outcomes');
+  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint' && activeNetworks.has(r.network));
+  if (checkpoints.length === 0) {
+    el.innerHTML = `<div class="empty">Checkpointe pole veel kogunenud — esimesed tulemused ilmuvad 10 min pärast esimest kandidaati. Kannatust: see ongi mõte, mitte kiirustada mudeliga enne kui andmeid on.</div>`;
+    return;
+  }
+  const offsets = [10, 30, 60, 180, 360];
+  const offsetLabel = { 10: '10 min', 30: '30 min', 60: '1 h', 180: '3 h', 360: '6 h' };
+  const rows = offsets.map(off => {
+    const rs = checkpoints.filter(r => r.offset_minutes === off && r.return_pct != null);
+    if (rs.length === 0) return { off, n: 0 };
+    const avg = rs.reduce((s, r) => s + r.return_pct, 0) / rs.length;
+    const winRate = rs.filter(r => r.return_pct > 0).length / rs.length * 100;
+    return { off, n: rs.length, avg, winRate };
+  });
+  const maxAbs = Math.max(...rows.map(r => Math.abs(r.avg || 0)), 1);
+
+  const bars = rows.map(r => {
+    if (!r.n) return `<div class="bar-row"><span class="off-label">${offsetLabel[r.off]}</span><div class="bar-track"><div class="zero-mark" style="left:50%"></div></div><span class="bar-val mono" style="color:var(--text-faint)">—</span></div>`;
+    const pct = Math.min(Math.abs(r.avg) / maxAbs * 50, 50);
+    const cls = r.avg >= 0 ? 'good' : 'bad';
+    const left = r.avg >= 0 ? '50%' : (50 - pct) + '%';
+    return `<div class="bar-row">
+      <span class="off-label">${offsetLabel[r.off]}</span>
+      <div class="bar-track">
+        <div class="zero-mark" style="left:50%"></div>
+        <div class="bar-fill ${cls}" style="left:${left}; width:${pct}%"></div>
+      </div>
+      <span class="bar-val mono ${pctClass(r.avg)}">${fmtPct(r.avg)} <span class="bar-n">(n=${r.n})</span></span>
+    </div>`;
+  }).join('');
+
+  const tableRows = rows.map(r => `<tr>
+      <td>${offsetLabel[r.off]}</td>
+      <td class="num mono">${r.n}</td>
+      <td class="num mono ${r.n ? pctClass(r.avg) : ''}">${r.n ? fmtPct(r.avg) : '—'}</td>
+      <td class="num mono">${r.n ? r.winRate.toFixed(0) + '%' : '—'}</td>
+    </tr>`).join('');
+
+  el.innerHTML = `
+    <div class="chart-card" style="margin-bottom: 12px;">${bars}</div>
+    <details class="raw-table"><summary>Täpne tabel</summary>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Checkpoint</th><th class="num">Vaatlusi</th><th class="num">Keskmine tootlus</th><th class="num">Võiduprotsent</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table></div>
+    </details>`;
+}
+
+// ---- Recent finds feed ----------------------------------------------------
+function renderFeed(labelRows, activeNetworks) {
+  const el = document.getElementById('feed');
+  const entries = labelRows.filter(r => r.row_type === 'entry' && activeNetworks.has(r.network))
+    .sort((a, b) => new Date(b.entry_ts) - new Date(a.entry_ts)).slice(0, 20);
+  if (entries.length === 0) {
+    el.innerHTML = `<div class="empty">Pole veel ühtegi leidu. Esimene ilmub siia kohe, kui mõni token mõlemast filtrist läbi saab.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap">${entries.map(e => `<div class="feed-item">
+    <span class="ts mono">${timeAgo(e.entry_ts)}</span>
+    <span class="net-badge"><span class="dot" style="background:${NET_COLOR[e.network]}"></span>${NET_LABEL[e.network]}</span>
+    <span class="row-name">${e.name}</span>
+    <span class="mono" style="color: var(--text-faint); margin-left: auto;">${fmtUsd(e.entry_mcap_usd)} mcap</span>
+  </div>`).join('')}</div>`;
+}
+
+// ---- Play-money portfolio ---------------------------------------------------
+// ---- Trader level badge - purely for fun, based on how many trades closed -
+function renderLevelBadge(portfolio) {
+  const el = document.getElementById('level-badge');
+  const n = portfolio?.closed?.length ?? 0;
+  let label;
+  if (n === 0) label = 'Uustulnuk';
+  else if (n < 5) label = 'Kaubleja';
+  else if (n < 15) label = 'Proff';
+  else label = 'Legend';
+  el.textContent = label;
+}
+
+// ---- Confetti burst - fires once per page load when there's something to
+// celebrate (a recent winning trade, or a candidate mooning). Self-contained
+// canvas animation, no dependency, removes itself when done. -------------
+function fireConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const colors = ['#3987e5', '#199e70', '#d95926', '#fbbf24', '#a78bfa', '#34d399'];
+  const particles = Array.from({ length: 90 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: -20 - Math.random() * 200,
+    vx: (Math.random() - 0.5) * 3,
+    vy: 2 + Math.random() * 3,
+    size: 4 + Math.random() * 5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI * 2,
+    vrot: (Math.random() - 0.5) * 0.3,
+  }));
+  let frame = 0;
+  const maxFrames = 220;
+  function tick() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.rot += p.vrot;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame / maxFrames);
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < maxFrames) requestAnimationFrame(tick);
+    else canvas.remove();
+  }
+  requestAnimationFrame(tick);
+}
+
+function maybeFireConfetti(portfolio, candidates) {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const closed = portfolio?.closed ?? [];
+  const now = Date.now();
+  const recentWin = closed.some(c => c.pnl_usd > 0 && (now - new Date(c.exit_ts).getTime()) < 30 * 60 * 1000);
+  const bigMover = candidates.some(c => asFloat(c.price_change_pct?.h1) >= 50);
+  if (recentWin || bigMover) fireConfetti();
+}
+
+async function renderPortfolio(portfolio, hotState) {
+  const heroEl = document.getElementById('portfolio-hero');
+  const holdingsTitleEl = document.getElementById('holdings-title');
+  const posEl = document.getElementById('portfolio-positions');
+  const closedEl = document.getElementById('portfolio-closed');
+
+  const balance = portfolio?.balance ?? 1000;
+  // Biggest position first, smallest last - "column 1" is always the trade
+  // with the most money in it, matching how big a bet the bot actually made.
+  const positions = Object.entries(portfolio?.positions ?? {})
+    .sort((a, b) => b[1].amount_usd - a[1].amount_usd);
+  const closed = portfolio?.closed ?? [];
+
+  const invested = positions.reduce((s, [, p]) => s + p.amount_usd, 0);
+  const realizedPl = closed.reduce((s, c) => s + c.pnl_usd, 0);
+  const wins = closed.filter(c => c.pnl_usd >= 0).length;
+  const winRate = closed.length ? (wins / closed.length * 100) : null;
+
+  holdingsTitleEl.textContent = positions.length
+    ? `Sinu positsioonid (${positions.length}) — suurimast väikseimani`
+    : '';
+
+  // Render positions with a loading placeholder first (net worth needs
+  // every live price in hand before it can be computed, but the cards
+  // themselves can still appear immediately). Reuses the exact .coin-card
+  // look from the recommendations grid (medal badges, colored hero number,
+  // momentum sparkline, stat row) instead of a separate visual language.
+  const medalNames = { 1: 'TOP #1', 2: 'TOP #2', 3: 'TOP #3' };
+  if (positions.length === 0) {
+    posEl.innerHTML = `<div class="empty">Bot ei hoia hetkel ühtegi positsiooni. Iga uus "tänane soovitus" saab automaatselt 1/12 kontoväärtusest investeeritud.</div>`;
+  } else {
+    posEl.innerHTML = `<div class="coin-grid">${positions.map(([poolId, p], i) => {
+      const rank = i + 1;
+      const medal = rank <= 3 ? rank : null;
+      return `<div class="coin-card ${medal ? 'medal-' + medal : ''}" style="--net-color:${NET_COLOR_HEX[p.network]}; animation-delay:${Math.min(i * 35, 400)}ms" data-pool-id="${poolId}">
+        <div class="card-top">
+          ${medal ? `<span class="medal-badge medal-${medal}">${TROPHY_SVG}${medalNames[medal]}</span>` : `<span class="pos-badge">#${rank}</span>`}
+          <span class="net-badge"><span class="dot" style="background:${NET_COLOR[p.network]}"></span>${NET_LABEL[p.network]}</span>
+        </div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-hero pending h-pl">laen...</div>
+        <div class="card-hero-label h-pl-label">${timeAgo(p.entry_ts)} tagasi ostetud</div>
+        ${renderSparkline(hotState?.[poolId]?.history)}
+        <div class="card-stats">
+          <div><span class="stat-label">Alghind</span><span class="stat-val">${fmtPrice(p.entry_price_usd)}</span></div>
+          <div><span class="stat-label">Investeeritud</span><span class="stat-val">${fmtUsd(p.amount_usd)}</span></div>
+          <div><span class="stat-label">Väärtus nüüd</span><span class="stat-val h-val">—</span></div>
+        </div>
+        ${p.dca_count ? `<div class="tag-rows"><div class="tag-row"><span class="tag info"><span class="tag-dot"></span>Juurde ostetud</span></div></div>` : ''}
+        <div class="card-footer">
+          <span class="shield-badge">${SHIELD_SVG}${p.qty ? p.qty.toLocaleString('en-US', {maximumFractionDigits: 2}) : '—'} tk</span>
+          <a class="card-link" href="${geckoterminalLink(p.network, p.pool_address)}" target="_blank" rel="noopener">Graafik →</a>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  // Fetch every open position's live price in parallel, once, so both the
+  // per-position P/L cards AND the net-worth hero number use the same
+  // figures (fetching twice could show two slightly different prices).
+  const livePrices = await Promise.all(positions.map(async ([poolId, p]) => {
+    const price = await fetchLivePrice(p.network, p.pool_address);
+    return { poolId, p, price };
+  }));
+
+  let currentPositionsValue = 0;
+  livePrices.forEach(({ poolId, p, price }) => {
+    const card = posEl.querySelector(`.coin-card[data-pool-id="${CSS.escape(poolId)}"]`);
+    const plEl = card?.querySelector('.h-pl');
+    const labelEl = card?.querySelector('.h-pl-label');
+    const valEl = card?.querySelector('.h-val');
+    if (price == null || p.entry_price_usd <= 0) {
+      currentPositionsValue += p.amount_usd; // fall back to cost basis if the live fetch failed
+      if (plEl) { plEl.textContent = '—'; plEl.classList.remove('pending'); }
+      return;
+    }
+    const value = p.qty * price;
+    currentPositionsValue += value;
+    const pl = value - p.amount_usd;
+    const plPct = (pl / p.amount_usd) * 100;
+    const plCls = pctClass(pl);
+    if (plEl) {
+      plEl.classList.remove('pending');
+      plEl.classList.add(plCls);
+      plEl.textContent = fmtPct(plPct);
+    }
+    if (labelEl) {
+      labelEl.innerHTML = `<span class="pl-dollar ${plCls}">${pl >= 0 ? '+' : ''}${fmtUsd(pl)}</span> · ${timeAgo(p.entry_ts)} tagasi ostetud`;
+    }
+    if (valEl) {
+      valEl.textContent = fmtUsd(value);
+      valEl.classList.add(plCls);
+    }
+  });
+
+  const netWorth = balance + currentPositionsValue;
+  const totalReturn = netWorth - 1000;
+  const totalReturnPct = (totalReturn / 1000) * 100;
+  const moodClass = totalReturn > 0 ? 'winning' : totalReturn < 0 ? 'losing' : '';
+
+  heroEl.innerHTML = `<div class="portfolio-hero ${moodClass}">
+    <div class="portfolio-balance">
+      <div class="label">Net worth</div>
+      <div class="value ${pctClass(totalReturn)}" id="net-worth-value">${fmtUsdFull(balance)}</div>
+      <div class="starting ${pctClass(totalReturn)}">vs alginvesteering $1,000: ${totalReturn >= 0 ? '+' : ''}${fmtUsdFull(totalReturn)} (${fmtPct(totalReturnPct)})</div>
+    </div>
+    <div class="portfolio-stats">
+      <div class="stat"><div class="label">Vaba saldo</div><div class="val">${fmtUsd(balance)}</div></div>
+      <div class="stat"><div class="label">Positsioonides</div><div class="val">${fmtUsd(currentPositionsValue)}</div></div>
+      <div class="stat"><div class="label">Realiseeritud P/L</div><div class="val ${pctClass(realizedPl)}">${realizedPl >= 0 ? '+' : ''}${fmtUsd(realizedPl)}</div></div>
+      <div class="stat"><div class="label">Võiduprotsent</div><div class="val">${winRate != null ? winRate.toFixed(0) + '%' : '—'}</div></div>
+    </div>
+  </div>`;
+  animateNetWorth(document.getElementById('net-worth-value'), netWorth);
+
+  if (closed.length === 0) {
+    closedEl.innerHTML = `<div class="empty">Ühtegi tehingut pole veel suletud - positsioonid müüakse 6h checkpointi juures.</div>`;
+  } else {
+    const sortedClosed = [...closed].sort((a, b) => new Date(b.exit_ts) - new Date(a.exit_ts));
+    closedEl.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Token</th><th>Võrk</th><th class="num">Investeeritud</th><th class="num">Tulemus</th></tr></thead>
+      <tbody>${sortedClosed.map(c => `<tr>
+        <td class="row-name">${c.name}</td>
+        <td><span class="net-badge"><span class="dot" style="background:${NET_COLOR[c.network]}"></span>${NET_LABEL[c.network]}</span></td>
+        <td class="num mono">${fmtUsd(c.amount_usd)}</td>
+        <td class="num mono ${pctClass(c.pnl_usd)}">${c.pnl_usd >= 0 ? '+' : ''}${fmtUsd(c.pnl_usd)} (${fmtPct(c.pnl_pct)})</td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+}
+
+// ---- Network filter chips --------------------------------------------------
+function renderFilterChips(networksPresent, activeNetworks, onChange) {
+  const el = document.getElementById('net-filter');
+  const order = ['solana', 'base', 'bsc', 'eth', 'arbitrum', 'polygon_pos'].filter(n => networksPresent.has(n));
+  if (order.length <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = `<button class="chip ${activeNetworks.size === order.length ? 'active' : ''}" data-net="__all">Kõik</button>` +
+    order.map(n => `<button class="chip ${activeNetworks.has(n) ? 'active' : ''}" data-net="${n}"><span class="dot" style="background:${NET_COLOR_HEX[n]}"></span>${NET_LABEL[n]}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const net = btn.dataset.net;
+      if (net === '__all') { activeNetworks.clear(); order.forEach(n => activeNetworks.add(n)); }
+      else {
+        if (activeNetworks.size === order.length) { activeNetworks.clear(); activeNetworks.add(net); }
+        else if (activeNetworks.has(net) && activeNetworks.size > 1) { activeNetworks.delete(net); }
+        else { activeNetworks.add(net); }
+      }
+      renderFilterChips(networksPresent, activeNetworks, onChange);
+      onChange();
+    });
+  });
+}
+
+// ---- "Reeglid" panel: plain-language readout of the live trading params --
+// Mirrors the actual constants in scan_memecoins.py - if those numbers ever
+// change, update them here too so this never drifts from what the bot
+// really does.
+function renderRules() {
+  const el = document.getElementById('rules-content');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="rules-group">
+      <h3>1. Kandidaatide valik</h3>
+      <ul class="rules-list">
+        <li>Skannitakse <b>6 võrku</b> iga tsükli järel: Solana, Base, BSC, Ethereum, Arbitrum, Polygon.</li>
+        <li>Token peab olema hetkel <b>tõusutrendis</b>: 1h ja 6h hinnamuutus mõlemad plussis, ostutehinguid rohkem kui müügitehinguid viimase tunni jooksul.</li>
+        <li>Turukapitalisatsioon vähemalt <b>$50,000</b> - alla selle mikro-rug'e ei vaadata üldse.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>2. Turvakontroll</h3>
+      <ul class="rules-list">
+        <li><b>Solana</b> (RugCheck): mint- ja freeze-õigus peavad olema kustutatud, top 10 hoidja kokku ≤ 40%, ei tohi olla "danger" taseme riskimärget.</li>
+        <li><b>EVM võrgud</b> (GoPlus): ei tohi olla honeypot, mintitav, mustas nimekirjas ega ostmatu; omaniku+looja osalus kokku ≤ 20%; ostu- ja müügimaks kumbki ≤ 10%; <b>arendaja pole varem honeypot'i teinud</b> (GoPlus jälgib sama rahakoti ajalugu teiste tokenite peal).</li>
+        <li>Turvakontrolli mitte läbinud token ei jõua kunagi soovituste sekka ega osta ka bot seda.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>3. "Soovitatud" tase</h3>
+      <ul class="rules-list">
+        <li>Iga turvalist tokenit hinnatakse 7 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, <b>likviidsus ≥ 80% lukustatud</b>, <b>hoidjate arv kasvab</b> (≥5% juurdekasvu alates esimesest jälgitud kontrollist).</li>
+        <li>Ja 9 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt), <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites), <b>likviidsus lukustamata</b> (alla 50% lukus - see on kõige levinum viis, kuidas memecoinid päriselt "rug'itakse"), <b>hoidjate arv kahaneb</b> (inimesed lahkuvad) ja <b>turg on risk-off</b> (SOL on languses ≥5% viimase tunni jooksul - kogu memecoini turg kipub siis koos kukkuma, sõltumata konkreetse tokeni kvaliteedist).</li>
+        <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>4. Ostmine</h3>
+      <ul class="rules-list">
+        <li>Algsaldo <b>$1,000</b> mänguraha.</li>
+        <li>Iga ost on <b>1/12 kogu kontoväärtusest</b> (vaba saldo + kõikide avatud positsioonide sisenemissummad kokku) - kasvab ja kahaneb koos kontoga. Nt konto $1,200 → $100/tehing; $2,400 → $200/tehing; $600 → $50/tehing.</li>
+        <li>Korraga hoitakse maksimaalselt <b>12 positsiooni</b> - kui täis, oodatakse kuni mõni positsioon suletakse. Uut ostu ei tehta ka siis, kui vaba saldo jääb selle hetke 1/12 suurusest väiksemaks, isegi kui kohti on veel vaba.</li>
+        <li><b>Ethereumil hetkel ei osteta</b> - mõõtsime, et gas (~$4 kahe tehingu peale) sööb väikese tehingu juures liiga suure osa ära. Kandidaate ja tulemusi jälgitakse Ethereumil endiselt (andmete kogumiseks), lihtsalt mänguraha sinna ei panda.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>5. Juurdeostmine (DCA)</h3>
+      <ul class="rules-list">
+        <li>Käivitub kui positsioon on <b>10-20% miinuses</b> alghinnast (mitte lähemal stop-lossile kui see).</li>
+        <li>Ainult siis kui token näeb hetkel ikka veel terve välja, mitte lihtsalt odavam.</li>
+        <li>Juurdeost on <b>50% originaaltehingu suurusest</b>, maksimaalselt <b>1 kord</b> positsiooni kohta.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>6. Väljumine</h3>
+      <ul class="rules-list">
+        <li><b>Stop-loss:</b> müüakse kui hind on 30% alghinnast madalamal.</li>
+        <li><b>Trailing stop (astmeline):</b> lubatud tagasitõmbumine tipust sõltub sellest kui kaugel kasumis positsioon on käinud - 25% tavaliselt, 35% kui tipp oli +50-150%, 45% kui tipp oli +150% või rohkem. Nii ei müüda tugevat võitjat tavalise kõikumise peale liiga vara maha.</li>
+        <li><b>Varajane kasumi realiseerimine:</b> kui positsioon on kunagi käinud tipus vähemalt +15% kasumis JA hoog on hetkel peatunud (1h tootlus ≤ 0%), müüakse kohe ära - selle asemel, et oodata trailing-stop'i suuremat tagasitõmbumist või 6h piirangut. Kui token näitab veel jätkuvalt kasvu (1h tootlus üle 0%), jäetakse rahulikult lahti - see reegel ei sega kunagi tõelise "lennuki" jätkumist.</li>
+        <li><b>Momentumi kokkuvarisemine:</b> müüakse kui 1h tootlus langeb alla -15% ja müügisurve ületab ostusurve.</li>
+        <li><b>6h ajapiirang:</b> tavaliselt suletakse positsioon 6 tunni pärast. Erand - kui tootlus on siis juba ≥ 40% JA token näitab endiselt positiivset momentumit (1h ja 6h plussis), jäetakse positsioon lahti ilma edasise ajapiiranguta ja lastakse "lennata" - ainult stop-loss/trailing-stop/momentumi-kollaps saavad selle veel sulgeda.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>7. Tehingukulud (realistlik simulatsioon)</h3>
+      <ul class="rules-list">
+        <li><b>Gas:</b> iga ost ja müük maksab võrgupõhise hinnangulise summa (nt Solana ~$0.02, Ethereum ~$4 - Ethereumil on väikeste tehingute puhul see suur osa kogu tehingust).</li>
+        <li><b>Slippage:</b> hinnamõju sõltub tehingu suurusest võrreldes pooli enda likviidsusega ("reserve_in_usd") - suurem tehing väikeses poolis liigutab hinda rohkem, maksimaalselt 8%.</li>
+        <li><b>Ostu-/müügimaks:</b> kui token'il on GoPlus'i järgi maks (kuni lubatud 10% piirini), arvestatakse see reaalselt tehingu tulemusse sisse, mitte ei eirata.</li>
+        <li>Need kulud tähendavad, et isegi täpselt sama hinnaga ostmine ja müümine näitab väikest miinust - täpselt nagu päris kauplemisel.</li>
+      </ul>
+    </div>
+  `;
+}
+
+async function main() {
+  const [candData, labelRows, portfolio, hotState] = await Promise.all([
+    fetchJson('data/memecoin_candidates.json', null),
+    fetchJsonl('data/memecoin_labels.jsonl'),
+    fetchJson('data/memecoin_portfolio.json', { balance: 1000, positions: {}, closed: [] }),
+    fetchJson('data/memecoin_hot_state.json', {}),
+  ]);
+  const candidates = candData?.candidates ?? [];
+  renderPortfolio(portfolio, hotState);
+  maybeFireConfetti(portfolio, candidates);
+  renderLevelBadge(portfolio);
+
+  document.getElementById('updated-ts').textContent = candData?.timestamp
+    ? new Date(candData.timestamp).toLocaleString('et-EE', { dateStyle: 'medium', timeStyle: 'short' })
+    : 'pole veel jooksnud';
+
+  const dot = document.getElementById('pulse-dot');
+  const label = document.getElementById('pulse-label');
+  const ageMin = candData?.timestamp ? (Date.now() - new Date(candData.timestamp).getTime()) / 60000 : Infinity;
+  if (ageMin < 10) { dot.classList.add('live'); label.textContent = 'Live'; }
+  else if (ageMin < Infinity) { label.textContent = 'Passiivne'; }
+  else { label.textContent = 'Ootel'; }
+
+  const entries = labelRows.filter(r => r.row_type === 'entry');
+  const checkpoints = labelRows.filter(r => r.row_type === 'checkpoint');
+  const oneHour = checkpoints.filter(r => r.offset_minutes === 60 && r.return_pct != null);
+  const avg1h = oneHour.length ? oneHour.reduce((s, r) => s + r.return_pct, 0) / oneHour.length : null;
+
+  const tileDefs = [
+    renderTile('Aktiivseid kandidaate', 0, '', candData?.candidates?.length ?? 0, false),
+    renderTile('Tokeneid jälgitud', 0, '', entries.length, false),
+    renderTile('Checkpointe kogutud', 0, '', checkpoints.length, false),
+    renderTile('Keskm. 1h tootlus', avg1h != null ? fmtPct(avg1h) : '—', avg1h != null ? pctClass(avg1h) : '', avg1h != null ? avg1h : null, true),
+  ];
+  document.getElementById('tiles').innerHTML = tileDefs.map(t => t.html).join('');
+  tileDefs.forEach(t => {
+    if (t.target != null) {
+      const el = document.getElementById(t.id);
+      if (el) animateCount(el, t.target, t.isPct);
+    }
+  });
+
+  const networksPresent = new Set([...candidates.map(c => c.network), ...labelRows.map(r => r.network)]);
+  const activeNetworks = new Set(networksPresent);
+  let showAll = false;
+
+  function rerender() {
+    renderCoinGrid(candidates, activeNetworks, showAll, hotState);
+    renderScatter(candidates, activeNetworks);
+    renderCandidatesTable(candidates, activeNetworks);
+    renderOutcomes(labelRows, activeNetworks);
+    renderFeed(labelRows, activeNetworks);
+  }
+
+  // main() can be called again by the refresh button - clone-and-replace the
+  // toggle button first so we don't stack a second click listener on the
+  // same persistent DOM node (unlike the chip/grid content, this button
+  // isn't rebuilt via innerHTML on every render).
+  const oldToggle = document.getElementById('show-all-toggle');
+  const toggleBtn = oldToggle.cloneNode(true);
+  oldToggle.replaceWith(toggleBtn);
+  toggleBtn.addEventListener('click', () => {
+    showAll = !showAll;
+    rerender();
+  });
+
+  renderFilterChips(networksPresent, activeNetworks, rerender);
+  rerender();
+
+  renderRules();
+
+  // Same clone-and-replace guard as the toggle button above - these two
+  // buttons are persistent DOM nodes too, so a naive addEventListener on
+  // every main() call would stack duplicate listeners.
+  const oldDataToggle = document.getElementById('data-toggle');
+  const dataToggle = oldDataToggle.cloneNode(true);
+  oldDataToggle.replaceWith(dataToggle);
+  const oldRulesToggle = document.getElementById('rules-toggle');
+  const rulesToggle = oldRulesToggle.cloneNode(true);
+  oldRulesToggle.replaceWith(rulesToggle);
+
+  const dataPanel = document.getElementById('data-panel');
+  const rulesPanel = document.getElementById('rules-panel');
+  dataToggle.addEventListener('click', () => {
+    const opening = dataPanel.hidden;
+    dataPanel.hidden = !opening;
+    rulesPanel.hidden = true;
+    dataToggle.classList.toggle('active', opening);
+    rulesToggle.classList.remove('active');
+  });
+  rulesToggle.addEventListener('click', () => {
+    const opening = rulesPanel.hidden;
+    rulesPanel.hidden = !opening;
+    dataPanel.hidden = true;
+    rulesToggle.classList.toggle('active', opening);
+    dataToggle.classList.remove('active');
+  });
+}
+
+async function refreshDashboard() {
+  const btn = document.getElementById('refresh-btn');
+  if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
+  try {
+    await main();
+  } finally {
+    if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
+  }
+}
+
+document.getElementById('refresh-btn').addEventListener('click', refreshDashboard);
+main();
+</script>
+</body>
+</html>
