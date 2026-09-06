@@ -56,6 +56,7 @@ import ssl
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
@@ -82,7 +83,15 @@ RUN_SNAPSHOT_PATH = os.path.join(DATA_DIR, "pumpfun_run_snapshot.jsonl")  # per-
 DASHBOARD_PATH = os.path.join(DATA_DIR, "pumpfun_dashboard.json")
 
 PUMPPORTAL_WS_URL = "wss://pumpportal.fun/api/data?api-key={api_key}"
-PUMPPORTAL_API_KEY = os.environ.get("PUMPPORTAL_API_KEY")
+# .strip() guards against a trailing newline/whitespace sneaking into the
+# GitHub secret on copy-paste - confirmed live as the actual cause of a
+# production failure: PumpPortal's nginx returned a flat "400 Bad Request"
+# on the WS handshake (not an auth error), which is exactly what happens
+# when a stray \n breaks the HTTP request line before it ever reaches the
+# app that would check the key itself. Passed through urllib.parse.quote
+# when building the URL too, in case the key ever contains characters that
+# need escaping - cheap insurance, not a response to an observed failure.
+PUMPPORTAL_API_KEY = (os.environ.get("PUMPPORTAL_API_KEY") or "").strip() or None
 
 # Public endpoint by default. Confirmed working for getBalance/getAccountInfo
 # from a local machine during validation, but NOT yet proven from a GitHub
@@ -242,7 +251,7 @@ def listen_pumpfun_events(api_key, window_seconds=None):
         ws = None
         try:
             ws = websocket.create_connection(
-                PUMPPORTAL_WS_URL.format(api_key=api_key),
+                PUMPPORTAL_WS_URL.format(api_key=urllib.parse.quote(api_key, safe="")),
                 timeout=WS_RECV_TIMEOUT_SECONDS,
                 sslopt={"cert_reqs": ssl.CERT_REQUIRED},
             )
