@@ -1,5 +1,5 @@
 {
-  "balance": 111.64934259016235,
+  "balance": 216.52940780528485,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -81,18 +81,6 @@
       "peak_price_usd": 0.251717178924265,
       "amount_usd": 96.21242562681375,
       "qty": 389.03711259713083,
-      "sell_tax_pct": 0.0
-    },
-    "base_0x85f1aa3a70fedd1c52705c15baed143e675cd626": {
-      "network": "base",
-      "pool_address": "0x85f1aa3a70fedd1c52705c15baed143e675cd626",
-      "base_token_address": "0x9b5e262cf9bb04869ab40b19af91d2dc85761722",
-      "name": "NOCK / USDC",
-      "entry_ts": "2026-09-06T18:10:30.933472+00:00",
-      "entry_price_usd": 0.029427448538912,
-      "peak_price_usd": 0.0343807465851668,
-      "amount_usd": 96.78571452365532,
-      "qty": 3285.329602472542,
       "sell_tax_pct": 0.0
     },
     "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": {
@@ -2193,6 +2181,24 @@
       "pnl_usd": -29.6508312686274,
       "pnl_pct": -30.82,
       "exit_reason": "stop_loss"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x85f1aa3a70fedd1c52705c15baed143e675cd626",
+      "base_token_address": "0x9b5e262cf9bb04869ab40b19af91d2dc85761722",
+      "name": "NOCK / USDC",
+      "entry_ts": "2026-09-06T18:10:30.933472+00:00",
+      "entry_price_usd": 0.029427448538912,
+      "peak_price_usd": 0.0343807465851668,
+      "amount_usd": 96.78571452365532,
+      "qty": 3285.329602472542,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T19:35:41.903775+00:00",
+      "exit_price_usd": 0.0319565700218235,
+      "proceeds_usd": 104.88006521512251,
+      "pnl_usd": 8.094350691467199,
+      "pnl_pct": 8.36,
+      "exit_reason": "take_profit"
     }
   ]
 }
