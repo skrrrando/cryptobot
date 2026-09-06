@@ -1,5 +1,5 @@
 {
-  "balance": 531.4836074721359,
+  "balance": 679.8428176623802,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -45,30 +45,6 @@
       "peak_price_usd": 0.00308880170328389,
       "amount_usd": 77.72608126222042,
       "qty": 27196.047415012228,
-      "sell_tax_pct": 0.0
-    },
-    "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": {
-      "network": "solana",
-      "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
-      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-      "name": "STONK / SOL",
-      "entry_ts": "2026-09-06T08:55:23.843409+00:00",
-      "entry_price_usd": 0.1283311182033763,
-      "peak_price_usd": 0.1490880979688262,
-      "amount_usd": 82.10561569725633,
-      "qty": 639.5988085198933,
-      "sell_tax_pct": 0.0
-    },
-    "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
-      "network": "base",
-      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
-      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
-      "name": "BSTONK / USDC 0.3%",
-      "entry_ts": "2026-09-06T09:45:29.936086+00:00",
-      "entry_price_usd": 0.0093707070267878,
-      "peak_price_usd": 0.0110185508441177,
-      "amount_usd": 62.81079600840109,
-      "qty": 6690.656846203816,
       "sell_tax_pct": 0.0
     },
     "base_0x4e829f8a5213c42535ab84aa40bd4adcce9cba02": {
@@ -1885,6 +1861,42 @@
       "pnl_usd": -19.987143449454166,
       "pnl_pct": -18.03,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-06T08:55:23.843409+00:00",
+      "entry_price_usd": 0.1283311182033763,
+      "peak_price_usd": 0.1490880979688262,
+      "amount_usd": 82.10561569725633,
+      "qty": 639.5988085198933,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T11:11:13.851629+00:00",
+      "exit_price_usd": 0.1286221145551654,
+      "proceeds_usd": 82.24190539420259,
+      "pnl_usd": 0.13628969694626392,
+      "pnl_pct": 0.17,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
+      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
+      "name": "BSTONK / USDC 0.3%",
+      "entry_ts": "2026-09-06T09:45:29.936086+00:00",
+      "entry_price_usd": 0.0093707070267878,
+      "peak_price_usd": 0.0110185508441177,
+      "amount_usd": 62.81079600840109,
+      "qty": 6690.656846203816,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T11:11:13.851629+00:00",
+      "exit_price_usd": 0.0098993460386417,
+      "proceeds_usd": 66.11730479604176,
+      "pnl_usd": 3.3065087876406736,
+      "pnl_pct": 5.26,
+      "exit_reason": "take_profit"
     }
   ]
 }
