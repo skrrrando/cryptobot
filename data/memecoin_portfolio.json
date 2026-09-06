@@ -1,5 +1,5 @@
 {
-  "balance": 168.33640995131708,
+  "balance": 240.4494247713146,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -69,18 +69,6 @@
       "peak_price_usd": 0.251717178924265,
       "amount_usd": 96.21242562681375,
       "qty": 389.03711259713083,
-      "sell_tax_pct": 0.0
-    },
-    "bsc_0xb366d9e23acc1f71c421e04d3fce92c417ce63ce": {
-      "network": "bsc",
-      "pool_address": "0xb366d9e23acc1f71c421e04d3fce92c417ce63ce",
-      "base_token_address": "0xdbc6333a7d8bcd95f96641eda4d095e69f207777",
-      "name": "Bicat / QQQB",
-      "entry_ts": "2026-09-06T19:10:35.155609+00:00",
-      "entry_price_usd": 0.000499601714488777,
-      "peak_price_usd": 0.000535713588100887,
-      "amount_usd": 96.65380179210793,
-      "qty": 192953.11676146288,
       "sell_tax_pct": 0.0
     },
     "solana_D5ZQf8GFSDxDKo3t3gejCfnrTMttU16Dv2BHK3TNYatp": {
@@ -2253,6 +2241,24 @@
       "pnl_usd": -14.181906918784847,
       "pnl_pct": -14.18,
       "exit_reason": "momentum_collapse"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xb366d9e23acc1f71c421e04d3fce92c417ce63ce",
+      "base_token_address": "0xdbc6333a7d8bcd95f96641eda4d095e69f207777",
+      "name": "Bicat / QQQB",
+      "entry_ts": "2026-09-06T19:10:35.155609+00:00",
+      "entry_price_usd": 0.000499601714488777,
+      "peak_price_usd": 0.000535713588100887,
+      "amount_usd": 96.65380179210793,
+      "qty": 192953.11676146288,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T21:44:42.124922+00:00",
+      "exit_price_usd": 0.000374855965819616,
+      "proceeds_usd": 72.11301481999752,
+      "pnl_usd": -24.54078697211041,
+      "pnl_pct": -25.39,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
