@@ -74,6 +74,13 @@ CANDIDATES_PATH = os.path.join(DATA_DIR, "memecoin_candidates.json")
 PENDING_CHECKPOINTS_PATH = os.path.join(DATA_DIR, "memecoin_pending_checkpoints.json")
 LABELS_JSONL_PATH = os.path.join(DATA_DIR, "memecoin_labels.jsonl")
 PORTFOLIO_PATH = os.path.join(DATA_DIR, "memecoin_portfolio.json")
+# Net worth over time, so the homepage can show a real weekly change instead
+# of inferring one. Sampled at most hourly (see NETWORTH_SNAPSHOT_INTERVAL_SECONDS)
+# and capped, because this runs every ~5 minutes and would otherwise grow
+# without bound in a git-tracked file.
+NETWORTH_HISTORY_PATH = os.path.join(DATA_DIR, "memecoin_networth_history.json")
+NETWORTH_SNAPSHOT_INTERVAL_SECONDS = 3600
+NETWORTH_HISTORY_MAX_POINTS = 2000  # ~83 days of hourly samples
 
 NETWORKS = ["solana", "base", "bsc", "eth", "arbitrum", "polygon_pos"]
 # Still scanned/labeled/alerted on normally (keeps contributing to the
@@ -710,6 +717,29 @@ def classify_recommendation(pool, features, security, sol_h1):
     return good >= RECOMMENDED_MIN_GOOD and caution == 0
 
 
+def record_networth_snapshot(history, balance, positions_value, now_wall):
+    """Append a net-worth point, at most once per NETWORTH_SNAPSHOT_INTERVAL_SECONDS.
+
+    Duplicated in scan_pumpfun.py rather than shared, per this codebase's
+    convention that sleeves only ever share engine.load_json/save_json.
+    Mutates and returns `history`."""
+    now_ts = now_wall.timestamp()
+    if history:
+        try:
+            last_ts = datetime.fromisoformat(history[-1]["ts"]).timestamp()
+            if now_ts - last_ts < NETWORTH_SNAPSHOT_INTERVAL_SECONDS:
+                return history
+        except (KeyError, ValueError):
+            pass  # malformed tail entry - just append a fresh one
+    history.append({
+        "ts": now_wall.isoformat(),
+        "net_worth": round(balance + positions_value, 2),
+        "balance": round(balance, 2),
+        "positions_value": round(positions_value, 2),
+    })
+    return history[-NETWORTH_HISTORY_MAX_POINTS:]
+
+
 def default_portfolio():
     return {"balance": STARTING_BALANCE_USD, "positions": {}, "closed": []}
 
@@ -879,14 +909,21 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
     underneath as a fallback if none of the exit conditions fire first."""
     closed_positions = []
     dca_events = []
+    # Live mark-to-market of whatever is still open after this pass, so main()
+    # can record a real net worth without paying for every price a second
+    # time. A position whose price lookup fails falls back to its cost basis
+    # rather than silently counting as zero.
+    live_value = 0.0
     for i, (pool_id, pos) in enumerate(list(portfolio["positions"].items())):
         if i > 0:
             time.sleep(1.5)  # shares GeckoTerminal's rate limit with everything else
         current = fetch_pool_price(pos["network"], pos["pool_address"])
         if current is None:
+            live_value += pos["amount_usd"]
             continue
         price = _as_float(current.get("price_usd"))
         if price <= 0:
+            live_value += pos["amount_usd"]
             continue
 
         pos["peak_price_usd"] = max(pos.get("peak_price_usd", pos["entry_price_usd"]), price)
@@ -914,12 +951,14 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
             closed = maybe_sell(portfolio, pool_id, price, current.get("reserve_in_usd"), now_wall.isoformat(), reason=reason)
             if closed is not None:
                 closed_positions.append(closed)
-            continue
+            continue  # sold - its proceeds are back in balance, not in live_value
 
         dca = maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick, now_wall.isoformat())
         if dca is not None:
             dca_events.append(dca)
-    return closed_positions, dca_events
+        # Counted after DCA so an add made this tick is reflected in the value.
+        live_value += pos["qty"] * price
+    return closed_positions, dca_events, live_value
 
 
 # --- Outcome checkpoints / labels table -----------------------------------
@@ -1249,6 +1288,7 @@ def main():
     alerted = engine.load_json(ALERTED_PATH, {})
     pending_checkpoints = engine.load_json(PENDING_CHECKPOINTS_PATH, {})
     portfolio = engine.load_json(PORTFOLIO_PATH, default_portfolio())
+    networth_history = engine.load_json(NETWORTH_HISTORY_PATH, [])
 
     jsonl_buffer = []
     candidates_out = []
@@ -1266,7 +1306,8 @@ def main():
     prune_hot_state(hot_state, datetime.now(timezone.utc))
 
     exit_checks_this_tick = [0]
-    closed_early, dca_events = check_open_positions(portfolio, security_cache, exit_checks_this_tick, datetime.now(timezone.utc))
+    closed_early, dca_events, live_positions_value = check_open_positions(
+        portfolio, security_cache, exit_checks_this_tick, datetime.now(timezone.utc))
     for closed in closed_early:
         send_telegram(format_sell_alert(closed, portfolio["balance"]))
     for dca in dca_events:
@@ -1295,6 +1336,8 @@ def main():
     engine.save_json(ALERTED_PATH, alerted)
     engine.save_json(PENDING_CHECKPOINTS_PATH, pending_checkpoints)
     engine.save_json(PORTFOLIO_PATH, portfolio)
+    engine.save_json(NETWORTH_HISTORY_PATH, record_networth_snapshot(
+        networth_history, portfolio["balance"], live_positions_value, datetime.now(timezone.utc)))
     engine.save_json(CANDIDATES_PATH, {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "candidates": deduped_candidates,

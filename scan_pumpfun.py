@@ -81,6 +81,12 @@ RUN_SNAPSHOT_PATH = os.path.join(DATA_DIR, "pumpfun_run_snapshot.jsonl")  # per-
 # BONDING_HISTORY_WINDOW that file is megabytes, and valuing a position needs
 # the curve invariant anyway - which is this script's job, not the browser's.
 DASHBOARD_PATH = os.path.join(DATA_DIR, "pumpfun_dashboard.json")
+# Net worth over time for the homepage's weekly change - same shape and same
+# reasoning as scan_memecoins.py's copy (duplicated, not shared, per this
+# codebase's sleeve-independence convention).
+NETWORTH_HISTORY_PATH = os.path.join(DATA_DIR, "pumpfun_networth_history.json")
+NETWORTH_SNAPSHOT_INTERVAL_SECONDS = 3600
+NETWORTH_HISTORY_MAX_POINTS = 2000
 
 PUMPPORTAL_WS_URL = "wss://pumpportal.fun/api/data?api-key={api_key}"
 # .strip() guards against a trailing newline/whitespace sneaking into the
@@ -185,7 +191,11 @@ ALERT_COOLDOWN_SECONDS = 3600  # never re-alert the same mint within this window
 # the bot - it is a practice ground for making the call, not an autonomous
 # trader.
 MOONSHOT_STARTING_BALANCE_USD = 1000.0
-MOONSHOT_POSITION_SIZE_USD = 100.0  # fixed size, so outcomes are comparable
+# The size of each buy is chosen by the user, per trade: pressing BUY asks
+# "how much?" and the next number they send is the amount. Only the bounds
+# are fixed here.
+MOONSHOT_MIN_TRADE_USD = 5.0
+MOONSHOT_SUGGESTED_TRADE_USD = 100.0  # shown in the prompt as a sensible default
 
 # Pump.fun's own trading fee. Widely documented as 1% per trade; recorded as a
 # named constant rather than folded into the maths so it's easy to correct.
@@ -698,7 +708,7 @@ def format_moonshot_alert(candidate, price_usd):
         "",
         f"mint: {candidate.get('mint')}",
         "",
-        f"A BUY opens a ${MOONSHOT_POSITION_SIZE_USD:.0f} paper position. Play money only.",
+        "BUY will ask how much to put in. Play money only.",
     ]
     return "\n".join(lines)
 
@@ -715,27 +725,67 @@ def alert_keyboard(alert_id, mint):
     ]]}
 
 
+def record_networth_snapshot(history, balance, positions_value, now_wall):
+    """Append a net-worth point, at most once per NETWORTH_SNAPSHOT_INTERVAL_SECONDS.
+    Duplicated from scan_memecoins.py per the sleeve-independence convention."""
+    now_ts = now_wall.timestamp()
+    if history:
+        try:
+            last_ts = datetime.fromisoformat(history[-1]["ts"]).timestamp()
+            if now_ts - last_ts < NETWORTH_SNAPSHOT_INTERVAL_SECONDS:
+                return history
+        except (KeyError, ValueError):
+            pass
+    history.append({
+        "ts": now_wall.isoformat(),
+        "net_worth": round(balance + positions_value, 2),
+        "balance": round(balance, 2),
+        "positions_value": round(positions_value, 2),
+    })
+    return history[-NETWORTH_HISTORY_MAX_POINTS:]
+
+
+def _parse_amount(text):
+    """Read a dollar amount out of a chat reply. Tolerates '$50', '50 usd',
+    '12,50' and stray spaces; returns None if there's no sane positive number
+    in there, so a random chat message can't be mistaken for a trade size."""
+    cleaned = (text or "").strip().lower()
+    for junk in ("$", "usd", "dollar", "dollars", "€", "eur"):
+        cleaned = cleaned.replace(junk, "")
+    cleaned = cleaned.replace(",", ".").strip()
+    try:
+        amount = float(cleaned)
+    except ValueError:
+        return None
+    if amount <= 0 or amount != amount or amount == float("inf"):
+        return None
+    return round(amount, 2)
+
+
 def default_portfolio():
     return {"balance": MOONSHOT_STARTING_BALANCE_USD, "positions": {}, "closed": []}
 
 
-def open_position(portfolio, candidate, curve, sol_usd, timestamp):
-    """Only ever called from a user's BUY press. Fills against the curve's real
-    invariant (fee + slippage), not the quoted spot price."""
+def open_position(portfolio, candidate, curve, sol_usd, timestamp, amount_usd):
+    """Only ever called from a user's BUY press, with the dollar amount they
+    typed in reply to the alert. Fills against the curve's real invariant
+    (fee + slippage), not the quoted spot price."""
     mint = candidate["mint"]
     if mint in portfolio["positions"]:
         return None, "already holding this one"
     if not sol_usd or sol_usd <= 0:
         return None, "no SOL price available"
-    if portfolio["balance"] < MOONSHOT_POSITION_SIZE_USD:
-        return None, f"balance ${portfolio['balance']:.2f} below the ${MOONSHOT_POSITION_SIZE_USD:.0f} trade size"
+    if amount_usd < MOONSHOT_MIN_TRADE_USD:
+        return None, f"${amount_usd:.2f} is below the ${MOONSHOT_MIN_TRADE_USD:.0f} minimum"
+    if amount_usd > portfolio["balance"]:
+        return None, f"only ${portfolio['balance']:.2f} free"
 
-    sol_in = MOONSHOT_POSITION_SIZE_USD / sol_usd
+    sol_in = amount_usd / sol_usd
     qty, effective_price_sol, slippage_pct = simulate_curve_buy(curve, sol_in)
     if qty is None:
         return None, "curve data unusable for pricing"
 
-    portfolio["balance"] -= MOONSHOT_POSITION_SIZE_USD
+    portfolio["balance"] -= amount_usd
     spot = _as_float(curve.get("virtual_sol_reserves")) / _as_float(curve.get("virtual_token_reserves"))
     portfolio["positions"][mint] = {
         "mint": mint,
@@ -746,7 +796,7 @@ def open_position(portfolio, candidate, curve, sol_usd, timestamp):
         "entry_price_usd": effective_price_sol * sol_usd,   # what we ACTUALLY paid
         "entry_spot_price_usd": spot * sol_usd,             # what it was quoted at
         "entry_slippage_pct": slippage_pct,
-        "amount_usd": MOONSHOT_POSITION_SIZE_USD,
+        "amount_usd": amount_usd,
         "qty": qty,
         "entry_graduation_pct": candidate.get("graduation_pct"),
         "entry_score": candidate.get("score"),
@@ -1140,8 +1190,62 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
         offset_state["offset"] = update["update_id"] + 1
 
         message = update.get("message")
-        if message and (message.get("text") or "").strip().lower().startswith("/positions"):
-            send_positions_list(portfolio, bonding_state, sol_usd)
+        if message:
+            text = (message.get("text") or "").strip()
+            if text.lower().startswith("/positions"):
+                send_positions_list(portfolio, bonding_state, sol_usd)
+                continue
+            # A bare number answers an outstanding "how much?" from a BUY press.
+            awaiting = alerts_state.setdefault("awaiting_amount", {})
+            if awaiting and text:
+                amount = _parse_amount(text)
+                alert_id = next(iter(awaiting))
+                alert = pending.get(alert_id)
+                if amount is None:
+                    telegram_call("sendMessage", {
+                        "chat_id": TELEGRAM_CHAT_ID,
+                        "text": "That didn't look like a number. Send just the amount, e.g. 50",
+                    })
+                elif alert is None:
+                    awaiting.clear()
+                    telegram_call("sendMessage", {
+                        "chat_id": TELEGRAM_CHAT_ID,
+                        "text": "That signal is no longer pending.",
+                    })
+                else:
+                    history = (bonding_state.get(alert.get("bonding_curve_key")) or {}).get("history") or []
+                    curve = history[-1] if history else None
+                    pos, err = open_position(portfolio, alert, curve, sol_usd, timestamp, amount)
+                    if pos is None:
+                        # Keep both the question and the alert open so the user
+                        # can just send a different number.
+                        telegram_call("sendMessage", {
+                            "chat_id": TELEGRAM_CHAT_ID,
+                            "text": f"Could not buy: {err}. Send another amount, or press IGNORE.",
+                        })
+                    else:
+                        awaiting.clear()
+                        pending.pop(alert_id, None)
+                        # Now that it's actually bought, retire the original
+                        # alert's buttons - the decision is final.
+                        if alert.get("message_id"):
+                            telegram_call("editMessageReplyMarkup", {
+                                "chat_id": TELEGRAM_CHAT_ID,
+                                "message_id": alert["message_id"],
+                                "reply_markup": {},
+                            })
+                        record_decision_on_outcome(pending_outcomes, alert["mint"], "buy", timestamp)
+                        label_rows.append({"row_type": "decision", "decision": "buy",
+                                           "decided_ts": timestamp,
+                                           "entry_price_usd": pos["entry_price_usd"],
+                                           "entry_slippage_pct": pos["entry_slippage_pct"], **alert})
+                        telegram_call("sendMessage", {
+                            "chat_id": TELEGRAM_CHAT_ID,
+                            "text": (f"Bought ${pos['amount_usd']:.2f} of {alert.get('name')} "
+                                     f"(slippage {pos['entry_slippage_pct']:+.1f}%).\n"
+                                     f"Balance ${portfolio['balance']:.2f}"),
+                        })
+                continue
             continue
 
         cq = update.get("callback_query")
@@ -1156,33 +1260,38 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
         action, _, key = data.partition(":")
         note = "Unknown action"
 
-        if action in ("buy", "ignore"):
+        if action == "ignore":
             alert = pending.pop(key, None)
             if alert is None:
                 note = "That signal has already been answered."
-            elif action == "ignore":
+            else:
+                alerts_state.get("awaiting_amount", {}).pop(key, None)
                 record_decision_on_outcome(pending_outcomes, alert["mint"], "ignore", timestamp)
                 label_rows.append({"row_type": "decision", "decision": "ignore",
                                    "decided_ts": timestamp, **alert})
                 note = f"Ignored {alert.get('name')} - still tracking how it turns out."
+
+        elif action == "buy":
+            # BUY doesn't buy anything yet - it asks how much. The alert stays
+            # pending until an amount arrives (see the message branch above),
+            # so nothing is lost if the user never answers.
+            alert = pending.get(key)
+            if alert is None:
+                note = "That signal has already been answered."
             else:
-                history = (bonding_state.get(alert.get("bonding_curve_key")) or {}).get("history") or []
-                curve = history[-1] if history else None
-                pos, err = open_position(portfolio, alert, curve, sol_usd, timestamp)
-                if pos is None:
-                    note = f"Could not buy: {err}"
-                    # Put it back so a failed buy (e.g. a price lookup blip)
-                    # can still be answered next tick rather than vanishing.
-                    pending[key] = alert
-                else:
-                    record_decision_on_outcome(pending_outcomes, alert["mint"], "buy", timestamp)
-                    label_rows.append({"row_type": "decision", "decision": "buy",
-                                       "decided_ts": timestamp,
-                                       "entry_price_usd": pos["entry_price_usd"],
-                                       "entry_slippage_pct": pos["entry_slippage_pct"], **alert})
-                    note = (f"Bought ${pos['amount_usd']:.0f} of {alert.get('name')} "
-                            f"(slippage {pos['entry_slippage_pct']:+.1f}%). "
-                            f"Balance ${portfolio['balance']:.2f}")
+                awaiting = alerts_state.setdefault("awaiting_amount", {})
+                # Only one open "how much?" question at a time, otherwise a
+                # bare number in the chat would be ambiguous.
+                awaiting.clear()
+                awaiting[key] = {"alert_id": key, "asked_ts": timestamp}
+                note = f"How much? Send a number."
+                telegram_call("sendMessage", {
+                    "chat_id": chat_id or TELEGRAM_CHAT_ID,
+                    "text": (f"How much do you want to put into {alert.get('name')}?\n"
+                             f"Reply with just a number, e.g. {MOONSHOT_SUGGESTED_TRADE_USD:.0f}\n\n"
+                             f"Free balance: ${portfolio['balance']:.2f}  "
+                             f"(min ${MOONSHOT_MIN_TRADE_USD:.0f})"),
+                })
 
         elif action == "sell":
             held = portfolio["positions"].get(key) or {}
@@ -1201,9 +1310,15 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
 
         # Always answer, or the user's client spins until it times out.
         telegram_call("answerCallbackQuery", {"callback_query_id": cq_id, "text": note[:200]})
-        # Strip the buttons so the decision is visibly final and re-clicks are
-        # a no-op by construction rather than by careful state checking.
-        if chat_id and message_id and action in ("buy", "ignore", "sell"):
+        # BUY is not a decision yet - it only opens the "how much?" question,
+        # which already sent its own detailed prompt. So leave its buttons
+        # alone (the user must still be able to change their mind and press
+        # IGNORE) and don't echo the note a second time.
+        if action == "buy":
+            continue
+        # For a real decision: strip the buttons so it's visibly final and
+        # re-clicks are inert by construction rather than by state checking.
+        if chat_id and message_id and action in ("ignore", "sell"):
             telegram_call("editMessageReplyMarkup",
                           {"chat_id": chat_id, "message_id": message_id, "reply_markup": {}})
         if chat_id:
@@ -1489,8 +1604,13 @@ def main():
     engine.save_json(PORTFOLIO_PATH, portfolio)
     engine.save_json(TELEGRAM_OFFSET_PATH, offset_state)
     engine.save_json(OUTCOMES_PATH, pending_outcomes)
-    engine.save_json(DASHBOARD_PATH, build_dashboard_summary(
-        portfolio, pending_outcomes, bonding_state, sol_usd, timestamp))
+    summary = build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd, timestamp)
+    engine.save_json(DASHBOARD_PATH, summary)
+    # Reuses the summary's already-computed mark-to-market rather than
+    # re-valuing every position a second time.
+    engine.save_json(NETWORTH_HISTORY_PATH, record_networth_snapshot(
+        engine.load_json(NETWORTH_HISTORY_PATH, []),
+        summary["balance"], summary["positions_value"], now_wall))
 
     for notice in notices:
         if "errors" in notice:
