@@ -1,5 +1,5 @@
 {
-  "balance": 350.7633701866864,
+  "balance": 435.27024049949495,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -34,19 +34,6 @@
       "amount_usd": 44.194652272260704,
       "qty": 58126.419528444305,
       "sell_tax_pct": 0.0
-    },
-    "bsc_0xbae8327deb97de23940d877134cd16f1bed0f83d": {
-      "network": "bsc",
-      "pool_address": "0xbae8327deb97de23940d877134cd16f1bed0f83d",
-      "base_token_address": "0xf49725118cb0707b8706ffffe895f3ab16da7777",
-      "name": "b-money / BTCB",
-      "entry_ts": "2026-09-05T20:10:30.294454+00:00",
-      "entry_price_usd": 0.012697771917522417,
-      "peak_price_usd": 0.0138668423552401,
-      "amount_usd": 100.4259310532137,
-      "qty": 7908.941167436622,
-      "sell_tax_pct": 1.0,
-      "dca_count": 1
     },
     "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
       "network": "base",
@@ -1617,6 +1604,25 @@
       "proceeds_usd": 39.061302143060225,
       "pnl_usd": -7.497669256745937,
       "pnl_pct": -16.1,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xbae8327deb97de23940d877134cd16f1bed0f83d",
+      "base_token_address": "0xf49725118cb0707b8706ffffe895f3ab16da7777",
+      "name": "b-money / BTCB",
+      "entry_ts": "2026-09-05T20:10:30.294454+00:00",
+      "entry_price_usd": 0.012697771917522417,
+      "peak_price_usd": 0.0138668423552401,
+      "amount_usd": 100.4259310532137,
+      "qty": 7908.941167436622,
+      "sell_tax_pct": 1.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-06T02:11:16.400734+00:00",
+      "exit_price_usd": 0.0108143435257863,
+      "proceeds_usd": 84.50687031280853,
+      "pnl_usd": -15.919060740405172,
+      "pnl_pct": -15.85,
       "exit_reason": "timeout"
     }
   ]
