@@ -1,5 +1,5 @@
 {
-  "balance": 505.99045352931836,
+  "balance": 647.6397066266061,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -46,19 +46,6 @@
       "amount_usd": 43.527024049949496,
       "qty": 129677.38842278621,
       "sell_tax_pct": 0.0
-    },
-    "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": {
-      "network": "solana",
-      "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
-      "base_token_address": "CaWZeUM4FvX9dPkjGc2xHS6tSN3qJfTWyvaG77aM5o7h",
-      "name": "AGI / ANTHRP",
-      "entry_ts": "2026-09-06T03:55:22.404551+00:00",
-      "entry_price_usd": 0.0031864375389772485,
-      "peak_price_usd": 0.005318648350472686,
-      "amount_usd": 106.50481956700693,
-      "qty": 33424.417790782056,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "base_0x3bf7c28ed75855d4384796cb13e869e2309b27c15f06afe28cac8264db4f8286": {
       "network": "base",
@@ -1740,6 +1727,25 @@
       "pnl_usd": -17.331799491553348,
       "pnl_pct": -22.34,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
+      "base_token_address": "CaWZeUM4FvX9dPkjGc2xHS6tSN3qJfTWyvaG77aM5o7h",
+      "name": "AGI / ANTHRP",
+      "entry_ts": "2026-09-06T03:55:22.404551+00:00",
+      "entry_price_usd": 0.0031864375389772485,
+      "peak_price_usd": 0.005318648350472686,
+      "amount_usd": 106.50481956700693,
+      "qty": 33424.417790782056,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-06T05:32:00.832291+00:00",
+      "exit_price_usd": 0.004240581046517267,
+      "proceeds_usd": 141.64925309728775,
+      "pnl_usd": 35.14443353028082,
+      "pnl_pct": 33.0,
+      "exit_reason": "take_profit"
     }
   ]
 }
