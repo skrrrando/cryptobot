@@ -1,5 +1,5 @@
 {
-  "balance": 506.742234300835,
+  "balance": 579.5013409399028,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -54,23 +54,10 @@
       "name": "AST / WBNB",
       "entry_ts": "2026-09-06T11:15:30.764043+00:00",
       "entry_price_usd": 0.00736148629745785,
-      "peak_price_usd": 0.010486288219273,
+      "peak_price_usd": 0.0115242670478035,
       "amount_usd": 67.98428176623803,
       "qty": 9120.919824694565,
       "sell_tax_pct": 1.0
-    },
-    "solana_2RmBs1KYzkDuaRR4F8zU9rPR6KT16eCgJ9YS1c8XXZgQ": {
-      "network": "solana",
-      "pool_address": "2RmBs1KYzkDuaRR4F8zU9rPR6KT16eCgJ9YS1c8XXZgQ",
-      "base_token_address": "E4Ap4icMLwKot8rkkTbq5JkS5kZxt5XCE3yfxbzYBjHx",
-      "name": "BTC / WBTC",
-      "entry_ts": "2026-09-06T12:10:32.088561+00:00",
-      "entry_price_usd": 0.00574290611457973,
-      "peak_price_usd": 0.006750552019872425,
-      "amount_usd": 97.28737913921479,
-      "qty": 16940.44394914061,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": {
       "network": "solana",
@@ -1959,6 +1946,25 @@
       "pnl_usd": -3.413533050073383,
       "pnl_pct": -4.39,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "solana",
+      "pool_address": "2RmBs1KYzkDuaRR4F8zU9rPR6KT16eCgJ9YS1c8XXZgQ",
+      "base_token_address": "E4Ap4icMLwKot8rkkTbq5JkS5kZxt5XCE3yfxbzYBjHx",
+      "name": "BTC / WBTC",
+      "entry_ts": "2026-09-06T12:10:32.088561+00:00",
+      "entry_price_usd": 0.00574290611457973,
+      "peak_price_usd": 0.006750552019872425,
+      "amount_usd": 97.28737913921479,
+      "qty": 16940.44394914061,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-06T13:11:24.926371+00:00",
+      "exit_price_usd": 0.0042970955396030115,
+      "proceeds_usd": 72.75910663906781,
+      "pnl_usd": -24.528272500146983,
+      "pnl_pct": -25.21,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
