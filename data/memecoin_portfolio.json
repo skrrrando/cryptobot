@@ -1,5 +1,5 @@
 {
-  "balance": 167.98324604422777,
+  "balance": 142.62619543371892,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -45,18 +45,6 @@
       "peak_price_usd": 0.00565262482835627,
       "amount_usd": 65.61526018174517,
       "qty": 11857.493562688369,
-      "sell_tax_pct": 0.0
-    },
-    "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": {
-      "network": "bsc",
-      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
-      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
-      "name": "BEN / QQQB",
-      "entry_ts": "2026-09-06T16:10:32.876358+00:00",
-      "entry_price_usd": 0.00553816789885549,
-      "peak_price_usd": 0.0064230113306727,
-      "amount_usd": 60.681006265979356,
-      "qty": 10927.527108225173,
       "sell_tax_pct": 0.0
     },
     "base_0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd": {
@@ -114,7 +102,7 @@
       "name": "NOCK / USDC",
       "entry_ts": "2026-09-06T18:10:30.933472+00:00",
       "entry_price_usd": 0.029427448538912,
-      "peak_price_usd": 0.0318871969073449,
+      "peak_price_usd": 0.0321745081452413,
       "amount_usd": 96.78571452365532,
       "qty": 3285.329602472542,
       "sell_tax_pct": 0.0
@@ -129,6 +117,18 @@
       "peak_price_usd": 0.013637195910027019,
       "amount_usd": 96.78571452365532,
       "qty": 7094.487885224074,
+      "sell_tax_pct": 0.0
+    },
+    "bsc_0xb366d9e23acc1f71c421e04d3fce92c417ce63ce": {
+      "network": "bsc",
+      "pool_address": "0xb366d9e23acc1f71c421e04d3fce92c417ce63ce",
+      "base_token_address": "0xdbc6333a7d8bcd95f96641eda4d095e69f207777",
+      "name": "Bicat / QQQB",
+      "entry_ts": "2026-09-06T19:10:35.155609+00:00",
+      "entry_price_usd": 0.000499601714488777,
+      "peak_price_usd": 0.00053551363101884,
+      "amount_usd": 96.65380179210793,
+      "qty": 192953.11676146288,
       "sell_tax_pct": 0.0
     }
   },
@@ -2157,6 +2157,24 @@
       "pnl_usd": -1.5829527785685258,
       "pnl_pct": -2.11,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
+      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
+      "name": "BEN / QQQB",
+      "entry_ts": "2026-09-06T16:10:32.876358+00:00",
+      "entry_price_usd": 0.00553816789885549,
+      "peak_price_usd": 0.00653969154682487,
+      "amount_usd": 60.681006265979356,
+      "qty": 10927.527108225173,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T19:11:14.803513+00:00",
+      "exit_price_usd": 0.00653969154682487,
+      "proceeds_usd": 71.29675118159909,
+      "pnl_usd": 10.615744915619736,
+      "pnl_pct": 17.49,
+      "exit_reason": "take_profit"
     }
   ]
 }
