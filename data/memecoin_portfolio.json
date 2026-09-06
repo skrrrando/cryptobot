@@ -1,5 +1,5 @@
 {
-  "balance": 113.00492263924643,
+  "balance": 174.68651270694096,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -66,7 +66,7 @@
       "name": "\u5b59\u5c0f\u5723 / WBNB",
       "entry_ts": "2026-09-06T16:35:25.376194+00:00",
       "entry_price_usd": 0.000335973195069055,
-      "peak_price_usd": 0.000338581944615579,
+      "peak_price_usd": 0.000345238221551113,
       "amount_usd": 97.63317976685721,
       "qty": 280993.6071673761,
       "sell_tax_pct": 3.0
@@ -117,18 +117,6 @@
       "peak_price_usd": 0.0354023851267839,
       "amount_usd": 95.7420738203129,
       "qty": 2701.3986943323944,
-      "sell_tax_pct": 0.0
-    },
-    "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": {
-      "network": "bsc",
-      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
-      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
-      "name": "BEN / QQQB",
-      "entry_ts": "2026-09-06T20:40:32.427736+00:00",
-      "entry_price_usd": 0.0125006479414558,
-      "peak_price_usd": 0.0125105960820503,
-      "amount_usd": 94.93970545221579,
-      "qty": 7581.205340941613,
       "sell_tax_pct": 0.0
     }
   },
@@ -2229,6 +2217,24 @@
       "pnl_usd": -9.628420417165046,
       "pnl_pct": -9.95,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
+      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
+      "name": "BEN / QQQB",
+      "entry_ts": "2026-09-06T20:40:32.427736+00:00",
+      "entry_price_usd": 0.0125006479414558,
+      "peak_price_usd": 0.0125105960820503,
+      "amount_usd": 94.93970545221579,
+      "qty": 7581.205340941613,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T20:56:38.564023+00:00",
+      "exit_price_usd": 0.00815726349186858,
+      "proceeds_usd": 61.681590067694536,
+      "pnl_usd": -33.258115384521254,
+      "pnl_pct": -35.03,
+      "exit_reason": "stop_loss"
     }
   ]
 }
