@@ -1,5 +1,5 @@
 {
-  "balance": 622.139758253951,
+  "balance": 710.0321304467128,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -47,18 +47,6 @@
       "qty": 26505.49389938188,
       "sell_tax_pct": 1.0,
       "dca_count": 1
-    },
-    "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": {
-      "network": "solana",
-      "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
-      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-      "name": "STONK / SOL",
-      "entry_ts": "2026-09-06T00:15:29.498598+00:00",
-      "entry_price_usd": 0.04805807579530071,
-      "peak_price_usd": 0.10849124932838718,
-      "amount_usd": 45.97074003813662,
-      "qty": 956.0857282604969,
-      "sell_tax_pct": 0.0
     },
     "bsc_0x19b2caf222446d28906d0f3e66c877379951cbcb": {
       "network": "bsc",
@@ -1671,6 +1659,24 @@
       "proceeds_usd": 70.58992280774714,
       "pnl_usd": 27.89673608132962,
       "pnl_pct": 65.34,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "solana",
+      "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-06T00:15:29.498598+00:00",
+      "entry_price_usd": 0.04805807579530071,
+      "peak_price_usd": 0.10849124932838718,
+      "amount_usd": 45.97074003813662,
+      "qty": 956.0857282604969,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T03:42:03.082720+00:00",
+      "exit_price_usd": 0.09195852739972464,
+      "proceeds_usd": 87.89237219276185,
+      "pnl_usd": 41.921632154625236,
+      "pnl_pct": 91.19,
       "exit_reason": "take_profit"
     }
   ]
