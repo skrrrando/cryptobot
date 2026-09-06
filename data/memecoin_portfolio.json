@@ -1,5 +1,5 @@
 {
-  "balance": 582.3316688143568,
+  "balance": 648.5825275947652,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -58,19 +58,6 @@
       "amount_usd": 65.61526018174517,
       "qty": 11857.493562688369,
       "sell_tax_pct": 0.0
-    },
-    "base_0x3bf7c28ed75855d4384796cb13e869e2309b27c15f06afe28cac8264db4f8286": {
-      "network": "base",
-      "pool_address": "0x3bf7c28ed75855d4384796cb13e869e2309b27c15f06afe28cac8264db4f8286",
-      "base_token_address": "0x28c74b28429df12d1f39f244f5c72fd472847a6b",
-      "name": "BALD / wtCOIN 0.3%",
-      "entry_ts": "2026-09-06T11:00:52.673033+00:00",
-      "entry_price_usd": 0.0008930563753873364,
-      "peak_price_usd": 0.000925337454960855,
-      "amount_usd": 88.58060124535598,
-      "qty": 99188.14051009579,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "bsc_0xf49d9c79a07922d3846c762c73b4df65205ef772": {
       "network": "bsc",
@@ -1910,6 +1897,25 @@
       "pnl_usd": 3.3065087876406736,
       "pnl_pct": 5.26,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x3bf7c28ed75855d4384796cb13e869e2309b27c15f06afe28cac8264db4f8286",
+      "base_token_address": "0x28c74b28429df12d1f39f244f5c72fd472847a6b",
+      "name": "BALD / wtCOIN 0.3%",
+      "entry_ts": "2026-09-06T11:00:52.673033+00:00",
+      "entry_price_usd": 0.0008930563753873364,
+      "peak_price_usd": 0.000925337454960855,
+      "amount_usd": 88.58060124535598,
+      "qty": 99188.14051009579,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-06T12:01:52.353914+00:00",
+      "exit_price_usd": 0.000669233564739235,
+      "proceeds_usd": 66.25085878040835,
+      "pnl_usd": -22.32974246494763,
+      "pnl_pct": -25.21,
+      "exit_reason": "trailing_stop"
     }
   ]
 }
