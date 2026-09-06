@@ -1,5 +1,5 @@
 {
-  "balance": 391.74321644954546,
+  "balance": 442.4017766192251,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -72,18 +72,6 @@
       "sell_tax_pct": 1.0,
       "dca_count": 1
     },
-    "solana_42SrahWLALtSf9uHs8JsjvwjJXj5gLbEnQCjXkyK4Eho": {
-      "network": "solana",
-      "pool_address": "42SrahWLALtSf9uHs8JsjvwjJXj5gLbEnQCjXkyK4Eho",
-      "base_token_address": "7nLukVng5teXze14rum9v57juXLjUp7JJnCveko1pump",
-      "name": "Martians / SOL",
-      "entry_ts": "2026-09-06T00:06:03.862577+00:00",
-      "entry_price_usd": 0.0004948698321579528,
-      "peak_price_usd": 0.0005039519293442861,
-      "amount_usd": 51.07860004237402,
-      "qty": 103110.16610878447,
-      "sell_tax_pct": 0.0
-    },
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": {
       "network": "solana",
       "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
@@ -91,7 +79,7 @@
       "name": "STONK / SOL",
       "entry_ts": "2026-09-06T00:15:29.498598+00:00",
       "entry_price_usd": 0.04805807579530071,
-      "peak_price_usd": 0.07252362751908599,
+      "peak_price_usd": 0.087074572177213,
       "amount_usd": 45.97074003813662,
       "qty": 956.0857282604969,
       "sell_tax_pct": 0.0
@@ -1635,6 +1623,24 @@
       "proceeds_usd": 84.50687031280853,
       "pnl_usd": -15.919060740405172,
       "pnl_pct": -15.85,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "42SrahWLALtSf9uHs8JsjvwjJXj5gLbEnQCjXkyK4Eho",
+      "base_token_address": "7nLukVng5teXze14rum9v57juXLjUp7JJnCveko1pump",
+      "name": "Martians / SOL",
+      "entry_ts": "2026-09-06T00:06:03.862577+00:00",
+      "entry_price_usd": 0.0004948698321579528,
+      "peak_price_usd": 0.0005039519293442861,
+      "amount_usd": 51.07860004237402,
+      "qty": 103110.16610878447,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T02:26:28.066351+00:00",
+      "exit_price_usd": 0.0004918118197789927,
+      "proceeds_usd": 50.65856016967961,
+      "pnl_usd": -0.4200398726944101,
+      "pnl_pct": -0.82,
       "exit_reason": "timeout"
     }
   ]
