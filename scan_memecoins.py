@@ -155,27 +155,10 @@ MAX_CHECKPOINT_LOOKUPS_PER_TICK = 8  # defensive cap, same rationale as security
 # price fetch instead of costing extra API calls. Purely play money - this
 # never touches broker.py/engine.py or anything resembling real trading.
 STARTING_BALANCE_USD = 1000.0
-FIXED_TRADE_SIZE_USD = 100.0    # every buy is exactly this - was 10% of current
-                                 # balance, which meant no two trades were ever
-                                 # the same size (a real run showed $44-$145 for
-                                 # the same nominal "buy"), muddying any later
-                                 # comparison of win rate / profit factor across
-                                 # trades. A fixed size makes every trade's %
-                                 # and $ return the same number and directly
-                                 # comparable. Trade-off: unlike percentage-of-
-                                 # balance sizing, this no longer auto-shrinks
-                                 # with a falling balance or auto-grows with a
-                                 # rising one - deliberate for this data-
-                                 # collection phase, revisit if/when compounding
-                                 # the balance itself becomes the goal.
-MIN_TRADE_USD = 20.0            # sanity floor for DCA adds (0.5x FIXED_TRADE_SIZE_USD);
-                                 # never binds on a fresh buy now that size is fixed
+MIN_TRADE_USD = 20.0            # below this a slice is too small to matter - see
+                                 # compute_trade_size_usd; also the sanity floor for DCA adds
 MAX_CONCURRENT_POSITIONS = 12   # once full, hold off buying until a position closes and frees a slot -
-                                 # more slots means a single lingering red position blocks less of the
-                                 # book while candidates that are currently green wait for a free one.
-                                 # Independent of the cap: a buy also needs balance >= FIXED_TRADE_SIZE_USD -
-                                 # e.g. a $1,100 balance with 11 of 12 slots full still can't open a 12th
-                                 # if the free cash itself has dropped below $100.
+                                 # ALSO the divisor for trade size - see compute_trade_size_usd.
 EXIT_OFFSET_MINUTES = 360  # sell at the 6h checkpoint
 GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
@@ -731,6 +714,27 @@ def default_portfolio():
     return {"balance": STARTING_BALANCE_USD, "positions": {}, "closed": []}
 
 
+def compute_trade_size_usd(portfolio):
+    """Each trade gets 1/MAX_CONCURRENT_POSITIONS of the account's total value:
+    free cash plus the cost basis of every currently open position (NOT live
+    mark-to-market - that would need re-fetching a price for every open
+    position on every single buy decision, multiplying GeckoTerminal calls for
+    no real gain in accuracy). $1,200 total -> $100/slot; $2,400 -> $200/slot;
+    $600 -> $50/slot; recomputed fresh at every buy so it tracks the account
+    up or down as trades actually close.
+
+    This is deliberately NOT balance-alone (i.e. not free cash / N): buying a
+    position moves money from free balance into that position's cost basis, so
+    total account value is unchanged by the act of buying itself. Sizing off
+    total value is what makes it invariant to simply filling slots - sizing
+    off free cash alone is exactly the bug fixed earlier (percentage-of-
+    remaining-FREE-balance sizing shrunk every subsequent buy in the same
+    batch even though nothing had actually been won or lost)."""
+    invested = sum(pos["amount_usd"] for pos in portfolio["positions"].values())
+    net_worth = portfolio["balance"] + invested
+    return net_worth / MAX_CONCURRENT_POSITIONS
+
+
 def maybe_buy(portfolio, pool, security, timestamp):
     pool_id = pool["id"]
     if pool_id in portfolio["positions"]:
@@ -740,9 +744,11 @@ def maybe_buy(portfolio, pool, security, timestamp):
     price = _as_float(pool.get("price_usd"))
     if price <= 0:
         return None
-    if portfolio["balance"] < FIXED_TRADE_SIZE_USD:
+    amount = compute_trade_size_usd(portfolio)
+    if amount < MIN_TRADE_USD:
+        return None  # account has shrunk enough that a 1/12th slice isn't worth it
+    if portfolio["balance"] < amount:
         return None  # free cash itself is short, independent of the slot cap
-    amount = FIXED_TRADE_SIZE_USD
 
     gas_usd = estimate_gas_usd(pool["network"])
     net_usd = amount - gas_usd
