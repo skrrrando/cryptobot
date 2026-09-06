@@ -1,5 +1,5 @@
 {
-  "balance": 499.08896585240626,
+  "balance": 622.139758253951,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -35,18 +35,6 @@
       "qty": 58126.419528444305,
       "sell_tax_pct": 0.0
     },
-    "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
-      "network": "base",
-      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
-      "name": "SOL / USDC 0.017%",
-      "entry_ts": "2026-09-05T21:35:23.760472+00:00",
-      "entry_price_usd": 103.631712134277,
-      "peak_price_usd": 104.955030746556,
-      "amount_usd": 51.8458826087288,
-      "qty": 0.4992798965624376,
-      "sell_tax_pct": 0.0
-    },
     "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": {
       "network": "bsc",
       "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
@@ -72,18 +60,6 @@
       "qty": 956.0857282604969,
       "sell_tax_pct": 0.0
     },
-    "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": {
-      "network": "arbitrum",
-      "pool_address": "0x628854f0cfd7debd6e04361421ee9c06c77048c3",
-      "base_token_address": "0x018d6a98555686be1ca5b6896ef6c42cf67e2bd1",
-      "name": "ODYS / WETH 1%",
-      "entry_ts": "2026-09-06T00:35:23.541158+00:00",
-      "entry_price_usd": 0.00183129323508865,
-      "peak_price_usd": 0.0033818570790218,
-      "amount_usd": 42.69318672641752,
-      "qty": 23225.45354743486,
-      "sell_tax_pct": 0.0
-    },
     "bsc_0x19b2caf222446d28906d0f3e66c877379951cbcb": {
       "network": "bsc",
       "pool_address": "0x19b2caf222446d28906d0f3e66c877379951cbcb",
@@ -103,7 +79,7 @@
       "name": "STONKEX / WETH 1%",
       "entry_ts": "2026-09-06T02:30:41.319226+00:00",
       "entry_price_usd": 0.00924431784149773,
-      "peak_price_usd": 0.0146979478860738,
+      "peak_price_usd": 0.0156416068687607,
       "amount_usd": 44.24017766192251,
       "qty": 4774.401017479626,
       "sell_tax_pct": 0.0
@@ -1659,6 +1635,42 @@
       "proceeds_usd": 100.92736689510372,
       "pnl_usd": 58.932201982033384,
       "pnl_pct": 140.33,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "name": "SOL / USDC 0.017%",
+      "entry_ts": "2026-09-05T21:35:23.760472+00:00",
+      "entry_price_usd": 103.631712134277,
+      "peak_price_usd": 104.955030746556,
+      "amount_usd": 51.8458826087288,
+      "qty": 0.4992798965624376,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T03:36:26.518967+00:00",
+      "exit_price_usd": 105.282749838774,
+      "proceeds_usd": 52.46086959379753,
+      "pnl_usd": 0.6149869850687324,
+      "pnl_pct": 1.19,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "arbitrum",
+      "pool_address": "0x628854f0cfd7debd6e04361421ee9c06c77048c3",
+      "base_token_address": "0x018d6a98555686be1ca5b6896ef6c42cf67e2bd1",
+      "name": "ODYS / WETH 1%",
+      "entry_ts": "2026-09-06T00:35:23.541158+00:00",
+      "entry_price_usd": 0.00183129323508865,
+      "peak_price_usd": 0.0033818570790218,
+      "amount_usd": 42.69318672641752,
+      "qty": 23225.45354743486,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T03:37:01.763178+00:00",
+      "exit_price_usd": 0.00304674832408569,
+      "proceeds_usd": 70.58992280774714,
+      "pnl_usd": 27.89673608132962,
+      "pnl_pct": 65.34,
       "exit_reason": "take_profit"
     }
   ]
