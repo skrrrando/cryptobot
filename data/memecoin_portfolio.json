@@ -1,5 +1,5 @@
 {
-  "balance": 174.68651270694096,
+  "balance": 168.33640995131708,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -47,18 +47,6 @@
       "qty": 11857.493562688369,
       "sell_tax_pct": 0.0
     },
-    "base_0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd": {
-      "network": "base",
-      "pool_address": "0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd",
-      "base_token_address": "0xf5f11bc9be9d6690f795d04d2fc9bdd097008a2b",
-      "name": "BPAD / USDC 1%",
-      "entry_ts": "2026-09-06T16:20:34.013046+00:00",
-      "entry_price_usd": 0.000422661494666636,
-      "peak_price_usd": 0.000462951953482202,
-      "amount_usd": 100.0,
-      "qty": 236013.05532066198,
-      "sell_tax_pct": 0.0
-    },
     "bsc_0x38fd5142c556b5016e48edba9eee48dbc7c3fb72": {
       "network": "bsc",
       "pool_address": "0x38fd5142c556b5016e48edba9eee48dbc7c3fb72",
@@ -66,7 +54,7 @@
       "name": "\u5b59\u5c0f\u5723 / WBNB",
       "entry_ts": "2026-09-06T16:35:25.376194+00:00",
       "entry_price_usd": 0.000335973195069055,
-      "peak_price_usd": 0.000354246434765394,
+      "peak_price_usd": 0.000360040738708966,
       "amount_usd": 97.63317976685721,
       "qty": 280993.6071673761,
       "sell_tax_pct": 3.0
@@ -117,6 +105,18 @@
       "peak_price_usd": 0.0354023851267839,
       "amount_usd": 95.7420738203129,
       "qty": 2701.3986943323944,
+      "sell_tax_pct": 0.0
+    },
+    "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
+      "network": "base",
+      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "name": "SOL / USDC 0.032%",
+      "entry_ts": "2026-09-06T21:05:22.967899+00:00",
+      "entry_price_usd": 105.871384604495,
+      "peak_price_usd": 105.871384604495,
+      "amount_usd": 92.16819583683902,
+      "qty": 0.8694863793909984,
       "sell_tax_pct": 0.0
     }
   },
@@ -2235,6 +2235,24 @@
       "pnl_usd": -33.258115384521254,
       "pnl_pct": -35.03,
       "exit_reason": "stop_loss"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd",
+      "base_token_address": "0xf5f11bc9be9d6690f795d04d2fc9bdd097008a2b",
+      "name": "BPAD / USDC 1%",
+      "entry_ts": "2026-09-06T16:20:34.013046+00:00",
+      "entry_price_usd": 0.000422661494666636,
+      "peak_price_usd": 0.000462951953482202,
+      "amount_usd": 100.0,
+      "qty": 236013.05532066198,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-06T21:06:16.874484+00:00",
+      "exit_price_usd": 0.000364532701808257,
+      "proceeds_usd": 85.81809308121515,
+      "pnl_usd": -14.181906918784847,
+      "pnl_pct": -14.18,
+      "exit_reason": "momentum_collapse"
     }
   ]
 }
