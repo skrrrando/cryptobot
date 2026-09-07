@@ -936,7 +936,7 @@ def passes_stage1(entry, now_wall):
     return True, None
 
 
-def score_candidate(entry, security):
+def score_candidate(entry, security, dev=None):
     """Combine the surviving signals into one number.
 
     Still hand-weighted rather than fitted - there is nowhere near enough
@@ -963,6 +963,25 @@ def score_candidate(entry, security):
     the score on momentum alone. Deliberately NOT tuned to perfectly separate
     those 8 points: a rule that cleanly splits 8 observations is far more
     likely to be a curve-fit than an edge.
+
+    dev's creator track record was added later, from dev_history - a much
+    bigger sample (thousands of creators, not 8 signals) split three ways by
+    launch position and prior outcome:
+      - creator's first-ever observed launch: 7.89% graduate (n=5592)
+      - repeat launch, creator has NEVER graduated before:  1.41% (n=7966)
+      - repeat launch, creator HAS graduated before:         5.19% (n=1195)
+    The gap between "never graduated despite repeat attempts" and either other
+    group is large and highly significant (z=18.8 / z=8.9) - a wallet that has
+    tried more than once and never once succeeded is a real, distinct risk
+    signal, not noise. Deliberately NOT rewarding "first-ever" over "unknown"
+    even though it measured highest (7.89%) - that number aggregates every
+    creator's first attempt, including future serial failures whose first one
+    just hasn't happened yet, and the gap to the proven-repeat-winner group is
+    real but far weaker (z=3.2) than the failure signal. Only the two robust,
+    unambiguous ends are scored: proven repeat winner gets rewarded, proven
+    repeat failure gets penalized, everything else (including "no history at
+    all", which is most candidates - see the plan's own cold-start caveat) is
+    neutral.
     """
     history = entry.get("history") or []
     latest = history[-1] if history else {}
@@ -989,9 +1008,14 @@ def score_candidate(entry, security):
         conc_pts = max(0.0, 30.0 * (1 - (conc - 10.0) / span))
 
     dev_pct = (security or {}).get("dev_holding_pct")
-    dev_pts = 10.0 if (dev_pct is not None and dev_pct <= 1.0) else 0.0
+    dev_holding_pts = 10.0 if (dev_pct is not None and dev_pct <= 1.0) else 0.0
 
-    return round(progress_pts + velocity_pts + holder_pts + conc_pts + dev_pts, 1)
+    dev_track_pts = 0.0
+    if dev and dev.get("launches_seen", 0) >= 2:
+        dev_track_pts = 15.0 if dev.get("graduated", 0) >= 1 else -20.0
+
+    return round(progress_pts + velocity_pts + holder_pts + conc_pts
+                 + dev_holding_pts + dev_track_pts, 1)
 
 
 def prune_bonding_state(bonding_state, now_wall, protected_keys=frozenset()):
@@ -1676,6 +1700,7 @@ def main():
         )
         if security is None or not security.get("passed"):
             continue
+        dev = dev_stats(dev_history, entry.get("creator"))
         candidates.append({
             "bonding_curve_key": key,
             "mint": entry["mint"],
@@ -1692,8 +1717,8 @@ def main():
             "sol_per_min": compute_velocity(entry["history"]),
             "samples": len(entry["history"]),
             "security": security,
-            "dev_stats": dev_stats(dev_history, entry.get("creator")),
-            "score": score_candidate(entry, security),
+            "dev_stats": dev,
+            "score": score_candidate(entry, security, dev),
         })
 
     # ---- Stage 3: rank, alert, and collect the user's decisions -----------
