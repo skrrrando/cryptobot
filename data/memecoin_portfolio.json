@@ -1,5 +1,5 @@
 {
-  "balance": 306.1383419130812,
+  "balance": 326.0484828603942,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -11,18 +11,6 @@
       "peak_price_usd": 0.394735271291954,
       "amount_usd": 145.19378588112022,
       "qty": 393.9763785721547
-    },
-    "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
-      "network": "base",
-      "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
-      "base_token_address": "0xa4a2e2ca3fbfe21aed83471d28b6f65a233c6e00",
-      "name": "TIBBIR / VIRTUAL",
-      "entry_ts": "2026-09-06T17:45:34.623896+00:00",
-      "entry_price_usd": 0.247045017151728,
-      "peak_price_usd": 0.251717178924265,
-      "amount_usd": 96.21242562681375,
-      "qty": 389.03711259713083,
-      "sell_tax_pct": 0.0
     },
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": {
       "network": "base",
@@ -67,10 +55,23 @@
       "name": "OTC / SOL",
       "entry_ts": "2026-09-07T13:15:32.833372+00:00",
       "entry_price_usd": 0.015933893090844753,
-      "peak_price_usd": 0.018024762792587818,
+      "peak_price_usd": 0.01804561269654279,
       "amount_usd": 71.14567917004553,
       "qty": 4463.221679543732,
       "sell_tax_pct": 0.0
+    },
+    "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": {
+      "network": "solana",
+      "pool_address": "9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw",
+      "base_token_address": "CB1YQfUzgsnaCd93cZLdiX1uASW7utWBaYMUsvcwNUBV",
+      "name": "LOOM / SOL",
+      "entry_ts": "2026-09-07T14:40:31.937707+00:00",
+      "entry_price_usd": 0.0008925856811888063,
+      "peak_price_usd": 0.0008925856811888063,
+      "amount_usd": 70.68851592655444,
+      "qty": 79134.22398789726,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
     }
   },
   "closed": [
@@ -2623,6 +2624,25 @@
       "proceeds_usd": 87.28162973990536,
       "pnl_usd": 2.146052028752294,
       "pnl_pct": 2.52,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
+      "base_token_address": "0xa4a2e2ca3fbfe21aed83471d28b6f65a233c6e00",
+      "name": "TIBBIR / VIRTUAL",
+      "entry_ts": "2026-09-06T17:45:34.623896+00:00",
+      "entry_price_usd": 0.247045017151728,
+      "peak_price_usd": 0.251717178924265,
+      "amount_usd": 96.21242562681375,
+      "qty": 389.03711259713083,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T14:41:26.365270+00:00",
+      "exit_price_usd": 0.233142607063894,
+      "proceeds_usd": 90.59865687386743,
+      "pnl_usd": -5.613768752946328,
+      "pnl_pct": -5.83,
       "exit_reason": "timeout"
     }
   ]
