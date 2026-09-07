@@ -1,18 +1,6 @@
 {
-  "balance": 539.8528904141241,
+  "balance": 622.7669474868767,
   "positions": {
-    "base_0xafe30319a948f322585fafc1cab1671a47eb3786": {
-      "network": "base",
-      "pool_address": "0xafe30319a948f322585fafc1cab1671a47eb3786",
-      "base_token_address": "0x3e12b9d6a4d12cd9b4a6d613872d0eb32f68b380",
-      "name": "FLOWER / USDC 0.3%",
-      "entry_ts": "2026-09-07T09:50:34.038189+00:00",
-      "entry_price_usd": 0.205648710626009,
-      "peak_price_usd": 0.209060509788141,
-      "amount_usd": 82.38325472987866,
-      "qty": 399.99774702153906,
-      "sell_tax_pct": 0.0
-    },
     "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e": {
       "network": "bsc",
       "pool_address": "0xf0a949d3d93b833c183a27ee067165b6f2c9625e",
@@ -2701,6 +2689,25 @@
       "pnl_usd": -22.55275225625008,
       "pnl_pct": -31.9,
       "exit_reason": "stop_loss"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xafe30319a948f322585fafc1cab1671a47eb3786",
+      "base_token_address": "0x3e12b9d6a4d12cd9b4a6d613872d0eb32f68b380",
+      "name": "FLOWER / USDC 0.3%",
+      "entry_ts": "2026-09-07T09:50:34.038189+00:00",
+      "entry_price_usd": 0.205648710626009,
+      "peak_price_usd": 0.209060509788141,
+      "amount_usd": 82.38325472987866,
+      "qty": 399.99774702153906,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T16:11:18.561997+00:00",
+      "exit_price_usd": 0.207597087826884,
+      "proceeds_usd": 82.91405707275263,
+      "pnl_usd": 0.5308023428739688,
+      "pnl_pct": 0.64,
+      "exit_reason": "timeout"
     }
   ]
 }
