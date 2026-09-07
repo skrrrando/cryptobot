@@ -1,5 +1,5 @@
 {
-  "balance": 19.379159661957843,
+  "balance": 97.3538255083232,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -81,18 +81,6 @@
       "peak_price_usd": 0.015857618258201266,
       "amount_usd": 86.07028745234386,
       "qty": 6058.825065924586,
-      "sell_tax_pct": 0.0
-    },
-    "base_0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd": {
-      "network": "base",
-      "pool_address": "0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd",
-      "base_token_address": "0xf5f11bc9be9d6690f795d04d2fc9bdd097008a2b",
-      "name": "BPAD / USDC 1%",
-      "entry_ts": "2026-09-07T04:55:23.521652+00:00",
-      "entry_price_usd": 0.000343697337336186,
-      "peak_price_usd": 0.000396433772206511,
-      "amount_usd": 85.29895557281634,
-      "qty": 247547.6041591566,
       "sell_tax_pct": 0.0
     },
     "bsc_0xf49d9c79a07922d3846c762c73b4df65205ef772": {
@@ -2464,6 +2452,24 @@
       "pnl_usd": -26.554004912313047,
       "pnl_pct": -31.16,
       "exit_reason": "stop_loss"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x863e852fe65a6226bcc7a2ca0a32aa5435126cfd",
+      "base_token_address": "0xf5f11bc9be9d6690f795d04d2fc9bdd097008a2b",
+      "name": "BPAD / USDC 1%",
+      "entry_ts": "2026-09-07T04:55:23.521652+00:00",
+      "entry_price_usd": 0.000343697337336186,
+      "peak_price_usd": 0.000396433772206511,
+      "amount_usd": 85.29895557281634,
+      "qty": 247547.6041591566,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-07T09:46:38.421285+00:00",
+      "exit_price_usd": 0.000315813288366994,
+      "proceeds_usd": 77.97466584636535,
+      "pnl_usd": -7.324289726450985,
+      "pnl_pct": -8.59,
+      "exit_reason": "take_profit"
     }
   ]
 }
