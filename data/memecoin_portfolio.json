@@ -1,5 +1,5 @@
 {
-  "balance": 1.2620726516654628,
+  "balance": 306.1383419130812,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -12,29 +12,6 @@
       "amount_usd": 145.19378588112022,
       "qty": 393.9763785721547
     },
-    "base_0x0ca6485b7e9cf814a3fd09d81672b07323535b64": {
-      "network": "base",
-      "pool_address": "0x0ca6485b7e9cf814a3fd09d81672b07323535b64",
-      "base_token_address": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
-      "name": "DEGEN / WETH 1%",
-      "entry_ts": "2026-09-04T12:35:25.935571+00:00",
-      "entry_price_usd": 0.00116114263083591,
-      "peak_price_usd": 0.00119480011313434,
-      "amount_usd": 92.54821079216657,
-      "qty": 79704.42935640116
-    },
-    "base_0x377feeed4820b3b28d1ab429509e7a0789824fca": {
-      "network": "base",
-      "pool_address": "0x377feeed4820b3b28d1ab429509e7a0789824fca",
-      "base_token_address": "0x9a26f5433671751c3276a065f57e5a02d2817973",
-      "name": "KEYCAT / WETH",
-      "entry_ts": "2026-09-05T14:10:30.978143+00:00",
-      "entry_price_usd": 0.00075856298754611,
-      "peak_price_usd": 0.000849956937062639,
-      "amount_usd": 44.194652272260704,
-      "qty": 58126.419528444305,
-      "sell_tax_pct": 0.0
-    },
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
       "network": "base",
       "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
@@ -45,30 +22,6 @@
       "peak_price_usd": 0.251717178924265,
       "amount_usd": 96.21242562681375,
       "qty": 389.03711259713083,
-      "sell_tax_pct": 0.0
-    },
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
-      "network": "base",
-      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "name": "WETH / USDC 0.3%",
-      "entry_ts": "2026-09-06T23:05:23.586633+00:00",
-      "entry_price_usd": 2511.95,
-      "peak_price_usd": 2527.99,
-      "amount_usd": 88.48378740772817,
-      "qty": 0.03518530253523183,
-      "sell_tax_pct": 0.0
-    },
-    "base_0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54": {
-      "network": "base",
-      "pool_address": "0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54",
-      "base_token_address": "0x16332535e2c27da578bc2e82beb09ce9d3c8eb07",
-      "name": "ClawBank / WETH",
-      "entry_ts": "2026-09-07T01:05:23.970760+00:00",
-      "entry_price_usd": 1.00995009205011e-05,
-      "peak_price_usd": 1.05941708194178e-05,
-      "amount_usd": 85.13557771115306,
-      "qty": 8419234.268337872,
       "sell_tax_pct": 0.0
     },
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": {
@@ -114,7 +67,7 @@
       "name": "OTC / SOL",
       "entry_ts": "2026-09-07T13:15:32.833372+00:00",
       "entry_price_usd": 0.015933893090844753,
-      "peak_price_usd": 0.017120799684745596,
+      "peak_price_usd": 0.018024762792587818,
       "amount_usd": 71.14567917004553,
       "qty": 4463.221679543732,
       "sell_tax_pct": 0.0
@@ -2596,6 +2549,81 @@
       "pnl_usd": -17.64485479861787,
       "pnl_pct": -22.72,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x0ca6485b7e9cf814a3fd09d81672b07323535b64",
+      "base_token_address": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+      "name": "DEGEN / WETH 1%",
+      "entry_ts": "2026-09-04T12:35:25.935571+00:00",
+      "entry_price_usd": 0.00116114263083591,
+      "peak_price_usd": 0.00119480011313434,
+      "amount_usd": 92.54821079216657,
+      "qty": 79704.42935640116,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T14:36:13.584700+00:00",
+      "exit_price_usd": 0.00110200656592256,
+      "proceeds_usd": 87.72727459341992,
+      "pnl_usd": -4.820936198746651,
+      "pnl_pct": -5.21,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x377feeed4820b3b28d1ab429509e7a0789824fca",
+      "base_token_address": "0x9a26f5433671751c3276a065f57e5a02d2817973",
+      "name": "KEYCAT / WETH",
+      "entry_ts": "2026-09-05T14:10:30.978143+00:00",
+      "entry_price_usd": 0.00075856298754611,
+      "peak_price_usd": 0.000849956937062639,
+      "amount_usd": 44.194652272260704,
+      "qty": 58126.419528444305,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T14:36:13.584700+00:00",
+      "exit_price_usd": 0.000735509367557057,
+      "proceeds_usd": 42.65052759354891,
+      "pnl_usd": -1.5441246787117962,
+      "pnl_pct": -3.49,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-06T23:05:23.586633+00:00",
+      "entry_price_usd": 2511.95,
+      "peak_price_usd": 2527.99,
+      "amount_usd": 88.48378740772817,
+      "qty": 0.03518530253523183,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T14:36:13.584700+00:00",
+      "exit_price_usd": 2481.63,
+      "proceeds_usd": 87.21683733454157,
+      "pnl_usd": -1.2669500731866066,
+      "pnl_pct": -1.43,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54",
+      "base_token_address": "0x16332535e2c27da578bc2e82beb09ce9d3c8eb07",
+      "name": "ClawBank / WETH",
+      "entry_ts": "2026-09-07T01:05:23.970760+00:00",
+      "entry_price_usd": 1.00995009205011e-05,
+      "peak_price_usd": 1.05941708194178e-05,
+      "amount_usd": 85.13557771115306,
+      "qty": 8419234.268337872,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-07T14:36:13.584700+00:00",
+      "exit_price_usd": 1.03794875273736e-05,
+      "proceeds_usd": 87.28162973990536,
+      "pnl_usd": 2.146052028752294,
+      "pnl_pct": 2.52,
+      "exit_reason": "timeout"
     }
   ]
 }
