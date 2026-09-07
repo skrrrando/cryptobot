@@ -166,7 +166,7 @@ MIN_TRADE_USD = 20.0            # below this a slice is too small to matter - se
                                  # compute_trade_size_usd; also the sanity floor for DCA adds
 MAX_CONCURRENT_POSITIONS = 12   # once full, hold off buying until a position closes and frees a slot -
                                  # ALSO the divisor for trade size - see compute_trade_size_usd.
-EXIT_OFFSET_MINUTES = 360  # sell at the 6h checkpoint
+EXIT_OFFSET_MINUTES = 360  # fallback: sell a position that's still open 6h after entry
 GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
 RECOMMENDED_MIN_GOOD = 2
@@ -346,6 +346,13 @@ def _as_float(v, default=0.0):
         return float(v)
     except (TypeError, ValueError):
         return default
+
+
+def _minutes_since(iso_ts, now_wall):
+    try:
+        return (now_wall - datetime.fromisoformat(iso_ts)).total_seconds() / 60.0
+    except (TypeError, ValueError):
+        return 0.0
 
 
 # --- GeckoTerminal: trending pools + rank --------------------------------
@@ -815,6 +822,7 @@ def maybe_buy(portfolio, pool, security, timestamp):
         "amount_usd": amount,
         "qty": qty,
         "sell_tax_pct": _as_float((security or {}).get("sell_tax_pct")),
+        "time_exit_evaluated": False,  # see check_open_positions - the one-shot 6h fallback exit
     }
     portfolio["positions"][pool_id] = position
     return position
@@ -919,8 +927,9 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
     isn't bounded the way checkpoint lookups are). Priority order: a hard
     stop-loss/trailing-stop/momentum-collapse exit always wins over "should
     we average down" - never add to a position in the same breath as cutting
-    it. The fixed 6h checkpoint exit (process_due_checkpoints) still applies
-    underneath as a fallback if none of the exit conditions fire first."""
+    it. The fixed 6h fallback exit (EXIT_OFFSET_MINUTES) applies underneath,
+    evaluated directly off each position's own entry_ts, if none of the other
+    exit conditions fire first."""
     closed_positions = []
     dca_events = []
     # Live mark-to-market of whatever is still open after this pass, so main()
@@ -948,6 +957,7 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
         trail = trailing_stop_pct_for(peak_profit_pct)
 
         h1 = _as_float(current.get("price_change_pct", {}).get("h1"))
+        h6 = _as_float(current.get("price_change_pct", {}).get("h6"))
         txns_h1 = current.get("transactions", {}).get("h1", {}) or {}
         sell_pressure = _as_float(txns_h1.get("sells")) > _as_float(txns_h1.get("buys"))
 
@@ -960,6 +970,35 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
             reason = "take_profit"
         elif h1 <= MOMENTUM_COLLAPSE_H1_PCT and sell_pressure:
             reason = "momentum_collapse"
+        elif not pos.get("time_exit_evaluated") and _minutes_since(pos["entry_ts"], now_wall) >= EXIT_OFFSET_MINUTES:
+            # The one fallback exit that isn't tied to price action: a position
+            # sitting flat forever (not down 30%, not pulled back from a peak,
+            # never up 15%) would otherwise just occupy a slot indefinitely.
+            #
+            # This used to be evaluated over in process_due_checkpoints, keyed
+            # off the SEPARATE shadow-candidate-tracking entry for this pool_id
+            # rather than this position's own entry_ts/entry_price - and that
+            # tracking entry only exists while the token keeps reappearing as a
+            # trending candidate. A position that quietly stopped trending (the
+            # exact "sitting flat" case) fell out of that tracking and never got
+            # evaluated again - confirmed on two real positions that sat 2-3
+            # days with zero exit evaluation. Checking directly off the position
+            # itself, every tick, means it can no longer depend on rediscovery.
+            #
+            # time_exit_evaluated makes this fire exactly once per position, so
+            # a genuine mooner (still_mooning below) isn't re-prompted forever -
+            # once past this point it's governed solely by stop-loss/trailing/
+            # momentum-collapse above, same as the original design intended.
+            pos["time_exit_evaluated"] = True
+            still_mooning = (
+                loss_pct >= MOONSHOT_EXTEND_MIN_RETURN_PCT
+                and h1 is not None and h1 > 0
+                and h6 is not None and h6 > 0
+            )
+            if still_mooning:
+                send_telegram(format_moonshot_alert(pos["name"], pos["network"], loss_pct))
+            else:
+                reason = "timeout"
 
         if reason is not None:
             closed = maybe_sell(portfolio, pool_id, price, current.get("reserve_in_usd"), now_wall.isoformat(), reason=reason)
@@ -1062,22 +1101,13 @@ def process_due_checkpoints(pending, now_wall, lookups_this_tick, portfolio):
             mcap_now = _as_float(current.get("market_cap_usd")) or _as_float(current.get("fdv_usd"))
             return_pct = (price_now - entry["entry_price_usd"]) / entry["entry_price_usd"] * 100.0
 
-            if offset == EXIT_OFFSET_MINUTES:
-                h1_now = _as_float(current.get("price_change_pct", {}).get("h1"))
-                h6_now = _as_float(current.get("price_change_pct", {}).get("h6"))
-                still_mooning = (
-                    return_pct >= MOONSHOT_EXTEND_MIN_RETURN_PCT
-                    and h1_now > 0 and h6_now > 0
-                )
-                if still_mooning:
-                    # Let it run - no forced sell. check_open_positions' own
-                    # stop-loss/trailing-stop/momentum-collapse keeps watching
-                    # it every run from here on, with no further time limit.
-                    send_telegram(format_moonshot_alert(entry["name"], entry["network"], return_pct))
-                else:
-                    closed = maybe_sell(portfolio, pool_id, price_now, current.get("reserve_in_usd"), checkpoint_ts)
-                    if closed is not None:
-                        send_telegram(format_sell_alert(closed, portfolio["balance"]))
+            # NOTE: this used to also force-sell the real position at the
+            # EXIT_OFFSET_MINUTES/6h offset. Moved to check_open_positions,
+            # which evaluates it directly off the position's own entry_ts and
+            # runs every tick regardless of whether this pool_id is still
+            # being shadow-tracked here - see the comment there for why. This
+            # function is now pure label/outcome data collection for every
+            # candidate seen (bought or not), same as every other offset.
 
             label_rows.append({
                 "row_type": "checkpoint",
