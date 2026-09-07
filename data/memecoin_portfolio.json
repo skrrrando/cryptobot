@@ -1,5 +1,5 @@
 {
-  "balance": 453.60179323709735,
+  "balance": 491.71712674381973,
   "positions": {
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": {
       "network": "base",
@@ -47,19 +47,6 @@
       "peak_price_usd": 0.0008925856811888063,
       "amount_usd": 70.68851592655444,
       "qty": 79134.22398789726,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "bsc_0x869b62bb396b7b9fedf52790b1427fed71a2c642": {
-      "network": "bsc",
-      "pool_address": "0x869b62bb396b7b9fedf52790b1427fed71a2c642",
-      "base_token_address": "0xee132e984cafa9525a511e2033a1ec53b9f87777",
-      "name": "LUNA / LUNA",
-      "entry_ts": "2026-09-07T15:20:31.300954+00:00",
-      "entry_price_usd": 0.00271876595147313,
-      "peak_price_usd": 0.00271876595147313,
-      "amount_usd": 69.60742406760777,
-      "qty": 25541.3226404368,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -2689,6 +2676,25 @@
       "pnl_usd": -15.246337943512401,
       "pnl_pct": -21.71,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x869b62bb396b7b9fedf52790b1427fed71a2c642",
+      "base_token_address": "0xee132e984cafa9525a511e2033a1ec53b9f87777",
+      "name": "LUNA / LUNA",
+      "entry_ts": "2026-09-07T15:20:31.300954+00:00",
+      "entry_price_usd": 0.00271876595147313,
+      "peak_price_usd": 0.00271876595147313,
+      "amount_usd": 69.60742406760777,
+      "qty": 25541.3226404368,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-07T15:26:49.288867+00:00",
+      "exit_price_usd": 0.00149844720441192,
+      "proceeds_usd": 38.1153335067224,
+      "pnl_usd": -31.492090560885366,
+      "pnl_pct": -45.24,
+      "exit_reason": "stop_loss"
     }
   ]
 }
