@@ -173,7 +173,8 @@ function getTags(c) {
   const holderGrowth = sec.holder_growth_pct;
   const solH1 = c.sol_h1;
 
-  if (rv != null && rv > 0) good.push('Rank kerkib');
+  // rank_velocity is no longer scored in either direction - see the note in
+  // scan_memecoins.py's classify_recommendation() for the measurement.
   if (accel != null && accel > 0) good.push('Hoog kasvab');
   if (h24 >= 20) good.push('Tugev 24h trend');
   if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
@@ -184,7 +185,6 @@ function getTags(c) {
   if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
   if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
   if (h24 < 0 && h1 > 0) caution.push('Alles pöördumas');
-  if (rv != null && rv === 0) caution.push('Rank paigal');
   if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
   if (sec.whale_buyer_pct != null && sec.whale_buyer_pct >= 40) caution.push('Üks rahakott domineerib');
   if (lockPct != null && lockPct < 50) caution.push('Likviidsus lukustamata');
@@ -809,8 +809,9 @@ function renderRules() {
     <div class="rules-group">
       <h3>3. "Soovitatud" tase</h3>
       <ul class="rules-list">
-        <li>Iga turvalist tokenit hinnatakse 7 "hea märgi" järgi: rank tõuseb, moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, <b>likviidsus ≥ 80% lukustatud</b>, <b>hoidjate arv kasvab</b> (≥5% juurdekasvu alates esimesest jälgitud kontrollist).</li>
-        <li>Ja 9 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, rank paigal, <b>vähe unikaalseid ostjaid</b> (palju ostutehinguid aga samadelt rahakottidelt), <b>üks rahakott domineerib</b> (kui üks rahakott moodustab ≥40% viimase tunni kogu ostumahust dollarites), <b>likviidsus lukustamata</b> (alla 50% lukus - see on kõige levinum viis, kuidas memecoinid päriselt "rug'itakse"), <b>hoidjate arv kahaneb</b> (inimesed lahkuvad) ja <b>turg on risk-off</b> (SOL on languses ≥5% viimase tunni jooksul - kogu memecoini turg kipub siis koos kukkuma, sõltumata konkreetse tokeni kvaliteedist).</li>
+        <li>Iga turvalist tokenit hinnatakse 6 "hea märgi" järgi: moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, likviidsus ≥ 80% lukustatud, hoidjate arv kasvab (≥5% juurdekasvu alates esimesest jälgitud kontrollist).</li>
+        <li>Ja 8 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, vähe unikaalseid ostjaid (palju ostutehinguid aga samadelt rahakottidelt), üks rahakott domineerib (≥40% viimase tunni ostumahust), likviidsus lukustamata (alla 50% lukus - kõige levinum viis, kuidas memecoinid päriselt "rug'itakse"), hoidjate arv kahaneb ja turg on risk-off (SOL languses ≥5% viimase tunni jooksul).</li>
+        <li><b>Eemaldatud reegel:</b> varem oli "rank tõuseb" hea märk ja "rank paigal" ettevaatusmärk. 118 sisenemise andmed näitasid, et see ei ennusta midagi — ja kuna 82% kõigist kandidaatidest on "rank paigal", blokeeris see üksi valdava enamiku ostudest. Mõõdetud: paigalseisva rank'iga tokenid ei läinud halvemini kui tõusvad, üheski ajaaknas.</li>
         <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
       </ul>
     </div>

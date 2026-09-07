@@ -662,7 +662,6 @@ def check_security_cached(pool, security_cache, checks_this_tick):
 def classify_recommendation(pool, features, security, sol_h1):
     good = 0
     caution = 0
-    rv = features.get("rank_velocity")
     accel = features.get("h1_accel")
     h1 = _as_float(pool["price_change_pct"].get("h1"))
     h24 = _as_float(pool["price_change_pct"].get("h24"))
@@ -677,8 +676,8 @@ def classify_recommendation(pool, features, security, sol_h1):
     buys_h1 = _as_float(txns_h1.get("buys"))
     buyers_h1 = _as_float(txns_h1.get("buyers"))
 
-    if rv is not None and rv > 0:
-        good += 1
+    # rank_velocity is deliberately NOT scored any more, in either direction -
+    # see the rv == 0 note further down for the measurement that retired it.
     if accel is not None and accel > 0:
         good += 1
     if h24 >= 20:
@@ -700,8 +699,23 @@ def classify_recommendation(pool, features, security, sol_h1):
         caution += 1
     if h24 < 0 and h1 > 0:
         caution += 1
-    if rv is not None and rv == 0:
-        caution += 1
+    # RETIRED: "rank_velocity == 0 is a caution" (and its mirror, "> 0 is
+    # good"). Both were guesses, and after 118 labelled entries the data does
+    # not support either:
+    #
+    #   - rv == 0 covered 82% of every candidate we ever saw (97 of 118), so
+    #     this single rule was doing the overwhelming majority of the blocking
+    #     in the whole recommendation gate.
+    #   - flat-rank candidates did no worse than rising-rank ones at any
+    #     horizon, and by win rate did better at every horizon past 30 min
+    #     (60 min: 48.0% vs 33.9%). A permutation test puts that at p=0.06
+    #     to 0.27, so it is NOT evidence that flat is better - but it is
+    #     clearly not evidence that rising is better either.
+    #
+    # Blocking 82% of candidates on an unsupported guess costs far more than
+    # it plausibly saves, so the rule is gone in both directions rather than
+    # inverted - inverting it would just be a different unsupported guess.
+    # `rv` is still recorded on every entry row, so this stays testable.
     if buys_h1 >= WASH_TRADE_MIN_BUYS_H1 and buyers_h1 > 0 and (buys_h1 / buyers_h1) >= WASH_TRADE_MAX_BUYS_PER_BUYER:
         caution += 1
     whale_pct = security.get("whale_buyer_pct")
