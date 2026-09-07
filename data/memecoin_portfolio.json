@@ -1,5 +1,5 @@
 {
-  "balance": 212.8077190742094,
+  "balance": 299.33966868090516,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -59,18 +59,6 @@
       "qty": 0.03518530253523183,
       "sell_tax_pct": 0.0
     },
-    "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
-      "network": "base",
-      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
-      "name": "SOL / USDC 0.032%",
-      "entry_ts": "2026-09-07T00:15:30.380320+00:00",
-      "entry_price_usd": 106.755072786769,
-      "peak_price_usd": 106.755072786769,
-      "amount_usd": 87.64206508318391,
-      "qty": 0.8199049492168179,
-      "sell_tax_pct": 0.0
-    },
     "base_0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54": {
       "network": "base",
       "pool_address": "0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54",
@@ -90,7 +78,7 @@
       "name": "OTC / SOL",
       "entry_ts": "2026-09-07T04:15:33.912141+00:00",
       "entry_price_usd": 0.014200139868853202,
-      "peak_price_usd": 0.015433717591324135,
+      "peak_price_usd": 0.015857618258201266,
       "amount_usd": 86.07028745234386,
       "qty": 6058.825065924586,
       "sell_tax_pct": 0.0
@@ -2404,6 +2392,24 @@
       "pnl_usd": -12.986332233820988,
       "pnl_pct": -10.06,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "name": "SOL / USDC 0.032%",
+      "entry_ts": "2026-09-07T00:15:30.380320+00:00",
+      "entry_price_usd": 106.755072786769,
+      "peak_price_usd": 106.755072786769,
+      "amount_usd": 87.64206508318391,
+      "qty": 0.8199049492168179,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-07T05:11:02.832782+00:00",
+      "exit_price_usd": 105.6765536131,
+      "proceeds_usd": 86.53194960669579,
+      "pnl_usd": -1.1101154764881187,
+      "pnl_pct": -1.27,
+      "exit_reason": "timeout"
     }
   ]
 }
