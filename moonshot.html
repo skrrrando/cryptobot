@@ -29,8 +29,14 @@
 
   <section>
     <div class="section-head"><h2>Jälgimisel <span class="count" id="watch-count"></span></h2></div>
-    <p class="coin-section-sub">Kõik signaalid, mille kohta otsus on tehtud või ootel — ka need, mille sa ignoreerisid. Nii näed, mida ignoreerimine maksis või säästis.</p>
+    <p class="coin-section-sub">Signaalid, mille lõpptulemus on veel lahtine — ka need, mille sa ignoreerisid või millele ei vastanud.</p>
     <div id="watching"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Kõik senised signaalid <span class="count" id="history-count"></span></h2></div>
+    <p class="coin-section-sub">Iga signaal, mis on lõpuni jõudnud — kas jõudis graduatsioonini või mitte. Kogutakse ka siis, kui sa ei vastanud, et hiljem näha, mida otsus (või vastamata jätmine) maksis.</p>
+    <div id="history"></div>
   </section>
 
   <section>
@@ -179,6 +185,38 @@ function renderWatching(d) {
   }).join('')}</div>`;
 }
 
+// Every signal that reached a verdict. Shown regardless of whether a decision
+// was ever made, because "I didn't answer" is itself a data point worth seeing.
+function renderHistory(d) {
+  const el = document.getElementById('history');
+  const countEl = document.getElementById('history-count');
+  const history = (d && d.history) || [];
+  countEl.textContent = history.length ? `(${history.length})` : '';
+
+  if (!history.length) {
+    el.innerHTML = `<div class="empty">Ükski signaal pole veel lõpuni jõudnud.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap">${history.map(h => {
+    const graduated = h.outcome === 'graduated';
+    const decided = h.decision === 'buy' ? 'Ostsid'
+      : h.decision === 'ignore' ? 'Ignoreerisid' : 'Ei vastanud';
+    const decTag = h.decision === 'buy' ? 'buy' : h.decision === 'ignore' ? 'ignore' : 'pending';
+    const detail = graduated
+      ? `jõudis kohale ${h.minutes_to_graduate != null ? h.minutes_to_graduate + ' min' : ''}`
+      : `jäi ${h.final_graduation_pct != null ? h.final_graduation_pct.toFixed(1) + '%' : '—'} peale`;
+    return `<div class="watch-row">
+      <div>
+        <div class="w-name">${h.name || h.symbol || (h.mint || '').slice(0, 8)}</div>
+        <div class="w-sub">signaal ${timeAgo(h.signal_ts)} tagasi · skoor ${h.alert_score ?? '—'} · alertil ${h.alert_graduation_pct != null ? h.alert_graduation_pct.toFixed(1) + '%' : '—'}</div>
+      </div>
+      <span class="decision-tag ${decTag}">${decided}</span>
+      <span class="decision-tag ${graduated ? 'buy' : 'ignore'}">${graduated ? 'Graduated' : 'Kukkus'}</span>
+      <span class="w-prog ${graduated ? 'good' : 'bad'}">${detail}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
 function renderClosed(d) {
   const el = document.getElementById('closed');
   const closed = (d && d.closed) || [];
@@ -259,6 +297,7 @@ async function main() {
   renderHeadline(d);
   renderPositions(d);
   renderWatching(d);
+  renderHistory(d);
   renderClosed(d);
   renderRules(d);
   document.getElementById('cap-chip').textContent = `max ${(d && d.daily_cap) || 4} signaali päevas`;

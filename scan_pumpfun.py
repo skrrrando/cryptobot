@@ -161,6 +161,24 @@ SECURITY_CACHE_TTL_SECONDS = 900   # 15 min - shorter than the memecoin sleeve's
                                     # 30 min because these tokens change fast
 PUMPFUN_MAX_DEV_HOLDING_PCT = 5.0  # creator holding more than this can dump on us
 
+# Largest single non-curve holder's share of everything actually bought so far.
+# dev_holding_pct above only sees the CREATOR's own wallet; an insider buying
+# through a different address is invisible to it. This catches that.
+#
+# Motivated by a real failure: "Biden Wif Hat" was alerted at 70.8% of the way
+# to graduation and was at 0.05% five minutes later. On a bonding curve you
+# cannot pull liquidity the way you can from an AMM - the curve holds the SOL -
+# so that can only happen if someone sold nearly the entire bought supply back
+# into it. A single wallet holding a large share of the circulating supply is
+# exactly the precondition for that.
+#
+# CAVEAT, stated plainly: 20% is chosen from only 8 observed signals, where it
+# happens to sit in a clean gap (13.7% vs 23.1%) that separates both winners
+# (9.1%, 6.2%) from the two worst losses (23.1%, 33.8%). That is far too few
+# points to call validated - it is a hypothesis with a plausible mechanism
+# behind it, not a fitted rule. Re-check against real outcomes as data builds.
+PUMPFUN_MAX_CIRCULATING_TOP_PCT = 20.0
+
 RUGCHECK_REPORT_URL = "https://api.rugcheck.xyz/v1/tokens/{mint}/report"
 
 # --- Outcome tracking ------------------------------------------------------
@@ -448,6 +466,11 @@ def check_security_rugcheck(mint, bonding_curve_key, total_supply_raw):
         and not has_danger_risk
         and not rugged
         and (dev_holding_pct is None or dev_holding_pct <= PUMPFUN_MAX_DEV_HOLDING_PCT)
+        # Unknown concentration is NOT treated as a failure: it's usually just
+        # a very new token with too few holders to compute a share from, and
+        # failing those outright would gut the whole point of catching launches
+        # early. Only a known-and-too-high value rejects.
+        and (circulating_top_pct is None or circulating_top_pct <= PUMPFUN_MAX_CIRCULATING_TOP_PCT)
     )
     return {
         "passed": passed,
@@ -1409,6 +1432,12 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
     stats = {"alerts": 0, "graduated": 0, "did_not_graduate": 0,
              "buy_graduated": 0, "buy_total": 0,
              "ignore_graduated": 0, "ignore_total": 0}
+    # Every signal that has reached a verdict, so the dashboard can show the
+    # full record rather than only what's still pending. Without this a signal
+    # vanishes from the UI the moment it resolves, which reads as "it was never
+    # tracked" even though the data was collected all along.
+    alert_rows = {}
+    history = []
     try:
         with open(DECISION_LABELS_PATH) as f:
             for line in f:
@@ -1421,6 +1450,7 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
                     continue
                 if row.get("row_type") == "alert":
                     stats["alerts"] += 1
+                    alert_rows[row.get("mint")] = row
                 elif row.get("row_type") == "outcome":
                     graduated = row.get("outcome") == "graduated"
                     stats["graduated" if graduated else "did_not_graduate"] += 1
@@ -1429,8 +1459,23 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
                         stats[f"{decision}_total"] += 1
                         if graduated:
                             stats[f"{decision}_graduated"] += 1
+                    alert = alert_rows.get(row.get("mint"), {})
+                    history.append({
+                        "mint": row.get("mint"),
+                        "name": row.get("name") or alert.get("name"),
+                        "symbol": alert.get("symbol"),
+                        "outcome": row.get("outcome"),
+                        "decision": decision,          # None if never answered
+                        "signal_ts": row.get("signal_ts"),
+                        "recorded_ts": row.get("recorded_ts"),
+                        "alert_score": row.get("alert_score"),
+                        "alert_graduation_pct": row.get("alert_graduation_pct"),
+                        "final_graduation_pct": row.get("final_graduation_pct"),
+                        "minutes_to_graduate": row.get("minutes_to_graduate"),
+                    })
     except FileNotFoundError:
         pass
+    history.reverse()  # newest verdict first
     decided = stats["graduated"] + stats["did_not_graduate"]
     stats["graduation_rate_pct"] = round(stats["graduated"] / decided * 100.0, 1) if decided else None
 
@@ -1443,6 +1488,7 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
         "positions": positions,
         "closed": (portfolio.get("closed") or [])[-25:],
         "watching": watching,
+        "history": history[:50],
         "stats": stats,
         "daily_cap": DAILY_SIGNAL_CAP,
     }
