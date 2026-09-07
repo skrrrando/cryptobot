@@ -939,25 +939,59 @@ def passes_stage1(entry, now_wall):
 def score_candidate(entry, security):
     """Combine the surviving signals into one number.
 
-    Explicitly a hand-weighted starting point, not a fitted model - there is
-    no outcome data yet to fit against, and pretending otherwise would repeat
-    the exact mistake the momentum sleeve already made. Its only real job for
-    now is ranking today's survivors against each other so the daily cap picks
-    the strongest few; the weights get revisited once graduation outcomes have
-    accumulated."""
+    Still hand-weighted rather than fitted - there is nowhere near enough
+    outcome data to fit anything, and pretending otherwise would repeat the
+    momentum sleeve's original mistake. Its job is to rank the day's survivors
+    against each other so the daily cap spends itself on the strongest few.
+
+    Reweighted after reviewing the first 8 real signals, where the original
+    weights turned out to reward the things that did NOT separate winners from
+    losers, and to ignore the one thing that did:
+
+      - progress, velocity and holder count all failed to discriminate. The
+        single worst loss (-89%) had the HIGHEST velocity in the sample
+        (6.78 SOL/min), a higher graduation % than one of the two winners,
+        and more holders than either of them.
+      - four different tokens all scored a maxed-out 100, of which only two
+        graduated - so the top of the scale carried no information at all.
+      - concentration was the only input that lined up with outcomes: both
+        winners sat at 6.2% and 9.1%, while the two worst losses were the two
+        highest in the sample at 23.1% and 33.8%.
+
+    So concentration now carries real weight, and the caps on progress and
+    velocity are lowered so that a single fast-moving token can no longer max
+    the score on momentum alone. Deliberately NOT tuned to perfectly separate
+    those 8 points: a rule that cleanly splits 8 observations is far more
+    likely to be a curve-fit than an edge.
+    """
     history = entry.get("history") or []
     latest = history[-1] if history else {}
     velocity = compute_velocity(history) or 0.0
 
     progress = latest.get("graduation_pct", 0.0)          # 0-100
-    progress_pts = min(progress, 60.0)                     # cap so one signal can't dominate
-    velocity_pts = min(velocity * 20.0, 25.0)              # 1.25 SOL/min maxes this out
+    progress_pts = min(progress * 0.5, 30.0)               # 60%+ maxes this out
+    velocity_pts = min(velocity * 8.0, 20.0)               # 2.5 SOL/min maxes this out
     holders = _as_float((security or {}).get("total_holders"))
-    holder_pts = min(holders / 2.0, 10.0)                  # 20+ holders maxes this out
-    dev_pct = (security or {}).get("dev_holding_pct")
-    dev_pts = 5.0 if (dev_pct is not None and dev_pct <= 1.0) else 0.0
+    holder_pts = min(holders / 40.0, 10.0)                 # 400+ holders maxes this out
 
-    return round(progress_pts + velocity_pts + holder_pts + dev_pts, 1)
+    # Concentration: the strongest discriminator in the data so far, and the
+    # one with a real mechanism behind it (a wallet holding a big share of the
+    # bought supply is what makes a dump-to-zero possible at all). Full marks
+    # under 10%, tapering to nothing at the PUMPFUN_MAX_CIRCULATING_TOP_PCT
+    # gate, above which the token is rejected outright anyway.
+    conc = (security or {}).get("circulating_top_pct")
+    if conc is None:
+        conc_pts = 12.0   # unknown: neither rewarded nor punished, mid-range
+    elif conc <= 10.0:
+        conc_pts = 30.0
+    else:
+        span = max(PUMPFUN_MAX_CIRCULATING_TOP_PCT - 10.0, 1.0)
+        conc_pts = max(0.0, 30.0 * (1 - (conc - 10.0) / span))
+
+    dev_pct = (security or {}).get("dev_holding_pct")
+    dev_pts = 10.0 if (dev_pct is not None and dev_pct <= 1.0) else 0.0
+
+    return round(progress_pts + velocity_pts + holder_pts + conc_pts + dev_pts, 1)
 
 
 def prune_bonding_state(bonding_state, now_wall, protected_keys=frozenset()):
