@@ -1,5 +1,5 @@
 {
-  "balance": 181.98757570233093,
+  "balance": 298.1066746470257,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -82,19 +82,6 @@
       "amount_usd": 85.13557771115306,
       "qty": 8419234.268337872,
       "sell_tax_pct": 0.0
-    },
-    "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": {
-      "network": "bsc",
-      "pool_address": "0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d",
-      "base_token_address": "0xfa6d9b504848606eb9aec04ccc161d169b3f2159",
-      "name": "BREW / WBNB 1%",
-      "entry_ts": "2026-09-07T04:05:25.336878+00:00",
-      "entry_price_usd": 0.021329999003917667,
-      "peak_price_usd": 0.024674171671836,
-      "amount_usd": 129.1054311785158,
-      "qty": 6052.763113341125,
-      "sell_tax_pct": 0.0,
-      "dca_count": 1
     },
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
@@ -2385,6 +2372,25 @@
       "proceeds_usd": 89.8006371318345,
       "pnl_usd": 3.7303496794906437,
       "pnl_pct": 4.33,
+      "exit_reason": "take_profit"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d",
+      "base_token_address": "0xfa6d9b504848606eb9aec04ccc161d169b3f2159",
+      "name": "BREW / WBNB 1%",
+      "entry_ts": "2026-09-07T04:05:25.336878+00:00",
+      "entry_price_usd": 0.021329999003917667,
+      "peak_price_usd": 0.024674171671836,
+      "amount_usd": 129.1054311785158,
+      "qty": 6052.763113341125,
+      "sell_tax_pct": 0.0,
+      "dca_count": 1,
+      "exit_ts": "2026-09-07T04:51:25.703737+00:00",
+      "exit_price_usd": 0.0192117604597237,
+      "proceeds_usd": 116.11909894469481,
+      "pnl_usd": -12.986332233820988,
+      "pnl_pct": -10.06,
       "exit_reason": "take_profit"
     }
   ]
