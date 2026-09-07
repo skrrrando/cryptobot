@@ -214,6 +214,14 @@ STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
 TRAILING_STOP_PCT = 25.0        # exit if price pulls back this much from its peak (only once ever in profit)
 MOMENTUM_COLLAPSE_H1_PCT = -15.0  # exit if 1h change turns this negative AND sell pressure exceeds buy pressure
 
+# A pool that closes (for any reason) is off-limits to re-buy for a while.
+# Without this, a token that keeps re-qualifying as a momentum candidate the
+# same day gets bought right back into immediately after being sold - caught
+# in production on a real pool that stopped out twice (-30.7%, -21.7%) and
+# was re-bought a third time the same day, burning a slot on the same loser
+# instead of diversifying into something else.
+REBUY_COOLDOWN_SECONDS = 2 * 3600
+
 # "Let winners run": a flat 25% trail is too tight for a real moonshot -
 # memecoins pull back 20-30% from a local high routinely even mid-rally, so
 # a fixed trail would stop out a genuine winner on ordinary noise. Widen the
@@ -790,6 +798,13 @@ def maybe_buy(portfolio, pool, security, timestamp):
     pool_id = pool["id"]
     if pool_id in portfolio["positions"]:
         return None
+    last_exit = portfolio.get("recent_exits", {}).get(pool_id)
+    if last_exit:
+        try:
+            if datetime.fromisoformat(timestamp).timestamp() - datetime.fromisoformat(last_exit).timestamp() < REBUY_COOLDOWN_SECONDS:
+                return None  # closed too recently - see REBUY_COOLDOWN_SECONDS
+        except ValueError:
+            pass
     if len(portfolio["positions"]) >= MAX_CONCURRENT_POSITIONS:
         return None  # full - wait for a position to close before opening another
     price = _as_float(pool.get("price_usd"))
@@ -854,6 +869,7 @@ def maybe_sell(portfolio, pool_id, price_now, reserve_usd_now, timestamp, reason
         "exit_reason": reason,
     }
     portfolio["closed"].append(closed)
+    portfolio.setdefault("recent_exits", {})[pool_id] = timestamp
     return closed
 
 
