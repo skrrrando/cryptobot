@@ -1027,13 +1027,21 @@ def prune_bonding_state(bonding_state, now_wall, protected_keys=frozenset()):
     return len(drop)
 
 
-def register_outcome_watch(pending_outcomes, alert, timestamp):
-    """Start watching an alerted token's outcome.
+def register_outcome_watch(pending_outcomes, alert, timestamp, alerted=True):
+    """Start watching a token's outcome.
 
     Deliberately called when the ALERT is sent, not when the user decides -
     ignored tokens have to be followed exactly as closely as bought ones.
     Otherwise the only data ever collected would be about coins the user
     already liked, which cannot answer whether the ignores were right.
+
+    `alerted=False` is used for shadow-tracking (see register_shadow_watches):
+    a token that cleared the security gate but never made the daily cap or
+    the score bar still gets its outcome recorded, just without ever
+    reaching Telegram. The flag rides along on every label row this watch
+    produces so dashboard stats and the alert history can stay scoped to
+    real alerts, while the underlying label file still has the full picture
+    for later analysis.
     """
     mint = alert["mint"]
     if mint in pending_outcomes:
@@ -1050,7 +1058,53 @@ def register_outcome_watch(pending_outcomes, alert, timestamp):
         "decision": None,          # filled in when the user presses a button
         "graduated": False,
         "checkpoints_done": {},
+        "alerted": alerted,
     }
+
+
+def register_shadow_watches(candidates, pending_outcomes, timestamp):
+    """Track every stage-2 survivor's outcome, not just the ones that made
+    today's DAILY_SIGNAL_CAP cut.
+
+    Motivated by how slowly outcome data was accumulating: only ~4/day ever
+    got tracked at all, because tracking was gated on being alerted. RugCheck
+    already ran on every one of these (stage 2's own per-tick cap is what
+    actually limits cost, unrelated to DAILY_SIGNAL_CAP) - so recording what
+    happened to the ones that DIDN'T make the cut is free, and is exactly the
+    data needed to tell whether the cap and the score floor are set in the
+    right place, rather than guessing from 4 signals a day.
+
+    Returns label rows with row_type "shadow", never "alert" - so
+    build_dashboard_summary's alert-scoped stats (what the user actually saw
+    and can be judged on) stay unaffected by candidates nobody was ever
+    shown. register_outcome_watch's own "already tracked" guard means a
+    candidate that IS alerted this same tick (send_moonshot_alerts must run
+    first) is simply skipped here rather than downgraded.
+    """
+    label_rows = []
+    for candidate in candidates:
+        mint = candidate["mint"]
+        if mint in pending_outcomes:
+            continue
+        register_outcome_watch(pending_outcomes, {
+            "mint": mint,
+            "name": candidate.get("name"),
+            "symbol": candidate.get("symbol"),
+            "bonding_curve_key": candidate.get("bonding_curve_key"),
+            "signal_ts": timestamp,
+            "score": candidate.get("score"),
+            "graduation_pct": candidate.get("graduation_pct"),
+        }, timestamp, alerted=False)
+        label_rows.append({
+            "row_type": "shadow",
+            "mint": mint,
+            "name": candidate.get("name"),
+            "symbol": candidate.get("symbol"),
+            "score": candidate.get("score"),
+            "graduation_pct": candidate.get("graduation_pct"),
+            "signal_ts": timestamp,
+        })
+    return label_rows
 
 
 def record_decision_on_outcome(pending_outcomes, mint, decision, timestamp):
@@ -1095,6 +1149,7 @@ def process_outcome_checkpoints(pending_outcomes, bonding_state, portfolio,
                 "alert_graduation_pct": watch.get("alert_graduation_pct"),
                 "signal_ts": watch["signal_ts"],
                 "recorded_ts": timestamp,
+                "alerted": watch.get("alerted", True),
             })
             finished.append(mint)
             continue
@@ -1126,6 +1181,7 @@ def process_outcome_checkpoints(pending_outcomes, bonding_state, portfolio,
                     "position_value_usd": value_usd,
                     "signal_ts": watch["signal_ts"],
                     "checkpoint_ts": timestamp,
+                    "alerted": watch.get("alerted", True),
                 })
                 watch["checkpoints_done"][key] = timestamp
 
@@ -1142,6 +1198,7 @@ def process_outcome_checkpoints(pending_outcomes, bonding_state, portfolio,
                 "alert_graduation_pct": watch.get("alert_graduation_pct"),
                 "signal_ts": watch["signal_ts"],
                 "recorded_ts": timestamp,
+                "alerted": watch.get("alerted", True),
             })
             finished.append(mint)
 
@@ -1447,7 +1504,11 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
         })
 
     watching = []
+    shadow_tracked = 0
     for mint, watch in (pending_outcomes or {}).items():
+        if not watch.get("alerted", True):
+            shadow_tracked += 1
+            continue  # not shown here - see build_dashboard_summary's shadow_stats
         history = (bonding_state.get(watch.get("bonding_curve_key")) or {}).get("history") or []
         latest = history[-1] if history else None
         watching.append({
@@ -1462,10 +1523,16 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
         })
     watching.sort(key=lambda w: w.get("graduation_pct") or 0, reverse=True)
 
-    # Verdicts so far, straight from the append-only decision log.
+    # Verdicts so far, straight from the append-only decision log. Scoped to
+    # real alerts only (alerted=True/missing) - this is what the user was
+    # actually shown and can be judged on. Shadow-tracked candidates (cleared
+    # the security gate but never made the daily cap/score bar) are counted
+    # separately below in shadow_stats, so a wide, low-scoring background
+    # sample can't quietly dilute the headline graduation rate.
     stats = {"alerts": 0, "graduated": 0, "did_not_graduate": 0,
              "buy_graduated": 0, "buy_total": 0,
              "ignore_graduated": 0, "ignore_total": 0}
+    shadow_stats = {"tracked": shadow_tracked, "graduated": 0, "did_not_graduate": 0}
     # Every signal that has reached a verdict, so the dashboard can show the
     # full record rather than only what's still pending. Without this a signal
     # vanishes from the UI the moment it resolves, which reads as "it was never
@@ -1487,6 +1554,9 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
                     alert_rows[row.get("mint")] = row
                 elif row.get("row_type") == "outcome":
                     graduated = row.get("outcome") == "graduated"
+                    if not row.get("alerted", True):
+                        shadow_stats["graduated" if graduated else "did_not_graduate"] += 1
+                        continue
                     stats["graduated" if graduated else "did_not_graduate"] += 1
                     decision = row.get("decision")
                     if decision in ("buy", "ignore"):
@@ -1512,6 +1582,9 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
     history.reverse()  # newest verdict first
     decided = stats["graduated"] + stats["did_not_graduate"]
     stats["graduation_rate_pct"] = round(stats["graduated"] / decided * 100.0, 1) if decided else None
+    shadow_decided = shadow_stats["graduated"] + shadow_stats["did_not_graduate"]
+    shadow_stats["graduation_rate_pct"] = (
+        round(shadow_stats["graduated"] / shadow_decided * 100.0, 1) if shadow_decided else None)
 
     return {
         "timestamp": timestamp,
@@ -1524,6 +1597,7 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
         "watching": watching,
         "history": history[:50],
         "stats": stats,
+        "shadow_stats": shadow_stats,
         "daily_cap": DAILY_SIGNAL_CAP,
     }
 
@@ -1636,6 +1710,12 @@ def main():
     label_rows += send_moonshot_alerts(
         candidates, alerts_state, portfolio, pending_outcomes,
         sol_usd, timestamp, now_wall)
+    # Everything that cleared the security gate but didn't make today's cap
+    # or score bar still gets its outcome tracked - see register_shadow_watches
+    # for why. Must run after send_moonshot_alerts so a candidate that WAS
+    # alerted this tick is already in pending_outcomes and gets skipped here
+    # rather than downgraded to a shadow watch.
+    label_rows += register_shadow_watches(candidates, pending_outcomes, timestamp)
 
     # ---- Phase 4: did the signals actually pan out? -----------------------
     outcome_rows = process_outcome_checkpoints(

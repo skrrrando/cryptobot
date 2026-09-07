@@ -105,6 +105,9 @@ function renderHeadline(d) {
   const s = d.stats || {};
   const mood = ret > 0 ? 'winning' : ret < 0 ? 'losing' : '';
 
+  const sh = d.shadow_stats || {};
+  const shDecided = (sh.graduated || 0) + (sh.did_not_graduate || 0);
+
   el.innerHTML = `<div class="headline ${mood}">
     <div>
       <div class="label">Kokku</div>
@@ -117,7 +120,8 @@ function renderHeadline(d) {
       <div class="stat"><div class="k">Signaale</div><div class="v">${s.alerts ?? 0}</div></div>
       <div class="stat"><div class="k">Graduatsioon</div><div class="v">${s.graduation_rate_pct != null ? s.graduation_rate_pct + '%' : '—'}</div></div>
     </div>
-  </div>`;
+  </div>
+  <p class="coin-section-sub">Taustal, ilma Telegramita: ${sh.tracked ?? 0} kandidaati jälgimisel praegu, ${shDecided} juba lahendatud${shDecided ? ` (${sh.graduation_rate_pct}% graduate'us)` : ''} - kogutakse andmeid selle kohta, kus signaali lävi peaks õieti olema.</p>`;
 }
 
 function renderPositions(d) {
@@ -252,7 +256,14 @@ function renderRules(d) {
         <li><b>Aste 0 (tasuta):</b> viskab välja need, kus arendaja on sama päeva jooksul juba mitu tokenit lasknud (seeriatootja), või kus nimi/sümbol puudub.</li>
         <li><b>Aste 1 (odav):</b> nõuab tõestatud tõmmet — token peab olema vähemalt 3 min vana, jõudnud ≥2% graduatsiooniteest ja veel aktiivselt raha sisse võtma. <b>Siit tuleb suurim täpsus:</b> me ei ennusta võitjat sünnihetkel, vaid valime need, kes juba ronivad.</li>
         <li><b>Aste 2 (kallis):</b> RugCheck ainult neile, kes juba ronivad — mint/freeze õigus peab olema kustutatud, ei tohi olla "rugged" märget, arendaja käes ≤5% supplyst.</li>
-        <li><b>Aste 3:</b> skoorib ja saadab <b>maksimaalselt ${cap} signaali päevas</b>.</li>
+        <li><b>Aste 3:</b> skoorib ja saadab <b>maksimaalselt ${cap} signaali päevas</b> Telegrami.</li>
+      </ul>
+    </div>
+    <div class="rules-group">
+      <h3>2b. Taustajälgimine</h3>
+      <ul class="rules-list">
+        <li>Kõik, kes aste 2-st läbi saavad — mitte ainult need ${cap}, kes Telegrami jõuavad — jäävad ikkagi jälgimisele. RugCheck on nende jaoks juba tehtud, jälgimine ei maksa midagi lisaks.</li>
+        <li>Need <b>ei lähe kunagi Telegrami</b> ja ei mõjuta sinu numbreid siin lehel — need on eraldi seis, et hiljem näha, kas ${cap}-piir ja skoori lävi on õiges kohas, mitte ainult ${cap} signaali põhjal arvata.</li>
       </ul>
     </div>
     <div class="rules-group">
