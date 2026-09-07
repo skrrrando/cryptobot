@@ -1,5 +1,5 @@
 {
-  "balance": 18.30581671662786,
+  "balance": 66.52726267015129,
   "positions": {
     "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d": {
       "network": "bsc",
@@ -12,19 +12,6 @@
       "amount_usd": 63.87739253279327,
       "qty": 3108.1968077931024,
       "sell_tax_pct": 3.0,
-      "time_exit_evaluated": false
-    },
-    "base_0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06": {
-      "network": "base",
-      "pool_address": "0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06",
-      "base_token_address": "0xc6405d7a226e1c18e559be2f335f74c01ad07bf5",
-      "name": "STFY / ETH 1%",
-      "entry_ts": "2026-09-07T17:45:32.078213+00:00",
-      "entry_price_usd": 0.00323298389382165,
-      "peak_price_usd": 0.00341618821040357,
-      "amount_usd": 63.87739253279327,
-      "qty": 19721.39311317471,
-      "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
@@ -2973,6 +2960,25 @@
       "pnl_usd": 102.20250689296782,
       "pnl_pct": 160.0,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06",
+      "base_token_address": "0xc6405d7a226e1c18e559be2f335f74c01ad07bf5",
+      "name": "STFY / ETH 1%",
+      "entry_ts": "2026-09-07T17:45:32.078213+00:00",
+      "entry_price_usd": 0.00323298389382165,
+      "peak_price_usd": 0.00341618821040357,
+      "amount_usd": 63.87739253279327,
+      "qty": 19721.39311317471,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-07T21:32:00.913697+00:00",
+      "exit_price_usd": 0.00245080250605433,
+      "proceeds_usd": 48.221445953523435,
+      "pnl_usd": -15.655946579269838,
+      "pnl_pct": -24.51,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -2982,6 +2988,7 @@
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": "2026-09-07T20:16:36.092631+00:00",
     "solana_987VwvJZ5FRjWCY9ZwC2tRUGL8FbMT1aF4pUrT7XjPjD": "2026-09-07T20:21:38.273917+00:00",
     "bsc_0x5a5a549379da0d7fe856c787dafab43c3fadc778": "2026-09-07T20:26:26.036386+00:00",
-    "solana_937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H": "2026-09-07T20:57:00.189196+00:00"
+    "solana_937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H": "2026-09-07T20:57:00.189196+00:00",
+    "base_0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06": "2026-09-07T21:32:00.913697+00:00"
   }
 }
