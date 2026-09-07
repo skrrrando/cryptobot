@@ -1,5 +1,5 @@
 {
-  "balance": 333.4344242269011,
+  "balance": 313.2529578810902,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -59,18 +59,6 @@
       "qty": 389.03711259713083,
       "sell_tax_pct": 0.0
     },
-    "solana_D5ZQf8GFSDxDKo3t3gejCfnrTMttU16Dv2BHK3TNYatp": {
-      "network": "solana",
-      "pool_address": "D5ZQf8GFSDxDKo3t3gejCfnrTMttU16Dv2BHK3TNYatp",
-      "base_token_address": "BRZ5aeJCDuruA42V1CntqKvofa2G7DS3yyxx1pZEpump",
-      "name": "moonkey / SOL",
-      "entry_ts": "2026-09-06T19:20:31.113834+00:00",
-      "entry_price_usd": 0.001284698480244945,
-      "peak_price_usd": 0.001284698480244945,
-      "amount_usd": 97.53844720174293,
-      "qty": 75850.73606241724,
-      "sell_tax_pct": 0.0
-    },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
       "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
@@ -90,10 +78,22 @@
       "name": "\u5b59\u5c0f\u5723 / WBNB",
       "entry_ts": "2026-09-06T23:20:50.901147+00:00",
       "entry_price_usd": 0.000374344567948705,
-      "peak_price_usd": 0.00046953374908931,
+      "peak_price_usd": 0.000485126771471896,
       "amount_usd": 88.48378740772817,
       "qty": 228568.2721693783,
       "sell_tax_pct": 3.0
+    },
+    "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": {
+      "network": "base",
+      "pool_address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "name": "SOL / USDC 0.032%",
+      "entry_ts": "2026-09-07T00:15:30.380320+00:00",
+      "entry_price_usd": 106.755072786769,
+      "peak_price_usd": 106.755072786769,
+      "amount_usd": 87.64206508318391,
+      "qty": 0.8199049492168179,
+      "sell_tax_pct": 0.0
     }
   },
   "closed": [
@@ -2301,6 +2301,24 @@
       "pnl_usd": -10.100667894531199,
       "pnl_pct": -10.55,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "D5ZQf8GFSDxDKo3t3gejCfnrTMttU16Dv2BHK3TNYatp",
+      "base_token_address": "BRZ5aeJCDuruA42V1CntqKvofa2G7DS3yyxx1pZEpump",
+      "name": "moonkey / SOL",
+      "entry_ts": "2026-09-06T19:20:31.113834+00:00",
+      "entry_price_usd": 0.001284698480244945,
+      "peak_price_usd": 0.001284698480244945,
+      "amount_usd": 97.53844720174293,
+      "qty": 75850.73606241724,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-07T00:16:14.537124+00:00",
+      "exit_price_usd": 0.0008902011166810253,
+      "proceeds_usd": 67.46059873737298,
+      "pnl_usd": -30.07784846436995,
+      "pnl_pct": -30.84,
+      "exit_reason": "stop_loss"
     }
   ]
 }
