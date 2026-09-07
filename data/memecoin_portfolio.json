@@ -1,5 +1,5 @@
 {
-  "balance": 328.456158762436,
+  "balance": 393.4329446536999,
   "positions": {
     "eth_0x7b1e5d984a43ee732de195628d20d05cfabc3cc7": {
       "network": "eth",
@@ -33,18 +33,6 @@
       "peak_price_usd": 0.000849956937062639,
       "amount_usd": 44.194652272260704,
       "qty": 58126.419528444305,
-      "sell_tax_pct": 0.0
-    },
-    "base_0x4e829f8a5213c42535ab84aa40bd4adcce9cba02": {
-      "network": "base",
-      "pool_address": "0x4e829f8a5213c42535ab84aa40bd4adcce9cba02",
-      "base_token_address": "0x532f27101965dd16442e59d40670faf5ebb142e4",
-      "name": "BRETT / WETH 1%",
-      "entry_ts": "2026-09-06T10:00:52.303763+00:00",
-      "entry_price_usd": 0.00552478943442472,
-      "peak_price_usd": 0.00565262482835627,
-      "amount_usd": 65.61526018174517,
-      "qty": 11857.493562688369,
       "sell_tax_pct": 0.0
     },
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
@@ -2337,6 +2325,24 @@
       "pnl_usd": 11.85499118477071,
       "pnl_pct": 13.4,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x4e829f8a5213c42535ab84aa40bd4adcce9cba02",
+      "base_token_address": "0x532f27101965dd16442e59d40670faf5ebb142e4",
+      "name": "BRETT / WETH 1%",
+      "entry_ts": "2026-09-06T10:00:52.303763+00:00",
+      "entry_price_usd": 0.00552478943442472,
+      "peak_price_usd": 0.00565262482835627,
+      "amount_usd": 65.61526018174517,
+      "qty": 11857.493562688369,
+      "sell_tax_pct": 0.0,
+      "exit_ts": "2026-09-07T02:41:15.915313+00:00",
+      "exit_price_usd": 0.00548866118014495,
+      "proceeds_usd": 64.97678589126392,
+      "pnl_usd": -0.6384742904812555,
+      "pnl_pct": -0.97,
+      "exit_reason": "timeout"
     }
   ]
 }
