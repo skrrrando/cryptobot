@@ -1,34 +1,39 @@
 {
-  "timestamp": "2026-09-08T06:14:17.885552+00:00",
+  "timestamp": "2026-09-08T06:23:20.793568+00:00",
   "balance": 1000.0,
   "positions_value": 0.0,
   "net_worth": 1000.0,
   "starting_balance": 1000.0,
   "positions": [],
   "closed": [],
-  "watching": [
-    {
-      "mint": "FiCKJB4MPAEMvPdpcyqSfGLtiqyfaFqWUQqNc47rMwvP",
-      "name": "Pok\u00e9dollar",
-      "symbol": "\u20bd",
-      "decision": null,
-      "signal_ts": "2026-09-08T00:16:53.148334+00:00",
-      "alert_score": 60.8,
-      "alert_graduation_pct": 38.25,
-      "graduation_pct": 3.73
-    },
+  "watching": [],
+  "history": [
     {
       "mint": "MC865gpBoZq2PsCruhrY1CF13ftbUQXkVMaWNzNpump",
       "name": "Lolite",
       "symbol": "LOL",
+      "outcome": "did_not_graduate",
       "decision": null,
       "signal_ts": "2026-09-08T00:16:53.148334+00:00",
+      "recorded_ts": "2026-09-08T06:23:20.793568+00:00",
       "alert_score": 41.2,
       "alert_graduation_pct": 9.73,
-      "graduation_pct": 2.61
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 2.41,
+      "minutes_to_graduate": null
+    },
+    {
+      "mint": "FiCKJB4MPAEMvPdpcyqSfGLtiqyfaFqWUQqNc47rMwvP",
+      "name": "Pok\u00e9dollar",
+      "symbol": "\u20bd",
+      "outcome": "did_not_graduate",
+      "decision": null,
+      "signal_ts": "2026-09-08T00:16:53.148334+00:00",
+      "recorded_ts": "2026-09-08T06:23:20.793568+00:00",
+      "alert_score": 60.8,
+      "alert_graduation_pct": 38.25,
+      "final_graduation_pct": 3.15,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "DpSzph7Fxw6jMYCEBHkMpj3wAtSD5FdGuFNgmaZKfvrd",
       "name": "pussyinbio",
@@ -150,15 +155,15 @@
   "stats": {
     "alerts": 12,
     "graduated": 2,
-    "did_not_graduate": 7,
+    "did_not_graduate": 9,
     "buy_graduated": 0,
     "buy_total": 0,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 22.2
+    "graduation_rate_pct": 18.2
   },
   "shadow_stats": {
-    "tracked": 35,
+    "tracked": 36,
     "graduated": 32,
     "did_not_graduate": 104,
     "graduation_rate_pct": 23.5
