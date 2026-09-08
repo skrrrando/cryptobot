@@ -211,8 +211,18 @@ BAD_HOLDER_GROWTH_PCT = 0.0    # holder count is net SHRINKING since the earlies
 # thresholds, not tuned against outcome data yet - same caveat as the rest
 # of this file's constants.
 STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
-TRAILING_STOP_PCT = 25.0        # exit if price pulls back this much from its peak (only once ever in profit)
+# Only used as trailing_stop_pct_for()'s defensive fallback now - normal flow
+# never reaches it, since MIN_PEAK_PROFIT_TO_ARM_TRAIL_PCT keeps anything
+# below the lowest real tier from arming trailing-stop at all.
+TRAILING_STOP_PCT = 25.0
 MOMENTUM_COLLAPSE_H1_PCT = -15.0  # exit if 1h change turns this negative AND sell pressure exceeds buy pressure
+
+# Below this, a position's peak is too small for ANY trail to protect without
+# guaranteeing a loss on exit (see TRAILING_STOP_TIERS) - so trailing-stop
+# simply doesn't arm yet. A position that hasn't cleared this stays governed
+# by stop-loss/momentum-collapse/the 6h timeout only, same as one that's
+# never been in profit at all.
+MIN_PEAK_PROFIT_TO_ARM_TRAIL_PCT = 10.0
 
 # A pool that closes (for any reason) is off-limits to re-buy for a while.
 # Without this, a token that keeps re-qualifying as a momentum candidate the
@@ -227,10 +237,22 @@ REBUY_COOLDOWN_SECONDS = 2 * 3600
 # a fixed trail would stop out a genuine winner on ordinary noise. Widen the
 # trail as the position banks more profit, so an average trade is still
 # protected tightly but a 3x+ isn't cut short by a normal wobble.
+#
+# The bottom two tiers were added after reviewing all 31 trailing_stop exits
+# in production. A 25% trail needs the peak to have been at least 33.3% above
+# entry just to exit at breakeven (peak * 0.75 >= entry solves to that). Most
+# positions never peak anywhere near that far - the median peak across all 31
+# was only 10.6% - so with just the old flat 25% tier, trailing_stop wasn't
+# "protecting gains", it was converting any small positive peak into a
+# guaranteed loss. Confirmed with zero exceptions: of the 26 trades whose peak
+# was under 33.3%, all 26 closed negative; of the 5 whose peak cleared it, 4
+# closed positive. The two new tiers below keep the exit close to or above
+# breakeven for a modest peak instead of guaranteeing a round-trip to red.
 TRAILING_STOP_TIERS = [
     (150.0, 45.0),  # up 150%+ from entry at peak -> allow a 45% pullback from peak
     (50.0, 35.0),   # up 50-150% -> allow 35%
-    (0.0, TRAILING_STOP_PCT),  # below that -> the default 25%
+    (20.0, 15.0),   # up 20-50% -> allow 15% (breakeven needs <=16.7% here)
+    (10.0, 8.0),    # up 10-20% -> allow 8% (breakeven needs <=9.1% here)
 ]
 
 # The fixed 6h checkpoint exit (EXIT_OFFSET_MINUTES) is a fallback for
@@ -966,10 +988,14 @@ def check_open_positions(portfolio, security_cache, checks_this_tick, now_wall):
             continue
 
         pos["peak_price_usd"] = max(pos.get("peak_price_usd", pos["entry_price_usd"]), price)
-        was_in_profit = pos["peak_price_usd"] > pos["entry_price_usd"]
         loss_pct = (price - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
         drawdown_from_peak_pct = (price - pos["peak_price_usd"]) / pos["peak_price_usd"] * 100.0
         peak_profit_pct = (pos["peak_price_usd"] - pos["entry_price_usd"]) / pos["entry_price_usd"] * 100.0
+        # Armed only once the peak clears a real profit, not merely > entry -
+        # see TRAILING_STOP_TIERS for why a barely-positive peak must not be
+        # allowed to trigger this at all (the trail math can't protect a gain
+        # that was never big enough to survive it).
+        was_in_profit = peak_profit_pct >= MIN_PEAK_PROFIT_TO_ARM_TRAIL_PCT
         trail = trailing_stop_pct_for(peak_profit_pct)
 
         h1 = _as_float(current.get("price_change_pct", {}).get("h1"))
