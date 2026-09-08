@@ -1826,6 +1826,8 @@ def main():
             print(f"NOTE from PumpPortal: {notice['errors']}", file=sys.stderr)
 
     top = candidates[0] if candidates else None
+    watched_alerted = sum(1 for w in pending_outcomes.values() if w.get("alerted", True))
+    watched_shadow = len(pending_outcomes) - watched_alerted
     print(f"Listened {LISTEN_WINDOW_SECONDS}s: {len(new_tokens)} new ({stage0_rejects} rejected at stage 0), "
           f"{len(migrations)} migration(s) ({matched_migrations} matched). "
           f"Tracking {len(bonding_state)} curve(s), read {len(curves)} this tick. "
@@ -1837,7 +1839,7 @@ def main():
           f"{len(alerts_state.get('pending', {}))} awaiting a decision. "
           f"Moonshot: ${portfolio['balance']:.2f} free, {len(portfolio['positions'])} open, "
           f"{len(portfolio['closed'])} closed. "
-          f"Watching {len(pending_outcomes)} alerted token(s) for graduation. "
+          f"Watching {watched_alerted} alerted + {watched_shadow} shadow token(s) for graduation. "
           f"Pruned {curves_pruned} curve(s), {dev_pruned} creator(s).")
     return 0
 
