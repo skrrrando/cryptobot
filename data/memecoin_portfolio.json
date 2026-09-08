@@ -1,5 +1,5 @@
 {
-  "balance": 24.77243089353962,
+  "balance": 113.5448450282128,
   "positions": {
     "base_0x85f1aa3a70fedd1c52705c15baed143e675cd626": {
       "network": "base",
@@ -39,20 +39,6 @@
       "qty": 667.915227313034,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
-    },
-    "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": {
-      "network": "base",
-      "pool_address": "0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a",
-      "base_token_address": "0xc52aedec3374422d7510e294cfaa90799595cba3",
-      "name": "Surplus / WETH",
-      "entry_ts": "2026-09-08T19:50:35.134794+00:00",
-      "entry_price_usd": 4.802083281450854e-05,
-      "peak_price_usd": 5.32052300106657e-05,
-      "amount_usd": 98.30568658776144,
-      "qty": 2047146.6408650107,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false,
-      "dca_count": 1
     },
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": {
       "network": "solana",
@@ -3901,6 +3887,26 @@
       "pnl_usd": -0.4718152548008021,
       "pnl_pct": -0.73,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a",
+      "base_token_address": "0xc52aedec3374422d7510e294cfaa90799595cba3",
+      "name": "Surplus / WETH",
+      "entry_ts": "2026-09-08T19:50:35.134794+00:00",
+      "entry_price_usd": 4.802083281450854e-05,
+      "peak_price_usd": 5.32052300106657e-05,
+      "amount_usd": 98.30568658776144,
+      "qty": 2047146.6408650107,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "dca_count": 1,
+      "exit_ts": "2026-09-08T23:26:03.533270+00:00",
+      "exit_price_usd": 4.34150262428704e-05,
+      "proceeds_usd": 88.77241413467318,
+      "pnl_usd": -9.533272453088259,
+      "pnl_pct": -9.7,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -3935,7 +3941,7 @@
     "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-08T16:36:36.661889+00:00",
     "solana_54sbyULrreD9HBoV5wRWedeCBEw6gQ7VkdHW18rLX78e": "2026-09-08T16:56:14.712363+00:00",
     "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": "2026-09-08T17:01:56.859110+00:00",
-    "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": "2026-09-08T17:46:25.054713+00:00",
+    "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": "2026-09-08T23:26:03.533270+00:00",
     "base_0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9": "2026-09-08T21:21:23.481144+00:00",
     "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": "2026-09-08T21:51:40.641344+00:00"
   }
