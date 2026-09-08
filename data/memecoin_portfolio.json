@@ -1,5 +1,5 @@
 {
-  "balance": 63.79304077900882,
+  "balance": 122.97349010579245,
   "positions": {
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
@@ -47,7 +47,7 @@
       "name": "KTA / WETH",
       "entry_ts": "2026-09-08T12:05:25.245179+00:00",
       "entry_price_usd": 0.0774214788992333,
-      "peak_price_usd": 0.0784735104045557,
+      "peak_price_usd": 0.0786013685120984,
       "amount_usd": 60.584911497678725,
       "qty": 781.230881664072,
       "sell_tax_pct": 0.0,
@@ -60,7 +60,7 @@
       "name": "Surplus / WETH",
       "entry_ts": "2026-09-08T15:10:35.136271+00:00",
       "entry_price_usd": 4.3695862963733e-05,
-      "peak_price_usd": 4.75014273967896e-05,
+      "peak_price_usd": 4.80925237315965e-05,
       "amount_usd": 59.15765415413296,
       "qty": 1351515.7409209202,
       "sell_tax_pct": 0.0,
@@ -76,19 +76,6 @@
       "peak_price_usd": 0.101576957780565,
       "amount_usd": 59.15765415413296,
       "qty": 651.240525083048,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
-      "network": "base",
-      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
-      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
-      "name": "DOT / ETH 1%",
-      "entry_ts": "2026-09-08T15:15:36.244471+00:00",
-      "entry_price_usd": 0.00518097639121896,
-      "peak_price_usd": 0.00572974103843728,
-      "amount_usd": 59.15765415413296,
-      "qty": 11397.866419310814,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -3613,6 +3600,25 @@
       "pnl_usd": 65.18677670244028,
       "pnl_pct": 108.78,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
+      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
+      "name": "DOT / ETH 1%",
+      "entry_ts": "2026-09-08T15:15:36.244471+00:00",
+      "entry_price_usd": 0.00518097639121896,
+      "peak_price_usd": 0.00572974103843728,
+      "amount_usd": 59.15765415413296,
+      "qty": 11397.866419310814,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-08T16:02:30.337237+00:00",
+      "exit_price_usd": 0.00520150866149416,
+      "proceeds_usd": 59.18044932678364,
+      "pnl_usd": 0.022795172650674544,
+      "pnl_pct": 0.04,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -3642,7 +3648,7 @@
     "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-08T10:26:12.643660+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-08T13:11:49.009556+00:00",
+    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-08T16:02:30.337237+00:00",
     "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00"
   }
 }
