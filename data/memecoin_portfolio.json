@@ -1,5 +1,5 @@
 {
-  "balance": 454.30309891094527,
+  "balance": 467.4576463852785,
   "positions": {
     "bsc_0x0ec12db33551afba853b691b4edf49196ea0e99a": {
       "network": "bsc",
@@ -11,19 +11,6 @@
       "peak_price_usd": 0.0160651004283901,
       "amount_usd": 68.62856637150833,
       "qty": 4577.193285457599,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "solana_937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H": {
-      "network": "solana",
-      "pool_address": "937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H",
-      "base_token_address": "7Y7V1a4m2nWK7BMgbka5B4vR1pDvCK7yva3Hnrqkraze",
-      "name": "Nasduck / SOL",
-      "entry_ts": "2026-09-07T23:10:31.323219+00:00",
-      "entry_price_usd": 0.004724189295064514,
-      "peak_price_usd": 0.006961532213827487,
-      "amount_usd": 68.44022303509695,
-      "qty": 14478.937594598861,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -64,6 +51,19 @@
       "peak_price_usd": 2505.13,
       "amount_usd": 69.38495946892641,
       "qty": 0.02768650245953602,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "base_0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06": {
+      "network": "base",
+      "pool_address": "0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06",
+      "base_token_address": "0xc6405d7a226e1c18e559be2f335f74c01ad07bf5",
+      "name": "STFY / ETH 1%",
+      "entry_ts": "2026-09-08T02:30:43.293173+00:00",
+      "entry_price_usd": 0.00373519121094133,
+      "peak_price_usd": 0.00380687597753423,
+      "amount_usd": 69.38495946892641,
+      "qty": 18543.904394587033,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -3112,6 +3112,25 @@
       "pnl_usd": -0.6401910040000018,
       "pnl_pct": -1.01,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H",
+      "base_token_address": "7Y7V1a4m2nWK7BMgbka5B4vR1pDvCK7yva3Hnrqkraze",
+      "name": "Nasduck / SOL",
+      "entry_ts": "2026-09-07T23:10:31.323219+00:00",
+      "entry_price_usd": 0.004724189295064514,
+      "peak_price_usd": 0.006961532213827487,
+      "amount_usd": 68.44022303509695,
+      "qty": 14478.937594598861,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-08T02:32:11.907315+00:00",
+      "exit_price_usd": 0.00570375285208747,
+      "proceeds_usd": 82.53950694325964,
+      "pnl_usd": 14.09928390816269,
+      "pnl_pct": 20.6,
+      "exit_reason": "take_profit"
     }
   ],
   "recent_exits": {
@@ -3121,7 +3140,7 @@
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": "2026-09-07T20:16:36.092631+00:00",
     "solana_987VwvJZ5FRjWCY9ZwC2tRUGL8FbMT1aF4pUrT7XjPjD": "2026-09-07T20:21:38.273917+00:00",
     "bsc_0x5a5a549379da0d7fe856c787dafab43c3fadc778": "2026-09-07T20:26:26.036386+00:00",
-    "solana_937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H": "2026-09-07T20:57:00.189196+00:00",
+    "solana_937nYYCPzqygDm71FX5XJzepDCnJLca9GSfe5essZK2H": "2026-09-08T02:32:11.907315+00:00",
     "base_0xa6979745954ea4976d4c94a5957c225801de74b4ef6ab22d122854fb09405e06": "2026-09-07T21:32:00.913697+00:00",
     "solana_DJ9xnmQU1gP6XXqmCZrtHsf89YS1B9PwkTWUXipuzaSr": "2026-09-07T21:56:48.930724+00:00",
     "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": "2026-09-07T21:56:48.930724+00:00",
