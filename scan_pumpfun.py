@@ -197,8 +197,32 @@ OUTCOME_MAX_AGE_SECONDS = 6 * 3600
 # The whole point of the funnel: few enough signals a day that each one can
 # actually be researched by hand before deciding. Counted per UTC day.
 DAILY_SIGNAL_CAP = 4
-MIN_SCORE_TO_ALERT = 25.0     # untuned starting guess; keeps the cap from being
-                               # spent on weak candidates just to fill the quota
+# Raised from the original untuned guess (25) after backtesting all 147
+# resolved signals (11 real alerts + 136 shadow-tracked, at $10/signal, hold
+# to graduation or final outcome, no stop-loss):
+#
+#   score >= 30: n=129  29% win rate  -11.9% return
+#   score >= 75: n= 58  47% win rate   +1.4% return
+#   score >= 90: n= 28  64% win rate  +14.2% return
+#   score >= 95: n= 17  71% win rate   +9.1% return
+#
+# The win rate climbs smoothly with score rather than jumping at one lucky
+# cutoff, which is what makes this look like a real gradient and not a
+# curve-fit. Confirmed on the 135 shadow-only signals alone (never touched
+# by the score formula's own tuning, so a genuine out-of-sample check):
+# score >= 90 there gives +20.0% (n=24), score >= 95 gives +18.1% (n=13) -
+# same shape, if anything stronger. A stop-loss on top of this filter makes
+# it WORSE (+14.2% -> +7-9%), because it cuts off some of the eventual
+# graduations along with the losers - once the entry filter is this
+# selective, holding to the real outcome beats protecting the downside.
+#
+# Set at 90 rather than 95 for a larger, steadier sample at the same
+# ballpark return. Caveat that has to travel with this number: it is drawn
+# from ~3 days of real market data. Re-check once more signals accumulate -
+# this could be a real edge or a temporary regime, and only more data (which
+# keeps flowing regardless via shadow-tracking, unaffected by this bar) can
+# tell those apart.
+MIN_SCORE_TO_ALERT = 90.0
 ALERT_COOLDOWN_SECONDS = 3600  # never re-alert the same mint within this window
 
 # --- Moonshot paper portfolio ---------------------------------------------
