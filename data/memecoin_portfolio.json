@@ -1,32 +1,6 @@
 {
-  "balance": 58.38170496206857,
+  "balance": 190.53760020081313,
   "positions": {
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
-      "network": "base",
-      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "name": "WETH / USDC 0.3%",
-      "entry_ts": "2026-09-08T10:25:25.564048+00:00",
-      "entry_price_usd": 2494.66,
-      "peak_price_usd": 2495.44,
-      "amount_usd": 66.60411673208066,
-      "qty": 0.026658574251376035,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": {
-      "network": "base",
-      "pool_address": "0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703",
-      "base_token_address": "0x22af33fe49fd1fa80c7149773dde5890d3c76f3b",
-      "name": "BNKR / WETH 1%",
-      "entry_ts": "2026-09-08T10:35:24.360717+00:00",
-      "entry_price_usd": 0.000242094002023933,
-      "peak_price_usd": 0.000243994249732223,
-      "amount_usd": 65.64806987836688,
-      "qty": 270745.0069778945,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": {
       "network": "solana",
       "pool_address": "DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW",
@@ -113,7 +87,7 @@
       "name": "STONK / SOL",
       "entry_ts": "2026-09-08T15:45:35.120804+00:00",
       "entry_price_usd": 0.16572089891736488,
-      "peak_price_usd": 0.17810926569371666,
+      "peak_price_usd": 0.17835258224371428,
       "amount_usd": 64.58988554600299,
       "qty": 389.6208901874252,
       "sell_tax_pct": 0.0,
@@ -3632,6 +3606,44 @@
       "pnl_usd": 0.022795172650674544,
       "pnl_pct": 0.04,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-08T10:25:25.564048+00:00",
+      "entry_price_usd": 2494.66,
+      "peak_price_usd": 2495.44,
+      "amount_usd": 66.60411673208066,
+      "qty": 0.026658574251376035,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-08T16:36:36.661889+00:00",
+      "exit_price_usd": 2492.19,
+      "proceeds_usd": 66.33819460656957,
+      "pnl_usd": -0.2659221255110822,
+      "pnl_pct": -0.4,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703",
+      "base_token_address": "0x22af33fe49fd1fa80c7149773dde5890d3c76f3b",
+      "name": "BNKR / WETH 1%",
+      "entry_ts": "2026-09-08T10:35:24.360717+00:00",
+      "entry_price_usd": 0.000242094002023933,
+      "peak_price_usd": 0.000243994249732223,
+      "amount_usd": 65.64806987836688,
+      "qty": 270745.0069778945,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-08T16:36:36.661889+00:00",
+      "exit_price_usd": 0.000243476486916442,
+      "proceeds_usd": 65.81770063217498,
+      "pnl_usd": 0.169630753808093,
+      "pnl_pct": 0.26,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -3647,7 +3659,7 @@
     "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": "2026-09-07T21:56:48.930724+00:00",
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": "2026-09-08T15:32:06.274372+00:00",
     "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d": "2026-09-08T12:02:05.654714+00:00",
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": "2026-09-08T08:06:23.966142+00:00",
+    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": "2026-09-08T16:36:36.661889+00:00",
     "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": "2026-09-08T00:16:36.277477+00:00",
     "arbitrum_0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e": "2026-09-08T13:17:12.777256+00:00",
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": "2026-09-08T12:02:05.654714+00:00",
@@ -3662,6 +3674,7 @@
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
     "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-08T16:02:30.337237+00:00",
-    "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00"
+    "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00",
+    "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-08T16:36:36.661889+00:00"
   }
 }
