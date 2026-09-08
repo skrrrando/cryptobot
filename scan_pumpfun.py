@@ -233,11 +233,12 @@ ALERT_COOLDOWN_SECONDS = 3600  # never re-alert the same mint within this window
 # the bot - it is a practice ground for making the call, not an autonomous
 # trader.
 MOONSHOT_STARTING_BALANCE_USD = 1000.0
-# The size of each buy is chosen by the user, per trade: pressing BUY asks
-# "how much?" and the next number they send is the amount. Only the bounds
-# are fixed here.
+# The size of each buy is chosen by the user, per trade: pressing BUY offers
+# quick percent-of-balance buttons (MOONSHOT_QUICK_BUY_PCTS) or the user can
+# still just type a dollar amount. Only the bounds are fixed here.
 MOONSHOT_MIN_TRADE_USD = 5.0
 MOONSHOT_SUGGESTED_TRADE_USD = 100.0  # shown in the prompt as a sensible default
+MOONSHOT_QUICK_BUY_PCTS = [10, 15, 20]  # % of free balance, shown as one-tap buttons
 
 # Pump.fun's own trading fee. Widely documented as 1% per trade; recorded as a
 # named constant rather than folded into the maths so it's easy to correct.
@@ -769,6 +770,19 @@ def alert_keyboard(alert_id, mint):
         {"text": "BUY", "callback_data": f"buy:{alert_id}"},
         {"text": "IGNORE", "callback_data": f"ignore:{alert_id}"},
         {"text": "OPEN", "url": f"https://pump.fun/coin/{mint}"},
+    ]]}
+
+
+def amount_keyboard(alert_id):
+    """Shown after BUY, so a decision is one tap instead of typing a number.
+    Percentages are of free balance, computed fresh at press time (not baked
+    into the button), so the amount is always right even if balance moved
+    since the alert fired. callback_data is 'buypct:{alert_id}:{pct}' -
+    alert_id is a short int-string, so this stays well under Telegram's
+    64-byte cap even for three buttons."""
+    return {"inline_keyboard": [[
+        {"text": f"{pct}%", "callback_data": f"buypct:{alert_id}:{pct}"}
+        for pct in MOONSHOT_QUICK_BUY_PCTS
     ]]}
 
 
@@ -1327,6 +1341,34 @@ def send_moonshot_alerts(candidates, alerts_state, portfolio, pending_outcomes,
     return label_rows
 
 
+def _finalize_buy_decision(portfolio, pending, awaiting, pending_outcomes,
+                            alert_id, alert, pos, prompt_message_id, timestamp, label_rows):
+    """Shared tail for a successful BUY, whichever path resolved the amount
+    (a typed number or a quick-percent button) - retires both the original
+    alert's buttons AND the "how much?" prompt's buttons (if it had any), so
+    neither can be tapped again after the decision is already final."""
+    awaiting.clear()
+    pending.pop(alert_id, None)
+    if alert.get("message_id"):
+        telegram_call("editMessageReplyMarkup", {
+            "chat_id": TELEGRAM_CHAT_ID, "message_id": alert["message_id"], "reply_markup": {},
+        })
+    if prompt_message_id:
+        telegram_call("editMessageReplyMarkup", {
+            "chat_id": TELEGRAM_CHAT_ID, "message_id": prompt_message_id, "reply_markup": {},
+        })
+    record_decision_on_outcome(pending_outcomes, alert["mint"], "buy", timestamp)
+    label_rows.append({"row_type": "decision", "decision": "buy", "decided_ts": timestamp,
+                       "entry_price_usd": pos["entry_price_usd"],
+                       "entry_slippage_pct": pos["entry_slippage_pct"], **alert})
+    telegram_call("sendMessage", {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": (f"Bought ${pos['amount_usd']:.2f} of {alert.get('name')} "
+                 f"(slippage {pos['entry_slippage_pct']:+.1f}%).\n"
+                 f"Balance ${portfolio['balance']:.2f}"),
+    })
+
+
 def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outcomes,
                             sol_usd, offset_state, timestamp):
     """Read button presses since the last tick and act on them.
@@ -1386,27 +1428,9 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
                             "text": f"Could not buy: {err}. Send another amount, or press IGNORE.",
                         })
                     else:
-                        awaiting.clear()
-                        pending.pop(alert_id, None)
-                        # Now that it's actually bought, retire the original
-                        # alert's buttons - the decision is final.
-                        if alert.get("message_id"):
-                            telegram_call("editMessageReplyMarkup", {
-                                "chat_id": TELEGRAM_CHAT_ID,
-                                "message_id": alert["message_id"],
-                                "reply_markup": {},
-                            })
-                        record_decision_on_outcome(pending_outcomes, alert["mint"], "buy", timestamp)
-                        label_rows.append({"row_type": "decision", "decision": "buy",
-                                           "decided_ts": timestamp,
-                                           "entry_price_usd": pos["entry_price_usd"],
-                                           "entry_slippage_pct": pos["entry_slippage_pct"], **alert})
-                        telegram_call("sendMessage", {
-                            "chat_id": TELEGRAM_CHAT_ID,
-                            "text": (f"Bought ${pos['amount_usd']:.2f} of {alert.get('name')} "
-                                     f"(slippage {pos['entry_slippage_pct']:+.1f}%).\n"
-                                     f"Balance ${portfolio['balance']:.2f}"),
-                        })
+                        prompt_message_id = awaiting.get(alert_id, {}).get("prompt_message_id")
+                        _finalize_buy_decision(portfolio, pending, awaiting, pending_outcomes,
+                                                alert_id, alert, pos, prompt_message_id, timestamp, label_rows)
                 continue
             continue
 
@@ -1421,6 +1445,7 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
 
         action, _, key = data.partition(":")
         note = "Unknown action"
+        buypct_completed = False  # set True below on a successful buypct purchase
 
         if action == "ignore":
             alert = pending.pop(key, None)
@@ -1434,9 +1459,10 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
                 note = f"Ignored {alert.get('name')} - still tracking how it turns out."
 
         elif action == "buy":
-            # BUY doesn't buy anything yet - it asks how much. The alert stays
-            # pending until an amount arrives (see the message branch above),
-            # so nothing is lost if the user never answers.
+            # BUY doesn't buy anything yet - it asks how much, via quick
+            # percent-of-balance buttons or a typed number. The alert stays
+            # pending until an amount arrives, so nothing is lost if the user
+            # never answers.
             alert = pending.get(key)
             if alert is None:
                 note = "That signal has already been answered."
@@ -1445,15 +1471,46 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
                 # Only one open "how much?" question at a time, otherwise a
                 # bare number in the chat would be ambiguous.
                 awaiting.clear()
-                awaiting[key] = {"alert_id": key, "asked_ts": timestamp}
-                note = f"How much? Send a number."
-                telegram_call("sendMessage", {
+                prompt = telegram_call("sendMessage", {
                     "chat_id": chat_id or TELEGRAM_CHAT_ID,
                     "text": (f"How much do you want to put into {alert.get('name')}?\n"
-                             f"Reply with just a number, e.g. {MOONSHOT_SUGGESTED_TRADE_USD:.0f}\n\n"
+                             f"Tap a quick amount, or reply with a number, e.g. {MOONSHOT_SUGGESTED_TRADE_USD:.0f}\n\n"
                              f"Free balance: ${portfolio['balance']:.2f}  "
                              f"(min ${MOONSHOT_MIN_TRADE_USD:.0f})"),
+                    "reply_markup": amount_keyboard(key),
                 })
+                awaiting[key] = {"alert_id": key, "asked_ts": timestamp,
+                                  "prompt_message_id": (prompt or {}).get("message_id")}
+                note = f"How much? Send a number or tap a quick amount."
+
+        elif action == "buypct":
+            # key is "{alert_id}:{pct}" - buypct's own callback_data shape,
+            # distinct from every other action's plain alert_id key.
+            alert_id, _, pct_str = key.partition(":")
+            alert = pending.get(alert_id)
+            if alert is None:
+                note = "That signal has already been answered."
+            else:
+                try:
+                    pct = float(pct_str)
+                except ValueError:
+                    pct = None
+                amount = round(portfolio["balance"] * pct / 100.0, 2) if pct else None
+                if not amount or amount < MOONSHOT_MIN_TRADE_USD:
+                    note = f"That's below the ${MOONSHOT_MIN_TRADE_USD:.0f} minimum - send a number instead."
+                else:
+                    history = (bonding_state.get(alert.get("bonding_curve_key")) or {}).get("history") or []
+                    curve = history[-1] if history else None
+                    pos, err = open_position(portfolio, alert, curve, sol_usd, timestamp, amount)
+                    if pos is None:
+                        note = f"Could not buy: {err}. Send a number instead."
+                    else:
+                        awaiting = alerts_state.setdefault("awaiting_amount", {})
+                        prompt_message_id = awaiting.get(alert_id, {}).get("prompt_message_id")
+                        _finalize_buy_decision(portfolio, pending, awaiting, pending_outcomes,
+                                                alert_id, alert, pos, prompt_message_id, timestamp, label_rows)
+                        note = f"Bought ${pos['amount_usd']:.2f} of {alert.get('name')}."
+                        buypct_completed = True
 
         elif action == "sell":
             held = portfolio["positions"].get(key) or {}
@@ -1475,8 +1532,12 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
         # BUY is not a decision yet - it only opens the "how much?" question,
         # which already sent its own detailed prompt. So leave its buttons
         # alone (the user must still be able to change their mind and press
-        # IGNORE) and don't echo the note a second time.
-        if action == "buy":
+        # IGNORE) and don't echo the note a second time. A successful buypct
+        # is the same story in reverse: it's already fully final and already
+        # sent its own confirmation (and retired both messages' buttons)
+        # inside _finalize_buy_decision, so it must skip the generic tail
+        # below too, or the confirmation gets sent twice.
+        if action == "buy" or buypct_completed:
             continue
         # For a real decision: strip the buttons so it's visibly final and
         # re-clicks are inert by construction rather than by state checking.
