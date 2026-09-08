@@ -1,19 +1,6 @@
 {
-  "balance": 175.73252387893842,
+  "balance": 247.27541566805337,
   "positions": {
-    "bsc_0x0ec12db33551afba853b691b4edf49196ea0e99a": {
-      "network": "bsc",
-      "pool_address": "0x0ec12db33551afba853b691b4edf49196ea0e99a",
-      "base_token_address": "0xd5eaaac47bd1993d661bc087e15dfb079a7f3c19",
-      "name": "KOMA / WBNB",
-      "entry_ts": "2026-09-07T22:40:31.214533+00:00",
-      "entry_price_usd": 0.0149603589484978,
-      "peak_price_usd": 0.0160651004283901,
-      "amount_usd": 68.62856637150833,
-      "qty": 4577.193285457599,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e": {
       "network": "bsc",
       "pool_address": "0xf0a949d3d93b833c183a27ee067165b6f2c9625e",
@@ -113,7 +100,7 @@
       "name": "STONKEX / WETH 1%",
       "entry_ts": "2026-09-08T04:15:31.946154+00:00",
       "entry_price_usd": 0.018998540444975,
-      "peak_price_usd": 0.0199812253138298,
+      "peak_price_usd": 0.0205457706842511,
       "amount_usd": 69.69757949206904,
       "qty": 3663.0666075368276,
       "sell_tax_pct": 0.0,
@@ -3221,6 +3208,25 @@
       "pnl_usd": -14.218437378265953,
       "pnl_pct": -20.15,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x0ec12db33551afba853b691b4edf49196ea0e99a",
+      "base_token_address": "0xd5eaaac47bd1993d661bc087e15dfb079a7f3c19",
+      "name": "KOMA / WBNB",
+      "entry_ts": "2026-09-07T22:40:31.214533+00:00",
+      "entry_price_usd": 0.0149603589484978,
+      "peak_price_usd": 0.0160651004283901,
+      "amount_usd": 68.62856637150833,
+      "qty": 4577.193285457599,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-08T04:42:00.217303+00:00",
+      "exit_price_usd": 0.0156635602299474,
+      "proceeds_usd": 71.54289178911495,
+      "pnl_usd": 2.9143254176066193,
+      "pnl_pct": 4.25,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -3242,6 +3248,7 @@
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": "2026-09-08T01:51:27.564743+00:00",
     "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": "2026-09-08T01:56:27.969088+00:00",
     "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": "2026-09-08T03:51:50.646554+00:00",
-    "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": "2026-09-08T04:11:50.538615+00:00"
+    "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": "2026-09-08T04:11:50.538615+00:00",
+    "bsc_0x0ec12db33551afba853b691b4edf49196ea0e99a": "2026-09-08T04:42:00.217303+00:00"
   }
 }
