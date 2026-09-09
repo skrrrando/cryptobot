@@ -233,9 +233,16 @@ ALERT_COOLDOWN_SECONDS = 3600  # never re-alert the same mint within this window
 # the bot - it is a practice ground for making the call, not an autonomous
 # trader.
 MOONSHOT_STARTING_BALANCE_USD = 1000.0
-# The size of each buy is chosen by the user, per trade: pressing BUY offers
-# quick percent-of-balance buttons (MOONSHOT_QUICK_BUY_PCTS) or the user can
-# still just type a dollar amount. Only the bounds are fixed here.
+# auto_buy_moonshot_signals() spends this on every signal that clears
+# MIN_SCORE_TO_ALERT, fixed rather than balance-scaled - the user's own
+# choice, made deliberately small next to MOONSHOT_STARTING_BALANCE_USD so
+# a bad run of signals can't do much damage while this is still new.
+MOONSHOT_AUTO_BUY_USD = 20.0
+# The manual BUY-amount flow (poll_telegram_decisions) is no longer reachable
+# for new signals now that alerting means buying, but the code is left in
+# place - see auto_buy_moonshot_signals's docstring - so these still apply to
+# a stale pre-automation alert someone might still answer, and to nothing
+# else.
 MOONSHOT_MIN_TRADE_USD = 5.0
 MOONSHOT_SUGGESTED_TRADE_USD = 100.0  # shown in the prompt as a sensible default
 MOONSHOT_QUICK_BUY_PCTS = [10, 15, 20]  # % of free balance, shown as one-tap buttons
@@ -866,8 +873,10 @@ def open_position(portfolio, candidate, curve, sol_usd, timestamp, amount_usd):
 
 
 def close_position(portfolio, mint, curve, sol_usd, timestamp, reason="manual"):
-    """Only ever called from a user's SELL press. Exits against the same
-    invariant - selling back into a thin curve costs as much as entering it."""
+    """Called from a user's SELL press, or automatically from
+    check_moonshot_positions (reason="graduated"/"take_profit"/"timeout").
+    Exits against the same invariant - selling back into a thin curve costs
+    as much as entering it."""
     pos = portfolio["positions"].pop(mint, None)
     if pos is None:
         return None
@@ -885,6 +894,71 @@ def close_position(portfolio, mint, curve, sol_usd, timestamp, reason="manual"):
         "exit_reason": reason,
     }
     portfolio["closed"].append(closed)
+    return closed
+
+
+# Take-profit level for automated moonshot exits. Backtested against every
+# resolved score>=90 signal (70 real + cross-checked on 62 shadow-only, both
+# at $20/trade): every stop-loss level tried (15-50%) made the RESULT WORSE
+# than no stop-loss at all, because it cuts off recoveries on a filter that's
+# already this selective (60%+ win rate baseline). So there is deliberately
+# no stop-loss here - downside is naturally capped anyway, a position can't
+# lose more than its own stake. Take-profit alone, swept from 20% to 120%,
+# forms a smooth plateau from roughly 30% to 85% (not a knife-edge one-point
+# optimum), peaking around 55-80% (+4.1-4.4% vs +2.1% for "hold to
+# graduation/timeout with no take-profit at all"). Picked 60% - the middle of
+# that plateau, not its exact edge. Same caveat as every other backtested
+# number in this file: real, but based on days not months of data - revisit
+# once more signals accumulate.
+MOONSHOT_TAKE_PROFIT_PCT = 60.0
+
+
+def check_moonshot_positions(portfolio, bonding_state, sol_usd, now_wall):
+    """Automated exit check for every open moonshot position, run once per
+    tick. Three terminal conditions, highest-priority first:
+      1. graduated - the curve's migration to a real pool is the actual
+         payout this sleeve is built around; cash out immediately against the
+         curve's final state rather than holding into the (unmodeled)
+         post-graduation DEX pool.
+      2. take-profit - MOONSHOT_TAKE_PROFIT_PCT above cost basis.
+      3. timeout - OUTCOME_MAX_AGE_SECONDS since entry, same giving-up point
+         process_outcome_checkpoints already uses to close out label
+         tracking, so a position that never graduates and never hits
+         take-profit doesn't sit open forever waiting for a SELL that isn't
+         coming.
+    A position with no fresh curve read yet this tick is left alone rather
+    than guessed at - it'll get evaluated on a later tick instead.
+    """
+    closed = []
+    for mint, pos in list(portfolio["positions"].items()):
+        history = (bonding_state.get(pos.get("bonding_curve_key")) or {}).get("history") or []
+        latest = history[-1] if history else None
+        if latest is None:
+            continue
+
+        if latest.get("complete"):
+            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="graduated")
+            if c is not None:
+                closed.append(c)
+            continue
+
+        sol_out = simulate_curve_sell(latest, pos["qty"])
+        value_usd = max(0.0, (sol_out or 0.0) * (sol_usd or 0.0) - SOLANA_GAS_USD)
+        if pos["amount_usd"] and value_usd >= pos["amount_usd"] * (1 + MOONSHOT_TAKE_PROFIT_PCT / 100.0):
+            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="take_profit")
+            if c is not None:
+                closed.append(c)
+            continue
+
+        try:
+            elapsed_seconds = (now_wall - datetime.fromisoformat(pos["entry_ts"])).total_seconds()
+        except (KeyError, ValueError):
+            elapsed_seconds = 0
+        if elapsed_seconds >= OUTCOME_MAX_AGE_SECONDS:
+            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="timeout")
+            if c is not None:
+                closed.append(c)
+
     return closed
 
 
@@ -1269,16 +1343,27 @@ def process_outcome_checkpoints(pending_outcomes, bonding_state, portfolio,
     return label_rows
 
 
-def send_moonshot_alerts(candidates, alerts_state, portfolio, pending_outcomes,
-                         sol_usd, timestamp, now_wall):
-    """Stage 3: send at most DAILY_SIGNAL_CAP alerts per UTC day, strongest
-    first. Returns the label rows to append."""
+def auto_buy_moonshot_signals(candidates, alerts_state, portfolio, pending_outcomes,
+                              sol_usd, timestamp, now_wall):
+    """Stage 3: buy at most DAILY_SIGNAL_CAP signals per UTC day, strongest
+    first, fixed MOONSHOT_AUTO_BUY_USD each. Returns the label rows to append.
+
+    Used to send a Telegram alert and wait for a BUY/IGNORE decision instead -
+    switched to auto-buying because that manual step turned out to be the
+    real bottleneck in production: a review of the first 3 days found 12
+    alerts sent (including two real graduations) and zero completed
+    purchases, because the user doesn't reliably watch Telegram. The
+    BUY/IGNORE/quick-percent machinery in poll_telegram_decisions is left in
+    place - unreachable for new signals now that alerting and buying happen
+    at the same score bar, but /positions + SELL still uses the same
+    close_position() path for a manual early exit, and it's a straightforward
+    revert if manual mode is ever wanted back.
+    """
     today = now_wall.strftime("%Y-%m-%d")
     daily = alerts_state.setdefault("daily", {"date": today, "count": 0})
     if daily.get("date") != today:
         daily["date"], daily["count"] = today, 0
 
-    pending = alerts_state.setdefault("pending", {})
     recent = alerts_state.setdefault("recent_mints", {})
     label_rows = []
 
@@ -1298,24 +1383,16 @@ def send_moonshot_alerts(candidates, alerts_state, portfolio, pending_outcomes,
             except ValueError:
                 pass
 
-        curve_price = None
-        # The candidate's newest curve read is the basis for entry pricing.
-        curve_price = token_price_usd({
-            "virtual_token_reserves": candidate.get("virtual_token_reserves"),
+        curve = {
             "virtual_sol_reserves": candidate.get("virtual_sol_reserves"),
-        }, sol_usd)
-
-        alert_id = f"{int(time.time())}{daily['count']}"
-        result = telegram_call("sendMessage", {
-            "chat_id": TELEGRAM_CHAT_ID,
-            "text": format_moonshot_alert(candidate, curve_price),
-            "reply_markup": alert_keyboard(alert_id, mint),
-        })
-        # A failed send must not consume the daily quota or leave a pending
-        # alert nobody can ever answer.
-        if result is None and TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
+            "virtual_token_reserves": candidate.get("virtual_token_reserves"),
+        }
+        pos, err = open_position(portfolio, candidate, curve, sol_usd, timestamp, MOONSHOT_AUTO_BUY_USD)
+        if pos is None:
+            print(f"WARN: auto-buy skipped for {candidate.get('name')}: {err}", file=sys.stderr)
             continue
 
+        alert_id = f"{int(time.time())}{daily['count']}"
         alert_row = {
             "alert_id": alert_id,
             "mint": mint,
@@ -1327,16 +1404,23 @@ def send_moonshot_alerts(candidates, alerts_state, portfolio, pending_outcomes,
             "sol_per_min": candidate.get("sol_per_min"),
             "signal_ts": timestamp,          # kept so a future tiered/delayed
                                               # release needs no schema change
-            "alert_price_usd": curve_price,
-            "message_id": (result or {}).get("message_id"),
+            "alert_price_usd": pos["entry_price_usd"],
         }
-        pending[alert_id] = alert_row
         recent[mint] = timestamp
         daily["count"] += 1
-        # Outcome tracking starts at the ALERT, not at the decision - see
-        # register_outcome_watch on why ignored tokens must be followed too.
         register_outcome_watch(pending_outcomes, alert_row, timestamp)
+        record_decision_on_outcome(pending_outcomes, mint, "buy", timestamp)
         label_rows.append({"row_type": "alert", **alert_row})
+        label_rows.append({"row_type": "decision", "decision": "buy", "decided_ts": timestamp,
+                           "entry_price_usd": pos["entry_price_usd"],
+                           "entry_slippage_pct": pos["entry_slippage_pct"], **alert_row})
+        telegram_call("sendMessage", {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": (f"Auto-bought ${pos['amount_usd']:.2f} of {candidate.get('name')} "
+                     f"(score {candidate.get('score')}, slippage {pos['entry_slippage_pct']:+.1f}%).\n"
+                     f"https://pump.fun/coin/{mint}\n"
+                     f"Balance ${portfolio['balance']:.2f}"),
+        })
 
     return label_rows
 
@@ -1708,6 +1792,9 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
         "stats": stats,
         "shadow_stats": shadow_stats,
         "daily_cap": DAILY_SIGNAL_CAP,
+        "min_score_to_alert": MIN_SCORE_TO_ALERT,
+        "auto_buy_usd": MOONSHOT_AUTO_BUY_USD,
+        "take_profit_pct": MOONSHOT_TAKE_PROFIT_PCT,
     }
 
 
@@ -1811,37 +1898,38 @@ def main():
 
     sol_usd = fetch_sol_usd()
     label_rows = []
-    # Decisions on PREVIOUS alerts are read first, so a BUY frees nothing and
-    # blocks nothing in this tick's own alerting, and so a position opened now
-    # is immediately excluded from being re-alerted below.
+    # Exits run first, so a position that just graduated or hit take-profit
+    # frees its balance before this tick's own auto-buys spend it.
+    closed_positions = check_moonshot_positions(portfolio, bonding_state, sol_usd, now_wall)
+    for closed in closed_positions:
+        label_rows.append({"row_type": "sell", "decided_ts": timestamp, **closed})
+        telegram_call("sendMessage", {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": (f"Sold {closed.get('name')} ({closed.get('exit_reason')}): "
+                     f"{closed['pnl_pct']:+.1f}% (${closed['pnl_usd']:+.2f}).\n"
+                     f"Balance ${portfolio['balance']:.2f}"),
+        })
+    # Decisions on PREVIOUS (pre-automation) alerts are still read, so a stale
+    # BUY/IGNORE someone answers doesn't get lost - see poll_telegram_decisions.
     label_rows += poll_telegram_decisions(
         alerts_state, portfolio, bonding_state, pending_outcomes,
         sol_usd, offset_state, timestamp)
-    label_rows += send_moonshot_alerts(
+    label_rows += auto_buy_moonshot_signals(
         candidates, alerts_state, portfolio, pending_outcomes,
         sol_usd, timestamp, now_wall)
     # Everything that cleared the security gate but didn't make today's cap
     # or score bar still gets its outcome tracked - see register_shadow_watches
-    # for why. Must run after send_moonshot_alerts so a candidate that WAS
-    # alerted this tick is already in pending_outcomes and gets skipped here
+    # for why. Must run after auto_buy_moonshot_signals so a candidate that WAS
+    # bought this tick is already in pending_outcomes and gets skipped here
     # rather than downgraded to a shadow watch.
     label_rows += register_shadow_watches(candidates, pending_outcomes, timestamp)
 
     # ---- Phase 4: did the signals actually pan out? -----------------------
+    # (label/analytics bookkeeping only now - the actual sale on graduation
+    # already happened above, in check_moonshot_positions)
     outcome_rows = process_outcome_checkpoints(
         pending_outcomes, bonding_state, portfolio, sol_usd, now_wall, timestamp)
     label_rows += outcome_rows
-    # Tell the user when something they're holding graduates - it's the good
-    # outcome, and it's the moment they may want to act on the position.
-    for row in outcome_rows:
-        if row.get("row_type") == "outcome" and row.get("outcome") == "graduated" \
-                and row.get("decision") == "buy":
-            telegram_call("sendMessage", {
-                "chat_id": TELEGRAM_CHAT_ID,
-                "text": (f"GRADUATED: {row.get('name')} made it to a real pool "
-                         f"in {row.get('minutes_to_graduate')} min.\n"
-                         f"You're holding it - /positions to sell."),
-            })
 
     dev_pruned = prune_dev_history(dev_history, now_wall)
     # Curves under outcome watch are exempt - see prune_bonding_state.

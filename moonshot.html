@@ -18,7 +18,7 @@
     </div>
     <div class="updated">Uuendatud <span class="mono" id="updated-ts">—</span></div>
   </header>
-  <p class="subtitle">Pump.fun uued launchid. Bot filtreerib, sina otsustad Telegramis — BUY küsib summa, IGNORE jääb ikka jälgimisele, et hiljem näha, kas otsus oli õige.</p>
+  <p class="subtitle">Pump.fun uued launchid. Bot filtreerib ja ostab ise — skoor ≥90 saab automaatselt $20, väljub graduatsioonil, take-profit'il või 6h möödudes. Sina ei pea midagi tegema.</p>
 
   <div id="headline"></div>
 
@@ -131,7 +131,7 @@ function renderPositions(d) {
   countEl.textContent = positions.length ? `(${positions.length})` : '';
 
   if (!positions.length) {
-    el.innerHTML = `<div class="empty">Ühtegi avatud positsiooni. Kui Telegrami tuleb signaal, vajuta BUY ja ütle summa.</div>`;
+    el.innerHTML = `<div class="empty">Ühtegi avatud positsiooni. Bot ostab ise, kui skoor ≥90 signaal tuleb.</div>`;
     return;
   }
   // Biggest position first, so the one that matters most is read first.
@@ -256,7 +256,7 @@ function renderRules(d) {
         <li><b>Aste 0 (tasuta):</b> viskab välja need, kus arendaja on sama päeva jooksul juba mitu tokenit lasknud (seeriatootja), või kus nimi/sümbol puudub.</li>
         <li><b>Aste 1 (odav):</b> nõuab tõestatud tõmmet — token peab olema vähemalt 3 min vana, jõudnud ≥2% graduatsiooniteest ja veel aktiivselt raha sisse võtma. <b>Siit tuleb suurim täpsus:</b> me ei ennusta võitjat sünnihetkel, vaid valime need, kes juba ronivad.</li>
         <li><b>Aste 2 (kallis):</b> RugCheck ainult neile, kes juba ronivad — mint/freeze õigus peab olema kustutatud, ei tohi olla "rugged" märget, arendaja käes ≤5% supplyst.</li>
-        <li><b>Aste 3:</b> skoorib ja saadab <b>maksimaalselt ${cap} signaali päevas</b> Telegrami.</li>
+        <li><b>Aste 3:</b> skoorib ja ostab automaatselt <b>maksimaalselt ${cap} signaali päevas</b>, tugevaim skoor enne. Ostetakse ainult skooriga ≥${(d && d.min_score_to_alert) || 90}.</li>
       </ul>
     </div>
     <div class="rules-group">
@@ -267,12 +267,12 @@ function renderRules(d) {
       </ul>
     </div>
     <div class="rules-group">
-      <h3>3. Sinu otsus</h3>
+      <h3>3. Ost ja müük — täisautomaatne</h3>
       <ul class="rules-list">
-        <li>Signaal tuleb Telegrami. <b>BUY</b> küsib summat — vajuta kiirvalik (10% / 15% / 20% vabast saldost) või kirjuta oma number. <b>IGNORE</b> ei osta midagi.</li>
-        <li>Mõlemal juhul jääb token jälgimisele, et hiljem näha, kas otsus oli õige.</li>
-        <li>Müük käib samuti sinu käsul: saada <b>/positions</b> ja vajuta soovitud positsiooni juures SELL.</li>
-        <li>Bot ei osta ega müü <b>kunagi</b> ise.</li>
+        <li>Iga signaal skooriga ≥${(d && d.min_score_to_alert) || 90} ostetakse kohe, fikseeritud <b>$${(d && d.auto_buy_usd) || 20}</b> eest. Telegrami tuleb ainult teade, mitte küsimus.</li>
+        <li>Väljumine, kolm põhjust, tähtsuse järjekorras: <b>graduatsioon</b> (müüakse kohe, kui token jõuab päris pooli — see ongi peamine võiduviis), <b>take-profit</b> (müüakse, kui väärtus on tõusnud ≥${(d && d.take_profit_pct) || 60}% sisenemishinnast), <b>6h tähtaeg</b> (müüakse ära ükskõik mis hinnaga, et positsioon ei jääks igavesti lahti).</li>
+        <li>Stop-lossi <b>ei ole</b> — mineviku andmete põhjal (70 signaali, kinnitatud ka eraldi 62 shadow-kandidaadi peal) tegi iga testitud stop-loss tase tulemuse halvemaks, sest lõikas ära hilisemaid graduatsioone. Kahju on niigi piiratud ostuhinnaga.</li>
+        <li>Käsitsi müügiks (nt tahad varem välja tulla) saada Telegrami <b>/positions</b> ja vajuta SELL.</li>
       </ul>
     </div>
     <div class="rules-group">
