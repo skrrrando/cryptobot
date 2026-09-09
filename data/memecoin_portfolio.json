@@ -1,5 +1,5 @@
 {
-  "balance": 86.39605904555765,
+  "balance": 152.5281437097712,
   "positions": {
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": {
       "network": "arbitrum",
@@ -80,19 +80,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "bsc_0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0": {
-      "network": "bsc",
-      "pool_address": "0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0",
-      "base_token_address": "0xd270d4e1ec6e6e0d28c0ecb8be966ec75997ffff",
-      "name": "4Stock / USDT 1%",
-      "entry_ts": "2026-09-09T02:30:45.107951+00:00",
-      "entry_price_usd": 0.0530144496841771,
-      "peak_price_usd": 0.0595965557341762,
-      "amount_usd": 65.68306932278665,
-      "qty": 1235.8346281046072,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
       "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
@@ -113,7 +100,7 @@
       "name": "NOCK / USDC",
       "entry_ts": "2026-09-09T02:45:31.849781+00:00",
       "entry_price_usd": 0.0373194333397804,
-      "peak_price_usd": 0.0374072578788182,
+      "peak_price_usd": 0.0376730096290829,
       "amount_usd": 65.68306932278665,
       "qty": 1757.2681745806144,
       "sell_tax_pct": 0.0,
@@ -4060,6 +4047,25 @@
       "pnl_usd": 2.489074060841517,
       "pnl_pct": 3.82,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0",
+      "base_token_address": "0xd270d4e1ec6e6e0d28c0ecb8be966ec75997ffff",
+      "name": "4Stock / USDT 1%",
+      "entry_ts": "2026-09-09T02:30:45.107951+00:00",
+      "entry_price_usd": 0.0530144496841771,
+      "peak_price_usd": 0.0595965557341762,
+      "amount_usd": 65.68306932278665,
+      "qty": 1235.8346281046072,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T03:16:26.904593+00:00",
+      "exit_price_usd": 0.0536473649406547,
+      "proceeds_usd": 66.13208466421355,
+      "pnl_usd": 0.44901534142690025,
+      "pnl_pct": 0.68,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -4098,6 +4104,7 @@
     "base_0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9": "2026-09-08T21:21:23.481144+00:00",
     "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": "2026-09-08T21:51:40.641344+00:00",
     "base_0x85f1aa3a70fedd1c52705c15baed143e675cd626": "2026-09-09T00:16:11.541223+00:00",
-    "bsc_0x725026c46796512ff511868e1855afe1e01e3515": "2026-09-09T01:31:50.433097+00:00"
+    "bsc_0x725026c46796512ff511868e1855afe1e01e3515": "2026-09-09T01:31:50.433097+00:00",
+    "bsc_0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0": "2026-09-09T03:16:26.904593+00:00"
   }
 }
