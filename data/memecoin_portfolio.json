@@ -1,31 +1,19 @@
 {
-  "balance": 315.7444922121073,
+  "balance": 349.12833633670425,
   "positions": {
-    "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": {
-      "network": "bsc",
-      "pool_address": "0xe5ae318389b8d6d09370a675479c64862152d126",
-      "base_token_address": "0xbeea1d618e533a387d941f58a7d4c9b7bd377777",
-      "name": "\u725b\u6765 / USDT 0.25%",
-      "entry_ts": "2026-09-08T19:15:32.413214+00:00",
-      "entry_price_usd": 0.0973796580086094,
-      "peak_price_usd": 0.104892121401449,
-      "amount_usd": 65.19612815749637,
-      "qty": 667.915227313034,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": {
       "network": "arbitrum",
       "pool_address": "0x628854f0cfd7debd6e04361421ee9c06c77048c3",
       "base_token_address": "0x018d6a98555686be1ca5b6896ef6c42cf67e2bd1",
       "name": "ODYS / WETH 1%",
       "entry_ts": "2026-09-08T22:20:33.441191+00:00",
-      "entry_price_usd": 0.00250171972913374,
+      "entry_price_usd": 0.002417056651829526,
       "peak_price_usd": 0.00250171972913374,
-      "amount_usd": 68.6027161874819,
-      "qty": 27353.01295176506,
+      "amount_usd": 102.90407428122285,
+      "qty": 42574.125932601695,
       "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
+      "time_exit_evaluated": false,
+      "dca_count": 1
     },
     "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
       "network": "base",
@@ -4001,6 +3989,25 @@
       "pnl_usd": 8.410587041385867,
       "pnl_pct": 12.26,
       "exit_reason": "take_profit"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xe5ae318389b8d6d09370a675479c64862152d126",
+      "base_token_address": "0xbeea1d618e533a387d941f58a7d4c9b7bd377777",
+      "name": "\u725b\u6765 / USDT 0.25%",
+      "entry_ts": "2026-09-08T19:15:32.413214+00:00",
+      "entry_price_usd": 0.0973796580086094,
+      "peak_price_usd": 0.104892121401449,
+      "amount_usd": 65.19612815749637,
+      "qty": 667.915227313034,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-09T01:35:05.876186+00:00",
+      "exit_price_usd": 0.101570112060649,
+      "proceeds_usd": 67.68520221833789,
+      "pnl_usd": 2.489074060841517,
+      "pnl_pct": 3.82,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -4034,7 +4041,7 @@
     "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00",
     "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-09T00:41:28.072571+00:00",
     "solana_54sbyULrreD9HBoV5wRWedeCBEw6gQ7VkdHW18rLX78e": "2026-09-09T00:56:48.607328+00:00",
-    "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": "2026-09-08T17:01:56.859110+00:00",
+    "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": "2026-09-09T01:35:05.876186+00:00",
     "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": "2026-09-08T23:26:03.533270+00:00",
     "base_0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9": "2026-09-08T21:21:23.481144+00:00",
     "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": "2026-09-08T21:51:40.641344+00:00",
