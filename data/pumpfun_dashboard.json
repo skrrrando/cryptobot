@@ -1,12 +1,23 @@
 {
-  "timestamp": "2026-09-09T00:15:34.440330+00:00",
+  "timestamp": "2026-09-09T00:20:34.280470+00:00",
   "balance": 1000.0,
   "positions_value": 0.0,
   "net_worth": 1000.0,
   "starting_balance": 1000.0,
   "positions": [],
   "closed": [],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "42SgDzjxgHa55icjbXqDVHk2A6NDgK4pEEbYxpxupump",
+      "name": "Alon LLM Agent",
+      "symbol": "ALON",
+      "decision": null,
+      "signal_ts": "2026-09-09T00:20:34.280470+00:00",
+      "alert_score": 94.3,
+      "alert_graduation_pct": 86.41,
+      "graduation_pct": 86.41
+    }
+  ],
   "history": [
     {
       "mint": "MC865gpBoZq2PsCruhrY1CF13ftbUQXkVMaWNzNpump",
@@ -153,7 +164,7 @@
     }
   ],
   "stats": {
-    "alerts": 13,
+    "alerts": 14,
     "graduated": 2,
     "did_not_graduate": 9,
     "buy_graduated": 0,
@@ -163,7 +174,7 @@
     "graduation_rate_pct": 18.2
   },
   "shadow_stats": {
-    "tracked": 51,
+    "tracked": 52,
     "graduated": 64,
     "did_not_graduate": 215,
     "graduation_rate_pct": 22.9
