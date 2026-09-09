@@ -1,5 +1,5 @@
 {
-  "balance": 188.49844992832067,
+  "balance": 191.11293943202327,
   "positions": {
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
@@ -48,22 +48,9 @@
       "name": "Surplus / WETH",
       "entry_ts": "2026-09-09T06:20:32.914345+00:00",
       "entry_price_usd": 4.59494228051544e-05,
-      "peak_price_usd": 6.9688068721263e-05,
+      "peak_price_usd": 6.99118332521051e-05,
       "amount_usd": 67.57887940678991,
       "qty": 1468491.1420241194,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
-      "network": "base",
-      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
-      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
-      "name": "DOT / ETH 1%",
-      "entry_ts": "2026-09-09T07:30:46.230465+00:00",
-      "entry_price_usd": 0.00691376749947212,
-      "peak_price_usd": 0.00829720154129186,
-      "amount_usd": 70.63858571803678,
-      "qty": 10201.710323931522,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -116,6 +103,19 @@
       "peak_price_usd": 1.89420499967349e-05,
       "amount_usd": 70.63858571803678,
       "qty": 3913827.990702889,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": {
+      "network": "solana",
+      "pool_address": "7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs",
+      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
+      "name": "ZCAT / SOL",
+      "entry_ts": "2026-09-09T08:50:33.556563+00:00",
+      "entry_price_usd": 0.11493351090897842,
+      "peak_price_usd": 0.11493351090897842,
+      "amount_usd": 70.0154988554022,
+      "qty": 608.9761831149558,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -4278,6 +4278,25 @@
       "pnl_usd": -1.1158499889004503,
       "pnl_pct": -1.7,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
+      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
+      "name": "DOT / ETH 1%",
+      "entry_ts": "2026-09-09T07:30:46.230465+00:00",
+      "entry_price_usd": 0.00691376749947212,
+      "peak_price_usd": 0.00829720154129186,
+      "amount_usd": 70.63858571803678,
+      "qty": 10201.710323931522,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T08:51:39.459469+00:00",
+      "exit_price_usd": 0.00712982962373803,
+      "proceeds_usd": 72.6299883591048,
+      "pnl_usd": 1.9914026410680208,
+      "pnl_pct": 2.82,
+      "exit_reason": "take_profit"
     }
   ],
   "recent_exits": {
@@ -4307,7 +4326,7 @@
     "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-08T10:26:12.643660+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-09T04:26:12.066501+00:00",
+    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-09T08:51:39.459469+00:00",
     "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00",
     "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-09T00:41:28.072571+00:00",
     "solana_54sbyULrreD9HBoV5wRWedeCBEw6gQ7VkdHW18rLX78e": "2026-09-09T00:56:48.607328+00:00",
