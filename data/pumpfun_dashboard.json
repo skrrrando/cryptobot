@@ -1,24 +1,26 @@
 {
-  "timestamp": "2026-09-09T00:25:26.352986+00:00",
+  "timestamp": "2026-09-09T00:30:48.001732+00:00",
   "balance": 1000.0,
   "positions_value": 0.0,
   "net_worth": 1000.0,
   "starting_balance": 1000.0,
   "positions": [],
   "closed": [],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "42SgDzjxgHa55icjbXqDVHk2A6NDgK4pEEbYxpxupump",
       "name": "Alon LLM Agent",
       "symbol": "ALON",
+      "outcome": "graduated",
       "decision": null,
       "signal_ts": "2026-09-09T00:20:34.280470+00:00",
+      "recorded_ts": "2026-09-09T00:30:48.001732+00:00",
       "alert_score": 94.3,
       "alert_graduation_pct": 86.41,
-      "graduation_pct": 86.49
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 10.2
+    },
     {
       "mint": "MC865gpBoZq2PsCruhrY1CF13ftbUQXkVMaWNzNpump",
       "name": "Lolite",
@@ -165,18 +167,18 @@
   ],
   "stats": {
     "alerts": 14,
-    "graduated": 2,
+    "graduated": 3,
     "did_not_graduate": 9,
     "buy_graduated": 0,
     "buy_total": 0,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 18.2
+    "graduation_rate_pct": 25.0
   },
   "shadow_stats": {
     "tracked": 50,
     "graduated": 65,
-    "did_not_graduate": 217,
+    "did_not_graduate": 218,
     "graduation_rate_pct": 23.0
   },
   "daily_cap": 4
