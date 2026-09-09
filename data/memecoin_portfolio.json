@@ -1,20 +1,6 @@
 {
-  "balance": 137.82457885637075,
+  "balance": 216.19717619851463,
   "positions": {
-    "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": {
-      "network": "bsc",
-      "pool_address": "0xffca411cfbcd3194503effa80fd394b55387915c",
-      "base_token_address": "0x2ab8a4dd2191989ac2898006df350b236d2b7777",
-      "name": "Sue / WBNB",
-      "entry_ts": "2026-09-09T04:40:34.092276+00:00",
-      "entry_price_usd": 0.00408730203052486,
-      "peak_price_usd": 0.00440456622621683,
-      "amount_usd": 99.442681484297,
-      "qty": 24329.66312292007,
-      "sell_tax_pct": 1.0,
-      "time_exit_evaluated": false,
-      "dca_count": 1
-    },
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": {
       "network": "solana",
       "pool_address": "HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3",
@@ -4386,6 +4372,26 @@
       "pnl_usd": 0.9298944855075462,
       "pnl_pct": 1.32,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xffca411cfbcd3194503effa80fd394b55387915c",
+      "base_token_address": "0x2ab8a4dd2191989ac2898006df350b236d2b7777",
+      "name": "Sue / WBNB",
+      "entry_ts": "2026-09-09T04:40:34.092276+00:00",
+      "entry_price_usd": 0.00408730203052486,
+      "peak_price_usd": 0.00440456622621683,
+      "amount_usd": 99.442681484297,
+      "qty": 24329.66312292007,
+      "sell_tax_pct": 1.0,
+      "time_exit_evaluated": true,
+      "dca_count": 1,
+      "exit_ts": "2026-09-09T10:51:59.930817+00:00",
+      "exit_price_usd": 0.00326095895921519,
+      "proceeds_usd": 78.37259734214388,
+      "pnl_usd": -21.07008414215312,
+      "pnl_pct": -21.19,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -4430,6 +4436,7 @@
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": "2026-09-09T04:21:05.397625+00:00",
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": "2026-09-09T04:26:12.066501+00:00",
     "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-09T06:36:35.723089+00:00",
-    "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-09T06:51:49.230409+00:00"
+    "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-09T06:51:49.230409+00:00",
+    "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-09T10:51:59.930817+00:00"
   }
 }
