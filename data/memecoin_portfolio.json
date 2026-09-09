@@ -1,19 +1,6 @@
 {
-  "balance": 156.60909128076426,
+  "balance": 299.051014626967,
   "positions": {
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
-      "network": "base",
-      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
-      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
-      "name": "DOT / ETH 1%",
-      "entry_ts": "2026-09-08T23:15:35.395416+00:00",
-      "entry_price_usd": 0.00635608882752629,
-      "peak_price_usd": 0.0080199244765681,
-      "amount_usd": 68.6027161874819,
-      "qty": 10776.437598782271,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": {
       "network": "solana",
       "pool_address": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
@@ -37,19 +24,6 @@
       "peak_price_usd": 0.17189674080053266,
       "amount_usd": 66.89053302493592,
       "qty": 419.23773169499447,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": {
-      "network": "solana",
-      "pool_address": "HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3",
-      "base_token_address": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
-      "name": "CATE / SOL",
-      "entry_ts": "2026-09-09T00:45:33.248887+00:00",
-      "entry_price_usd": 0.04010449788349477,
-      "peak_price_usd": 0.04818758888003051,
-      "amount_usd": 66.9123502973158,
-      "qty": 1667.8955761490813,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -113,7 +87,7 @@
       "name": "FLOWER / USDC 0.3%",
       "entry_ts": "2026-09-09T03:45:31.730984+00:00",
       "entry_price_usd": 0.248062473502401,
-      "peak_price_usd": 0.248562832174062,
+      "peak_price_usd": 0.249769614835098,
       "amount_usd": 65.78997753244826,
       "qty": 264.75284486682824,
       "sell_tax_pct": 0.0,
@@ -4105,6 +4079,44 @@
       "pnl_usd": -0.865135376408233,
       "pnl_pct": -0.84,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
+      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
+      "name": "DOT / ETH 1%",
+      "entry_ts": "2026-09-08T23:15:35.395416+00:00",
+      "entry_price_usd": 0.00635608882752629,
+      "peak_price_usd": 0.0080199244765681,
+      "amount_usd": 68.6027161874819,
+      "qty": 10776.437598782271,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T04:26:12.066501+00:00",
+      "exit_price_usd": 0.00669019720605851,
+      "proceeds_usd": 71.98914036032286,
+      "pnl_usd": 3.386424172840961,
+      "pnl_pct": 4.94,
+      "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3",
+      "base_token_address": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
+      "name": "CATE / SOL",
+      "entry_ts": "2026-09-09T00:45:33.248887+00:00",
+      "entry_price_usd": 0.04010449788349477,
+      "peak_price_usd": 0.04818758888003051,
+      "amount_usd": 66.9123502973158,
+      "qty": 1667.8955761490813,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T04:26:12.066501+00:00",
+      "exit_price_usd": 0.04225395051345805,
+      "proceeds_usd": 70.4527829858799,
+      "pnl_usd": 3.5404326885641098,
+      "pnl_pct": 5.29,
+      "exit_reason": "take_profit"
     }
   ],
   "recent_exits": {
@@ -4134,7 +4146,7 @@
     "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-08T10:26:12.643660+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-08T20:56:36.219022+00:00",
+    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-09T04:26:12.066501+00:00",
     "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00",
     "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-09T00:41:28.072571+00:00",
     "solana_54sbyULrreD9HBoV5wRWedeCBEw6gQ7VkdHW18rLX78e": "2026-09-09T00:56:48.607328+00:00",
@@ -4146,6 +4158,7 @@
     "bsc_0x725026c46796512ff511868e1855afe1e01e3515": "2026-09-09T01:31:50.433097+00:00",
     "bsc_0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0": "2026-09-09T03:16:26.904593+00:00",
     "bsc_0xdf8f1510a5a3f82fbab166175a72bc00a5c432d1": "2026-09-09T03:36:11.691987+00:00",
-    "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": "2026-09-09T04:21:05.397625+00:00"
+    "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": "2026-09-09T04:21:05.397625+00:00",
+    "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": "2026-09-09T04:26:12.066501+00:00"
   }
 }
