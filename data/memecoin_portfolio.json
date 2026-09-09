@@ -1,5 +1,5 @@
 {
-  "balance": 388.4924313238919,
+  "balance": 364.86380061575824,
   "positions": {
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
@@ -40,19 +40,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "arbitrum_0xb2d0b9fc11381130897f50656a9705bb6fdeb9d9": {
-      "network": "arbitrum",
-      "pool_address": "0xb2d0b9fc11381130897f50656a9705bb6fdeb9d9",
-      "base_token_address": "0x768d4b20869771a93946b5101a6a2e886f020c4e",
-      "name": "NOLA / WETH 1%",
-      "entry_ts": "2026-09-09T21:20:37.029811+00:00",
-      "entry_price_usd": 0.000343292934541338,
-      "peak_price_usd": 0.000387074221040831,
-      "amount_usd": 66.3198423983239,
-      "qty": 192573.97262698153,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
       "network": "base",
       "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
@@ -73,9 +60,22 @@
       "name": "CATE / SOL",
       "entry_ts": "2026-09-09T22:01:03.471796+00:00",
       "entry_price_usd": 0.05176272063104388,
-      "peak_price_usd": 0.05176272063104388,
+      "peak_price_usd": 0.05290755723028741,
       "amount_usd": 66.3198423983239,
       "qty": 1280.804036361586,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": {
+      "network": "solana",
+      "pool_address": "nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad",
+      "base_token_address": "8RVBk8vxLiUHueLUW1f4izFVqN3nWippLhkohKg6EGkS",
+      "name": "KNOTS / SOL",
+      "entry_ts": "2026-09-09T22:35:27.615329+00:00",
+      "entry_price_usd": 0.020149094326803042,
+      "peak_price_usd": 0.020149094326803042,
+      "amount_usd": 66.3198423983239,
+      "qty": 3288.951531923316,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -4869,6 +4869,25 @@
       "pnl_usd": -2.2905082616661403,
       "pnl_pct": -3.53,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "arbitrum",
+      "pool_address": "0xb2d0b9fc11381130897f50656a9705bb6fdeb9d9",
+      "base_token_address": "0x768d4b20869771a93946b5101a6a2e886f020c4e",
+      "name": "NOLA / WETH 1%",
+      "entry_ts": "2026-09-09T21:20:37.029811+00:00",
+      "entry_price_usd": 0.000343292934541338,
+      "peak_price_usd": 0.000387074221040831,
+      "amount_usd": 66.3198423983239,
+      "qty": 192573.97262698153,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T22:36:35.854739+00:00",
+      "exit_price_usd": 0.000222631810904461,
+      "proceeds_usd": 42.691211690190244,
+      "pnl_usd": -23.628630708133656,
+      "pnl_pct": -35.63,
+      "exit_reason": "stop_loss"
     }
   ],
   "recent_exits": {
@@ -4920,6 +4939,7 @@
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-09T19:11:24.512034+00:00",
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": "2026-09-09T16:01:55.973521+00:00",
     "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": "2026-09-09T19:32:00.023400+00:00",
-    "solana_3dcwhqJp6JBTJPq8ga335HWgSQVS7uQmdmeX7iGjMNpj": "2026-09-09T20:16:23.944441+00:00"
+    "solana_3dcwhqJp6JBTJPq8ga335HWgSQVS7uQmdmeX7iGjMNpj": "2026-09-09T20:16:23.944441+00:00",
+    "arbitrum_0xb2d0b9fc11381130897f50656a9705bb6fdeb9d9": "2026-09-09T22:36:35.854739+00:00"
   }
 }
