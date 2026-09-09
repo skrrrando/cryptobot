@@ -1,19 +1,6 @@
 {
-  "balance": 193.92687266264568,
+  "balance": 259.71703645970604,
   "positions": {
-    "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": {
-      "network": "base",
-      "pool_address": "0x3fe04a59ebd38cf06080a6f60a98d124eb59392a",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "name": "WETH / USDC 0.05%",
-      "entry_ts": "2026-09-09T00:50:37.434840+00:00",
-      "entry_price_usd": 2494.68,
-      "peak_price_usd": 2507.71,
-      "amount_usd": 65.86268106923796,
-      "qty": 0.026360899478775887,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
       "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
@@ -4189,6 +4176,25 @@
       "pnl_usd": -2.610289486574473,
       "pnl_pct": -3.86,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x3fe04a59ebd38cf06080a6f60a98d124eb59392a",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.05%",
+      "entry_ts": "2026-09-09T00:50:37.434840+00:00",
+      "entry_price_usd": 2494.68,
+      "peak_price_usd": 2507.71,
+      "amount_usd": 65.86268106923796,
+      "qty": 0.026360899478775887,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-09T06:56:03.985933+00:00",
+      "exit_price_usd": 2499.56,
+      "proceeds_usd": 65.79016379706034,
+      "pnl_usd": -0.07251727217762038,
+      "pnl_pct": -0.11,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -4225,7 +4231,7 @@
     "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": "2026-09-09T01:35:05.876186+00:00",
     "base_0xfc25fdd217e288d03a877f0b7d49e0bbe52b2288c88de929125062569fc7eb2a": "2026-09-08T23:26:03.533270+00:00",
     "base_0xec33256bf1ded407a57fd3c1965e7556e42ac14db09bc4e6fef57d5e2eb0b0b9": "2026-09-08T21:21:23.481144+00:00",
-    "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": "2026-09-08T21:51:40.641344+00:00",
+    "base_0x3fe04a59ebd38cf06080a6f60a98d124eb59392a": "2026-09-09T06:56:03.985933+00:00",
     "base_0x85f1aa3a70fedd1c52705c15baed143e675cd626": "2026-09-09T00:16:11.541223+00:00",
     "bsc_0x725026c46796512ff511868e1855afe1e01e3515": "2026-09-09T01:31:50.433097+00:00",
     "bsc_0xcd7102295aff1e775c7d4fb8cf73a127c6d391d0": "2026-09-09T03:16:26.904593+00:00",
