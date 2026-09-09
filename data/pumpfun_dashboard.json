@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-09T01:20:33.458180+00:00",
+  "timestamp": "2026-09-09T01:29:57.138237+00:00",
   "balance": 1000.0,
   "positions_value": 0.0,
   "net_worth": 1000.0,
@@ -8,16 +8,6 @@
   "closed": [],
   "watching": [
     {
-      "mint": "Hz3cAMP5ruvLaKPiwAmVBzu1sQfNeiZrnBYzk12spump",
-      "name": "Garagecoin",
-      "symbol": "Garage",
-      "decision": null,
-      "signal_ts": "2026-09-09T01:20:33.458180+00:00",
-      "alert_score": 112.9,
-      "alert_graduation_pct": 77.22,
-      "graduation_pct": 77.22
-    },
-    {
       "mint": "5GcHjLKJjW9MHCh9scyxnnJYTait5uosH4ztkeZ2pump",
       "name": "A Mini Cock",
       "symbol": "AMC",
@@ -25,10 +15,23 @@
       "signal_ts": "2026-09-09T01:15:32.749802+00:00",
       "alert_score": 95.8,
       "alert_graduation_pct": 76.09,
-      "graduation_pct": 0.12
+      "graduation_pct": 0.1
     }
   ],
   "history": [
+    {
+      "mint": "Hz3cAMP5ruvLaKPiwAmVBzu1sQfNeiZrnBYzk12spump",
+      "name": "Garagecoin",
+      "symbol": "Garage",
+      "outcome": "graduated",
+      "decision": null,
+      "signal_ts": "2026-09-09T01:20:33.458180+00:00",
+      "recorded_ts": "2026-09-09T01:29:57.138237+00:00",
+      "alert_score": 112.9,
+      "alert_graduation_pct": 77.22,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.4
+    },
     {
       "mint": "42SgDzjxgHa55icjbXqDVHk2A6NDgK4pEEbYxpxupump",
       "name": "Alon LLM Agent",
@@ -188,19 +191,19 @@
   ],
   "stats": {
     "alerts": 16,
-    "graduated": 3,
+    "graduated": 4,
     "did_not_graduate": 9,
     "buy_graduated": 0,
     "buy_total": 0,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 25.0
+    "graduation_rate_pct": 30.8
   },
   "shadow_stats": {
-    "tracked": 50,
+    "tracked": 45,
     "graduated": 67,
-    "did_not_graduate": 224,
-    "graduation_rate_pct": 23.0
+    "did_not_graduate": 229,
+    "graduation_rate_pct": 22.6
   },
   "daily_cap": 4
 }
