@@ -1,5 +1,5 @@
 {
-  "balance": 117.95087986989101,
+  "balance": 118.89238752657984,
   "positions": {
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": {
       "network": "solana",
@@ -41,19 +41,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": {
-      "network": "solana",
-      "pool_address": "nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad",
-      "base_token_address": "8RVBk8vxLiUHueLUW1f4izFVqN3nWippLhkohKg6EGkS",
-      "name": "KNOTS / SOL",
-      "entry_ts": "2026-09-09T11:10:35.509870+00:00",
-      "entry_price_usd": 0.020169444717357248,
-      "peak_price_usd": 0.0252404952006321,
-      "amount_usd": 71.26981359563267,
-      "qty": 3530.888746500173,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
       "network": "base",
       "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
@@ -87,7 +74,7 @@
       "name": "PURR / HYPE",
       "entry_ts": "2026-09-09T13:20:38.920095+00:00",
       "entry_price_usd": 0.010467484340544066,
-      "peak_price_usd": 0.01213452481155788,
+      "peak_price_usd": 0.01245773508942716,
       "amount_usd": 73.04327731921651,
       "qty": 6975.203021968781,
       "sell_tax_pct": 0.0,
@@ -130,6 +117,19 @@
       "amount_usd": 73.4819259734045,
       "qty": 1512.2813911750316,
       "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": {
+      "network": "bsc",
+      "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
+      "base_token_address": "0x3efbfff95576e1d23cf6ead0acd2e73f4d6a7777",
+      "name": "BNBCAT / WBNB",
+      "entry_ts": "2026-09-09T15:01:07.099195+00:00",
+      "entry_price_usd": 0.0010253707771884,
+      "peak_price_usd": 0.0010253707771884,
+      "amount_usd": 73.07274155024693,
+      "qty": 70370.4377794723,
+      "sell_tax_pct": 1.0,
       "time_exit_evaluated": false
     }
   },
@@ -4540,6 +4540,25 @@
       "pnl_usd": -4.9102130778907735,
       "pnl_pct": -6.72,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad",
+      "base_token_address": "8RVBk8vxLiUHueLUW1f4izFVqN3nWippLhkohKg6EGkS",
+      "name": "KNOTS / SOL",
+      "entry_ts": "2026-09-09T11:10:35.509870+00:00",
+      "entry_price_usd": 0.020169444717357248,
+      "peak_price_usd": 0.0252404952006321,
+      "amount_usd": 71.26981359563267,
+      "qty": 3530.888746500173,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-09T15:02:00.273986+00:00",
+      "exit_price_usd": 0.020976653164498985,
+      "proceeds_usd": 74.01424920693576,
+      "pnl_usd": 2.744435611303089,
+      "pnl_pct": 3.85,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -4587,6 +4606,7 @@
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-09T11:31:21.280523+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-09T10:51:59.930817+00:00",
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-09T14:06:11.403065+00:00",
-    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-09T14:56:53.621597+00:00"
+    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-09T14:56:53.621597+00:00",
+    "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-09T15:02:00.273986+00:00"
   }
 }
