@@ -1,31 +1,18 @@
 {
-  "timestamp": "2026-09-10T08:20:35.831605+00:00",
-  "balance": 956.41,
-  "positions_value": 6.54,
-  "net_worth": 962.95,
+  "timestamp": "2026-09-10T08:25:29.269443+00:00",
+  "balance": 959.59,
+  "positions_value": 3.32,
+  "net_worth": 962.91,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
-      "name": "The Great Replacement",
-      "symbol": "Replacement",
-      "entry_ts": "2026-09-10T02:25:25.217004+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.21,
-      "pnl_pct": -83.95,
-      "entry_slippage_pct": 1.25,
-      "entry_graduation_pct": 61.17,
-      "graduation_pct": 3.79,
-      "graduated": false
-    },
     {
       "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
       "name": "Eternal Twap Faucet",
       "symbol": "ETF",
       "entry_ts": "2026-09-10T03:20:36.753440+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.33,
-      "pnl_pct": -83.35,
+      "value_usd": 3.32,
+      "pnl_pct": -83.4,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 57.34,
       "graduation_pct": 2.99,
@@ -72,19 +59,29 @@
       "pnl_usd": 16.41,
       "pnl_pct": 82.04,
       "exit_reason": "take_profit"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
       "name": "The Great Replacement",
       "symbol": "Replacement",
-      "decision": "buy",
-      "signal_ts": "2026-09-10T02:25:25.217004+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 61.17,
-      "graduation_pct": 3.79
-    },
+      "bonding_curve_key": "6pnWg1kEKCFsnfnUaEuHKEBUUbAr7cxQSQWDdzLZHHep",
+      "entry_ts": "2026-09-10T02:25:25.217004+00:00",
+      "entry_price_usd": 2.1469723204308587e-05,
+      "entry_spot_price_usd": 2.1204585872521496e-05,
+      "entry_slippage_pct": 1.25,
+      "amount_usd": 20.0,
+      "qty": 931544.3804131746,
+      "entry_graduation_pct": 61.17,
+      "entry_score": 115.0,
+      "exit_ts": "2026-09-10T08:25:29.269462+00:00",
+      "exit_price_usd": 3.4114839840080394e-06,
+      "proceeds_usd": 3.18,
+      "pnl_usd": -16.82,
+      "pnl_pct": -84.11,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
       "name": "Eternal Twap Faucet",
@@ -97,6 +94,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
+      "name": "The Great Replacement",
+      "symbol": "Replacement",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-10T02:25:25.217004+00:00",
+      "recorded_ts": "2026-09-10T08:25:29.269443+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 61.17,
+      "final_graduation_pct": 3.79,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
       "name": "I'm Feeling Lucky",
@@ -296,17 +306,17 @@
   "stats": {
     "alerts": 20,
     "graduated": 5,
-    "did_not_graduate": 10,
+    "did_not_graduate": 11,
     "buy_graduated": 1,
-    "buy_total": 1,
+    "buy_total": 2,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 33.3
+    "graduation_rate_pct": 31.2
   },
   "shadow_stats": {
     "tracked": 42,
     "graduated": 98,
-    "did_not_graduate": 439,
+    "did_not_graduate": 440,
     "graduation_rate_pct": 18.2
   },
   "daily_cap": 4,
