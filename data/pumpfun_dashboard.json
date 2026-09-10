@@ -1,12 +1,37 @@
 {
-  "timestamp": "2026-09-10T01:10:00.331403+00:00",
-  "balance": 1000.0,
-  "positions_value": 0.0,
-  "net_worth": 1000.0,
+  "timestamp": "2026-09-10T01:19:03.701349+00:00",
+  "balance": 980.0,
+  "positions_value": 19.52,
+  "net_worth": 999.52,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
+      "name": "I'm Feeling Lucky",
+      "symbol": "LUCKY",
+      "entry_ts": "2026-09-10T01:19:03.701349+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 74.95,
+      "graduation_pct": 74.95,
+      "graduated": false
+    }
+  ],
   "closed": [],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
+      "name": "I'm Feeling Lucky",
+      "symbol": "LUCKY",
+      "decision": "buy",
+      "signal_ts": "2026-09-10T01:19:03.701349+00:00",
+      "alert_score": 100.0,
+      "alert_graduation_pct": 74.95,
+      "graduation_pct": 74.95
+    }
+  ],
   "history": [
     {
       "mint": "5GcHjLKJjW9MHCh9scyxnnJYTait5uosH4ztkeZ2pump",
@@ -192,7 +217,7 @@
     }
   ],
   "stats": {
-    "alerts": 16,
+    "alerts": 17,
     "graduated": 4,
     "did_not_graduate": 10,
     "buy_graduated": 0,
