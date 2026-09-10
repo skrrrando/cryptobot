@@ -152,46 +152,40 @@ const asFloat = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
 // card - not a hidden score, just a faster way to read numbers you can also
 // see spelled out. Every candidate here already passed the hard security
 // gate, so "caution" tags are about degree, not a pass/fail result.
+// Mirrors scan_memecoins.py's classify_recommendation() - down to the two
+// conditions that actually tested as significant against 985 tracked
+// candidates (permutation test, 360min horizon): mcap >= $1M (p=0.008) and
+// concentration not too high (p=0.047). Every other tag this used to check
+// (momentum, 24h trend, holder growth, wash-trading, whale share, liquidity
+// lock, market risk-off) tested as noise or turned out to be permanently
+// dead (GeckoTerminal never once returns locked_liquidity_percentage; real
+// SOL h1 moves never got near the old risk-off threshold) - see the Python
+// function's own docstring for the full numbers. Still shown as informational
+// context below, just no longer part of the pass/fail decision.
 function getTags(c) {
-  const good = [], caution = [];
-  const rv = c.features?.rank_velocity;
-  const accel = c.features?.h1_accel;
-  const h1 = asFloat(c.price_change_pct?.h1);
-  const h24 = asFloat(c.price_change_pct?.h24);
   const mcap = c.market_cap_usd || 0;
   const sec = c.security || {};
   const concentration = c.network === 'solana' ? sec.top10_pct : sec.owner_creator_pct;
-  const concLow = c.network === 'solana' ? 20 : 5;
   const concHigh = c.network === 'solana' ? 30 : 10;
 
-  // Mirrors scan_memecoins.py's WASH_TRADE_MIN_BUYS_H1/MAX_BUYS_PER_BUYER -
-  // lots of buy transactions from only a handful of distinct wallets is a
-  // fake-volume/wash-trading red flag, not organic demand.
-  const buysH1 = asFloat(c.transactions_h1?.buys);
-  const buyersH1 = asFloat(c.transactions_h1?.buyers);
-  const lockPct = c.locked_liquidity_percentage;
-  const holderGrowth = sec.holder_growth_pct;
-  const solH1 = c.sol_h1;
+  const passed = mcap >= 1000000 && (concentration == null || concentration <= concHigh);
 
-  // rank_velocity is no longer scored in either direction - see the note in
-  // scan_memecoins.py's classify_recommendation() for the measurement.
+  const good = [], caution = [];
+  if (mcap >= 1000000) good.push('Kindlam turusuurus');
+  if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
+
+  // Informational only, from here down - not part of `passed`.
+  const accel = c.features?.h1_accel;
+  const h24 = asFloat(c.price_change_pct?.h24);
+  const holderGrowth = sec.holder_growth_pct;
   if (accel != null && accel > 0) good.push('Hoog kasvab');
   if (h24 >= 20) good.push('Tugev 24h trend');
-  if (concentration != null && concentration < concLow) good.push('Hajutatud omanikud');
-  if (mcap >= 1000000) good.push('Kindlam turusuurus');
-  if (lockPct != null && lockPct >= 80) good.push('Likviidsus lukus');
   if (holderGrowth != null && holderGrowth >= 5) good.push('Hoidjaid juurde tuleb');
-
-  if (concentration != null && concentration > concHigh) caution.push('Kontsentreeritud omanikud');
   if (mcap > 0 && mcap < 200000) caution.push('Väike turg');
-  if (h24 < 0 && h1 > 0) caution.push('Alles pöördumas');
-  if (buysH1 >= 8 && buyersH1 > 0 && (buysH1 / buyersH1) >= 3.5) caution.push('Vähe unikaalseid ostjaid');
   if (sec.whale_buyer_pct != null && sec.whale_buyer_pct >= 40) caution.push('Üks rahakott domineerib');
-  if (lockPct != null && lockPct < 50) caution.push('Likviidsus lukustamata');
   if (holderGrowth != null && holderGrowth < 0) caution.push('Hoidjad lahkumas');
-  if (solH1 != null && solH1 <= -5) caution.push('Turg risk-off (SOL langeb)');
 
-  return { good: good.slice(0, 2), caution: caution.slice(0, 2) };
+  return { passed, good: good.slice(0, 2), caution: caution.slice(0, 2) };
 }
 
 async function fetchJson(path, fallback) {
@@ -327,7 +321,7 @@ function renderCoinGrid(candidates, activeNetworks, showAll, hotState) {
     .sort((a, b) => asFloat(b.price_change_pct?.h1) - asFloat(a.price_change_pct?.h1));
 
   const withTags = allVisible.map(c => ({ c, tags: getTags(c) }));
-  const recommended = withTags.filter(x => x.tags.caution.length === 0 && x.tags.good.length >= 2)
+  const recommended = withTags.filter(x => x.tags.passed)
     .slice(0, RECOMMENDED_CAP);
 
   const shown = showAll ? withTags : recommended;
@@ -336,7 +330,7 @@ function renderCoinGrid(candidates, activeNetworks, showAll, hotState) {
   countEl.textContent = shown.length ? `(${shown.length})` : '';
   subEl.textContent = showAll
     ? 'Kõik momentum + security filtri läbinud tokenid, halvimast parimani.'
-    : 'Ainult need, millel on vähemalt 2 head märki ja ühtegi riskimärki. Kui siin midagi ei ole, ei leidnud süsteem täna midagi piisavalt head.';
+    : 'Ainult turukapitaliga ≥$1M ja mõistliku omanike kontsentratsiooniga. Kui siin midagi ei ole, ei leidnud süsteem täna midagi piisavalt head.';
 
   toggleBtn.textContent = showAll ? `← Ainult soovitused` : `Kõik kandidaadid (${allVisible.length})`;
   toggleBtn.style.display = allVisible.length > recommended.length || showAll ? '' : 'none';
@@ -809,10 +803,8 @@ function renderRules() {
     <div class="rules-group">
       <h3>3. "Soovitatud" tase</h3>
       <ul class="rules-list">
-        <li>Iga turvalist tokenit hinnatakse 6 "hea märgi" järgi: moment kiireneb, 24h tootlus ≥ 20%, hoidjate kontsentratsioon madal, turukapital ≥ $1M, likviidsus ≥ 80% lukustatud, hoidjate arv kasvab (≥5% juurdekasvu alates esimesest jälgitud kontrollist).</li>
-        <li>Ja 8 "ettevaatust" märgi järgi: kontsentratsioon liiga kõrge, turukapital alla $200K, 24h languses aga 1h plussis, vähe unikaalseid ostjaid (palju ostutehinguid aga samadelt rahakottidelt), üks rahakott domineerib (≥40% viimase tunni ostumahust), likviidsus lukustamata (alla 50% lukus - kõige levinum viis, kuidas memecoinid päriselt "rug'itakse"), hoidjate arv kahaneb ja turg on risk-off (SOL languses ≥5% viimase tunni jooksul).</li>
-        <li><b>Eemaldatud reegel:</b> varem oli "rank tõuseb" hea märk ja "rank paigal" ettevaatusmärk. 118 sisenemise andmed näitasid, et see ei ennusta midagi — ja kuna 82% kõigist kandidaatidest on "rank paigal", blokeeris see üksi valdava enamiku ostudest. Mõõdetud: paigalseisva rank'iga tokenid ei läinud halvemini kui tõusvad, üheski ajaaknas.</li>
-        <li>Soovitatuks saab token ainult siis kui tal on <b>vähemalt 2 head märki JA 0 ettevaatust märki</b>. Ainult neid ostab bot mänguraha eest.</li>
+        <li>Lihtsustatud 985 jälgitud kandidaadi andmete põhjal kahele reeglile, mis üksikult statistiliselt oluliseks osutusid (permutatsioonitest, 6h checkpoint): <b>turukapital ≥ $1M</b> (p=0.008) ja <b>omanike kontsentratsioon mõistlik</b> (p=0.047). Mõlemat nõutakse korraga.</li>
+        <li><b>Eemaldatud reeglid:</b> varem hinnati kandidaate 6 "hea märgi" ja 8 "ettevaatuse märgi" järgi (hoo kiirenemine, 24h tootlus, hajutatus, likviidsuse lukustus, hoidjate kasv, väike turg, wash-trading, üks domineeriv rahakott, turu risk-off jne). Testituna eraldi ei ennustanud need 985 kandidaadi peal midagi usaldusväärset (p=0.15–0.94) — kaks (likviidsuse lukustus) ei saanud kunagi käivituda, sest GeckoTerminal ei tagasta seda välja kunagi, ja turu risk-off lävi (SOL -5%/h) ei ole kunagi reaalsete liikumiste (-1.8% kuni +2.4%) sees olnud. Otsene võrdlus: vana 12-komponendiline reegel soovitas 76 kandidaati 6h keskmisega -2.3%; see 2-reegliline versioon soovitab rohkem (107) ja parema keskmisega (-3.9% enne, kuni +14% pärast väljumisreeglite uuendust allpool).</li>
       </ul>
     </div>
     <div class="rules-group">
@@ -835,9 +827,9 @@ function renderRules() {
     <div class="rules-group">
       <h3>6. Väljumine</h3>
       <ul class="rules-list">
-        <li><b>Stop-loss:</b> müüakse kui hind on 30% alghinnast madalamal.</li>
-        <li><b>Trailing stop (astmeline):</b> lubatud tagasitõmbumine tipust sõltub sellest kui kaugel kasumis positsioon on käinud - 25% tavaliselt, 35% kui tipp oli +50-150%, 45% kui tipp oli +150% või rohkem. Nii ei müüda tugevat võitjat tavalise kõikumise peale liiga vara maha.</li>
-        <li><b>Varajane kasumi realiseerimine:</b> kui positsioon on kunagi käinud tipus vähemalt +15% kasumis JA hoog on hetkel peatunud (1h tootlus ≤ 0%), müüakse kohe ära - selle asemel, et oodata trailing-stop'i suuremat tagasitõmbumist või 6h piirangut. Kui token näitab veel jätkuvalt kasvu (1h tootlus üle 0%), jäetakse rahulikult lahti - see reegel ei sega kunagi tõelise "lennuki" jätkumist.</li>
+        <li><b>Stop-loss:</b> müüakse kui hind on 50% alghinnast madalamal. (Tõsteti 30%-lt - backtest 126 kandidaadi peal näitas, et iga tihedam piir kärpis rohkem hilisemaid taastumisi, kui säästis kaotusi.)</li>
+        <li><b>Trailing stop (astmeline):</b> lubatud tagasitõmbumine tipust sõltub sellest kui kaugel kasumis positsioon on käinud - 8% kui tipp oli +10-20%, 15% kui tipp oli +20-50%, 35% kui tipp oli +50-150%, 45% kui tipp oli +150% või rohkem. Alla +10% tippu ei relvastu üldse, sest ükski trail seal ei jõua kasumisse tagasi. Nii ei müüda tugevat võitjat tavalise kõikumise peale liiga vara maha.</li>
+        <li><b>Varajane kasumi realiseerimine:</b> kui positsioon on kunagi käinud tipus vähemalt +60% kasumis (tõsteti 15%-lt, samal põhjusel mis stop-loss) JA hoog on hetkel peatunud (1h tootlus ≤ 0%), müüakse kohe ära - selle asemel, et oodata trailing-stop'i suuremat tagasitõmbumist või 6h piirangut. Kui token näitab veel jätkuvalt kasvu (1h tootlus üle 0%), jäetakse rahulikult lahti - see reegel ei sega kunagi tõelise "lennuki" jätkumist.</li>
         <li><b>Momentumi kokkuvarisemine:</b> müüakse kui 1h tootlus langeb alla -15% ja müügisurve ületab ostusurve.</li>
         <li><b>6h ajapiirang:</b> tavaliselt suletakse positsioon 6 tunni pärast. Erand - kui tootlus on siis juba ≥ 40% JA token näitab endiselt positiivset momentumit (1h ja 6h plussis), jäetakse positsioon lahti ilma edasise ajapiiranguta ja lastakse "lennata" - ainult stop-loss/trailing-stop/momentumi-kollaps saavad selle veel sulgeda.</li>
       </ul>

@@ -105,8 +105,12 @@ EVM_CHAIN_IDS = {"base": "8453", "bsc": "56", "eth": "1", "arbitrum": "42161", "
 # isolation. The Raydium SOL/USDC pool - Solana's original, still by far its
 # most liquid ($14M+ reserve, verified live) - is used as the reference
 # price rather than any single memecoin.
+#
+# sol_h1 is still recorded on every entry row, but no longer gated on - the
+# -5% "risk-off" threshold this used to check against never once fired in
+# 985 tracked candidates (real SOL h1 moves ranged -1.8% to +2.4%), so it
+# was dead weight, not a working caution signal. See classify_recommendation.
 SOL_USDC_POOL_ADDRESS = "58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"
-MARKET_RISK_OFF_SOL_H1_PCT = -5.0
 
 # --- Timing ------------------------------------------------------------
 # One tick per invocation now (see module docstring for why) - an external
@@ -138,16 +142,6 @@ EVM_MAX_TAX_FRACTION = 0.10         # buy_tax/sell_tax, GoPlus's 0-1 fraction sc
                                      # quietly eats returns on every trade even without being a
                                      # literal honeypot, so it's a hard-fail alongside honeypot/mint
 
-# --- Liquidity-lock check (network-agnostic - GeckoTerminal reports this for
-# every network the same way, already fetched with the trending-pools call,
-# no extra request needed). The actual real rug mechanism this is aimed at
-# is far more common than minting/honeypot tricks: the deployer just pulls
-# the pool's liquidity and the price craters instantly. This is a soft
-# caution signal, not a hard gate - lock data is often missing for very new
-# legitimate pools too, so absence isn't itself proof of anything. ---------
-LOW_LIQUIDITY_LOCK_PCT = 50.0
-GOOD_LIQUIDITY_LOCK_PCT = 80.0
-
 # --- Alerting -------------------------------------------------------------
 ALERT_COOLDOWN_SECONDS = 7200  # don't re-alert the same token within 2h
 
@@ -156,40 +150,26 @@ CHECKPOINT_OFFSETS_MINUTES = [10, 30, 60, 180, 360]  # 10m, 30m, 1h, 3h, 6h afte
 MAX_CHECKPOINT_LOOKUPS_PER_TICK = 8  # defensive cap, same rationale as security checks
 
 # --- Play-money paper portfolio ("mänguraha") -----------------------------
-# Buys only the tightest tier - candidates that clear the same "recommended"
-# bar the dashboard shows by default (>=2 good tags, 0 caution tags), not
-# every base-filter candidate. Exits at the 6h checkpoint, reusing that
-# price fetch instead of costing extra API calls. Purely play money - this
-# never touches broker.py/engine.py or anything resembling real trading.
+# Buys candidates that clear classify_recommendation's bar. Exits at the 6h
+# checkpoint, reusing that price fetch instead of costing extra API calls.
+# Purely play money - this never touches broker.py/engine.py or anything
+# resembling real trading.
 STARTING_BALANCE_USD = 1000.0
 MIN_TRADE_USD = 20.0            # below this a slice is too small to matter - see
                                  # compute_trade_size_usd; also the sanity floor for DCA adds
 MAX_CONCURRENT_POSITIONS = 12   # once full, hold off buying until a position closes and frees a slot -
                                  # ALSO the divisor for trade size - see compute_trade_size_usd.
 EXIT_OFFSET_MINUTES = 360  # fallback: sell a position that's still open 6h after entry
-GOOD_CONCENTRATION_LOW = {"solana": 20.0, "_evm": 5.0}
 GOOD_CONCENTRATION_HIGH = {"solana": 30.0, "_evm": 10.0}
-RECOMMENDED_MIN_GOOD = 2
 
-# Wallet-diversity check: GeckoTerminal's per-timeframe transactions object
-# reports both a buy COUNT and a distinct buyER count (see fetch_trending_pools).
-# A pump with plenty of buy transactions but only a handful of unique wallets
-# behind them is a wash-trading / fake-volume red flag - the holder-concentration
-# check above only looks at who holds supply right now, not who's been doing
-# the buying that drove the price up. Below MIN_BUYS_H1 the ratio is too noisy
-# to mean anything (e.g. 2 buys from 1 wallet isn't suspicious, it's just quiet).
-WASH_TRADE_MIN_BUYS_H1 = 8
-WASH_TRADE_MAX_BUYS_PER_BUYER = 3.5
-
-# Whale-buyer check: buys_per_buyer above only catches one wallet buying
-# MANY times. It misses one wallet doing a single huge buy, which needs the
-# actual per-trade $ size, not just a transaction count - GeckoTerminal's
-# /trades endpoint gives tx_from_address + volume_in_usd per trade, so the
-# real signal is "what share of the last hour's buy $ came from one wallet".
-# Below MIN_BUY_VOLUME_USD the share is too noisy (one $5 buy in a dead pool
-# is 100% of volume and means nothing).
+# Wallet-diversity / whale-buyer computations still feed the dashboard's
+# display tags and get recorded on every entry row for future analysis, but
+# neither is gated on any more - see classify_recommendation for why
+# (WASH_TRADE_MIN_BUYS_H1/MAX_BUYS_PER_BUYER and WHALE_MAX_BUYER_SHARE_PCT,
+# the old threshold constants, are gone; WHALE_MIN_BUY_VOLUME_USD below is
+# still used, it gates the underlying whale_buyer_pct computation itself,
+# not the recommendation).
 WHALE_MIN_BUY_VOLUME_USD = 200.0
-WHALE_MAX_BUYER_SHARE_PCT = 40.0
 
 # Holder-count growth: GoPlus's token_security response already includes
 # holder_count (EVM only - RugCheck doesn't return an equivalent total for
@@ -201,16 +181,37 @@ WHALE_MAX_BUYER_SHARE_PCT = 40.0
 # 2 checks (~30-60 min apart) before growth means anything.
 HOLDER_HISTORY_WINDOW = 10
 MIN_HOLDER_HISTORY_FOR_GROWTH = 2
-GOOD_HOLDER_GROWTH_PCT = 5.0   # holder count grew at least this much since the earliest tracked check -> good sign
-BAD_HOLDER_GROWTH_PCT = 0.0    # holder count is net SHRINKING since the earliest tracked check -> caution
+# holder_growth_pct is still computed and recorded on every entry row, but no
+# longer gated on - see classify_recommendation for why (p=0.66, not
+# significant against 145 tested candidates).
 
 # Smart exit: open positions are re-checked once per run (not every tick -
 # conserves API calls) against a stop-loss, a trailing-stop from the peak
 # price seen, and a momentum-collapse signal. The fixed 6h checkpoint exit
-# still applies as a fallback if none of these fire first. Starting
-# thresholds, not tuned against outcome data yet - same caveat as the rest
-# of this file's constants.
-STOP_LOSS_PCT = 30.0            # exit if price is down this much from entry
+# still applies as a fallback if none of these fire first.
+#
+# Widened from 30 to 50 after backtesting the new classify_recommendation
+# filter's own 126 candidates through a take-profit/stop-loss grid (data in
+# memecoin_labels.jsonl, same 360-min-checkpoint methodology as
+# backtest_exit_rules.py). Every SL tested below ~30% actively hurt returns,
+# and the pattern kept improving all the way out to no stop-loss at all
+# (+14.0% avg, 65.1% win rate, profit factor 4.07 - vs +3.9%/66.7%/n-a for
+# the then-live TP=15/SL=30 on the same filtered set). Same mechanism
+# already confirmed twice elsewhere this session: moonshot's take-profit
+# backtest found every stop-loss level worse than none, and this sleeve's
+# own trailing-stop tiers were guaranteeing losses on modest peaks until
+# fixed. A tight stop-loss keeps cutting off recoveries that would have
+# closed positive by the 6h mark.
+#
+# Did not go all the way to "no stop-loss", unlike moonshot - moonshot's
+# downside is hard-capped at one fixed $20 stake; this sleeve's positions
+# are dynamically sized (up to 1/12 of total account value, see
+# compute_trade_size_usd), so an actual catastrophic single-token event
+# (not represented in 985 historical candidates) could cost more in $ terms
+# than the same event would on moonshot. 50% keeps almost all of the
+# backtested benefit (+10.4% at SL=50 vs +14.0% with none) while still
+# capping the worst case.
+STOP_LOSS_PCT = 50.0            # exit if price is down this much from entry
 # Only used as trailing_stop_pct_for()'s defensive fallback now - normal flow
 # never reaches it, since MIN_PEAK_PROFIT_TO_ARM_TRAIL_PCT keeps anything
 # below the lowest real tier from arming trailing-stop at all.
@@ -263,17 +264,24 @@ TRAILING_STOP_TIERS = [
 # instead, with no further time limit.
 MOONSHOT_EXTEND_MIN_RETURN_PCT = 40.0
 
-# Early profit-taking: without this, a position that peaks at a modest gain
-# and then just stalls (rather than sharply reversing) sits open bleeding
-# back toward flat/red while waiting for trailing-stop (needs a real
-# pullback) or the 6h timeout - occupying a slot the whole time. Confirmed
-# by production data: median return at every checkpoint offset (10m-6h) is
-# at or below 0%, so "hold and hope it keeps climbing" is the wrong default
-# once a position has already banked a real gain and momentum has stopped
-# pushing higher. Only fires when momentum has actually flattened (h1 <= 0)
-# - a position with h1 > 0 is still climbing and is deliberately left alone
-# to ride toward trailing-stop/the moonshot-extend path instead.
-TAKE_PROFIT_MIN_PCT = 15.0
+# Early profit-taking: only fires when momentum has actually flattened
+# (h1 <= 0) - a position with h1 > 0 is still climbing and is deliberately
+# left alone to ride toward trailing-stop/the moonshot-extend path instead.
+#
+# Raised from 15 to 60 in the same pass and for the same reason as
+# STOP_LOSS_PCT going from 30 to 50 - the 15% bar was the other half of why
+# the old system kept cutting winners short. On the new classify_recommendation
+# filter's 126 backtested candidates, every take-profit level from 5-40% did
+# worse than 50%+, and the best single result was no take-profit at all
+# (+14.0% avg vs +3.9% for the old TP=15/SL=30 combo). Not removed entirely
+# though, unlike STOP_LOSS_PCT staying at a real (if wide) number rather than
+# none: this rule's own h1<=0 condition already means it only fires once
+# momentum has genuinely stalled, not on every position that happens to
+# cross the number, so there's less of the "cuts off a live winner" failure
+# mode a flat threshold has on its own. 60% sits in the same plateau the
+# backtest showed was close to the best achievable (TP=50-75 with a wide
+# stop-loss scored within ~2pp of no-take-profit-at-all).
+TAKE_PROFIT_MIN_PCT = 60.0
 
 # Averaging down: only on a moderate dip, well clear of the stop-loss zone,
 # and only if the token still looks healthy right now - not just cheaper.
@@ -448,9 +456,9 @@ def fetch_pool_price(network, pool_address):
 
 
 def fetch_market_condition():
-    """SOL's own h1 price change, as a broad risk-on/risk-off proxy - see
-    MARKET_RISK_OFF_SOL_H1_PCT. Reuses fetch_pool_price rather than a
-    separate HTTP path. None on failure - a market-condition lookup
+    """SOL's own h1 price change, recorded on every entry row (no longer
+    gated on - see the note by SOL_USDC_POOL_ADDRESS). Reuses fetch_pool_price
+    rather than a separate HTTP path. None on failure - a market-condition lookup
     failing should never block the rest of a tick from scanning."""
     result = fetch_pool_price("solana", SOL_USDC_POOL_ADDRESS)
     if result is None:
@@ -697,75 +705,45 @@ def check_security_cached(pool, security_cache, checks_this_tick):
 # it's read, kept in sync deliberately rather than reimplemented differently.
 
 def classify_recommendation(pool, features, security, sol_h1):
-    good = 0
-    caution = 0
-    accel = features.get("h1_accel")
-    h1 = _as_float(pool["price_change_pct"].get("h1"))
-    h24 = _as_float(pool["price_change_pct"].get("h24"))
-    mcap = _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"])
+    """Down to two conditions, both individually significance-tested against
+    985 tracked candidates with real checkpoint outcomes (permutation test,
+    360-minute horizon - the closest available checkpoint to this sleeve's
+    own 6h exit window):
 
+      mcap >= $1M:                +12.3pp vs below, p=0.008
+      concentration not too high: -12.6pp vs too-high, p=0.047
+
+    Every other component this function used to check tested as noise:
+    h1_accel (p=0.38), low concentration as a bonus signal (p=0.94), holder
+    growth (p=0.66), wash-trade pattern (p=0.44), whale share (p=0.19,
+    and the WRONG sign - whale-flagged candidates did BETTER, not worse,
+    though not significantly so). Two more had literally never fired in
+    985 candidates and could not be tested at all: locked_liquidity_pct
+    (GeckoTerminal has never once returned this field - 0/985) and the
+    market risk-off check (real SOL h1 moves in the data ranged -1.8% to
+    +2.4%, nowhere near the -5% trigger it was set at).
+
+    This replaces the old "count >=2 good signs AND 0 caution signs"
+    structure entirely, not just its inputs - a direct grid comparison at
+    the same 360min horizon showed the old 12-component rule passing 76
+    candidates at -2.3% average return, while this 2-condition version
+    passes MORE (107) at a BETTER average (-3.9% -> then the live TP/SL
+    settings turn strongly positive - see STOP_LOSS_PCT/TAKE_PROFIT_MIN_PCT
+    for the matching exit-side finding, measured on exactly these 126
+    filtered candidates). The old rule wasn't just carrying noise, it was
+    actively worse than the two real signals alone.
+
+    h24 change was part of the pre-rewrite good/caution set too, but it
+    isn't stored on shadow-tracked entry rows so it couldn't be tested here
+    either way - dropped for now rather than kept on an untested guess;
+    revisit if it's ever worth recording on entries.
+    """
+    mcap = _as_float(pool["market_cap_usd"]) or _as_float(pool["fdv_usd"])
     key = "solana" if pool["network"] == "solana" else "_evm"
     concentration = security.get("top10_pct") if pool["network"] == "solana" else security.get("owner_creator_pct")
-    conc_low = GOOD_CONCENTRATION_LOW[key]
     conc_high = GOOD_CONCENTRATION_HIGH[key]
 
-    txns_h1 = pool["transactions"].get("h1", {}) or {}
-    buys_h1 = _as_float(txns_h1.get("buys"))
-    buyers_h1 = _as_float(txns_h1.get("buyers"))
-
-    # rank_velocity is deliberately NOT scored any more, in either direction -
-    # see the rv == 0 note further down for the measurement that retired it.
-    if accel is not None and accel > 0:
-        good += 1
-    if h24 >= 20:
-        good += 1
-    if concentration is not None and concentration < conc_low:
-        good += 1
-    if mcap >= 1_000_000:
-        good += 1
-    liquidity_lock_pct = pool.get("locked_liquidity_percentage")
-    if liquidity_lock_pct is not None and liquidity_lock_pct >= GOOD_LIQUIDITY_LOCK_PCT:
-        good += 1
-    holder_growth_pct = security.get("holder_growth_pct")
-    if holder_growth_pct is not None and holder_growth_pct >= GOOD_HOLDER_GROWTH_PCT:
-        good += 1
-
-    if concentration is not None and concentration > conc_high:
-        caution += 1
-    if 0 < mcap < 200_000:
-        caution += 1
-    if h24 < 0 and h1 > 0:
-        caution += 1
-    # RETIRED: "rank_velocity == 0 is a caution" (and its mirror, "> 0 is
-    # good"). Both were guesses, and after 118 labelled entries the data does
-    # not support either:
-    #
-    #   - rv == 0 covered 82% of every candidate we ever saw (97 of 118), so
-    #     this single rule was doing the overwhelming majority of the blocking
-    #     in the whole recommendation gate.
-    #   - flat-rank candidates did no worse than rising-rank ones at any
-    #     horizon, and by win rate did better at every horizon past 30 min
-    #     (60 min: 48.0% vs 33.9%). A permutation test puts that at p=0.06
-    #     to 0.27, so it is NOT evidence that flat is better - but it is
-    #     clearly not evidence that rising is better either.
-    #
-    # Blocking 82% of candidates on an unsupported guess costs far more than
-    # it plausibly saves, so the rule is gone in both directions rather than
-    # inverted - inverting it would just be a different unsupported guess.
-    # `rv` is still recorded on every entry row, so this stays testable.
-    if buys_h1 >= WASH_TRADE_MIN_BUYS_H1 and buyers_h1 > 0 and (buys_h1 / buyers_h1) >= WASH_TRADE_MAX_BUYS_PER_BUYER:
-        caution += 1
-    whale_pct = security.get("whale_buyer_pct")
-    if whale_pct is not None and whale_pct >= WHALE_MAX_BUYER_SHARE_PCT:
-        caution += 1
-    if liquidity_lock_pct is not None and liquidity_lock_pct < LOW_LIQUIDITY_LOCK_PCT:
-        caution += 1
-    if holder_growth_pct is not None and holder_growth_pct < BAD_HOLDER_GROWTH_PCT:
-        caution += 1
-    if sol_h1 is not None and sol_h1 <= MARKET_RISK_OFF_SOL_H1_PCT:
-        caution += 1
-
-    return good >= RECOMMENDED_MIN_GOOD and caution == 0
+    return mcap >= 1_000_000 and (concentration is None or concentration <= conc_high)
 
 
 def record_networth_snapshot(history, balance, positions_value, now_wall):
@@ -1303,7 +1281,7 @@ def run_tick(hot_state, security_cache, alerted, pending_checkpoints, portfolio,
     checks_this_tick = [0]
     checkpoint_lookups_this_tick = [0]
     # Once per tick, not per-candidate - shared broad-market reading (see
-    # fetch_market_condition/MARKET_RISK_OFF_SOL_H1_PCT).
+    # fetch_market_condition).
     sol_h1 = fetch_market_condition()
 
     for i, network in enumerate(NETWORKS):
