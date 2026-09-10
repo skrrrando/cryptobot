@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-10T03:20:36.753440+00:00",
+  "timestamp": "2026-09-10T03:25:29.797837+00:00",
   "balance": 956.41,
-  "positions_value": 22.86,
-  "net_worth": 979.27,
+  "positions_value": 6.76,
+  "net_worth": 963.17,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "Replacement",
       "entry_ts": "2026-09-10T02:25:25.217004+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.35,
-      "pnl_pct": -83.25,
+      "value_usd": 3.37,
+      "pnl_pct": -83.15,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 61.17,
-      "graduation_pct": 4.63,
+      "graduation_pct": 4.75,
       "graduated": false
     },
     {
@@ -24,11 +24,11 @@
       "symbol": "ETF",
       "entry_ts": "2026-09-10T03:20:36.753440+00:00",
       "amount_usd": 20.0,
-      "value_usd": 19.51,
-      "pnl_pct": -2.45,
+      "value_usd": 3.39,
+      "pnl_pct": -83.05,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 57.34,
-      "graduation_pct": 57.34,
+      "graduation_pct": 3.3,
       "graduated": false
     }
   ],
@@ -76,16 +76,6 @@
   ],
   "watching": [
     {
-      "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
-      "name": "Eternal Twap Faucet",
-      "symbol": "ETF",
-      "decision": "buy",
-      "signal_ts": "2026-09-10T03:20:36.753440+00:00",
-      "alert_score": 113.7,
-      "alert_graduation_pct": 57.34,
-      "graduation_pct": 57.34
-    },
-    {
       "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
       "name": "The Great Replacement",
       "symbol": "Replacement",
@@ -93,7 +83,17 @@
       "signal_ts": "2026-09-10T02:25:25.217004+00:00",
       "alert_score": 115.0,
       "alert_graduation_pct": 61.17,
-      "graduation_pct": 4.63
+      "graduation_pct": 4.75
+    },
+    {
+      "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
+      "name": "Eternal Twap Faucet",
+      "symbol": "ETF",
+      "decision": "buy",
+      "signal_ts": "2026-09-10T03:20:36.753440+00:00",
+      "alert_score": 113.7,
+      "alert_graduation_pct": 57.34,
+      "graduation_pct": 3.3
     }
   ],
   "history": [
@@ -304,7 +304,7 @@
     "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
-    "tracked": 42,
+    "tracked": 44,
     "graduated": 90,
     "did_not_graduate": 403,
     "graduation_rate_pct": 18.3
