@@ -1,5 +1,5 @@
 {
-  "balance": 40.0330910918449,
+  "balance": 92.24175685641802,
   "positions": {
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
       "network": "base",
@@ -89,19 +89,6 @@
       "peak_price_usd": 0.006978749482333593,
       "amount_usd": 49.64326288417838,
       "qty": 7641.161854923176,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": {
-      "network": "solana",
-      "pool_address": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
-      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-      "name": "STONK / SOL",
-      "entry_ts": "2026-09-10T19:40:33.879703+00:00",
-      "entry_price_usd": 0.1941548601782553,
-      "peak_price_usd": 0.2286124004147989,
-      "amount_usd": 49.87315503130103,
-      "qty": 256.766556986617,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -5910,6 +5897,25 @@
       "pnl_usd": -0.5125015258772763,
       "pnl_pct": -1.04,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-10T19:40:33.879703+00:00",
+      "entry_price_usd": 0.1941548601782553,
+      "peak_price_usd": 0.2286124004147989,
+      "amount_usd": 49.87315503130103,
+      "qty": 256.766556986617,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-10T22:36:25.779122+00:00",
+      "exit_price_usd": 0.20341189831338033,
+      "proceeds_usd": 52.20866576457313,
+      "pnl_usd": 2.335510733272095,
+      "pnl_pct": 4.68,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -5953,7 +5959,7 @@
     "bsc_0xdf8f1510a5a3f82fbab166175a72bc00a5c432d1": "2026-09-09T03:36:11.691987+00:00",
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": "2026-09-09T04:21:05.397625+00:00",
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": "2026-09-10T15:25:55.876285+00:00",
-    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-10T12:11:23.626922+00:00",
+    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-10T22:36:25.779122+00:00",
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-10T11:51:13.977588+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-09T10:51:59.930817+00:00",
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-09T14:06:11.403065+00:00",
