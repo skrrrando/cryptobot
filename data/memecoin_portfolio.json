@@ -1,5 +1,5 @@
 {
-  "balance": 167.507131116474,
+  "balance": 178.25832694755292,
   "positions": {
     "base_0x11748db1a9462e907ed35229fe0a3c671afc9b772e7f2f2adf8087235acefca3": {
       "network": "base",
@@ -12,19 +12,6 @@
       "amount_usd": 64.24434548165556,
       "qty": 60579.80331509173,
       "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": {
-      "network": "bsc",
-      "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
-      "base_token_address": "0x3efbfff95576e1d23cf6ead0acd2e73f4d6a7777",
-      "name": "BNBCAT / WBNB",
-      "entry_ts": "2026-09-09T23:40:33.163882+00:00",
-      "entry_price_usd": 0.00114382362697277,
-      "peak_price_usd": 0.00146716740784621,
-      "amount_usd": 64.24434548165556,
-      "qty": 55450.56239944431,
-      "sell_tax_pct": 1.0,
       "time_exit_evaluated": false
     },
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": {
@@ -47,7 +34,7 @@
       "name": "Stonks / USDT 1%",
       "entry_ts": "2026-09-10T01:50:31.319003+00:00",
       "entry_price_usd": 0.00347582505939003,
-      "peak_price_usd": 0.00373085569245956,
+      "peak_price_usd": 0.00375946205131159,
       "amount_usd": 58.97719893841434,
       "qty": 16908.72544442896,
       "sell_tax_pct": 0.0,
@@ -60,7 +47,7 @@
       "name": "STONK / SOL",
       "entry_ts": "2026-09-10T02:15:31.752428+00:00",
       "entry_price_usd": 0.18554746488784227,
-      "peak_price_usd": 0.2039970948870669,
+      "peak_price_usd": 0.2112047484846697,
       "amount_usd": 59.135745708087676,
       "qty": 318.5909880658799,
       "sell_tax_pct": 0.0,
@@ -112,9 +99,22 @@
       "name": "DOT / ETH 1%",
       "entry_ts": "2026-09-10T03:00:55.957852+00:00",
       "entry_price_usd": 0.00649927871552513,
-      "peak_price_usd": 0.00649927871552513,
+      "peak_price_usd": 0.00656731514883727,
       "amount_usd": 59.135745708087676,
       "qty": 9082.739447382482,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": {
+      "network": "bsc",
+      "pool_address": "0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d",
+      "base_token_address": "0xfa6d9b504848606eb9aec04ccc161d169b3f2159",
+      "name": "BREW / WBNB 1%",
+      "entry_ts": "2026-09-10T03:15:35.161636+00:00",
+      "entry_price_usd": 0.0106130869570905,
+      "peak_price_usd": 0.0106130869570905,
+      "amount_usd": 59.135745708087676,
+      "qty": 5557.327535553773,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -5080,6 +5080,25 @@
       "pnl_usd": 1.9025612360800892,
       "pnl_pct": 2.85,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8650e3ede7c2d45f89dbbe108bd6568f414167cb",
+      "base_token_address": "0x3efbfff95576e1d23cf6ead0acd2e73f4d6a7777",
+      "name": "BNBCAT / WBNB",
+      "entry_ts": "2026-09-09T23:40:33.163882+00:00",
+      "entry_price_usd": 0.00114382362697277,
+      "peak_price_usd": 0.00146716740784621,
+      "amount_usd": 64.24434548165556,
+      "qty": 55450.56239944431,
+      "sell_tax_pct": 1.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-10T03:17:36.295606+00:00",
+      "exit_price_usd": 0.00127639349450139,
+      "proceeds_usd": 69.88694153916661,
+      "pnl_usd": 5.6425960575110565,
+      "pnl_pct": 8.78,
+      "exit_reason": "take_profit"
     }
   ],
   "recent_exits": {
@@ -5104,7 +5123,7 @@
     "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": "2026-09-09T21:16:11.981327+00:00",
     "bsc_0x0ec12db33551afba853b691b4edf49196ea0e99a": "2026-09-08T04:42:00.217303+00:00",
     "solana_CW5jBQCAw9btDETXs2hZsDUNHYAaXpx9mgKfzYimsebh": "2026-09-09T00:47:00.291146+00:00",
-    "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": "2026-09-09T21:06:04.437170+00:00",
+    "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": "2026-09-10T03:17:36.295606+00:00",
     "bsc_0x90c3c770087eb9e63ad47e99a66e260aa10c31ae": "2026-09-09T17:12:12.925628+00:00",
     "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-10T00:51:10.713745+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
