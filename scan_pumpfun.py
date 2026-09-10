@@ -872,6 +872,31 @@ def open_position(portfolio, candidate, curve, sol_usd, timestamp, amount_usd):
     return portfolio["positions"][mint], None
 
 
+def usable_curve_state(history):
+    """The most recent curve reading in `history` that has real, sellable
+    reserves - walking backward past any that don't.
+
+    Exists because of a real production failure: a position that graduated
+    was sold using the exact RPC read that reported complete=True, and that
+    read had virtual_sol_reserves/virtual_token_reserves of zero - pump.fun's
+    account gets its reserves cleared as part of the same state transition
+    that flips the completion flag, sometimes before the funds are gone,
+    sometimes not. simulate_curve_sell correctly refuses to price against
+    zero reserves and returns None, but close_position then silently treated
+    that None as "proceeds $0" - turning the sleeve's best possible outcome
+    (an actual graduation) into a 100% loss. Confirmed on a real trade:
+    "I'm Feeling Lucky", entered at 74.95% graduation, completed 9 minutes
+    later, sold for $0.00 instead of the real payout.
+
+    Used for both the automatic graduation exit and the manual SELL path -
+    they share the same risk, since both ultimately price off the newest
+    history entry."""
+    for entry in reversed(history or []):
+        if _as_float(entry.get("virtual_sol_reserves")) > 0 and _as_float(entry.get("virtual_token_reserves")) > 0:
+            return entry
+    return None
+
+
 def close_position(portfolio, mint, curve, sol_usd, timestamp, reason="manual"):
     """Called from a user's SELL press, or automatically from
     check_moonshot_positions (reason="graduated"/"take_profit"/"timeout").
@@ -927,7 +952,12 @@ def check_moonshot_positions(portfolio, bonding_state, sol_usd, now_wall):
          take-profit doesn't sit open forever waiting for a SELL that isn't
          coming.
     A position with no fresh curve read yet this tick is left alone rather
-    than guessed at - it'll get evaluated on a later tick instead.
+    than guessed at - it'll get evaluated on a later tick instead. Same if
+    the curve has no reading anywhere in history with real reserves left to
+    price a sale against (see usable_curve_state) - deferred to the next
+    tick rather than forced through at a bogus $0, on the chance a better
+    read shows up (real accounts have come back with valid reserves on a
+    later poll after one bad one).
     """
     closed = []
     for mint, pos in list(portfolio["positions"].items()):
@@ -935,17 +965,20 @@ def check_moonshot_positions(portfolio, bonding_state, sol_usd, now_wall):
         latest = history[-1] if history else None
         if latest is None:
             continue
+        sellable = usable_curve_state(history)
+        if sellable is None:
+            continue
 
         if latest.get("complete"):
-            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="graduated")
+            c = close_position(portfolio, mint, sellable, sol_usd, now_wall.isoformat(), reason="graduated")
             if c is not None:
                 closed.append(c)
             continue
 
-        sol_out = simulate_curve_sell(latest, pos["qty"])
+        sol_out = simulate_curve_sell(sellable, pos["qty"])
         value_usd = max(0.0, (sol_out or 0.0) * (sol_usd or 0.0) - SOLANA_GAS_USD)
         if pos["amount_usd"] and value_usd >= pos["amount_usd"] * (1 + MOONSHOT_TAKE_PROFIT_PCT / 100.0):
-            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="take_profit")
+            c = close_position(portfolio, mint, sellable, sol_usd, now_wall.isoformat(), reason="take_profit")
             if c is not None:
                 closed.append(c)
             continue
@@ -955,7 +988,7 @@ def check_moonshot_positions(portfolio, bonding_state, sol_usd, now_wall):
         except (KeyError, ValueError):
             elapsed_seconds = 0
         if elapsed_seconds >= OUTCOME_MAX_AGE_SECONDS:
-            c = close_position(portfolio, mint, latest, sol_usd, now_wall.isoformat(), reason="timeout")
+            c = close_position(portfolio, mint, sellable, sol_usd, now_wall.isoformat(), reason="timeout")
             if c is not None:
                 closed.append(c)
 
@@ -1599,7 +1632,7 @@ def poll_telegram_decisions(alerts_state, portfolio, bonding_state, pending_outc
         elif action == "sell":
             held = portfolio["positions"].get(key) or {}
             history = (bonding_state.get(held.get("bonding_curve_key")) or {}).get("history") or []
-            curve = history[-1] if history else None
+            curve = usable_curve_state(history)
             if curve is None:
                 note = "No current curve data - try again next tick."
             else:
@@ -1675,9 +1708,10 @@ def build_dashboard_summary(portfolio, pending_outcomes, bonding_state, sol_usd,
     for mint, pos in (portfolio.get("positions") or {}).items():
         history = (bonding_state.get(pos.get("bonding_curve_key")) or {}).get("history") or []
         latest = history[-1] if history else None
+        sellable = usable_curve_state(history)
         value = None
-        if latest and sol_usd:
-            sol_out = simulate_curve_sell(latest, pos["qty"])
+        if sellable and sol_usd:
+            sol_out = simulate_curve_sell(sellable, pos["qty"])
             if sol_out:
                 value = round(sol_out * sol_usd, 2)
         positions_value += value if value is not None else pos["amount_usd"]
