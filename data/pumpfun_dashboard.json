@@ -1,38 +1,47 @@
 {
-  "timestamp": "2026-09-10T01:19:03.701349+00:00",
+  "timestamp": "2026-09-10T01:28:09.467119+00:00",
   "balance": 980.0,
-  "positions_value": 19.52,
-  "net_worth": 999.52,
+  "positions_value": 0.0,
+  "net_worth": 980.0,
   "starting_balance": 1000.0,
-  "positions": [
+  "positions": [],
+  "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
       "name": "I'm Feeling Lucky",
       "symbol": "LUCKY",
+      "bonding_curve_key": "4hTgeq48gKKc2MxsyzgSndoAjfiCuZthKhtxzS3fMDaK",
       "entry_ts": "2026-09-10T01:19:03.701349+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
+      "entry_price_usd": 2.79058974748807e-05,
+      "entry_spot_price_usd": 2.7569195968094037e-05,
       "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 716694.3839739561,
       "entry_graduation_pct": 74.95,
-      "graduation_pct": 74.95,
-      "graduated": false
+      "entry_score": 100.0,
+      "exit_ts": "2026-09-10T01:28:09.467144+00:00",
+      "exit_price_usd": 0.0,
+      "proceeds_usd": 0.0,
+      "pnl_usd": -20.0,
+      "pnl_pct": -100.0,
+      "exit_reason": "graduated"
     }
   ],
-  "closed": [],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
       "name": "I'm Feeling Lucky",
       "symbol": "LUCKY",
+      "outcome": "graduated",
       "decision": "buy",
       "signal_ts": "2026-09-10T01:19:03.701349+00:00",
+      "recorded_ts": "2026-09-10T01:28:09.467119+00:00",
       "alert_score": 100.0,
       "alert_graduation_pct": 74.95,
-      "graduation_pct": 74.95
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.1
+    },
     {
       "mint": "5GcHjLKJjW9MHCh9scyxnnJYTait5uosH4ztkeZ2pump",
       "name": "A Mini Cock",
@@ -218,13 +227,13 @@
   ],
   "stats": {
     "alerts": 17,
-    "graduated": 4,
+    "graduated": 5,
     "did_not_graduate": 10,
-    "buy_graduated": 0,
-    "buy_total": 0,
+    "buy_graduated": 1,
+    "buy_total": 1,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 28.6
+    "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
     "tracked": 40,
