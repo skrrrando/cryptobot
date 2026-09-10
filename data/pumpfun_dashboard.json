@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-10T02:20:38.478069+00:00",
-  "balance": 980.0,
-  "positions_value": 0.0,
-  "net_worth": 980.0,
+  "timestamp": "2026-09-10T02:25:25.217004+00:00",
+  "balance": 960.0,
+  "positions_value": 19.51,
+  "net_worth": 979.51,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
+      "name": "The Great Replacement",
+      "symbol": "Replacement",
+      "entry_ts": "2026-09-10T02:25:25.217004+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 61.17,
+      "graduation_pct": 61.17,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -27,7 +41,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "2FxAHJMFnp4D5HSdQQo12RXnTiUfsR3PMvJfsB5qpump",
+      "name": "The Great Replacement",
+      "symbol": "Replacement",
+      "decision": "buy",
+      "signal_ts": "2026-09-10T02:25:25.217004+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 61.17,
+      "graduation_pct": 61.17
+    }
+  ],
   "history": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -226,7 +251,7 @@
     }
   ],
   "stats": {
-    "alerts": 17,
+    "alerts": 18,
     "graduated": 5,
     "did_not_graduate": 10,
     "buy_graduated": 1,
