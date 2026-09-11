@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-11T06:40:37.248126+00:00",
-  "balance": 902.89,
-  "positions_value": 30.93,
-  "net_worth": 933.82,
+  "timestamp": "2026-09-11T06:45:33.486275+00:00",
+  "balance": 923.7,
+  "positions_value": 10.18,
+  "net_worth": 933.88,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,8 +11,8 @@
       "symbol": "NEKO",
       "entry_ts": "2026-09-11T03:05:28.928327+00:00",
       "amount_usd": 20.0,
-      "value_usd": 7.48,
-      "pnl_pct": -62.6,
+      "value_usd": 7.5,
+      "pnl_pct": -62.5,
       "entry_slippage_pct": 1.31,
       "entry_graduation_pct": 43.17,
       "graduation_pct": 13.14,
@@ -29,19 +29,6 @@
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 71.3,
       "graduation_pct": 4.25,
-      "graduated": false
-    },
-    {
-      "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
-      "name": "liquid silver",
-      "symbol": "cumcoin",
-      "entry_ts": "2026-09-11T06:25:30.083685+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 20.77,
-      "pnl_pct": 3.85,
-      "entry_slippage_pct": 1.25,
-      "entry_graduation_pct": 64.39,
-      "graduation_pct": 67.66,
       "graduated": false
     }
   ],
@@ -125,19 +112,29 @@
       "pnl_usd": -16.69,
       "pnl_pct": -83.47,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
       "name": "liquid silver",
       "symbol": "cumcoin",
-      "decision": "buy",
-      "signal_ts": "2026-09-11T06:25:30.083685+00:00",
-      "alert_score": 104.0,
-      "alert_graduation_pct": 64.39,
-      "graduation_pct": 67.66
-    },
+      "bonding_curve_key": "9g8gCeyUtZVASiEdevECqqwBraLF5ebP7w4qsM2CeffY",
+      "entry_ts": "2026-09-11T06:25:30.083685+00:00",
+      "entry_price_usd": 2.2551851154165335e-05,
+      "entry_spot_price_usd": 2.2274208155821194e-05,
+      "entry_slippage_pct": 1.25,
+      "amount_usd": 20.0,
+      "qty": 886845.1579996347,
+      "entry_graduation_pct": 64.39,
+      "entry_score": 104.0,
+      "exit_ts": "2026-09-11T06:45:33.486295+00:00",
+      "exit_price_usd": 2.3456551853516454e-05,
+      "proceeds_usd": 20.8,
+      "pnl_usd": 0.8,
+      "pnl_pct": 4.01,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
     {
       "mint": "AokuVDgue6fYR8BgHsqas9V2mjqJ9oAWGuQfgqWvpump",
       "name": "Bitcoin Maneki Neko \u62db\u304d\u732b",
@@ -150,6 +147,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
+      "name": "liquid silver",
+      "symbol": "cumcoin",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-09-11T06:25:30.083685+00:00",
+      "recorded_ts": "2026-09-11T06:45:33.486275+00:00",
+      "alert_score": 104.0,
+      "alert_graduation_pct": 64.39,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 20.1
+    },
     {
       "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
       "name": "Eternal Twap Faucet",
@@ -374,13 +384,13 @@
   ],
   "stats": {
     "alerts": 23,
-    "graduated": 5,
+    "graduated": 6,
     "did_not_graduate": 12,
-    "buy_graduated": 1,
-    "buy_total": 3,
+    "buy_graduated": 2,
+    "buy_total": 4,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 29.4
+    "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
     "tracked": 15,
