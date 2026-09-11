@@ -1,20 +1,6 @@
 {
-  "balance": 106.98134505899358,
+  "balance": 113.22694381679764,
   "positions": {
-    "bsc_0x1f12111deb29e8ae246aa53f17839fe778a217ba": {
-      "network": "bsc",
-      "pool_address": "0x1f12111deb29e8ae246aa53f17839fe778a217ba",
-      "base_token_address": "0x06f7aeabc9c37d457922a9368f291c5d57c07777",
-      "name": "UPONLY / BNC4",
-      "entry_ts": "2026-09-10T23:30:49.455394+00:00",
-      "entry_price_usd": 0.0015093969361100598,
-      "peak_price_usd": 0.00157134068255456,
-      "amount_usd": 73.904101719382,
-      "qty": 48962.66843488092,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false,
-      "dca_count": 1
-    },
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
       "network": "base",
       "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
@@ -113,10 +99,23 @@
       "name": "DRB / WETH 1%",
       "entry_ts": "2026-09-11T05:25:24.658276+00:00",
       "entry_price_usd": 0.000236165148039483,
-      "peak_price_usd": 0.000238044813885833,
+      "peak_price_usd": 0.000238223362880222,
       "amount_usd": 48.896795080745505,
       "qty": 206615.18024319634,
       "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": {
+      "network": "bsc",
+      "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
+      "base_token_address": "0x6ec90334d89dbdc89e08a133271be3d104128edb",
+      "name": "WKC / WBNB",
+      "entry_ts": "2026-09-11T05:35:25.838065+00:00",
+      "entry_price_usd": 7.88655328083781e-08,
+      "peak_price_usd": 7.89152691961288e-08,
+      "amount_usd": 48.0908497188998,
+      "qty": 595699392.5814313,
+      "sell_tax_pct": 2.0,
       "time_exit_evaluated": false
     }
   },
@@ -6208,6 +6207,26 @@
       "pnl_usd": -9.67134434214858,
       "pnl_pct": -19.63,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x1f12111deb29e8ae246aa53f17839fe778a217ba",
+      "base_token_address": "0x06f7aeabc9c37d457922a9368f291c5d57c07777",
+      "name": "UPONLY / BNC4",
+      "entry_ts": "2026-09-10T23:30:49.455394+00:00",
+      "entry_price_usd": 0.0015093969361100598,
+      "peak_price_usd": 0.00157134068255456,
+      "amount_usd": 73.904101719382,
+      "qty": 48962.66843488092,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "dca_count": 1,
+      "exit_ts": "2026-09-11T05:35:43.257027+00:00",
+      "exit_price_usd": 0.00111325348841184,
+      "proceeds_usd": 54.336448476703865,
+      "pnl_usd": -19.567653242678134,
+      "pnl_pct": -26.48,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -6275,6 +6294,7 @@
     "solana_GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8": "2026-09-11T04:56:13.806892+00:00",
     "solana_AXTq4JHNYHSnooqjoDmtL9WW5eEgnkkMSWq76Kznidnz": "2026-09-10T19:46:48.919229+00:00",
     "base_0xb099c658e784b41ee435d48a8eb67e8f27285c93": "2026-09-10T22:21:35.908157+00:00",
-    "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": "2026-09-10T23:12:00.933678+00:00"
+    "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": "2026-09-10T23:12:00.933678+00:00",
+    "bsc_0x1f12111deb29e8ae246aa53f17839fe778a217ba": "2026-09-11T05:35:43.257027+00:00"
   }
 }
