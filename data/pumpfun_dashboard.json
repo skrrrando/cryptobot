@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-09-11T09:00:59.214703+00:00",
-  "balance": 903.7,
-  "positions_value": 13.38,
-  "net_worth": 917.08,
+  "timestamp": "2026-09-11T09:10:36.962746+00:00",
+  "balance": 909.14,
+  "positions_value": 7.45,
+  "net_worth": 916.59,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "AokuVDgue6fYR8BgHsqas9V2mjqJ9oAWGuQfgqWvpump",
-      "name": "Bitcoin Maneki Neko \u62db\u304d\u732b",
-      "symbol": "NEKO",
-      "entry_ts": "2026-09-11T03:05:28.928327+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 5.38,
-      "pnl_pct": -73.1,
-      "entry_slippage_pct": 1.31,
-      "entry_graduation_pct": 43.17,
-      "graduation_pct": 5.72,
-      "graduated": false
-    },
     {
       "mint": "EbeW2PZ3sikW4ttF3pmwKPJVkaA4a3FToN3QMFAYpump",
       "name": "Jose",
@@ -37,11 +24,11 @@
       "symbol": "Watching",
       "entry_ts": "2026-09-11T07:55:27.661804+00:00",
       "amount_usd": 20.0,
-      "value_usd": 5.34,
-      "pnl_pct": -73.3,
+      "value_usd": 4.79,
+      "pnl_pct": -76.05,
       "entry_slippage_pct": 1.3,
       "entry_graduation_pct": 46.59,
-      "graduation_pct": 7.44,
+      "graduation_pct": 5.21,
       "graduated": false
     }
   ],
@@ -145,6 +132,26 @@
       "pnl_usd": 0.8,
       "pnl_pct": 4.01,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "AokuVDgue6fYR8BgHsqas9V2mjqJ9oAWGuQfgqWvpump",
+      "name": "Bitcoin Maneki Neko \u62db\u304d\u732b",
+      "symbol": "NEKO",
+      "bonding_curve_key": "AxwGnWAxfzALtJcYBurpJRK5pf91U1qqMV8A4C7hMm3i",
+      "entry_ts": "2026-09-11T03:05:28.928327+00:00",
+      "entry_price_usd": 1.3865137022781332e-05,
+      "entry_spot_price_usd": 1.368546040898113e-05,
+      "entry_slippage_pct": 1.31,
+      "amount_usd": 20.0,
+      "qty": 1442466.8120580912,
+      "entry_graduation_pct": 43.17,
+      "entry_score": 97.2,
+      "exit_ts": "2026-09-11T09:10:36.962767+00:00",
+      "exit_price_usd": 3.7756807804751138e-06,
+      "proceeds_usd": 5.45,
+      "pnl_usd": -14.55,
+      "pnl_pct": -72.77,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -156,20 +163,23 @@
       "signal_ts": "2026-09-11T07:55:27.661804+00:00",
       "alert_score": 106.2,
       "alert_graduation_pct": 46.59,
-      "graduation_pct": 7.44
-    },
+      "graduation_pct": 5.21
+    }
+  ],
+  "history": [
     {
       "mint": "AokuVDgue6fYR8BgHsqas9V2mjqJ9oAWGuQfgqWvpump",
       "name": "Bitcoin Maneki Neko \u62db\u304d\u732b",
       "symbol": "NEKO",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-09-11T03:05:28.928327+00:00",
+      "recorded_ts": "2026-09-11T09:10:36.962746+00:00",
       "alert_score": 97.2,
       "alert_graduation_pct": 43.17,
-      "graduation_pct": 5.72
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 6.05,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
       "name": "liquid silver",
@@ -408,17 +418,17 @@
   "stats": {
     "alerts": 24,
     "graduated": 6,
-    "did_not_graduate": 12,
+    "did_not_graduate": 13,
     "buy_graduated": 2,
-    "buy_total": 4,
+    "buy_total": 5,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 33.3
+    "graduation_rate_pct": 31.6
   },
   "shadow_stats": {
-    "tracked": 17,
+    "tracked": 16,
     "graduated": 113,
-    "did_not_graduate": 587,
+    "did_not_graduate": 588,
     "graduation_rate_pct": 16.1
   },
   "daily_cap": 4,
