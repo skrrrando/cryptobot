@@ -309,6 +309,23 @@ GAS_COST_USD = {
 GAS_COST_USD_DEFAULT = 0.20
 SLIPPAGE_MAX_PCT = 8.0  # cap - beyond this the trade realistically wouldn't fill this way at all
 
+# Found investigating why the account pumped then bled out: closed trades
+# above the median size ($65.63) averaged -5.29% with a 37.1% win rate;
+# below-median trades averaged +4.70% with 59.3%. estimate_slippage_pct is
+# trade_usd/reserve_usd - linear in trade size for a fixed pool - so a bigger
+# trade pays proportionally worse slippage on BOTH legs (entry and exit) of
+# the exact same trade, independent of whether the token itself was a good
+# pick. compute_trade_size_usd scales with total account value, so this
+# compounds badly after a lucky run: the account gets bigger, trades get
+# bigger, and bigger trades specifically get worse fills - right when
+# reversion (see classify_recommendation - the broader candidate pool's
+# median 6h return is negative on almost every single day observed, "up"
+# periods are variance around that, not a regime) is arguably most likely.
+# Not separately backtested - reserve_in_usd wasn't recorded on historical
+# trades, so there's no way to replay this exact counterfactual - but the
+# mechanism itself isn't a guess, it's how estimate_slippage_pct is defined.
+MAX_ENTRY_SLIPPAGE_PCT = 3.0  # skip a buy rather than pay more than this in estimated one-way slippage
+
 
 def estimate_gas_usd(network):
     return GAS_COST_USD.get(network, GAS_COST_USD_DEFAULT)
@@ -821,6 +838,8 @@ def maybe_buy(portfolio, pool, security, timestamp):
     if net_usd <= 0:
         return None  # trade too small to survive gas alone
     slippage_pct = estimate_slippage_pct(amount, pool.get("reserve_in_usd"))
+    if slippage_pct > MAX_ENTRY_SLIPPAGE_PCT:
+        return None  # this pool is too thin for a trade this size - see MAX_ENTRY_SLIPPAGE_PCT
     buy_tax_pct = _as_float((security or {}).get("buy_tax_pct"))
     execution_price = price * (1 + slippage_pct / 100.0)
     qty = (net_usd / execution_price) * (1 - buy_tax_pct / 100.0)
@@ -913,6 +932,8 @@ def maybe_average_down(portfolio, pos, current, security_cache, checks_this_tick
     if net_amount <= 0:
         return None
     slippage_pct = estimate_slippage_pct(add_amount, current.get("reserve_in_usd"))
+    if slippage_pct > MAX_ENTRY_SLIPPAGE_PCT:
+        return None  # same reasoning as maybe_buy - don't pay up for a thin pool
     buy_tax_pct = _as_float(security.get("buy_tax_pct"))
     execution_price = price * (1 + slippage_pct / 100.0)
     add_qty = (net_amount / execution_price) * (1 - buy_tax_pct / 100.0)
