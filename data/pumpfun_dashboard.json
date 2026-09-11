@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-11T06:20:37.046317+00:00",
-  "balance": 922.89,
-  "positions_value": 11.8,
-  "net_worth": 934.69,
+  "timestamp": "2026-09-11T06:25:30.083685+00:00",
+  "balance": 902.89,
+  "positions_value": 30.28,
+  "net_worth": 933.17,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "NEKO",
       "entry_ts": "2026-09-11T03:05:28.928327+00:00",
       "amount_usd": 20.0,
-      "value_usd": 9.09,
-      "pnl_pct": -54.55,
+      "value_usd": 8.08,
+      "pnl_pct": -59.6,
       "entry_slippage_pct": 1.31,
       "entry_graduation_pct": 43.17,
-      "graduation_pct": 17.93,
+      "graduation_pct": 14.99,
       "graduated": false
     },
     {
@@ -24,11 +24,24 @@
       "symbol": "Jose",
       "entry_ts": "2026-09-11T04:50:34.784710+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.71,
-      "pnl_pct": -86.45,
+      "value_usd": 2.69,
+      "pnl_pct": -86.55,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 71.3,
       "graduation_pct": 4.34,
+      "graduated": false
+    },
+    {
+      "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
+      "name": "liquid silver",
+      "symbol": "cumcoin",
+      "entry_ts": "2026-09-11T06:25:30.083685+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 64.39,
+      "graduation_pct": 64.39,
       "graduated": false
     }
   ],
@@ -116,6 +129,16 @@
   ],
   "watching": [
     {
+      "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
+      "name": "liquid silver",
+      "symbol": "cumcoin",
+      "decision": "buy",
+      "signal_ts": "2026-09-11T06:25:30.083685+00:00",
+      "alert_score": 104.0,
+      "alert_graduation_pct": 64.39,
+      "graduation_pct": 64.39
+    },
+    {
       "mint": "AokuVDgue6fYR8BgHsqas9V2mjqJ9oAWGuQfgqWvpump",
       "name": "Bitcoin Maneki Neko \u62db\u304d\u732b",
       "symbol": "NEKO",
@@ -123,7 +146,7 @@
       "signal_ts": "2026-09-11T03:05:28.928327+00:00",
       "alert_score": 97.2,
       "alert_graduation_pct": 43.17,
-      "graduation_pct": 17.93
+      "graduation_pct": 14.99
     }
   ],
   "history": [
@@ -350,7 +373,7 @@
     }
   ],
   "stats": {
-    "alerts": 22,
+    "alerts": 23,
     "graduated": 5,
     "did_not_graduate": 12,
     "buy_graduated": 1,
@@ -360,7 +383,7 @@
     "graduation_rate_pct": 29.4
   },
   "shadow_stats": {
-    "tracked": 12,
+    "tracked": 14,
     "graduated": 111,
     "did_not_graduate": 583,
     "graduation_rate_pct": 16.0
