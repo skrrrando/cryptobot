@@ -1,5 +1,5 @@
 {
-  "balance": 48.83690849212153,
+  "balance": 46.313816423128145,
   "positions": {
     "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": {
       "network": "solana",
@@ -13,19 +13,6 @@
       "qty": 243.6537134586291,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": true
-    },
-    "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": {
-      "network": "bsc",
-      "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
-      "base_token_address": "0x6ec90334d89dbdc89e08a133271be3d104128edb",
-      "name": "WKC / WBNB",
-      "entry_ts": "2026-09-11T05:35:25.838065+00:00",
-      "entry_price_usd": 7.88655328083781e-08,
-      "peak_price_usd": 8.13534712094016e-08,
-      "amount_usd": 48.0908497188998,
-      "qty": 595699392.5814313,
-      "sell_tax_pct": 2.0,
-      "time_exit_evaluated": false
     },
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
       "network": "base",
@@ -138,9 +125,22 @@
       "name": "EMBER / SOL",
       "entry_ts": "2026-09-11T11:25:26.908032+00:00",
       "entry_price_usd": 0.031220731369942717,
-      "peak_price_usd": 0.031220731369942717,
+      "peak_price_usd": 0.035810842443341775,
       "amount_usd": 48.10792390048102,
       "qty": 1540.2005279309637,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
+      "network": "solana",
+      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
+      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
+      "name": "OTC / SOL",
+      "entry_ts": "2026-09-11T11:35:26.678977+00:00",
+      "entry_price_usd": 0.011470398811563249,
+      "peak_price_usd": 0.011470398811563249,
+      "amount_usd": 48.07334782138474,
+      "qty": 4188.946889064565,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -6444,6 +6444,25 @@
       "pnl_usd": -0.4149129491554575,
       "pnl_pct": -0.85,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
+      "base_token_address": "0x6ec90334d89dbdc89e08a133271be3d104128edb",
+      "name": "WKC / WBNB",
+      "entry_ts": "2026-09-11T05:35:25.838065+00:00",
+      "entry_price_usd": 7.88655328083781e-08,
+      "peak_price_usd": 8.13534712094016e-08,
+      "amount_usd": 48.0908497188998,
+      "qty": 595699392.5814313,
+      "sell_tax_pct": 2.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-11T11:37:02.152864+00:00",
+      "exit_price_usd": 7.82856836947156e-08,
+      "proceeds_usd": 45.55025575239136,
+      "pnl_usd": -2.540593966508439,
+      "pnl_pct": -5.28,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -6513,6 +6532,7 @@
     "base_0xb099c658e784b41ee435d48a8eb67e8f27285c93": "2026-09-10T22:21:35.908157+00:00",
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": "2026-09-10T23:12:00.933678+00:00",
     "bsc_0x1f12111deb29e8ae246aa53f17839fe778a217ba": "2026-09-11T05:35:43.257027+00:00",
-    "base_0x6ef02666f150d9649655b884e043b61b0990fad9be4c632d0c7568bb24da9367": "2026-09-11T07:41:49.938511+00:00"
+    "base_0x6ef02666f150d9649655b884e043b61b0990fad9be4c632d0c7568bb24da9367": "2026-09-11T07:41:49.938511+00:00",
+    "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": "2026-09-11T11:37:02.152864+00:00"
   }
 }
