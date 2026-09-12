@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-12T04:35:30.145434+00:00",
-  "balance": 895.71,
-  "positions_value": 4.65,
-  "net_worth": 900.36,
+  "timestamp": "2026-09-12T04:40:34.163008+00:00",
+  "balance": 875.71,
+  "positions_value": 24.16,
+  "net_worth": 899.87,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "VPN",
       "entry_ts": "2026-09-12T02:50:33.935638+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.65,
-      "pnl_pct": -76.75,
+      "value_usd": 4.63,
+      "pnl_pct": -76.85,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 58.23,
-      "graduation_pct": 10.43,
+      "graduation_pct": 10.31,
+      "graduated": false
+    },
+    {
+      "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
+      "name": "Butthole Coin",
+      "symbol": "BUTTHOLE",
+      "entry_ts": "2026-09-12T04:40:34.163008+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.2,
+      "entry_graduation_pct": 89.29,
+      "graduation_pct": 89.29,
       "graduated": false
     }
   ],
@@ -183,6 +196,16 @@
   ],
   "watching": [
     {
+      "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
+      "name": "Butthole Coin",
+      "symbol": "BUTTHOLE",
+      "decision": "buy",
+      "signal_ts": "2026-09-12T04:40:34.163008+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 89.29,
+      "graduation_pct": 89.29
+    },
+    {
       "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
       "name": "Very Private Niggas",
       "symbol": "VPN",
@@ -190,7 +213,7 @@
       "signal_ts": "2026-09-12T02:50:33.935638+00:00",
       "alert_score": 90.3,
       "alert_graduation_pct": 58.23,
-      "graduation_pct": 10.43
+      "graduation_pct": 10.31
     }
   ],
   "history": [
@@ -456,7 +479,7 @@
     }
   ],
   "stats": {
-    "alerts": 25,
+    "alerts": 26,
     "graduated": 6,
     "did_not_graduate": 14,
     "buy_graduated": 2,
@@ -466,9 +489,9 @@
     "graduation_rate_pct": 30.0
   },
   "shadow_stats": {
-    "tracked": 34,
+    "tracked": 32,
     "graduated": 133,
-    "did_not_graduate": 698,
+    "did_not_graduate": 700,
     "graduation_rate_pct": 16.0
   },
   "daily_cap": 4,
