@@ -1,34 +1,21 @@
 {
-  "timestamp": "2026-09-12T10:35:29.044880+00:00",
-  "balance": 858.97,
-  "positions_value": 14.92,
-  "net_worth": 873.89,
+  "timestamp": "2026-09-12T10:40:37.896627+00:00",
+  "balance": 861.13,
+  "positions_value": 12.6,
+  "net_worth": 873.73,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
-      "name": "Butthole Coin",
-      "symbol": "BUTTHOLE",
-      "entry_ts": "2026-09-12T04:40:34.163008+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.18,
-      "pnl_pct": -89.1,
-      "entry_slippage_pct": 1.2,
-      "entry_graduation_pct": 89.29,
-      "graduation_pct": 6.23,
-      "graduated": false
-    },
     {
       "mint": "CURgresJFA4BLkH6iyGqMyPV8ExrXigD7CD1U9ysXqPt",
       "name": "Revolve Dog",
       "symbol": "REVDOG",
       "entry_ts": "2026-09-12T06:20:34.340069+00:00",
       "amount_usd": 20.0,
-      "value_usd": 12.74,
-      "pnl_pct": -36.3,
+      "value_usd": 12.6,
+      "pnl_pct": -37.0,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 60.55,
-      "graduation_pct": 41.97,
+      "graduation_pct": 41.53,
       "graduated": false
     }
   ],
@@ -232,21 +219,43 @@
       "pnl_usd": -16.23,
       "pnl_pct": -81.15,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
       "name": "Butthole Coin",
       "symbol": "BUTTHOLE",
-      "decision": "buy",
-      "signal_ts": "2026-09-12T04:40:34.163008+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 89.29,
-      "graduation_pct": 6.23
+      "bonding_curve_key": "CsYNhYCE6cqmtFWNX1bXULE2Qefr1TAC7HkCzjYMTfbP",
+      "entry_ts": "2026-09-12T04:40:34.163008+00:00",
+      "entry_price_usd": 3.5966548851280573e-05,
+      "entry_spot_price_usd": 3.5541739975742015e-05,
+      "entry_slippage_pct": 1.2,
+      "amount_usd": 20.0,
+      "qty": 556072.2571047544,
+      "entry_graduation_pct": 89.29,
+      "entry_score": 115.0,
+      "exit_ts": "2026-09-12T10:40:37.896646+00:00",
+      "exit_price_usd": 3.879244393392768e-06,
+      "proceeds_usd": 2.16,
+      "pnl_usd": -17.84,
+      "pnl_pct": -89.21,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
+      "name": "Butthole Coin",
+      "symbol": "BUTTHOLE",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-12T04:40:34.163008+00:00",
+      "recorded_ts": "2026-09-12T10:40:37.896627+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 89.29,
+      "final_graduation_pct": 6.23,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
       "name": "Very Private Niggas",
@@ -537,18 +546,18 @@
   "stats": {
     "alerts": 28,
     "graduated": 7,
-    "did_not_graduate": 15,
+    "did_not_graduate": 16,
     "buy_graduated": 3,
-    "buy_total": 8,
+    "buy_total": 9,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 31.8
+    "graduation_rate_pct": 30.4
   },
   "shadow_stats": {
     "tracked": 31,
-    "graduated": 134,
+    "graduated": 135,
     "did_not_graduate": 732,
-    "graduation_rate_pct": 15.5
+    "graduation_rate_pct": 15.6
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
