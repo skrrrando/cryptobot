@@ -1,19 +1,6 @@
 {
-  "balance": 73.24577084211603,
+  "balance": 72.68631640261013,
   "positions": {
-    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
-      "network": "base",
-      "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
-      "base_token_address": "0xb095274743941e953c746f9c228da9c18bb6ec29",
-      "name": "LAPTOP / USDC 1%",
-      "entry_ts": "2026-09-11T23:00:58.530479+00:00",
-      "entry_price_usd": 0.411187905670942,
-      "peak_price_usd": 0.429218208152331,
-      "amount_usd": 55.97717391446676,
-      "qty": 135.8873652843837,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": {
       "network": "base",
       "pool_address": "0xd9edc75a3a797ec92ca370f19051babebfb2edee",
@@ -21,7 +8,7 @@
       "name": "KTA / WETH",
       "entry_ts": "2026-09-12T00:30:50.968908+00:00",
       "entry_price_usd": 0.0905171330269022,
-      "peak_price_usd": 0.0921275145053848,
+      "peak_price_usd": 0.0925240999049074,
       "amount_usd": 52.596449929528156,
       "qty": 579.9549073331743,
       "sell_tax_pct": 0.0,
@@ -34,7 +21,7 @@
       "name": "STFY / ETH 1%",
       "entry_ts": "2026-09-12T00:50:31.999773+00:00",
       "entry_price_usd": 0.00174993296724284,
-      "peak_price_usd": 0.00183946899342243,
+      "peak_price_usd": 0.00187132255237788,
       "amount_usd": 52.69623690394183,
       "qty": 30047.41899054142,
       "sell_tax_pct": 0.0,
@@ -113,7 +100,7 @@
       "name": "\u54c8\u57fa\u7c73 / WBNB",
       "entry_ts": "2026-09-12T03:55:25.180816+00:00",
       "entry_price_usd": 0.0375640831421181,
-      "peak_price_usd": 0.0394917028489333,
+      "peak_price_usd": 0.0396360152705548,
       "amount_usd": 53.054786322380416,
       "qty": 1408.354716730228,
       "sell_tax_pct": 0.0,
@@ -129,6 +116,19 @@
       "peak_price_usd": 0.129397313507849,
       "amount_usd": 52.40539997973651,
       "qty": 403.8235689908439,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
+      "network": "base",
+      "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
+      "base_token_address": "0xa4a2e2ca3fbfe21aed83471d28b6f65a233c6e00",
+      "name": "TIBBIR / VIRTUAL",
+      "entry_ts": "2026-09-12T05:00:59.133326+00:00",
+      "entry_price_usd": 0.209446923267554,
+      "peak_price_usd": 0.213700533742082,
+      "amount_usd": 52.47801153021914,
+      "qty": 250.07327146152656,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -7232,6 +7232,25 @@
       "pnl_usd": 0.8713386057915642,
       "pnl_pct": 1.64,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
+      "base_token_address": "0xb095274743941e953c746f9c228da9c18bb6ec29",
+      "name": "LAPTOP / USDC 1%",
+      "entry_ts": "2026-09-11T23:00:58.530479+00:00",
+      "entry_price_usd": 0.411187905670942,
+      "peak_price_usd": 0.429218208152331,
+      "amount_usd": 55.97717391446676,
+      "qty": 135.8873652843837,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-12T05:01:55.606161+00:00",
+      "exit_price_usd": 0.382818859519947,
+      "proceeds_usd": 51.91855709071324,
+      "pnl_usd": -4.058616823753518,
+      "pnl_pct": -7.25,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -7279,7 +7298,7 @@
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-10T11:51:13.977588+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-11T18:41:23.397741+00:00",
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-12T04:56:40.004982+00:00",
-    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-11T15:26:49.352981+00:00",
+    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-12T05:01:55.606161+00:00",
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-11T16:26:25.177498+00:00",
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": "2026-09-11T20:56:26.700867+00:00",
     "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": "2026-09-09T19:32:00.023400+00:00",
