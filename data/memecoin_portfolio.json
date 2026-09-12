@@ -1,19 +1,6 @@
 {
-  "balance": 71.58261948266883,
+  "balance": 80.25286343350493,
   "positions": {
-    "bsc_0xc33bacff9141da689875e6381c1932348ab4c5cb": {
-      "network": "bsc",
-      "pool_address": "0xc33bacff9141da689875e6381c1932348ab4c5cb",
-      "base_token_address": "0x82ec31d69b3c289e541b50e30681fd1acad24444",
-      "name": "\u54c8\u57fa\u7c73 / WBNB",
-      "entry_ts": "2026-09-12T03:55:25.180816+00:00",
-      "entry_price_usd": 0.0375640831421181,
-      "peak_price_usd": 0.0424377839942231,
-      "amount_usd": 53.054786322380416,
-      "qty": 1408.354716730228,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
       "network": "base",
       "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
@@ -125,9 +112,22 @@
       "name": "baton / PUMP",
       "entry_ts": "2026-09-12T09:45:33.736803+00:00",
       "entry_price_usd": 0.006464489894080601,
-      "peak_price_usd": 0.006464489894080601,
+      "peak_price_usd": 0.006482470335815152,
       "amount_usd": 47.2248877590327,
       "qty": 7301.152041506795,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x22af7297243c4eef12e2d5a4f888b92e56bf127c": {
+      "network": "bsc",
+      "pool_address": "0x22af7297243c4eef12e2d5a4f888b92e56bf127c",
+      "base_token_address": "0xeccbb861c0dda7efd964010085488b69317e4444",
+      "name": "\u9f99\u867e / WBNB",
+      "entry_ts": "2026-09-12T09:55:24.639672+00:00",
+      "entry_price_usd": 0.125742951316793,
+      "peak_price_usd": 0.125742951316793,
+      "amount_usd": 47.339336699808975,
+      "qty": 375.27829070077894,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -7422,6 +7422,25 @@
       "pnl_usd": 1.3733872893153176,
       "pnl_pct": 2.62,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xc33bacff9141da689875e6381c1932348ab4c5cb",
+      "base_token_address": "0x82ec31d69b3c289e541b50e30681fd1acad24444",
+      "name": "\u54c8\u57fa\u7c73 / WBNB",
+      "entry_ts": "2026-09-12T03:55:25.180816+00:00",
+      "entry_price_usd": 0.0375640831421181,
+      "peak_price_usd": 0.0424377839942231,
+      "amount_usd": 53.054786322380416,
+      "qty": 1408.354716730228,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-12T09:56:10.718790+00:00",
+      "exit_price_usd": 0.0398769800653698,
+      "proceeds_usd": 56.00958065064507,
+      "pnl_usd": 2.9547943282646543,
+      "pnl_pct": 5.57,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -7501,6 +7520,7 @@
     "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": "2026-09-12T01:06:11.641126+00:00",
     "bsc_0xd4ae7dd719ec71594f13d0e3b17e65e9085f1ca1": "2026-09-12T03:36:36.606340+00:00",
     "solana_8Tfvhwk6swWCjo7DNKrp89wWqrTdj6o9HBoDhfXT2dy6": "2026-09-12T04:41:59.988942+00:00",
-    "solana_uzAK8txfJAvqS9VHtDaYAWfBiYbzwq4BzxdiFJTQEnJ": "2026-09-12T06:16:03.505319+00:00"
+    "solana_uzAK8txfJAvqS9VHtDaYAWfBiYbzwq4BzxdiFJTQEnJ": "2026-09-12T06:16:03.505319+00:00",
+    "bsc_0xc33bacff9141da689875e6381c1932348ab4c5cb": "2026-09-12T09:56:10.718790+00:00"
   }
 }
