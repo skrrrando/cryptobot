@@ -1,19 +1,6 @@
 {
-  "balance": 43.49303790142407,
+  "balance": 91.97313466460044,
   "positions": {
-    "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": {
-      "network": "base",
-      "pool_address": "0xd9edc75a3a797ec92ca370f19051babebfb2edee",
-      "base_token_address": "0xc0634090f2fe6c6d75e61be2b949464abb498973",
-      "name": "KTA / WETH",
-      "entry_ts": "2026-09-12T11:10:32.045441+00:00",
-      "entry_price_usd": 0.0964229752706286,
-      "peak_price_usd": 0.101018225613595,
-      "amount_usd": 47.49256501192509,
-      "qty": 491.50213318317594,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": {
       "network": "bsc",
       "pool_address": "0x933477eba23726ca95a957cb85dbb1957267ef85",
@@ -7701,6 +7688,25 @@
       "pnl_usd": -19.695347200822532,
       "pnl_pct": -40.42,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xd9edc75a3a797ec92ca370f19051babebfb2edee",
+      "base_token_address": "0xc0634090f2fe6c6d75e61be2b949464abb498973",
+      "name": "KTA / WETH",
+      "entry_ts": "2026-09-12T11:10:32.045441+00:00",
+      "entry_price_usd": 0.0964229752706286,
+      "peak_price_usd": 0.101018225613595,
+      "amount_usd": 47.49256501192509,
+      "qty": 491.50213318317594,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-12T17:12:00.604147+00:00",
+      "exit_price_usd": 0.0988410368699521,
+      "proceeds_usd": 48.48009676317637,
+      "pnl_usd": 0.9875317512512822,
+      "pnl_pct": 2.08,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -7720,7 +7726,7 @@
     "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": "2026-09-11T11:31:21.810979+00:00",
     "arbitrum_0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e": "2026-09-08T13:17:12.777256+00:00",
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": "2026-09-11T07:16:48.874466+00:00",
-    "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": "2026-09-12T06:56:48.276096+00:00",
+    "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": "2026-09-12T17:12:00.604147+00:00",
     "solana_DPh4Cfctg8yycPZP6zVmhQJZ1tHSvByKAbBLjhLBVitW": "2026-09-08T17:41:28.498458+00:00",
     "solana_Ad7pbBvVRNofo96WR6eHwmU2o4naZ6Lao1J98hW8a1TQ": "2026-09-10T20:51:59.965312+00:00",
     "bsc_0x0ec12db33551afba853b691b4edf49196ea0e99a": "2026-09-08T04:42:00.217303+00:00",
