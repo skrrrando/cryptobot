@@ -1,5 +1,5 @@
 {
-  "balance": 84.81650331155785,
+  "balance": 84.38056596891023,
   "positions": {
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
       "network": "base",
@@ -12,19 +12,6 @@
       "amount_usd": 47.88215186319557,
       "qty": 7678.742209889906,
       "sell_tax_pct": 0.2,
-      "time_exit_evaluated": false
-    },
-    "bsc_0x185d73ec966d464a40372cd7e737bb68b0b95f1f": {
-      "network": "bsc",
-      "pool_address": "0x185d73ec966d464a40372cd7e737bb68b0b95f1f",
-      "base_token_address": "0x3510fbbc13090f991ffa523527113a166161683e",
-      "name": "Deod / USDT 1%",
-      "entry_ts": "2026-09-12T13:35:25.510840+00:00",
-      "entry_price_usd": 0.0210642116673316,
-      "peak_price_usd": 0.0211225491253614,
-      "amount_usd": 47.88215186319557,
-      "qty": 2264.4897748282997,
-      "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
     "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": {
@@ -86,7 +73,7 @@
       "name": "AKE / WBNB 0.01%",
       "entry_ts": "2026-09-12T17:20:33.535968+00:00",
       "entry_price_usd": 0.0158835753076239,
-      "peak_price_usd": 0.0161917005614443,
+      "peak_price_usd": 0.0162149886816977,
       "amount_usd": 47.87228623870183,
       "qty": 3004.438133605411,
       "sell_tax_pct": 0.0,
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.10927619477462461,
       "amount_usd": 47.192205394747084,
       "qty": 431.66060649513577,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
+      "network": "base",
+      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
+      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
+      "name": "DOT / ETH 1%",
+      "entry_ts": "2026-09-12T19:35:26.995831+00:00",
+      "entry_price_usd": 0.0053469163960616,
+      "peak_price_usd": 0.0053469163960616,
+      "amount_usd": 46.989710263172306,
+      "qty": 8768.907858325963,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -7783,6 +7783,25 @@
       "pnl_usd": -2.429941578897356,
       "pnl_pct": -5.08,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x185d73ec966d464a40372cd7e737bb68b0b95f1f",
+      "base_token_address": "0x3510fbbc13090f991ffa523527113a166161683e",
+      "name": "Deod / USDT 1%",
+      "entry_ts": "2026-09-12T13:35:25.510840+00:00",
+      "entry_price_usd": 0.0210642116673316,
+      "peak_price_usd": 0.0211225491253614,
+      "amount_usd": 47.88215186319557,
+      "qty": 2264.4897748282997,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-12T19:36:14.419575+00:00",
+      "exit_price_usd": 0.0206381099322405,
+      "proceeds_usd": 46.553772920524686,
+      "pnl_usd": -1.3283789426708807,
+      "pnl_pct": -2.77,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -7856,7 +7875,7 @@
     "bsc_0x933477eba23726ca95a957cb85dbb1957267ef85": "2026-09-12T18:02:14.172538+00:00",
     "solana_GbrDAq3RjcVWeroLDUwmnuQ8N5xaaKj2Rk2dJDg64CLY": "2026-09-11T11:51:38.079012+00:00",
     "base_0x72ab388e2e2f6facef59e3c3fa2c4e29011c2d38": "2026-09-12T12:57:12.151179+00:00",
-    "bsc_0x185d73ec966d464a40372cd7e737bb68b0b95f1f": "2026-09-11T18:11:48.144242+00:00",
+    "bsc_0x185d73ec966d464a40372cd7e737bb68b0b95f1f": "2026-09-12T19:36:14.419575+00:00",
     "bsc_0xd6fe21107c05a153d419edc3d93072066d52dff9": "2026-09-12T00:21:39.035573+00:00",
     "bsc_0xe6edc555061d1d9fe0145867b7ea7b07da840898": "2026-09-12T00:46:17.252022+00:00",
     "base_0x1131db5977242a03ebead1acd18f80a9a29e5922": "2026-09-12T13:26:20.227494+00:00",
