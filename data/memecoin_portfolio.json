@@ -1,5 +1,5 @@
 {
-  "balance": 54.4050244115768,
+  "balance": 46.67617368547958,
   "positions": {
     "bsc_0xe5ae318389b8d6d09370a675479c64862152d126": {
       "network": "bsc",
@@ -47,7 +47,7 @@
       "name": "\u9f99\u867e / WBNB",
       "entry_ts": "2026-09-12T18:05:40.688361+00:00",
       "entry_price_usd": 0.141449043743653,
-      "peak_price_usd": 0.159469051672875,
+      "peak_price_usd": 0.160014572641609,
       "amount_usd": 47.14295643050755,
       "qty": 332.2204336551219,
       "sell_tax_pct": 0.0,
@@ -66,19 +66,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false,
       "dca_count": 1
-    },
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": {
-      "network": "base",
-      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
-      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
-      "name": "DOT / ETH 1%",
-      "entry_ts": "2026-09-12T19:35:26.995831+00:00",
-      "entry_price_usd": 0.0053469163960616,
-      "peak_price_usd": 0.00547445388679859,
-      "amount_usd": 46.989710263172306,
-      "qty": 8768.907858325963,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
     },
     "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": {
       "network": "base",
@@ -113,7 +100,7 @@
       "name": "BREW / WBNB 1%",
       "entry_ts": "2026-09-12T20:15:32.680235+00:00",
       "entry_price_usd": 0.0152201547917453,
-      "peak_price_usd": 0.0172154189902096,
+      "peak_price_usd": 0.0174739338831433,
       "amount_usd": 46.19266186826812,
       "qty": 3024.9482883165665,
       "sell_tax_pct": 0.0,
@@ -129,6 +116,19 @@
       "peak_price_usd": 0.00124669308727044,
       "amount_usd": 45.89729203106785,
       "qty": 36872.11465606905,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x185d73ec966d464a40372cd7e737bb68b0b95f1f": {
+      "network": "bsc",
+      "pool_address": "0x185d73ec966d464a40372cd7e737bb68b0b95f1f",
+      "base_token_address": "0x3510fbbc13090f991ffa523527113a166161683e",
+      "name": "Deod / USDT 1%",
+      "entry_ts": "2026-09-12T22:10:40.764137+00:00",
+      "entry_price_usd": 0.0209652349500781,
+      "peak_price_usd": 0.0209652349500781,
+      "amount_usd": 45.764344935057515,
+      "qty": 2174.297314702866,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -7879,6 +7879,25 @@
       "pnl_usd": -1.595365152124124,
       "pnl_pct": -3.27,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b",
+      "base_token_address": "0x23a2847d772803f9efc64b4277b782b06296fe51",
+      "name": "DOT / ETH 1%",
+      "entry_ts": "2026-09-12T19:35:26.995831+00:00",
+      "entry_price_usd": 0.0053469163960616,
+      "peak_price_usd": 0.00547445388679859,
+      "amount_usd": 46.989710263172306,
+      "qty": 8768.907858325963,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-12T22:11:49.487879+00:00",
+      "exit_price_usd": 0.00434920680590209,
+      "proceeds_usd": 38.0354942089603,
+      "pnl_usd": -8.954216054212004,
+      "pnl_pct": -19.06,
+      "exit_reason": "momentum_collapse"
     }
   ],
   "recent_exits": {
@@ -7908,7 +7927,7 @@
     "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-11T07:26:36.155137+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
-    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-10T09:02:23.867192+00:00",
+    "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-12T22:11:49.487879+00:00",
     "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": "2026-09-08T13:36:28.017272+00:00",
     "base_0xaec085e5a5ce8d96a7bdd3eb3a62445d4f6ce703": "2026-09-12T09:41:11.903912+00:00",
     "solana_54sbyULrreD9HBoV5wRWedeCBEw6gQ7VkdHW18rLX78e": "2026-09-09T00:56:48.607328+00:00",
