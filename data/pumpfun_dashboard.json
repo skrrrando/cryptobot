@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-12T02:45:38.757707+00:00",
-  "balance": 915.71,
-  "positions_value": 0.0,
-  "net_worth": 915.71,
+  "timestamp": "2026-09-12T02:50:33.935638+00:00",
+  "balance": 895.71,
+  "positions_value": 19.51,
+  "net_worth": 915.22,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
+      "name": "Very Private Niggas",
+      "symbol": "VPN",
+      "entry_ts": "2026-09-12T02:50:33.935638+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 58.23,
+      "graduation_pct": 58.23,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -167,7 +181,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
+      "name": "Very Private Niggas",
+      "symbol": "VPN",
+      "decision": "buy",
+      "signal_ts": "2026-09-12T02:50:33.935638+00:00",
+      "alert_score": 90.3,
+      "alert_graduation_pct": 58.23,
+      "graduation_pct": 58.23
+    }
+  ],
   "history": [
     {
       "mint": "DzRAnvAbmcFXjrBUCQdohrNJzhonpzzsYTRHQkiMnBXh",
@@ -431,7 +456,7 @@
     }
   ],
   "stats": {
-    "alerts": 24,
+    "alerts": 25,
     "graduated": 6,
     "did_not_graduate": 14,
     "buy_graduated": 2,
