@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-12T05:30:50.972451+00:00",
-  "balance": 855.71,
-  "positions_value": 25.58,
-  "net_worth": 881.29,
+  "timestamp": "2026-09-12T05:35:27.854127+00:00",
+  "balance": 875.2,
+  "positions_value": 5.91,
+  "net_worth": 881.11,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -15,7 +15,7 @@
       "pnl_pct": -80.75,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 58.23,
-      "graduation_pct": 6.33,
+      "graduation_pct": 6.32,
       "graduated": false
     },
     {
@@ -24,24 +24,11 @@
       "symbol": "BUTTHOLE",
       "entry_ts": "2026-09-12T04:40:34.163008+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.21,
-      "pnl_pct": -88.95,
+      "value_usd": 2.06,
+      "pnl_pct": -89.7,
       "entry_slippage_pct": 1.2,
       "entry_graduation_pct": 89.29,
-      "graduation_pct": 6.62,
-      "graduated": false
-    },
-    {
-      "mint": "J8X5ygWHY5uHFch7m3MisSC7eDAWpAkgi1pyqfT5pump",
-      "name": "revolve ",
-      "symbol": "revolve ",
-      "entry_ts": "2026-09-12T05:30:50.972451+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
-      "entry_slippage_pct": 1.21,
-      "entry_graduation_pct": 78.43,
-      "graduation_pct": 78.43,
+      "graduation_pct": 5.21,
       "graduated": false
     }
   ],
@@ -205,18 +192,38 @@
       "pnl_usd": -15.79,
       "pnl_pct": -78.94,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "J8X5ygWHY5uHFch7m3MisSC7eDAWpAkgi1pyqfT5pump",
       "name": "revolve ",
       "symbol": "revolve ",
+      "bonding_curve_key": "Hyw2BfEJAhA3tedY7UzxLoYUhjAKCQCBKf7xG2QGunD3",
+      "entry_ts": "2026-09-12T05:30:50.972451+00:00",
+      "entry_price_usd": 2.9888282221386563e-05,
+      "entry_spot_price_usd": 2.9529934482395312e-05,
+      "entry_slippage_pct": 1.21,
+      "amount_usd": 20.0,
+      "qty": 669158.5636088848,
+      "entry_graduation_pct": 78.43,
+      "entry_score": 96.2,
+      "exit_ts": "2026-09-12T05:35:27.854148+00:00",
+      "exit_price_usd": 2.912939562249934e-05,
+      "proceeds_usd": 19.49,
+      "pnl_usd": -0.51,
+      "pnl_pct": -2.54,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
+    {
+      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
+      "name": "Very Private Niggas",
+      "symbol": "VPN",
       "decision": "buy",
-      "signal_ts": "2026-09-12T05:30:50.972451+00:00",
-      "alert_score": 96.2,
-      "alert_graduation_pct": 78.43,
-      "graduation_pct": 78.43
+      "signal_ts": "2026-09-12T02:50:33.935638+00:00",
+      "alert_score": 90.3,
+      "alert_graduation_pct": 58.23,
+      "graduation_pct": 6.32
     },
     {
       "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
@@ -226,20 +233,23 @@
       "signal_ts": "2026-09-12T04:40:34.163008+00:00",
       "alert_score": 115.0,
       "alert_graduation_pct": 89.29,
-      "graduation_pct": 6.62
-    },
-    {
-      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
-      "name": "Very Private Niggas",
-      "symbol": "VPN",
-      "decision": "buy",
-      "signal_ts": "2026-09-12T02:50:33.935638+00:00",
-      "alert_score": 90.3,
-      "alert_graduation_pct": 58.23,
-      "graduation_pct": 6.33
+      "graduation_pct": 5.21
     }
   ],
   "history": [
+    {
+      "mint": "J8X5ygWHY5uHFch7m3MisSC7eDAWpAkgi1pyqfT5pump",
+      "name": "revolve ",
+      "symbol": "revolve ",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-09-12T05:30:50.972451+00:00",
+      "recorded_ts": "2026-09-12T05:35:27.854127+00:00",
+      "alert_score": 96.2,
+      "alert_graduation_pct": 78.43,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 4.6
+    },
     {
       "mint": "DzRAnvAbmcFXjrBUCQdohrNJzhonpzzsYTRHQkiMnBXh",
       "name": "Are you still watching",
@@ -503,13 +513,13 @@
   ],
   "stats": {
     "alerts": 27,
-    "graduated": 6,
+    "graduated": 7,
     "did_not_graduate": 14,
-    "buy_graduated": 2,
-    "buy_total": 6,
+    "buy_graduated": 3,
+    "buy_total": 7,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 30.0
+    "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
     "tracked": 26,
