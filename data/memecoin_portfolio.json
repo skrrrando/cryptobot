@@ -1,5 +1,5 @@
 {
-  "balance": 19.222012084869142,
+  "balance": 73.24577084211603,
   "positions": {
     "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
       "network": "base",
@@ -34,7 +34,7 @@
       "name": "STFY / ETH 1%",
       "entry_ts": "2026-09-12T00:50:31.999773+00:00",
       "entry_price_usd": 0.00174993296724284,
-      "peak_price_usd": 0.00183763581654098,
+      "peak_price_usd": 0.00183946899342243,
       "amount_usd": 52.69623690394183,
       "qty": 30047.41899054142,
       "sell_tax_pct": 0.0,
@@ -104,19 +104,6 @@
       "amount_usd": 52.66569946624344,
       "qty": 225756.06119910494,
       "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": {
-      "network": "base",
-      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
-      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
-      "name": "BSTONK / USDC 0.3%",
-      "entry_ts": "2026-09-12T03:40:33.557105+00:00",
-      "entry_price_usd": 0.0069966036841777,
-      "peak_price_usd": 0.00781326972534892,
-      "amount_usd": 53.15242015145532,
-      "qty": 7581.231697591589,
-      "sell_tax_pct": 0.2,
       "time_exit_evaluated": false
     },
     "bsc_0xc33bacff9141da689875e6381c1932348ab4c5cb": {
@@ -7226,6 +7213,25 @@
       "pnl_usd": -7.7926361117267575,
       "pnl_pct": -13.99,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2",
+      "base_token_address": "0x0f61edbfe6cd86024c0f210c0695b08df55fdfc9",
+      "name": "BSTONK / USDC 0.3%",
+      "entry_ts": "2026-09-12T03:40:33.557105+00:00",
+      "entry_price_usd": 0.0069966036841777,
+      "peak_price_usd": 0.00781326972534892,
+      "amount_usd": 53.15242015145532,
+      "qty": 7581.231697591589,
+      "sell_tax_pct": 0.2,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-12T04:56:40.004982+00:00",
+      "exit_price_usd": 0.00715477328060469,
+      "proceeds_usd": 54.02375875724688,
+      "pnl_usd": 0.8713386057915642,
+      "pnl_pct": 1.64,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -7272,7 +7278,7 @@
     "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-11T21:41:22.837334+00:00",
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-10T11:51:13.977588+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-11T18:41:23.397741+00:00",
-    "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-12T01:25:55.653225+00:00",
+    "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-12T04:56:40.004982+00:00",
     "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-11T15:26:49.352981+00:00",
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-11T16:26:25.177498+00:00",
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": "2026-09-11T20:56:26.700867+00:00",
