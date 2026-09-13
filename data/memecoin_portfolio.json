@@ -1,5 +1,5 @@
 {
-  "balance": 123.15937931625686,
+  "balance": 123.30756731660381,
   "positions": {
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": {
       "network": "bsc",
@@ -66,19 +66,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "solana_Cb7ZRgPLhji3Th7htXyKEqbXvNjPpeTvckXuWakBUhXu": {
-      "network": "solana",
-      "pool_address": "Cb7ZRgPLhji3Th7htXyKEqbXvNjPpeTvckXuWakBUhXu",
-      "base_token_address": "Hg5Ja55T5wESq4vyFoiVCMeHXtGyVA69X2UHq8hgpump",
-      "name": "baton / PUMP",
-      "entry_ts": "2026-09-13T07:45:33.836544+00:00",
-      "entry_price_usd": 0.012155200967512207,
-      "peak_price_usd": 0.014787861184609086,
-      "amount_usd": 42.932546748700695,
-      "qty": 3530.0754312078743,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
       "network": "base",
       "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
@@ -116,6 +103,19 @@
       "amount_usd": 42.59087962634431,
       "qty": 569380288.4052718,
       "sell_tax_pct": 2.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d": {
+      "network": "bsc",
+      "pool_address": "0xa2b1926cb477e92445cf70602f1a7200361f761d",
+      "base_token_address": "0xe9bc5c6a86caa44fd7b469bf3cc7c563e4f77777",
+      "name": "Max / WBNB",
+      "entry_ts": "2026-09-13T10:55:25.187093+00:00",
+      "entry_price_usd": 0.00574376067507002,
+      "peak_price_usd": 0.00574376067507002,
+      "amount_usd": 42.45728493628052,
+      "qty": 7143.911977121371,
+      "sell_tax_pct": 3.0,
       "time_exit_evaluated": false
     }
   },
@@ -8399,6 +8399,25 @@
       "pnl_usd": -1.603136280765547,
       "pnl_pct": -3.76,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "Cb7ZRgPLhji3Th7htXyKEqbXvNjPpeTvckXuWakBUhXu",
+      "base_token_address": "Hg5Ja55T5wESq4vyFoiVCMeHXtGyVA69X2UHq8hgpump",
+      "name": "baton / PUMP",
+      "entry_ts": "2026-09-13T07:45:33.836544+00:00",
+      "entry_price_usd": 0.012155200967512207,
+      "peak_price_usd": 0.014787861184609086,
+      "amount_usd": 42.932546748700695,
+      "qty": 3530.0754312078743,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-13T10:56:02.935291+00:00",
+      "exit_price_usd": 0.012076003297550427,
+      "proceeds_usd": 42.60547293662748,
+      "pnl_usd": -0.3270738120732162,
+      "pnl_pct": -0.76,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -8455,7 +8474,7 @@
     "solana_2RmBs1KYzkDuaRR4F8zU9rPR6KT16eCgJ9YS1c8XXZgQ": "2026-09-12T08:56:57.516657+00:00",
     "bsc_0xdfeab54f1aabea0d3e1af8a778a76e648275d113": "2026-09-10T04:21:02.909211+00:00",
     "base_0x11748db1a9462e907ed35229fe0a3c671afc9b772e7f2f2adf8087235acefca3": "2026-09-10T05:41:18.165193+00:00",
-    "solana_Cb7ZRgPLhji3Th7htXyKEqbXvNjPpeTvckXuWakBUhXu": "2026-09-13T01:32:02.090631+00:00",
+    "solana_Cb7ZRgPLhji3Th7htXyKEqbXvNjPpeTvckXuWakBUhXu": "2026-09-13T10:56:02.935291+00:00",
     "bsc_0x3e3278e8a8c388ee049e9f055004a651de7d7bae769d4b253121be8c6fc15d25": "2026-09-10T11:32:00.285783+00:00",
     "base_0xb04b187062efbf94cf9b4b6f42bf688258d3c88b7c9283bbc74dbbfb1af40d54": "2026-09-10T14:31:50.550134+00:00",
     "bsc_0xf49d9c79a07922d3846c762c73b4df65205ef772": "2026-09-13T01:32:02.090631+00:00",
