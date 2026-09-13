@@ -1,19 +1,6 @@
 {
-  "balance": 34.72981073535298,
+  "balance": 77.8863645531442,
   "positions": {
-    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
-      "network": "base",
-      "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
-      "base_token_address": "0xfb31f85a8367210b2e4ed2360d2da9dc2d2ccc95",
-      "name": "EDEL / WETH",
-      "entry_ts": "2026-09-13T09:32:33.476988+00:00",
-      "entry_price_usd": 0.0124508373118402,
-      "peak_price_usd": 0.0128317422956324,
-      "amount_usd": 41.77469685684533,
-      "qty": 3346.940074667312,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": {
       "network": "bsc",
       "pool_address": "0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d",
@@ -8596,6 +8583,25 @@
       "pnl_usd": -4.838078262773195,
       "pnl_pct": -11.39,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
+      "base_token_address": "0xfb31f85a8367210b2e4ed2360d2da9dc2d2ccc95",
+      "name": "EDEL / WETH",
+      "entry_ts": "2026-09-13T09:32:33.476988+00:00",
+      "entry_price_usd": 0.0124508373118402,
+      "peak_price_usd": 0.0129249930085754,
+      "amount_usd": 41.77469685684533,
+      "qty": 3346.940074667312,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-13T16:01:59.151058+00:00",
+      "exit_price_usd": 0.0129249930085754,
+      "proceeds_usd": 43.156553817791234,
+      "pnl_usd": 1.3818569609459033,
+      "pnl_pct": 3.31,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -8685,6 +8691,7 @@
     "bsc_0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f": "2026-09-13T10:20:53.945797+00:00",
     "solana_8myc52qh4zCDWXBnW9UxbJMs1cu6aNMcsa4VCK5Hw9R3": "2026-09-13T10:41:15.123609+00:00",
     "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": "2026-09-13T11:56:38.358529+00:00",
-    "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": "2026-09-13T12:31:46.773576+00:00"
+    "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": "2026-09-13T12:31:46.773576+00:00",
+    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": "2026-09-13T16:01:59.151058+00:00"
   }
 }
