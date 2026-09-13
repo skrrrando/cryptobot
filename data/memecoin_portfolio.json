@@ -1,5 +1,5 @@
 {
-  "balance": 67.77094790296329,
+  "balance": 167.3533952233667,
   "positions": {
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": {
       "network": "bsc",
@@ -79,19 +79,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "solana_2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh": {
-      "network": "solana",
-      "pool_address": "2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh",
-      "base_token_address": "BHS8LHW11NKxzxyCtqz9NJbTkh3h94WqeMVYgTY5pump",
-      "name": "YOYO / SOL",
-      "entry_ts": "2026-09-13T08:40:35.128951+00:00",
-      "entry_price_usd": 0.0016362896081389853,
-      "peak_price_usd": 0.003497764950989028,
-      "amount_usd": 41.77469685684533,
-      "qty": 25510.01086366426,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
       "network": "base",
       "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
@@ -102,19 +89,6 @@
       "peak_price_usd": 0.0124508373118402,
       "amount_usd": 41.77469685684533,
       "qty": 3346.940074667312,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "bsc_0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f": {
-      "network": "bsc",
-      "pool_address": "0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f",
-      "base_token_address": "0x198dba421a7db566a90da5de7901abe3443b4444",
-      "name": "\u5bcc\u8d35 / WBNB",
-      "entry_ts": "2026-09-13T09:40:35.266462+00:00",
-      "entry_price_usd": 0.00192135339223625,
-      "peak_price_usd": 0.00219504077331194,
-      "amount_usd": 41.77469685684533,
-      "qty": 21660.56959772981,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -8355,6 +8329,44 @@
       "pnl_usd": -6.238860372724936,
       "pnl_pct": -14.01,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh",
+      "base_token_address": "BHS8LHW11NKxzxyCtqz9NJbTkh3h94WqeMVYgTY5pump",
+      "name": "YOYO / SOL",
+      "entry_ts": "2026-09-13T08:40:35.128951+00:00",
+      "entry_price_usd": 0.0016362896081389853,
+      "peak_price_usd": 0.003497764950989028,
+      "amount_usd": 41.77469685684533,
+      "qty": 25510.01086366426,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-13T10:20:53.945797+00:00",
+      "exit_price_usd": 0.0022715400527847105,
+      "proceeds_usd": 57.90595476761838,
+      "pnl_usd": 16.13125791077305,
+      "pnl_pct": 38.61,
+      "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f",
+      "base_token_address": "0x198dba421a7db566a90da5de7901abe3443b4444",
+      "name": "\u5bcc\u8d35 / WBNB",
+      "entry_ts": "2026-09-13T09:40:35.266462+00:00",
+      "entry_price_usd": 0.00192135339223625,
+      "peak_price_usd": 0.00219504077331194,
+      "amount_usd": 41.77469685684533,
+      "qty": 21660.56959772981,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-13T10:20:53.945797+00:00",
+      "exit_price_usd": 0.00193132441867297,
+      "proceeds_usd": 41.67649255278502,
+      "pnl_usd": -0.09820430406031022,
+      "pnl_pct": -0.24,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -8439,6 +8451,8 @@
     "bsc_0xa651c8deb3ff9f8d56a26e72042b7a8a1f433480": "2026-09-12T15:26:25.265907+00:00",
     "bsc_0x22af7297243c4eef12e2d5a4f888b92e56bf127c": "2026-09-13T00:11:48.611658+00:00",
     "bsc_0x4d3bf29ba30f8bfe4624e7678709afa195689c5d": "2026-09-12T23:21:24.577039+00:00",
-    "solana_r9cBueKD9ZLzN2kXyNCzpX5iJmYLw5fWhDzCtbDCz6K": "2026-09-13T02:16:50.374352+00:00"
+    "solana_r9cBueKD9ZLzN2kXyNCzpX5iJmYLw5fWhDzCtbDCz6K": "2026-09-13T02:16:50.374352+00:00",
+    "solana_2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh": "2026-09-13T10:20:53.945797+00:00",
+    "bsc_0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f": "2026-09-13T10:20:53.945797+00:00"
   }
 }
