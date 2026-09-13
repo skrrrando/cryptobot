@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-13T03:05:26.911870+00:00",
-  "balance": 828.66,
-  "positions_value": 4.01,
-  "net_worth": 832.67,
+  "timestamp": "2026-09-13T03:10:34.489748+00:00",
+  "balance": 808.66,
+  "positions_value": 23.52,
+  "net_worth": 832.18,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,8 +11,8 @@
       "symbol": "wank",
       "entry_ts": "2026-09-13T00:01:02.016265+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.3,
-      "pnl_pct": -88.5,
+      "value_usd": 2.29,
+      "pnl_pct": -88.55,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 68.84,
       "graduation_pct": 0.42,
@@ -24,11 +24,24 @@
       "symbol": "FLYPAD",
       "entry_ts": "2026-09-13T01:27:53.091040+00:00",
       "amount_usd": 20.0,
-      "value_usd": 1.71,
-      "pnl_pct": -91.45,
+      "value_usd": 1.7,
+      "pnl_pct": -91.5,
       "entry_slippage_pct": 1.2,
       "entry_graduation_pct": 89.03,
       "graduation_pct": 1.49,
+      "graduated": false
+    },
+    {
+      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
+      "name": "UP SYNDROME",
+      "symbol": "UP",
+      "entry_ts": "2026-09-13T03:10:34.489748+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.21,
+      "entry_graduation_pct": 83.04,
+      "graduation_pct": 83.04,
       "graduated": false
     }
   ],
@@ -275,6 +288,16 @@
     }
   ],
   "watching": [
+    {
+      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
+      "name": "UP SYNDROME",
+      "symbol": "UP",
+      "decision": "buy",
+      "signal_ts": "2026-09-13T03:10:34.489748+00:00",
+      "alert_score": 95.4,
+      "alert_graduation_pct": 83.04,
+      "graduation_pct": 83.04
+    },
     {
       "mint": "F2nVSziVhZSpSkpLU5c5UNCSbeJFrCL6tYqnrcWxpump",
       "name": "FlyPad",
@@ -598,7 +621,7 @@
     }
   ],
   "stats": {
-    "alerts": 30,
+    "alerts": 31,
     "graduated": 7,
     "did_not_graduate": 16,
     "buy_graduated": 3,
