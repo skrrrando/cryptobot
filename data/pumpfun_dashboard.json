@@ -1,24 +1,10 @@
 {
-  "timestamp": "2026-09-13T09:02:11.736258+00:00",
-  "balance": 812.07,
-  "positions_value": 1.77,
-  "net_worth": 813.84,
+  "timestamp": "2026-09-13T09:11:23.478519+00:00",
+  "balance": 813.82,
+  "positions_value": 0.0,
+  "net_worth": 813.82,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
-      "name": "UP SYNDROME",
-      "symbol": "UP",
-      "entry_ts": "2026-09-13T03:10:34.489748+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 1.77,
-      "pnl_pct": -91.15,
-      "entry_slippage_pct": 1.21,
-      "entry_graduation_pct": 83.04,
-      "graduation_pct": 0.59,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -319,21 +305,43 @@
       "pnl_usd": -18.34,
       "pnl_pct": -91.69,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
       "name": "UP SYNDROME",
       "symbol": "UP",
-      "decision": "buy",
-      "signal_ts": "2026-09-13T03:10:34.489748+00:00",
-      "alert_score": 95.4,
-      "alert_graduation_pct": 83.04,
-      "graduation_pct": 0.59
+      "bonding_curve_key": "3S6S1trZ37aZTLRY19RPjkQxqCbXBxSaffeDcjhR9gmG",
+      "entry_ts": "2026-09-13T03:10:34.489748+00:00",
+      "entry_price_usd": 3.2375937405260146e-05,
+      "entry_spot_price_usd": 3.1990302704897366e-05,
+      "entry_slippage_pct": 1.21,
+      "amount_usd": 20.0,
+      "qty": 617742.7312653065,
+      "entry_graduation_pct": 83.04,
+      "entry_score": 95.4,
+      "exit_ts": "2026-09-13T09:11:23.478540+00:00",
+      "exit_price_usd": 2.8257077885590402e-06,
+      "proceeds_usd": 1.75,
+      "pnl_usd": -18.25,
+      "pnl_pct": -91.27,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
+      "name": "UP SYNDROME",
+      "symbol": "UP",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-13T03:10:34.489748+00:00",
+      "recorded_ts": "2026-09-13T09:11:23.478519+00:00",
+      "alert_score": 95.4,
+      "alert_graduation_pct": 83.04,
+      "final_graduation_pct": 0.59,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "F2nVSziVhZSpSkpLU5c5UNCSbeJFrCL6tYqnrcWxpump",
       "name": "FlyPad",
@@ -663,15 +671,15 @@
   "stats": {
     "alerts": 32,
     "graduated": 7,
-    "did_not_graduate": 18,
+    "did_not_graduate": 19,
     "buy_graduated": 3,
-    "buy_total": 11,
+    "buy_total": 12,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 28.0
+    "graduation_rate_pct": 26.9
   },
   "shadow_stats": {
-    "tracked": 22,
+    "tracked": 23,
     "graduated": 150,
     "did_not_graduate": 833,
     "graduation_rate_pct": 15.3
