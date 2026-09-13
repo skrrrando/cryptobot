@@ -1,19 +1,6 @@
 {
-  "balance": 83.43015391180097,
+  "balance": 84.51702565335562,
   "positions": {
-    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
-      "network": "base",
-      "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
-      "base_token_address": "0xb095274743941e953c746f9c228da9c18bb6ec29",
-      "name": "LAPTOP / USDC 1%",
-      "entry_ts": "2026-09-13T05:45:32.671684+00:00",
-      "entry_price_usd": 0.299767325904064,
-      "peak_price_usd": 0.329075263802024,
-      "amount_usd": 43.893155924506516,
-      "qty": 146.08647567125576,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": {
       "network": "solana",
       "pool_address": "2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd",
@@ -73,7 +60,7 @@
       "name": "BREW / WBNB 1%",
       "entry_ts": "2026-09-13T10:15:31.474313+00:00",
       "entry_price_usd": 0.0153038754471057,
-      "peak_price_usd": 0.0156561584518559,
+      "peak_price_usd": 0.0156999793334158,
       "amount_usd": 41.25479182578491,
       "qty": 2685.7774533654015,
       "sell_tax_pct": 0.0,
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.00211238869777286,
       "amount_usd": 42.51649591503742,
       "qty": 23881.551938119297,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0xf49d9c79a07922d3846c762c73b4df65205ef772": {
+      "network": "bsc",
+      "pool_address": "0xf49d9c79a07922d3846c762c73b4df65205ef772",
+      "base_token_address": "0x265b3982ea730748100947f52561a4eab54affff",
+      "name": "AST / WBNB",
+      "entry_ts": "2026-09-13T11:45:33.669550+00:00",
+      "entry_price_usd": 0.00159866746839854,
+      "peak_price_usd": 0.00159866746839854,
+      "amount_usd": 42.51649591503742,
+      "qty": 26495.09555782167,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -8450,6 +8450,25 @@
       "pnl_usd": 1.0376055571559348,
       "pnl_pct": 2.35,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
+      "base_token_address": "0xb095274743941e953c746f9c228da9c18bb6ec29",
+      "name": "LAPTOP / USDC 1%",
+      "entry_ts": "2026-09-13T05:45:32.671684+00:00",
+      "entry_price_usd": 0.299767325904064,
+      "peak_price_usd": 0.329075263802024,
+      "amount_usd": 43.893155924506516,
+      "qty": 146.08647567125576,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-13T11:46:03.438675+00:00",
+      "exit_price_usd": 0.29916903530282,
+      "proceeds_usd": 43.60336765659206,
+      "pnl_usd": -0.289788267914453,
+      "pnl_pct": -0.66,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -8497,7 +8516,7 @@
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-10T11:51:13.977588+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-13T11:01:52.963110+00:00",
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-13T08:31:42.085499+00:00",
-    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-12T05:01:55.606161+00:00",
+    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-13T11:46:03.438675+00:00",
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-12T05:42:14.016731+00:00",
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": "2026-09-13T07:02:05.277844+00:00",
     "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": "2026-09-09T19:32:00.023400+00:00",
