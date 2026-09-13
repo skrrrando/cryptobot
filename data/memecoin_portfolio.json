@@ -1,5 +1,5 @@
 {
-  "balance": 84.51702565335562,
+  "balance": 128.33909109625796,
   "positions": {
     "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": {
       "network": "solana",
@@ -73,7 +73,7 @@
       "name": "WKC / WBNB",
       "entry_ts": "2026-09-13T10:35:24.543317+00:00",
       "entry_price_usd": 7.30452634319253e-08,
-      "peak_price_usd": 7.39604370047631e-08,
+      "peak_price_usd": 7.3965579437252e-08,
       "amount_usd": 42.59087962634431,
       "qty": 569380288.4052718,
       "sell_tax_pct": 2.0,
@@ -102,19 +102,6 @@
       "peak_price_usd": 0.155696996626452,
       "amount_usd": 42.51649591503742,
       "qty": 272.1051647560747,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": {
-      "network": "bsc",
-      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
-      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
-      "name": "BEN / QQQB",
-      "entry_ts": "2026-09-13T11:10:32.735258+00:00",
-      "entry_price_usd": 0.00177360751878284,
-      "peak_price_usd": 0.00211238869777286,
-      "amount_usd": 42.51649591503742,
-      "qty": 23881.551938119297,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -8469,6 +8456,25 @@
       "pnl_usd": -0.289788267914453,
       "pnl_pct": -0.66,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6",
+      "base_token_address": "0x7bc70ae0f2a67d2fdc0180a697a611f21c857777",
+      "name": "BEN / QQQB",
+      "entry_ts": "2026-09-13T11:10:32.735258+00:00",
+      "entry_price_usd": 0.00177360751878284,
+      "peak_price_usd": 0.00211238869777286,
+      "amount_usd": 42.51649591503742,
+      "qty": 23881.551938119297,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-13T11:56:38.358529+00:00",
+      "exit_price_usd": 0.00184170508417711,
+      "proceeds_usd": 43.82206544290233,
+      "pnl_usd": 1.305569527864911,
+      "pnl_pct": 3.07,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -8556,6 +8562,7 @@
     "solana_r9cBueKD9ZLzN2kXyNCzpX5iJmYLw5fWhDzCtbDCz6K": "2026-09-13T02:16:50.374352+00:00",
     "solana_2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh": "2026-09-13T10:20:53.945797+00:00",
     "bsc_0x8672a5d410c567c1b54703bfeddd7699ffdb1b3f": "2026-09-13T10:20:53.945797+00:00",
-    "solana_8myc52qh4zCDWXBnW9UxbJMs1cu6aNMcsa4VCK5Hw9R3": "2026-09-13T10:41:15.123609+00:00"
+    "solana_8myc52qh4zCDWXBnW9UxbJMs1cu6aNMcsa4VCK5Hw9R3": "2026-09-13T10:41:15.123609+00:00",
+    "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": "2026-09-13T11:56:38.358529+00:00"
   }
 }
