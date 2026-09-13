@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-12T23:55:26.497580+00:00",
-  "balance": 868.66,
-  "positions_value": 0.0,
-  "net_worth": 868.66,
+  "timestamp": "2026-09-13T00:01:02.016265+00:00",
+  "balance": 848.66,
+  "positions_value": 19.52,
+  "net_worth": 868.18,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
+      "name": "wank",
+      "symbol": "wank",
+      "entry_ts": "2026-09-13T00:01:02.016265+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 68.84,
+      "graduation_pct": 68.84,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -247,7 +261,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
+      "name": "wank",
+      "symbol": "wank",
+      "decision": "buy",
+      "signal_ts": "2026-09-13T00:01:02.016265+00:00",
+      "alert_score": 94.2,
+      "alert_graduation_pct": 68.84,
+      "graduation_pct": 68.84
+    }
+  ],
   "history": [
     {
       "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
@@ -550,7 +575,7 @@
     }
   ],
   "stats": {
-    "alerts": 28,
+    "alerts": 29,
     "graduated": 7,
     "did_not_graduate": 16,
     "buy_graduated": 3,
