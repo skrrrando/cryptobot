@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-09-13T05:53:08.999790+00:00",
-  "balance": 808.16,
-  "positions_value": 5.79,
-  "net_worth": 813.95,
+  "timestamp": "2026-09-13T06:02:18.807400+00:00",
+  "balance": 810.41,
+  "positions_value": 3.5,
+  "net_worth": 813.91,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
-      "name": "wank",
-      "symbol": "wank",
-      "entry_ts": "2026-09-13T00:01:02.016265+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.28,
-      "pnl_pct": -88.6,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 68.84,
-      "graduation_pct": 0.17,
-      "graduated": false
-    },
     {
       "mint": "F2nVSziVhZSpSkpLU5c5UNCSbeJFrCL6tYqnrcWxpump",
       "name": "FlyPad",
@@ -37,8 +24,8 @@
       "symbol": "UP",
       "entry_ts": "2026-09-13T03:10:34.489748+00:00",
       "amount_usd": 20.0,
-      "value_usd": 1.81,
-      "pnl_pct": -90.95,
+      "value_usd": 1.8,
+      "pnl_pct": -91.0,
       "entry_slippage_pct": 1.21,
       "entry_graduation_pct": 83.04,
       "graduation_pct": 0.59,
@@ -305,6 +292,26 @@
       "pnl_usd": -0.5,
       "pnl_pct": -2.49,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
+      "name": "wank",
+      "symbol": "wank",
+      "bonding_curve_key": "CxXfissZUXKbBVrkpCnzXkEJouMfLqNSxukY28SBzQXe",
+      "entry_ts": "2026-09-13T00:01:02.016265+00:00",
+      "entry_price_usd": 2.5110969941477635e-05,
+      "entry_spot_price_usd": 2.4805412865321714e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 796464.6545557976,
+      "entry_graduation_pct": 68.84,
+      "entry_score": 94.2,
+      "exit_ts": "2026-09-13T06:02:18.807424+00:00",
+      "exit_price_usd": 2.8238031197404317e-06,
+      "proceeds_usd": 2.25,
+      "pnl_usd": -17.75,
+      "pnl_pct": -88.75,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -327,19 +334,22 @@
       "alert_score": 95.4,
       "alert_graduation_pct": 83.04,
       "graduation_pct": 0.59
-    },
+    }
+  ],
+  "history": [
     {
       "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
       "name": "wank",
       "symbol": "wank",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-09-13T00:01:02.016265+00:00",
+      "recorded_ts": "2026-09-13T06:02:18.807400+00:00",
       "alert_score": 94.2,
       "alert_graduation_pct": 68.84,
-      "graduation_pct": 0.17
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.17,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
       "name": "Butthole Coin",
@@ -643,18 +653,18 @@
   "stats": {
     "alerts": 32,
     "graduated": 7,
-    "did_not_graduate": 16,
+    "did_not_graduate": 17,
     "buy_graduated": 3,
-    "buy_total": 9,
+    "buy_total": 10,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 30.4
+    "graduation_rate_pct": 29.2
   },
   "shadow_stats": {
-    "tracked": 19,
+    "tracked": 18,
     "graduated": 150,
-    "did_not_graduate": 827,
-    "graduation_rate_pct": 15.4
+    "did_not_graduate": 828,
+    "graduation_rate_pct": 15.3
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
