@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-09-14T07:51:09.825561+00:00",
-  "balance": 753.28,
-  "positions_value": 9.4,
-  "net_worth": 762.68,
+  "timestamp": "2026-09-14T08:01:05.233325+00:00",
+  "balance": 757.27,
+  "positions_value": 5.36,
+  "net_worth": 762.63,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
-      "name": "eminem",
-      "symbol": "m&m",
-      "entry_ts": "2026-09-14T01:58:10.682583+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 4.05,
-      "pnl_pct": -79.75,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 72.17,
-      "graduation_pct": 13.31,
-      "graduated": false
-    },
     {
       "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
       "name": "Kimchi",
@@ -37,8 +24,8 @@
       "symbol": "AI",
       "entry_ts": "2026-09-14T05:25:28.808116+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.87,
-      "pnl_pct": -85.65,
+      "value_usd": 2.88,
+      "pnl_pct": -85.6,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 59.24,
       "graduation_pct": 0.93,
@@ -385,19 +372,29 @@
       "pnl_usd": -0.54,
       "pnl_pct": -2.68,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
       "name": "eminem",
       "symbol": "m&m",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T01:58:10.682583+00:00",
-      "alert_score": 113.5,
-      "alert_graduation_pct": 72.17,
-      "graduation_pct": 13.31
-    },
+      "bonding_curve_key": "9E2KudEubjsCt5Pq268sTgUwhZRSdNeMRKbLWr923uNY",
+      "entry_ts": "2026-09-14T01:58:10.682583+00:00",
+      "entry_price_usd": 2.6328616350676554e-05,
+      "entry_spot_price_usd": 2.6009139832951256e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 759629.7402649522,
+      "entry_graduation_pct": 72.17,
+      "entry_score": 113.5,
+      "exit_ts": "2026-09-14T08:01:05.233346+00:00",
+      "exit_price_usd": 5.241677274784712e-06,
+      "proceeds_usd": 3.98,
+      "pnl_usd": -16.02,
+      "pnl_pct": -80.09,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
       "name": "Kimchi",
@@ -420,6 +417,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
+      "name": "eminem",
+      "symbol": "m&m",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T01:58:10.682583+00:00",
+      "recorded_ts": "2026-09-14T08:01:05.233325+00:00",
+      "alert_score": 113.5,
+      "alert_graduation_pct": 72.17,
+      "final_graduation_pct": 12.99,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
       "name": "The Spirit of Bull",
@@ -775,15 +785,15 @@
   "stats": {
     "alerts": 36,
     "graduated": 8,
-    "did_not_graduate": 19,
+    "did_not_graduate": 20,
     "buy_graduated": 4,
-    "buy_total": 13,
+    "buy_total": 14,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 29.6
+    "graduation_rate_pct": 28.6
   },
   "shadow_stats": {
-    "tracked": 26,
+    "tracked": 27,
     "graduated": 173,
     "did_not_graduate": 919,
     "graduation_rate_pct": 15.8
