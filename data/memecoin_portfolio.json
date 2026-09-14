@@ -1,19 +1,6 @@
 {
-  "balance": 62.91625616855364,
+  "balance": 64.16653707032404,
   "positions": {
-    "solana_GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8": {
-      "network": "solana",
-      "pool_address": "GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8",
-      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
-      "name": "ZCAT / SOL",
-      "entry_ts": "2026-09-14T05:45:32.937723+00:00",
-      "entry_price_usd": 0.10851927726119004,
-      "peak_price_usd": 0.10851927726119004,
-      "amount_usd": 34.74820779336503,
-      "qty": 320.0106292590361,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": {
       "network": "solana",
       "pool_address": "nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad",
@@ -99,7 +86,7 @@
       "name": "fone / SOL",
       "entry_ts": "2026-09-14T12:05:27.579342+00:00",
       "entry_price_usd": 0.005864081360211216,
-      "peak_price_usd": 0.0059074694480690335,
+      "peak_price_usd": 0.005959871354236238,
       "amount_usd": 32.626599788611884,
       "qty": 5560.040342645575,
       "sell_tax_pct": 0.0,
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.0210976162549602,
       "amount_usd": 32.81397467530622,
       "qty": 1548.0412128707396,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x4d3bf29ba30f8bfe4624e7678709afa195689c5d": {
+      "network": "bsc",
+      "pool_address": "0x4d3bf29ba30f8bfe4624e7678709afa195689c5d",
+      "base_token_address": "0x2c3a8ee94ddd97244a93bc48298f97d2c412f7db",
+      "name": "AKE / WBNB 0.01%",
+      "entry_ts": "2026-09-14T12:25:27.225223+00:00",
+      "entry_price_usd": 0.0154017204922337,
+      "peak_price_usd": 0.0154017204922337,
+      "amount_usd": 32.79190831648977,
+      "qty": 2119.3346080598344,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -9401,6 +9401,25 @@
       "pnl_usd": -0.26479630579737545,
       "pnl_pct": -0.81,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "solana",
+      "pool_address": "GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8",
+      "base_token_address": "HcRLc9VDgjLeK154xDawfb1dmVJ98DoSqcwTHGqiDeJR",
+      "name": "ZCAT / SOL",
+      "entry_ts": "2026-09-14T05:45:32.937723+00:00",
+      "entry_price_usd": 0.10851927726119004,
+      "peak_price_usd": 0.10851927726119004,
+      "amount_usd": 34.74820779336503,
+      "qty": 320.0106292590361,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-14T12:26:15.965300+00:00",
+      "exit_price_usd": 0.10644358117971961,
+      "proceeds_usd": 34.04218921826016,
+      "pnl_usd": -0.7060185751048706,
+      "pnl_pct": -2.03,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -9465,7 +9484,7 @@
     "solana_2y6PCqa4fEp3jLiFdan9jVMw7LSK8F3gwsTfy8p7traE": "2026-09-10T14:46:36.871824+00:00",
     "bsc_0xc7768c2cb3152d89b0d21d3f9fdd2f1ac35a60a7": "2026-09-10T15:16:38.182671+00:00",
     "bsc_0x9793a9cbb04f781433254e4530398107e6a8dcee": "2026-09-11T05:21:15.880425+00:00",
-    "solana_GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8": "2026-09-13T22:41:16.278093+00:00",
+    "solana_GuPbekwP9MqB23CghhiMQZTaigPdUJooovo1neCErhM8": "2026-09-14T12:26:15.965300+00:00",
     "solana_AXTq4JHNYHSnooqjoDmtL9WW5eEgnkkMSWq76Kznidnz": "2026-09-10T19:46:48.919229+00:00",
     "base_0xb099c658e784b41ee435d48a8eb67e8f27285c93": "2026-09-14T10:46:17.787417+00:00",
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": "2026-09-14T09:02:24.063372+00:00",
