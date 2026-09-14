@@ -1,19 +1,6 @@
 {
-  "balance": 55.69748162767384,
+  "balance": 89.20659775524567,
   "positions": {
-    "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": {
-      "network": "base",
-      "pool_address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
-      "base_token_address": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
-      "name": "DRB / WETH 1%",
-      "entry_ts": "2026-09-14T15:30:52.158239+00:00",
-      "entry_price_usd": 0.000188728840668095,
-      "peak_price_usd": 0.000210438279943482,
-      "amount_usd": 30.941109100550424,
-      "qty": 163411.47979949418,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": {
       "network": "solana",
       "pool_address": "HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3",
@@ -9705,6 +9692,25 @@
       "pnl_usd": 1.0650726445230667,
       "pnl_pct": 3.56,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
+      "base_token_address": "0x3ec2156d4c0a9cbdab4a016633b7bcf6a8d68ea2",
+      "name": "DRB / WETH 1%",
+      "entry_ts": "2026-09-14T15:30:52.158239+00:00",
+      "entry_price_usd": 0.000188728840668095,
+      "peak_price_usd": 0.000210438279943482,
+      "amount_usd": 30.941109100550424,
+      "qty": 163411.47979949418,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-14T21:31:57.614480+00:00",
+      "exit_price_usd": 0.000205676149274782,
+      "proceeds_usd": 33.50911612757183,
+      "pnl_usd": 2.5680070270214053,
+      "pnl_pct": 8.3,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -9721,7 +9727,7 @@
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": "2026-09-10T12:16:36.602106+00:00",
     "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d": "2026-09-13T17:02:04.375835+00:00",
     "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": "2026-09-14T12:02:13.618160+00:00",
-    "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": "2026-09-14T10:10:56.271673+00:00",
+    "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": "2026-09-14T21:31:57.614480+00:00",
     "arbitrum_0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e": "2026-09-08T13:17:12.777256+00:00",
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": "2026-09-11T07:16:48.874466+00:00",
     "base_0xd9edc75a3a797ec92ca370f19051babebfb2edee": "2026-09-13T01:42:12.205620+00:00",
