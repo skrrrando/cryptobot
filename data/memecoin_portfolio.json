@@ -1,19 +1,6 @@
 {
-  "balance": 22.463702325240504,
+  "balance": 91.95458812148003,
   "positions": {
-    "bsc_0x22af7297243c4eef12e2d5a4f888b92e56bf127c": {
-      "network": "bsc",
-      "pool_address": "0x22af7297243c4eef12e2d5a4f888b92e56bf127c",
-      "base_token_address": "0xeccbb861c0dda7efd964010085488b69317e4444",
-      "name": "\u9f99\u867e / WBNB",
-      "entry_ts": "2026-09-13T23:50:33.485370+00:00",
-      "entry_price_usd": 0.14414345966932,
-      "peak_price_usd": 0.146762324558193,
-      "amount_usd": 37.47767187225441,
-      "qty": 258.9589400632673,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0xe6edc555061d1d9fe0145867b7ea7b07da840898": {
       "network": "bsc",
       "pool_address": "0xe6edc555061d1d9fe0145867b7ea7b07da840898",
@@ -92,19 +79,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "solana_41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx": {
-      "network": "solana",
-      "pool_address": "41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx",
-      "base_token_address": "CbyTNf7UPzvewHh4Zp6umogM2RWahhmGRJWLJnPwpump",
-      "name": "biketyson / SOL",
-      "entry_ts": "2026-09-14T05:10:34.886082+00:00",
-      "entry_price_usd": 0.003547768482182237,
-      "peak_price_usd": 0.004191731753566287,
-      "amount_usd": 35.14921830294622,
-      "qty": 9900.114524906157,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0x46f1c493ca0765a52f392b7664bef8b90b624880": {
       "network": "bsc",
       "pool_address": "0x46f1c493ca0765a52f392b7664bef8b90b624880",
@@ -112,7 +86,7 @@
       "name": "Daram / USDT",
       "entry_ts": "2026-09-14T05:40:52.838772+00:00",
       "entry_price_usd": 0.831590551883393,
-      "peak_price_usd": 0.958825146882599,
+      "peak_price_usd": 0.978859279820158,
       "amount_usd": 34.748207793365026,
       "qty": 41.59470922568437,
       "sell_tax_pct": 0.0,
@@ -138,7 +112,7 @@
       "name": "WETH / USDC 0.3%",
       "entry_ts": "2026-09-14T06:01:06.935552+00:00",
       "entry_price_usd": 2514.56,
-      "peak_price_usd": 2514.56,
+      "peak_price_usd": 2517.67,
       "amount_usd": 34.87770927488792,
       "qty": 0.013830530698967027,
       "sell_tax_pct": 0.0,
@@ -9167,6 +9141,44 @@
       "pnl_usd": 1.5540177782746696,
       "pnl_pct": 4.18,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x22af7297243c4eef12e2d5a4f888b92e56bf127c",
+      "base_token_address": "0xeccbb861c0dda7efd964010085488b69317e4444",
+      "name": "\u9f99\u867e / WBNB",
+      "entry_ts": "2026-09-13T23:50:33.485370+00:00",
+      "entry_price_usd": 0.14414345966932,
+      "peak_price_usd": 0.146762324558193,
+      "amount_usd": 37.47767187225441,
+      "qty": 258.9589400632673,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-14T06:06:16.417921+00:00",
+      "exit_price_usd": 0.135736670611669,
+      "proceeds_usd": 34.999831567595656,
+      "pnl_usd": -2.4778403046587556,
+      "pnl_pct": -6.61,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx",
+      "base_token_address": "CbyTNf7UPzvewHh4Zp6umogM2RWahhmGRJWLJnPwpump",
+      "name": "biketyson / SOL",
+      "entry_ts": "2026-09-14T05:10:34.886082+00:00",
+      "entry_price_usd": 0.003547768482182237,
+      "peak_price_usd": 0.004191731753566287,
+      "amount_usd": 35.14921830294622,
+      "qty": 9900.114524906157,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-14T06:06:16.417921+00:00",
+      "exit_price_usd": 0.0034865111975145584,
+      "proceeds_usd": 34.49105422864387,
+      "pnl_usd": -0.6581640743023485,
+      "pnl_pct": -1.87,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -9249,7 +9261,7 @@
     "solana_uzAK8txfJAvqS9VHtDaYAWfBiYbzwq4BzxdiFJTQEnJ": "2026-09-12T06:16:03.505319+00:00",
     "bsc_0xc33bacff9141da689875e6381c1932348ab4c5cb": "2026-09-12T09:56:10.718790+00:00",
     "bsc_0xa651c8deb3ff9f8d56a26e72042b7a8a1f433480": "2026-09-13T18:56:24.989343+00:00",
-    "bsc_0x22af7297243c4eef12e2d5a4f888b92e56bf127c": "2026-09-13T17:22:04.000072+00:00",
+    "bsc_0x22af7297243c4eef12e2d5a4f888b92e56bf127c": "2026-09-14T06:06:16.417921+00:00",
     "bsc_0x4d3bf29ba30f8bfe4624e7678709afa195689c5d": "2026-09-12T23:21:24.577039+00:00",
     "solana_r9cBueKD9ZLzN2kXyNCzpX5iJmYLw5fWhDzCtbDCz6K": "2026-09-13T13:56:12.520185+00:00",
     "solana_2eAX4Jgn81aaW7wGCoLc43NVrBcnswKKz7cmpE7unyqh": "2026-09-13T19:52:00.709013+00:00",
@@ -9259,7 +9271,7 @@
     "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": "2026-09-13T12:31:46.773576+00:00",
     "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": "2026-09-14T03:46:20.949287+00:00",
     "solana_84uf4YpzybB4vm8RsermBFqjGxThAETpyMbp5HvkVRJQ": "2026-09-13T20:31:41.478460+00:00",
-    "solana_41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx": "2026-09-13T22:02:37.446231+00:00",
+    "solana_41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx": "2026-09-14T06:06:16.417921+00:00",
     "solana_Eb9qkfiSzKd185KdWLkZrMrejKEbA2ah2BK7spNmoPej": "2026-09-14T00:16:12.314273+00:00",
     "bsc_0xbae8327deb97de23940d877134cd16f1bed0f83d": "2026-09-14T02:36:25.440809+00:00",
     "base_0xc2dd131e210679afff1749c7f5d219bf87e9dd436b0bdd48a6bd27075b205ac3": "2026-09-14T05:36:12.653731+00:00"
