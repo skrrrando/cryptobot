@@ -1,24 +1,10 @@
 {
-  "timestamp": "2026-09-14T01:01:01.173834+00:00",
-  "balance": 793.82,
-  "positions_value": 19.52,
-  "net_worth": 813.34,
+  "timestamp": "2026-09-14T01:10:35.849983+00:00",
+  "balance": 813.28,
+  "positions_value": 0.0,
+  "net_worth": 813.28,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
-      "name": "The Spirit of Bull",
-      "symbol": "Bullabu",
-      "entry_ts": "2026-09-14T01:01:01.173834+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
-      "entry_slippage_pct": 1.22,
-      "entry_graduation_pct": 78.84,
-      "graduation_pct": 78.84,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -339,21 +325,43 @@
       "pnl_usd": -18.25,
       "pnl_pct": -91.27,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
       "name": "The Spirit of Bull",
       "symbol": "Bullabu",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T01:01:01.173834+00:00",
-      "alert_score": 98.9,
-      "alert_graduation_pct": 78.84,
-      "graduation_pct": 78.84
+      "bonding_curve_key": "F9VKpYeNmEmyWp5Q3SFiVL3LuxcwneTLwLuUfmwkJh8a",
+      "entry_ts": "2026-09-14T01:01:01.173834+00:00",
+      "entry_price_usd": 2.9581733345315656e-05,
+      "entry_spot_price_usd": 2.9226239527076848e-05,
+      "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 676092.9039057493,
+      "entry_graduation_pct": 78.84,
+      "entry_score": 98.9,
+      "exit_ts": "2026-09-14T01:10:35.850005+00:00",
+      "exit_price_usd": 2.8788920253040725e-05,
+      "proceeds_usd": 19.46,
+      "pnl_usd": -0.54,
+      "pnl_pct": -2.68,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
+      "name": "The Spirit of Bull",
+      "symbol": "Bullabu",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T01:01:01.173834+00:00",
+      "recorded_ts": "2026-09-14T01:10:35.849983+00:00",
+      "alert_score": 98.9,
+      "alert_graduation_pct": 78.84,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.6
+    },
     {
       "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
       "name": "UP SYNDROME",
@@ -695,16 +703,16 @@
   ],
   "stats": {
     "alerts": 33,
-    "graduated": 7,
+    "graduated": 8,
     "did_not_graduate": 19,
-    "buy_graduated": 3,
-    "buy_total": 12,
+    "buy_graduated": 4,
+    "buy_total": 13,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 26.9
+    "graduation_rate_pct": 29.6
   },
   "shadow_stats": {
-    "tracked": 29,
+    "tracked": 30,
     "graduated": 167,
     "did_not_graduate": 889,
     "graduation_rate_pct": 15.8
