@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-14T05:20:34.774009+00:00",
-  "balance": 773.28,
-  "positions_value": 6.37,
-  "net_worth": 779.65,
+  "timestamp": "2026-09-14T05:25:28.808116+00:00",
+  "balance": 753.28,
+  "positions_value": 25.79,
+  "net_worth": 779.07,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "m&m",
       "entry_ts": "2026-09-14T01:58:10.682583+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.91,
-      "pnl_pct": -80.45,
+      "value_usd": 3.82,
+      "pnl_pct": -80.9,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 72.17,
-      "graduation_pct": 12.54,
+      "graduation_pct": 11.93,
       "graduated": false
     },
     {
@@ -29,6 +29,19 @@
       "entry_slippage_pct": 1.22,
       "entry_graduation_pct": 77.74,
       "graduation_pct": 4.67,
+      "graduated": false
+    },
+    {
+      "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
+      "name": "Life Before AI",
+      "symbol": "AI",
+      "entry_ts": "2026-09-14T05:25:28.808116+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 59.24,
+      "graduation_pct": 59.24,
       "graduated": false
     }
   ],
@@ -376,6 +389,16 @@
   ],
   "watching": [
     {
+      "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
+      "name": "Life Before AI",
+      "symbol": "AI",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T05:25:28.808116+00:00",
+      "alert_score": 109.5,
+      "alert_graduation_pct": 59.24,
+      "graduation_pct": 59.24
+    },
+    {
       "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
       "name": "eminem",
       "symbol": "m&m",
@@ -383,7 +406,7 @@
       "signal_ts": "2026-09-14T01:58:10.682583+00:00",
       "alert_score": 113.5,
       "alert_graduation_pct": 72.17,
-      "graduation_pct": 12.54
+      "graduation_pct": 11.93
     },
     {
       "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
@@ -750,7 +773,7 @@
     }
   ],
   "stats": {
-    "alerts": 35,
+    "alerts": 36,
     "graduated": 8,
     "did_not_graduate": 19,
     "buy_graduated": 4,
@@ -760,7 +783,7 @@
     "graduation_rate_pct": 29.6
   },
   "shadow_stats": {
-    "tracked": 18,
+    "tracked": 19,
     "graduated": 170,
     "did_not_graduate": 914,
     "graduation_rate_pct": 15.7
