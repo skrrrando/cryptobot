@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-14T01:49:06.481237+00:00",
-  "balance": 813.28,
-  "positions_value": 0.0,
-  "net_worth": 813.28,
+  "timestamp": "2026-09-14T01:58:10.682583+00:00",
+  "balance": 793.28,
+  "positions_value": 19.52,
+  "net_worth": 812.8,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
+      "name": "eminem",
+      "symbol": "m&m",
+      "entry_ts": "2026-09-14T01:58:10.682583+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 72.17,
+      "graduation_pct": 72.17,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -347,7 +361,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
+      "name": "eminem",
+      "symbol": "m&m",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T01:58:10.682583+00:00",
+      "alert_score": 113.5,
+      "alert_graduation_pct": 72.17,
+      "graduation_pct": 72.17
+    }
+  ],
   "history": [
     {
       "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
@@ -702,7 +727,7 @@
     }
   ],
   "stats": {
-    "alerts": 33,
+    "alerts": 34,
     "graduated": 8,
     "did_not_graduate": 19,
     "buy_graduated": 4,
