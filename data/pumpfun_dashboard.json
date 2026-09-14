@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-14T00:55:28.525321+00:00",
-  "balance": 813.82,
-  "positions_value": 0.0,
-  "net_worth": 813.82,
+  "timestamp": "2026-09-14T01:01:01.173834+00:00",
+  "balance": 793.82,
+  "positions_value": 19.52,
+  "net_worth": 813.34,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
+      "name": "The Spirit of Bull",
+      "symbol": "Bullabu",
+      "entry_ts": "2026-09-14T01:01:01.173834+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 78.84,
+      "graduation_pct": 78.84,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -327,7 +341,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
+      "name": "The Spirit of Bull",
+      "symbol": "Bullabu",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T01:01:01.173834+00:00",
+      "alert_score": 98.9,
+      "alert_graduation_pct": 78.84,
+      "graduation_pct": 78.84
+    }
+  ],
   "history": [
     {
       "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
@@ -669,7 +694,7 @@
     }
   ],
   "stats": {
-    "alerts": 32,
+    "alerts": 33,
     "graduated": 7,
     "did_not_graduate": 19,
     "buy_graduated": 3,
@@ -679,7 +704,7 @@
     "graduation_rate_pct": 26.9
   },
   "shadow_stats": {
-    "tracked": 28,
+    "tracked": 29,
     "graduated": 167,
     "did_not_graduate": 889,
     "graduation_rate_pct": 15.8
