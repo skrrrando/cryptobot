@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-14T03:50:37.364424+00:00",
+  "timestamp": "2026-09-14T03:55:28.848411+00:00",
   "balance": 773.28,
-  "positions_value": 8.73,
-  "net_worth": 782.01,
+  "positions_value": 8.14,
+  "net_worth": 781.42,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "m&m",
       "entry_ts": "2026-09-14T01:58:10.682583+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.51,
-      "pnl_pct": -77.45,
+      "value_usd": 4.47,
+      "pnl_pct": -77.65,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 72.17,
-      "graduation_pct": 16.19,
+      "graduation_pct": 15.95,
       "graduated": false
     },
     {
@@ -24,11 +24,11 @@
       "symbol": "KIMCHI",
       "entry_ts": "2026-09-14T02:46:14.191452+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.22,
-      "pnl_pct": -78.9,
+      "value_usd": 3.67,
+      "pnl_pct": -81.65,
       "entry_slippage_pct": 1.22,
       "entry_graduation_pct": 77.74,
-      "graduation_pct": 17.16,
+      "graduation_pct": 13.63,
       "graduated": false
     }
   ],
@@ -376,16 +376,6 @@
   ],
   "watching": [
     {
-      "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
-      "name": "Kimchi",
-      "symbol": "KIMCHI",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T02:46:14.191452+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 77.74,
-      "graduation_pct": 17.16
-    },
-    {
       "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
       "name": "eminem",
       "symbol": "m&m",
@@ -393,7 +383,17 @@
       "signal_ts": "2026-09-14T01:58:10.682583+00:00",
       "alert_score": 113.5,
       "alert_graduation_pct": 72.17,
-      "graduation_pct": 16.19
+      "graduation_pct": 15.95
+    },
+    {
+      "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
+      "name": "Kimchi",
+      "symbol": "KIMCHI",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T02:46:14.191452+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 77.74,
+      "graduation_pct": 13.63
     }
   ],
   "history": [
@@ -760,7 +760,7 @@
     "graduation_rate_pct": 29.6
   },
   "shadow_stats": {
-    "tracked": 25,
+    "tracked": 26,
     "graduated": 169,
     "did_not_graduate": 903,
     "graduation_rate_pct": 15.8
