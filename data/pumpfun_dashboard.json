@@ -1,24 +1,10 @@
 {
-  "timestamp": "2026-09-14T11:20:36.684528+00:00",
-  "balance": 759.73,
-  "positions_value": 2.88,
-  "net_worth": 762.61,
+  "timestamp": "2026-09-14T11:25:31.710344+00:00",
+  "balance": 762.58,
+  "positions_value": 0.0,
+  "net_worth": 762.58,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
-      "name": "Life Before AI",
-      "symbol": "AI",
-      "entry_ts": "2026-09-14T05:25:28.808116+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.88,
-      "pnl_pct": -85.6,
-      "entry_slippage_pct": 1.26,
-      "entry_graduation_pct": 59.24,
-      "graduation_pct": 0.91,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -399,21 +385,43 @@
       "pnl_usd": -17.54,
       "pnl_pct": -87.68,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
       "name": "Life Before AI",
       "symbol": "AI",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T05:25:28.808116+00:00",
-      "alert_score": 109.5,
-      "alert_graduation_pct": 59.24,
-      "graduation_pct": 0.91
+      "bonding_curve_key": "BmybfvNw8XGKeUiGVMh1fjmUEUkz7GE1RDfLrbDcucp8",
+      "entry_ts": "2026-09-14T05:25:28.808116+00:00",
+      "entry_price_usd": 2.061240717054886e-05,
+      "entry_spot_price_usd": 2.0356853739484615e-05,
+      "entry_slippage_pct": 1.26,
+      "amount_usd": 20.0,
+      "qty": 970289.3909730315,
+      "entry_graduation_pct": 59.24,
+      "entry_score": 109.5,
+      "exit_ts": "2026-09-14T11:25:31.710363+00:00",
+      "exit_price_usd": 2.94263476445895e-06,
+      "proceeds_usd": 2.86,
+      "pnl_usd": -17.14,
+      "pnl_pct": -85.72,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
+      "name": "Life Before AI",
+      "symbol": "AI",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-14T05:25:28.808116+00:00",
+      "recorded_ts": "2026-09-14T11:25:31.710344+00:00",
+      "alert_score": 109.5,
+      "alert_graduation_pct": 59.24,
+      "final_graduation_pct": 0.91,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
       "name": "Kimchi",
@@ -795,12 +803,12 @@
   "stats": {
     "alerts": 36,
     "graduated": 8,
-    "did_not_graduate": 21,
+    "did_not_graduate": 22,
     "buy_graduated": 4,
-    "buy_total": 15,
+    "buy_total": 16,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 27.6
+    "graduation_rate_pct": 26.7
   },
   "shadow_stats": {
     "tracked": 29,
