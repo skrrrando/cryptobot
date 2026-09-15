@@ -1,5 +1,5 @@
 {
-  "balance": 53.2359264536724,
+  "balance": 54.053336201263235,
   "positions": {
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
@@ -79,19 +79,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
-      "network": "base",
-      "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
-      "base_token_address": "0xfb31f85a8367210b2e4ed2360d2da9dc2d2ccc95",
-      "name": "EDEL / WETH",
-      "entry_ts": "2026-09-15T12:40:35.941802+00:00",
-      "entry_price_usd": 0.0192321410330179,
-      "peak_price_usd": 0.0220232827391792,
-      "amount_usd": 27.198251505249733,
-      "qty": 1408.9647052139737,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
       "network": "base",
       "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.0085585103257579,
       "amount_usd": 27.218362783671,
       "qty": 3182.021403347137,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": {
+      "network": "bsc",
+      "pool_address": "0xffca411cfbcd3194503effa80fd394b55387915c",
+      "base_token_address": "0x2ab8a4dd2191989ac2898006df350b236d2b7777",
+      "name": "Sue / WBNB",
+      "entry_ts": "2026-09-15T15:01:05.216083+00:00",
+      "entry_price_usd": 0.00143510524009663,
+      "peak_price_usd": 0.00143839272667261,
+      "amount_usd": 27.150751284369132,
+      "qty": 18811.8167779526,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -10294,6 +10294,25 @@
       "pnl_usd": -0.8113379916224837,
       "pnl_pct": -2.98,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
+      "base_token_address": "0xfb31f85a8367210b2e4ed2360d2da9dc2d2ccc95",
+      "name": "EDEL / WETH",
+      "entry_ts": "2026-09-15T12:40:35.941802+00:00",
+      "entry_price_usd": 0.0192321410330179,
+      "peak_price_usd": 0.0220232827391792,
+      "amount_usd": 27.198251505249733,
+      "qty": 1408.9647052139737,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-15T15:02:15.631549+00:00",
+      "exit_price_usd": 0.0199217627267824,
+      "proceeds_usd": 27.968161031959966,
+      "pnl_usd": 0.7699095267102329,
+      "pnl_pct": 2.83,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -10384,7 +10403,7 @@
     "solana_8myc52qh4zCDWXBnW9UxbJMs1cu6aNMcsa4VCK5Hw9R3": "2026-09-14T04:16:39.815726+00:00",
     "bsc_0x8f6814bd5db791fc8b64eea6bbad8bbeb508d6c6": "2026-09-13T11:56:38.358529+00:00",
     "solana_2uF4Xh61rDwxnG9woyxsVQP7zuA6kLFpb3NvnRQeoiSd": "2026-09-13T12:31:46.773576+00:00",
-    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": "2026-09-15T09:42:36.212004+00:00",
+    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": "2026-09-15T15:02:15.631549+00:00",
     "solana_84uf4YpzybB4vm8RsermBFqjGxThAETpyMbp5HvkVRJQ": "2026-09-13T20:31:41.478460+00:00",
     "solana_41rzTMB7JHPTyMXzrYwdqnBecJRhkb8KHYAjrQ9cYxJx": "2026-09-15T08:56:24.513148+00:00",
     "solana_Eb9qkfiSzKd185KdWLkZrMrejKEbA2ah2BK7spNmoPej": "2026-09-14T00:16:12.314273+00:00",
