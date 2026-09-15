@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-15T00:01:02.441840+00:00",
-  "balance": 762.58,
-  "positions_value": 0.0,
-  "net_worth": 762.58,
+  "timestamp": "2026-09-15T00:10:36.987665+00:00",
+  "balance": 742.58,
+  "positions_value": 19.53,
+  "net_worth": 762.11,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
+      "name": "Hybrid Memes",
+      "symbol": "HYBRID",
+      "entry_ts": "2026-09-15T00:10:36.987665+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.19,
+      "entry_graduation_pct": 93.75,
+      "graduation_pct": 93.75,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -407,7 +421,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
+      "name": "Hybrid Memes",
+      "symbol": "HYBRID",
+      "decision": "buy",
+      "signal_ts": "2026-09-15T00:10:36.987665+00:00",
+      "alert_score": 99.3,
+      "alert_graduation_pct": 93.75,
+      "graduation_pct": 93.75
+    }
+  ],
   "history": [
     {
       "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
@@ -801,7 +826,7 @@
     }
   ],
   "stats": {
-    "alerts": 36,
+    "alerts": 37,
     "graduated": 8,
     "did_not_graduate": 22,
     "buy_graduated": 4,
@@ -811,9 +836,9 @@
     "graduation_rate_pct": 26.7
   },
   "shadow_stats": {
-    "tracked": 41,
+    "tracked": 39,
     "graduated": 186,
-    "did_not_graduate": 1012,
+    "did_not_graduate": 1014,
     "graduation_rate_pct": 15.5
   },
   "daily_cap": 4,
