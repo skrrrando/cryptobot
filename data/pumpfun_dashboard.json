@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-15T03:45:34.724558+00:00",
-  "balance": 722.03,
-  "positions_value": 25.48,
-  "net_worth": 747.51,
+  "timestamp": "2026-09-15T03:50:35.225916+00:00",
+  "balance": 743.96,
+  "positions_value": 3.56,
+  "net_worth": 747.52,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -16,19 +16,6 @@
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 9423.39,
       "graduation_pct": 828.47,
-      "graduated": false
-    },
-    {
-      "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
-      "name": "The White Bull",
-      "symbol": "WhiteBull",
-      "entry_ts": "2026-09-15T03:40:37.021371+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 21.92,
-      "pnl_pct": 9.6,
-      "entry_slippage_pct": 1.19,
-      "entry_graduation_pct": 91.57,
-      "graduation_pct": 99.14,
       "graduated": false
     }
   ],
@@ -452,6 +439,26 @@
       "pnl_usd": -0.55,
       "pnl_pct": -2.77,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
+      "name": "The White Bull",
+      "symbol": "WhiteBull",
+      "bonding_curve_key": "JCaNEeLLxxS3kgorvoxUDsUEb6vnT5nmdHWrrG3rcaF8",
+      "entry_ts": "2026-09-15T03:40:37.021371+00:00",
+      "entry_price_usd": 3.717827802846827e-05,
+      "entry_spot_price_usd": 3.674016328675519e-05,
+      "entry_slippage_pct": 1.19,
+      "amount_usd": 20.0,
+      "qty": 537948.5296410322,
+      "entry_graduation_pct": 91.57,
+      "entry_score": 95.4,
+      "exit_ts": "2026-09-15T03:50:35.225937+00:00",
+      "exit_price_usd": 4.075888082480564e-05,
+      "proceeds_usd": 21.93,
+      "pnl_usd": 1.93,
+      "pnl_pct": 9.63,
+      "exit_reason": "graduated"
     }
   ],
   "watching": [
@@ -464,19 +471,22 @@
       "alert_score": 92.5,
       "alert_graduation_pct": 9423.39,
       "graduation_pct": 828.47
-    },
+    }
+  ],
+  "history": [
     {
       "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
       "name": "The White Bull",
       "symbol": "WhiteBull",
+      "outcome": "graduated",
       "decision": "buy",
       "signal_ts": "2026-09-15T03:40:37.021371+00:00",
+      "recorded_ts": "2026-09-15T03:50:35.225916+00:00",
       "alert_score": 95.4,
       "alert_graduation_pct": 91.57,
-      "graduation_pct": 99.14
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 10.0
+    },
     {
       "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
       "name": "Hybrid Memes",
@@ -883,19 +893,19 @@
   ],
   "stats": {
     "alerts": 39,
-    "graduated": 9,
+    "graduated": 10,
     "did_not_graduate": 22,
-    "buy_graduated": 5,
-    "buy_total": 17,
+    "buy_graduated": 6,
+    "buy_total": 18,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 29.0
+    "graduation_rate_pct": 31.2
   },
   "shadow_stats": {
-    "tracked": 33,
-    "graduated": 189,
-    "did_not_graduate": 1043,
-    "graduation_rate_pct": 15.3
+    "tracked": 31,
+    "graduated": 190,
+    "did_not_graduate": 1044,
+    "graduation_rate_pct": 15.4
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
