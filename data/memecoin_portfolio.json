@@ -1,32 +1,6 @@
 {
-  "balance": 23.977437396599708,
+  "balance": 75.89367055903912,
   "positions": {
-    "bsc_0xc7a398a7f9c4d8181fd847a2062360f9247a5e59": {
-      "network": "bsc",
-      "pool_address": "0xc7a398a7f9c4d8181fd847a2062360f9247a5e59",
-      "base_token_address": "0x848e2b1cb00dc439a15b03b8c3194e7d08917777",
-      "name": "BAN / WBNB",
-      "entry_ts": "2026-09-15T02:36:44.729757+00:00",
-      "entry_price_usd": 0.0492054874097754,
-      "peak_price_usd": 0.0504732772488361,
-      "amount_usd": 29.60602794649915,
-      "qty": 580.6562169930037,
-      "sell_tax_pct": 3.0,
-      "time_exit_evaluated": false
-    },
-    "solana_qhJ7kLjrE68sbDF11CpwMt3P9rqiwZtretM5ZzeAX6o": {
-      "network": "solana",
-      "pool_address": "qhJ7kLjrE68sbDF11CpwMt3P9rqiwZtretM5ZzeAX6o",
-      "base_token_address": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
-      "name": "CATE / SOL",
-      "entry_ts": "2026-09-15T02:40:34.052511+00:00",
-      "entry_price_usd": 0.07577711542289137,
-      "peak_price_usd": 0.07862530218116484,
-      "amount_usd": 29.186434098747025,
-      "qty": 384.88712796085423,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
       "network": "base",
       "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
@@ -86,7 +60,7 @@
       "name": "biketyson / SOL",
       "entry_ts": "2026-09-15T05:55:27.612908+00:00",
       "entry_price_usd": 0.006343519936450416,
-      "peak_price_usd": 0.0075563631673033075,
+      "peak_price_usd": 0.007570235863893817,
       "amount_usd": 27.73031174071959,
       "qty": 4367.888528799018,
       "sell_tax_pct": 0.0,
@@ -10022,6 +9996,44 @@
       "pnl_usd": 1.479888254183404,
       "pnl_pct": 5.34,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xc7a398a7f9c4d8181fd847a2062360f9247a5e59",
+      "base_token_address": "0x848e2b1cb00dc439a15b03b8c3194e7d08917777",
+      "name": "BAN / WBNB",
+      "entry_ts": "2026-09-15T02:36:44.729757+00:00",
+      "entry_price_usd": 0.0492054874097754,
+      "peak_price_usd": 0.0504732772488361,
+      "amount_usd": 29.60602794649915,
+      "qty": 580.6562169930037,
+      "sell_tax_pct": 3.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-15T08:41:36.728406+00:00",
+      "exit_price_usd": 0.0480299673352399,
+      "proceeds_usd": 26.901500164027635,
+      "pnl_usd": -2.7045277824715157,
+      "pnl_pct": -9.14,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "qhJ7kLjrE68sbDF11CpwMt3P9rqiwZtretM5ZzeAX6o",
+      "base_token_address": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
+      "name": "CATE / SOL",
+      "entry_ts": "2026-09-15T02:40:34.052511+00:00",
+      "entry_price_usd": 0.07577711542289137,
+      "peak_price_usd": 0.07862530218116484,
+      "amount_usd": 29.186434098747025,
+      "qty": 384.88712796085423,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-15T08:41:36.728406+00:00",
+      "exit_price_usd": 0.06504593832921074,
+      "proceeds_usd": 25.014732998411773,
+      "pnl_usd": -4.171701100335252,
+      "pnl_pct": -14.29,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -10121,6 +10133,8 @@
     "bsc_0x46f1c493ca0765a52f392b7664bef8b90b624880": "2026-09-14T06:56:02.040164+00:00",
     "solana_AFaYrFH7hUYnkv5mbvbnRHwX29M9JzUL3ySGtQz69AUv": "2026-09-14T21:26:12.624935+00:00",
     "bsc_0xd9434e63fe78a6e77dafe2abc504121bf8500822f6d3a59eccba577cf0a070f2": "2026-09-15T02:31:36.249392+00:00",
-    "base_0xb2cc224c1c9fee385f8ad6a55b4d94e92359dc59": "2026-09-15T02:38:36.365119+00:00"
+    "base_0xb2cc224c1c9fee385f8ad6a55b4d94e92359dc59": "2026-09-15T02:38:36.365119+00:00",
+    "bsc_0xc7a398a7f9c4d8181fd847a2062360f9247a5e59": "2026-09-15T08:41:36.728406+00:00",
+    "solana_qhJ7kLjrE68sbDF11CpwMt3P9rqiwZtretM5ZzeAX6o": "2026-09-15T08:41:36.728406+00:00"
   }
 }
