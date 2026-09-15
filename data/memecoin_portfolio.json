@@ -1,19 +1,6 @@
 {
-  "balance": 30.539994712973833,
+  "balance": 77.93844865284947,
   "positions": {
-    "solana_6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC": {
-      "network": "solana",
-      "pool_address": "6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC",
-      "base_token_address": "FbYYdLRX2sL5xzLGjdhfaWNhtpxqXBSoqvUY8o8W8eNF",
-      "name": "TOEROGAN / SOL",
-      "entry_ts": "2026-09-15T17:10:35.110313+00:00",
-      "entry_price_usd": 0.0018798472824938831,
-      "peak_price_usd": 0.0018798472824938831,
-      "amount_usd": 26.128610329221413,
-      "qty": 13885.61228925278,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
       "network": "base",
       "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
@@ -73,7 +60,7 @@
       "name": "BAN / WBNB",
       "entry_ts": "2026-09-15T20:05:26.025316+00:00",
       "entry_price_usd": 0.0444211336390345,
-      "peak_price_usd": 0.0448946385407424,
+      "peak_price_usd": 0.044954814015966,
       "amount_usd": 25.72934021245585,
       "qty": 558.547846139497,
       "sell_tax_pct": 3.0,
@@ -115,19 +102,6 @@
       "peak_price_usd": 0.00463273712029831,
       "amount_usd": 26.709290070490095,
       "qty": 6161.181559626204,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": {
-      "network": "solana",
-      "pool_address": "6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA",
-      "base_token_address": "98kfF7rmsg1QDUEoCqNE7g7M1FdrTt92TEp2CLzypump",
-      "name": "PAID / SOL",
-      "entry_ts": "2026-09-15T22:05:25.785124+00:00",
-      "entry_price_usd": 0.005452785377377468,
-      "peak_price_usd": 0.009232380044709278,
-      "amount_usd": 26.466011610234734,
-      "qty": 4849.455898013268,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -10611,6 +10585,44 @@
       "pnl_usd": -2.919341523064272,
       "pnl_pct": -11.1,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC",
+      "base_token_address": "FbYYdLRX2sL5xzLGjdhfaWNhtpxqXBSoqvUY8o8W8eNF",
+      "name": "TOEROGAN / SOL",
+      "entry_ts": "2026-09-15T17:10:35.110313+00:00",
+      "entry_price_usd": 0.0018798472824938831,
+      "peak_price_usd": 0.0018798472824938831,
+      "amount_usd": 26.128610329221413,
+      "qty": 13885.61228925278,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-15T23:16:11.020133+00:00",
+      "exit_price_usd": 0.0009557480726614314,
+      "proceeds_usd": 13.249133474484069,
+      "pnl_usd": -12.879476854737344,
+      "pnl_pct": -49.29,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA",
+      "base_token_address": "98kfF7rmsg1QDUEoCqNE7g7M1FdrTt92TEp2CLzypump",
+      "name": "PAID / SOL",
+      "entry_ts": "2026-09-15T22:05:25.785124+00:00",
+      "entry_price_usd": 0.005452785377377468,
+      "peak_price_usd": 0.009232380044709278,
+      "amount_usd": 26.466011610234734,
+      "qty": 4849.455898013268,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-15T23:16:11.020133+00:00",
+      "exit_price_usd": 0.007046855139834749,
+      "proceeds_usd": 34.14932046539157,
+      "pnl_usd": 7.6833088551568345,
+      "pnl_pct": 29.03,
+      "exit_reason": "take_profit"
     }
   ],
   "recent_exits": {
@@ -10721,6 +10733,8 @@
     "bsc_0x189fcfa548968cbd3b0118c2200f05db00d429f1": "2026-09-15T17:45:57.875422+00:00",
     "base_0x4e829f8a5213c42535ab84aa40bd4adcce9cba02": "2026-09-15T20:26:25.009799+00:00",
     "arbitrum_0x17e073f0fb07b904c3db4fdb1e5b711ae5defb10cf0c27626784d68b0f128c55": "2026-09-15T21:10:52.035818+00:00",
-    "solana_BNpwtuYGve7G1v2NFaRQVCFvcU4CzjvwAmdUxEVQYvrd": "2026-09-15T21:25:46.762535+00:00"
+    "solana_BNpwtuYGve7G1v2NFaRQVCFvcU4CzjvwAmdUxEVQYvrd": "2026-09-15T21:25:46.762535+00:00",
+    "solana_6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC": "2026-09-15T23:16:11.020133+00:00",
+    "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": "2026-09-15T23:16:11.020133+00:00"
   }
 }
