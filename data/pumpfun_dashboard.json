@@ -1,24 +1,10 @@
 {
-  "timestamp": "2026-09-15T00:10:36.987665+00:00",
-  "balance": 742.58,
-  "positions_value": 19.53,
-  "net_worth": 762.11,
+  "timestamp": "2026-09-15T00:15:36.295117+00:00",
+  "balance": 762.03,
+  "positions_value": 0.0,
+  "net_worth": 762.03,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
-      "name": "Hybrid Memes",
-      "symbol": "HYBRID",
-      "entry_ts": "2026-09-15T00:10:36.987665+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.53,
-      "pnl_pct": -2.35,
-      "entry_slippage_pct": 1.19,
-      "entry_graduation_pct": 93.75,
-      "graduation_pct": 93.75,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -419,21 +405,43 @@
       "pnl_usd": -17.14,
       "pnl_pct": -85.72,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
       "name": "Hybrid Memes",
       "symbol": "HYBRID",
-      "decision": "buy",
-      "signal_ts": "2026-09-15T00:10:36.987665+00:00",
-      "alert_score": 99.3,
-      "alert_graduation_pct": 93.75,
-      "graduation_pct": 93.75
+      "bonding_curve_key": "1Q5KJBViqF8jPgdQ6ibCFexE5A2h8WqUsB724ta3Vsp",
+      "entry_ts": "2026-09-15T00:10:36.987665+00:00",
+      "entry_price_usd": 3.8882273228351787e-05,
+      "entry_spot_price_usd": 3.842597640640762e-05,
+      "entry_slippage_pct": 1.19,
+      "amount_usd": 20.0,
+      "qty": 514373.2179068327,
+      "entry_graduation_pct": 93.75,
+      "entry_score": 99.3,
+      "exit_ts": "2026-09-15T00:15:36.295139+00:00",
+      "exit_price_usd": 3.780582580928909e-05,
+      "proceeds_usd": 19.45,
+      "pnl_usd": -0.55,
+      "pnl_pct": -2.77,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
+      "name": "Hybrid Memes",
+      "symbol": "HYBRID",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-09-15T00:10:36.987665+00:00",
+      "recorded_ts": "2026-09-15T00:15:36.295117+00:00",
+      "alert_score": 99.3,
+      "alert_graduation_pct": 93.75,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 5.0
+    },
     {
       "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
       "name": "Life Before AI",
@@ -827,16 +835,16 @@
   ],
   "stats": {
     "alerts": 37,
-    "graduated": 8,
+    "graduated": 9,
     "did_not_graduate": 22,
-    "buy_graduated": 4,
-    "buy_total": 16,
+    "buy_graduated": 5,
+    "buy_total": 17,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 26.7
+    "graduation_rate_pct": 29.0
   },
   "shadow_stats": {
-    "tracked": 39,
+    "tracked": 40,
     "graduated": 186,
     "did_not_graduate": 1014,
     "graduation_rate_pct": 15.5
