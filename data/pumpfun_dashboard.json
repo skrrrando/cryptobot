@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-15T03:35:29.222838+00:00",
-  "balance": 742.03,
-  "positions_value": 3.56,
-  "net_worth": 745.59,
+  "timestamp": "2026-09-15T03:40:37.021371+00:00",
+  "balance": 722.03,
+  "positions_value": 23.09,
+  "net_worth": 745.12,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -15,7 +15,20 @@
       "pnl_pct": -82.2,
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 9423.39,
-      "graduation_pct": 831.55,
+      "graduation_pct": 828.47,
+      "graduated": false
+    },
+    {
+      "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
+      "name": "The White Bull",
+      "symbol": "WhiteBull",
+      "entry_ts": "2026-09-15T03:40:37.021371+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.19,
+      "entry_graduation_pct": 91.57,
+      "graduation_pct": 91.57,
       "graduated": false
     }
   ],
@@ -450,7 +463,17 @@
       "signal_ts": "2026-09-15T01:50:47.878927+00:00",
       "alert_score": 92.5,
       "alert_graduation_pct": 9423.39,
-      "graduation_pct": 831.55
+      "graduation_pct": 828.47
+    },
+    {
+      "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
+      "name": "The White Bull",
+      "symbol": "WhiteBull",
+      "decision": "buy",
+      "signal_ts": "2026-09-15T03:40:37.021371+00:00",
+      "alert_score": 95.4,
+      "alert_graduation_pct": 91.57,
+      "graduation_pct": 91.57
     }
   ],
   "history": [
@@ -859,7 +882,7 @@
     }
   ],
   "stats": {
-    "alerts": 38,
+    "alerts": 39,
     "graduated": 9,
     "did_not_graduate": 22,
     "buy_graduated": 5,
@@ -869,10 +892,10 @@
     "graduation_rate_pct": 29.0
   },
   "shadow_stats": {
-    "tracked": 35,
+    "tracked": 33,
     "graduated": 189,
-    "did_not_graduate": 1041,
-    "graduation_rate_pct": 15.4
+    "did_not_graduate": 1043,
+    "graduation_rate_pct": 15.3
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
