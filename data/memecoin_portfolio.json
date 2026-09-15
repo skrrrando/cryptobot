@@ -1,5 +1,5 @@
 {
-  "balance": 52.129708735088506,
+  "balance": 52.60221073411671,
   "positions": {
     "base_0x0ab02e160f0df68dc049b012c514857306960eae": {
       "network": "base",
@@ -34,7 +34,7 @@
       "name": "fone / SOL",
       "entry_ts": "2026-09-15T09:20:35.318014+00:00",
       "entry_price_usd": 0.00600744673569868,
-      "peak_price_usd": 0.006169487249878497,
+      "peak_price_usd": 0.006232284019708904,
       "amount_usd": 27.344082470061547,
       "qty": 4548.127477778344,
       "sell_tax_pct": 0.0,
@@ -63,19 +63,6 @@
       "peak_price_usd": 0.00799087486392866,
       "amount_usd": 27.289442648956783,
       "qty": 3597.8559891083305,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": {
-      "network": "solana",
-      "pool_address": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
-      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-      "name": "STONK / SOL",
-      "entry_ts": "2026-09-15T10:50:33.696728+00:00",
-      "entry_price_usd": 0.18118481235160153,
-      "peak_price_usd": 0.1998190374901415,
-      "amount_usd": 27.238098914742768,
-      "qty": 150.2212222121322,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.0022246713920110743,
       "amount_usd": 27.169426267776227,
       "qty": 12614.57152591322,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
+      "network": "base",
+      "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
+      "base_token_address": "0xb095274743941e953c746f9c228da9c18bb6ec29",
+      "name": "LAPTOP / USDC 1%",
+      "entry_ts": "2026-09-15T13:40:35.344125+00:00",
+      "entry_price_usd": 0.241959286806769,
+      "peak_price_usd": 0.241959286806769,
+      "amount_usd": 27.080465881225592,
+      "qty": 111.49203123224386,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -10237,6 +10237,25 @@
       "pnl_usd": -1.0675246386076225,
       "pnl_pct": -3.84,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
+      "base_token_address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+      "name": "STONK / SOL",
+      "entry_ts": "2026-09-15T10:50:33.696728+00:00",
+      "entry_price_usd": 0.18118481235160153,
+      "peak_price_usd": 0.1998190374901415,
+      "amount_usd": 27.238098914742768,
+      "qty": 150.2212222121322,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-15T13:42:13.873812+00:00",
+      "exit_price_usd": 0.1835512260065485,
+      "proceeds_usd": 27.5529678802538,
+      "pnl_usd": 0.3148689655110317,
+      "pnl_pct": 1.16,
+      "exit_reason": "trailing_stop"
     }
   ],
   "recent_exits": {
@@ -10280,7 +10299,7 @@
     "bsc_0xdf8f1510a5a3f82fbab166175a72bc00a5c432d1": "2026-09-09T03:36:11.691987+00:00",
     "arbitrum_0x628854f0cfd7debd6e04361421ee9c06c77048c3": "2026-09-15T04:16:12.874371+00:00",
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": "2026-09-15T02:31:36.249392+00:00",
-    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-14T21:56:03.417682+00:00",
+    "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX": "2026-09-15T13:42:13.873812+00:00",
     "solana_FZuTAARDYJapX7HqniQEzzDboNY8RT4FXCrakVFJap2R": "2026-09-10T11:51:13.977588+00:00",
     "bsc_0xffca411cfbcd3194503effa80fd394b55387915c": "2026-09-13T11:01:52.963110+00:00",
     "base_0xc9786476d2492eb8ddb2ebf8b4b69e227e1f31397c790d877541ab0ed5cf5ee2": "2026-09-15T06:46:49.800896+00:00",
