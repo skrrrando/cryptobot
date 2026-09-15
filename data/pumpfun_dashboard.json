@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-15T01:41:16.637458+00:00",
-  "balance": 762.03,
-  "positions_value": 0.0,
-  "net_worth": 762.03,
+  "timestamp": "2026-09-15T01:50:47.878927+00:00",
+  "balance": 742.03,
+  "positions_value": 19.6,
+  "net_worth": 761.63,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "FNGqSX4p8wnHHud4du4GdsDbKR3FpacaBcmLRf9jpump",
+      "name": "Sydney Weenie",
+      "symbol": "Weenie",
+      "entry_ts": "2026-09-15T01:50:47.878927+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.6,
+      "pnl_pct": -2.0,
+      "entry_slippage_pct": 1.01,
+      "entry_graduation_pct": 9423.39,
+      "graduation_pct": 9423.39,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -427,7 +441,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FNGqSX4p8wnHHud4du4GdsDbKR3FpacaBcmLRf9jpump",
+      "name": "Sydney Weenie",
+      "symbol": "Weenie",
+      "decision": "buy",
+      "signal_ts": "2026-09-15T01:50:47.878927+00:00",
+      "alert_score": 92.5,
+      "alert_graduation_pct": 9423.39,
+      "graduation_pct": 9423.39
+    }
+  ],
   "history": [
     {
       "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
@@ -834,7 +859,7 @@
     }
   ],
   "stats": {
-    "alerts": 37,
+    "alerts": 38,
     "graduated": 9,
     "did_not_graduate": 22,
     "buy_graduated": 5,
@@ -844,9 +869,9 @@
     "graduation_rate_pct": 29.0
   },
   "shadow_stats": {
-    "tracked": 34,
+    "tracked": 33,
     "graduated": 189,
-    "did_not_graduate": 1024,
+    "did_not_graduate": 1025,
     "graduation_rate_pct": 15.6
   },
   "daily_cap": 4,
