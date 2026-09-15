@@ -1,19 +1,6 @@
 {
-  "balance": 26.786463120371064,
+  "balance": 53.2359264536724,
   "positions": {
-    "base_0x0ab02e160f0df68dc049b012c514857306960eae": {
-      "network": "base",
-      "pool_address": "0x0ab02e160f0df68dc049b012c514857306960eae",
-      "base_token_address": "0x11030f79109269d796fd0fb956d6244e502757f7",
-      "name": "CTR / USDC 0.002%",
-      "entry_ts": "2026-09-15T08:45:35.900061+00:00",
-      "entry_price_usd": 0.011413057151654,
-      "peak_price_usd": 0.01156203020502,
-      "amount_usd": 27.26080132492382,
-      "qty": 2379.6835257162593,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
       "network": "solana",
       "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
@@ -10288,6 +10275,25 @@
       "pnl_usd": 1.3398938638339715,
       "pnl_pct": 4.93,
       "exit_reason": "trailing_stop"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x0ab02e160f0df68dc049b012c514857306960eae",
+      "base_token_address": "0x11030f79109269d796fd0fb956d6244e502757f7",
+      "name": "CTR / USDC 0.002%",
+      "entry_ts": "2026-09-15T08:45:35.900061+00:00",
+      "entry_price_usd": 0.011413057151654,
+      "peak_price_usd": 0.01156203020502,
+      "amount_usd": 27.26080132492382,
+      "qty": 2379.6835257162593,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-15T14:56:00.210084+00:00",
+      "exit_price_usd": 0.0111572646480415,
+      "proceeds_usd": 26.449463333301335,
+      "pnl_usd": -0.8113379916224837,
+      "pnl_pct": -2.98,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -10393,6 +10399,7 @@
     "bsc_0x76c42dda1de814ac60951c2c89c77dbecfb86ffb": "2026-09-15T09:16:31.493983+00:00",
     "solana_Q2sPHPdUWFMg7M7wwrQKLrn619cAucfRsmhVJffodSp": "2026-09-15T11:36:00.606607+00:00",
     "arbitrum_0x299c7d6f2ef82cb52b2ab83b14f05c6b2b803aba": "2026-09-15T12:36:12.456276+00:00",
-    "solana_nEnhtdXrHocxDQnmfTWgaLodJP8jxFbY6958iv28GzV": "2026-09-15T14:31:19.630040+00:00"
+    "solana_nEnhtdXrHocxDQnmfTWgaLodJP8jxFbY6958iv28GzV": "2026-09-15T14:31:19.630040+00:00",
+    "base_0x0ab02e160f0df68dc049b012c514857306960eae": "2026-09-15T14:56:00.210084+00:00"
   }
 }
