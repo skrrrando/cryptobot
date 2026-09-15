@@ -8754,16 +8754,12 @@
     "is_mintable": false,
     "is_blacklisted": false,
     "owner_creator_pct": 0.0,
-    "buy_tax_pct": 0.0,
-    "sell_tax_pct": 0.0,
+    "buy_tax_pct": 3.0,
+    "sell_tax_pct": 3.0,
     "honeypot_with_same_creator": false,
     "holder_count": 11314,
-    "whale_buyer_pct": 87.5,
+    "whale_buyer_pct": 53.8,
     "holder_count_history": [
-      {
-        "ts": 1789397445.152152,
-        "holder_count": 11253
-      },
       {
         "ts": 1789403160.4701319,
         "holder_count": 11255
@@ -8799,10 +8795,14 @@
       {
         "ts": 1789500662.072761,
         "holder_count": 11314
+      },
+      {
+        "ts": 1789502467.442629,
+        "holder_count": 11314
       }
     ],
     "holder_growth_pct": 0.5,
-    "checked_at": 1789500662.072761
+    "checked_at": 1789502467.442629
   },
   "0x06f7aeabc9c37d457922a9368f291c5d57c07777": {
     "passed": true,
@@ -11452,5 +11452,25 @@
     ],
     "holder_growth_pct": null,
     "checked_at": 1789494640.436636
+  },
+  "0xb1f1ee126e9c96231cc3d3fad7c08b4cf873b1f1": {
+    "passed": false,
+    "is_honeypot": false,
+    "is_mintable": false,
+    "is_blacklisted": false,
+    "owner_creator_pct": 0.0,
+    "buy_tax_pct": 0.0,
+    "sell_tax_pct": 0.0,
+    "honeypot_with_same_creator": true,
+    "holder_count": 2285,
+    "whale_buyer_pct": null,
+    "holder_count_history": [
+      {
+        "ts": 1789502469.177761,
+        "holder_count": 2285
+      }
+    ],
+    "holder_growth_pct": null,
+    "checked_at": 1789502469.177761
   }
 }
