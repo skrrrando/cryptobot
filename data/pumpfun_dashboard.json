@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-16T00:50:35.770457+00:00",
-  "balance": 736.63,
-  "positions_value": 19.52,
-  "net_worth": 756.15,
+  "timestamp": "2026-09-16T00:55:26.962784+00:00",
+  "balance": 716.63,
+  "positions_value": 21.58,
+  "net_worth": 738.21,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "culture",
       "entry_ts": "2026-09-16T00:50:35.770457+00:00",
       "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
+      "value_usd": 2.08,
+      "pnl_pct": -89.6,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 73.25,
-      "graduation_pct": 73.25,
+      "graduation_pct": 0.05,
+      "graduated": false
+    },
+    {
+      "mint": "8P4hKQ2Bg6DospeWyTxKM9A2eGRDjA28jxLX66yLUmzn",
+      "name": "ALXMONEY",
+      "symbol": "ALXMONEY",
+      "entry_ts": "2026-09-16T00:55:26.962784+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.27,
+      "entry_graduation_pct": 59.11,
+      "graduation_pct": 59.11,
       "graduated": false
     }
   ],
@@ -503,6 +516,16 @@
   ],
   "watching": [
     {
+      "mint": "8P4hKQ2Bg6DospeWyTxKM9A2eGRDjA28jxLX66yLUmzn",
+      "name": "ALXMONEY",
+      "symbol": "ALXMONEY",
+      "decision": "buy",
+      "signal_ts": "2026-09-16T00:55:26.962784+00:00",
+      "alert_score": 92.7,
+      "alert_graduation_pct": 59.11,
+      "graduation_pct": 59.11
+    },
+    {
       "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
       "name": "Culture Dog",
       "symbol": "culture",
@@ -510,7 +533,7 @@
       "signal_ts": "2026-09-16T00:50:35.770457+00:00",
       "alert_score": 94.9,
       "alert_graduation_pct": 73.25,
-      "graduation_pct": 73.25
+      "graduation_pct": 0.05
     }
   ],
   "history": [
@@ -945,7 +968,7 @@
     }
   ],
   "stats": {
-    "alerts": 41,
+    "alerts": 42,
     "graduated": 10,
     "did_not_graduate": 23,
     "buy_graduated": 6,
