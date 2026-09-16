@@ -1,19 +1,6 @@
 {
-  "balance": 17.24891492168719,
+  "balance": 35.75364304946504,
   "positions": {
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
-      "network": "solana",
-      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
-      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
-      "name": "OTC / SOL",
-      "entry_ts": "2026-09-16T09:10:34.092127+00:00",
-      "entry_price_usd": 0.004673813386960464,
-      "peak_price_usd": 0.004673813386960464,
-      "amount_usd": 22.588249666150336,
-      "qty": 4828.347716751366,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888": {
       "network": "base",
       "pool_address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
@@ -138,7 +125,7 @@
       "name": "ALLINU / DKNG",
       "entry_ts": "2026-09-16T14:55:26.937413+00:00",
       "entry_price_usd": 0.02335548785685864,
-      "peak_price_usd": 0.0233732426650736,
+      "peak_price_usd": 0.02709337185747895,
       "amount_usd": 22.259857329041605,
       "qty": 952.1914040448556,
       "sell_tax_pct": 0.0,
@@ -11219,10 +11206,29 @@
       "pnl_usd": -2.901960136702769,
       "pnl_pct": -12.82,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
+      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
+      "name": "OTC / SOL",
+      "entry_ts": "2026-09-16T09:10:34.092127+00:00",
+      "entry_price_usd": 0.004673813386960464,
+      "peak_price_usd": 0.004673813386960464,
+      "amount_usd": 22.588249666150336,
+      "qty": 4828.347716751366,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-16T15:16:41.533951+00:00",
+      "exit_price_usd": 0.0038368849231660467,
+      "proceeds_usd": 18.504728127777845,
+      "pnl_usd": -4.083521538372491,
+      "pnl_pct": -18.08,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": "2026-09-16T03:16:39.826950+00:00",
+    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": "2026-09-16T15:16:41.533951+00:00",
     "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": "2026-09-10T07:22:02.175591+00:00",
     "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e": "2026-09-12T03:06:24.877296+00:00",
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": "2026-09-15T02:31:36.249392+00:00",
