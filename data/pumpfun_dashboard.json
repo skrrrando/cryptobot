@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-16T00:55:26.962784+00:00",
-  "balance": 716.63,
-  "positions_value": 21.58,
-  "net_worth": 738.21,
+  "timestamp": "2026-09-16T01:00:59.025092+00:00",
+  "balance": 696.63,
+  "positions_value": 43.92,
+  "net_worth": 740.55,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "culture",
       "entry_ts": "2026-09-16T00:50:35.770457+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.08,
-      "pnl_pct": -89.6,
+      "value_usd": 2.12,
+      "pnl_pct": -89.4,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 73.25,
-      "graduation_pct": 0.05,
+      "graduation_pct": 0.39,
       "graduated": false
     },
     {
@@ -24,11 +24,24 @@
       "symbol": "ALXMONEY",
       "entry_ts": "2026-09-16T00:55:26.962784+00:00",
       "amount_usd": 20.0,
+      "value_usd": 22.3,
+      "pnl_pct": 11.5,
+      "entry_slippage_pct": 1.27,
+      "entry_graduation_pct": 59.11,
+      "graduation_pct": 65.55,
+      "graduated": false
+    },
+    {
+      "mint": "6T1YJrNksBSs7vAeAnL7WpRzZmkiFxEqUuzWwhWzh1Qi",
+      "name": "xmonkey",
+      "symbol": "XMONKEY",
+      "entry_ts": "2026-09-16T01:00:59.025092+00:00",
+      "amount_usd": 20.0,
       "value_usd": 19.5,
       "pnl_pct": -2.5,
       "entry_slippage_pct": 1.27,
-      "entry_graduation_pct": 59.11,
-      "graduation_pct": 59.11,
+      "entry_graduation_pct": 57.61,
+      "graduation_pct": 57.61,
       "graduated": false
     }
   ],
@@ -523,7 +536,17 @@
       "signal_ts": "2026-09-16T00:55:26.962784+00:00",
       "alert_score": 92.7,
       "alert_graduation_pct": 59.11,
-      "graduation_pct": 59.11
+      "graduation_pct": 65.55
+    },
+    {
+      "mint": "6T1YJrNksBSs7vAeAnL7WpRzZmkiFxEqUuzWwhWzh1Qi",
+      "name": "xmonkey",
+      "symbol": "XMONKEY",
+      "decision": "buy",
+      "signal_ts": "2026-09-16T01:00:59.025092+00:00",
+      "alert_score": 92.6,
+      "alert_graduation_pct": 57.61,
+      "graduation_pct": 57.61
     },
     {
       "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
@@ -533,7 +556,7 @@
       "signal_ts": "2026-09-16T00:50:35.770457+00:00",
       "alert_score": 94.9,
       "alert_graduation_pct": 73.25,
-      "graduation_pct": 0.05
+      "graduation_pct": 0.39
     }
   ],
   "history": [
@@ -968,7 +991,7 @@
     }
   ],
   "stats": {
-    "alerts": 42,
+    "alerts": 43,
     "graduated": 10,
     "did_not_graduate": 23,
     "buy_graduated": 6,
@@ -978,10 +1001,10 @@
     "graduation_rate_pct": 30.3
   },
   "shadow_stats": {
-    "tracked": 77,
-    "graduated": 215,
+    "tracked": 78,
+    "graduated": 216,
     "did_not_graduate": 1188,
-    "graduation_rate_pct": 15.3
+    "graduation_rate_pct": 15.4
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
