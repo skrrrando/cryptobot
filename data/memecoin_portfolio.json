@@ -1,19 +1,6 @@
 {
-  "balance": 11.06520143929174,
+  "balance": 34.072642382467826,
   "positions": {
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": {
-      "network": "solana",
-      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
-      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
-      "name": "OTC / SOL",
-      "entry_ts": "2026-09-15T21:15:34.711234+00:00",
-      "entry_price_usd": 0.00486649176946934,
-      "peak_price_usd": 0.004886376836622407,
-      "amount_usd": 25.787110574255916,
-      "qty": 5294.419265960692,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": {
       "network": "base",
       "pool_address": "0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c",
@@ -138,7 +125,7 @@
       "name": "WETH / USDC 0.05%",
       "entry_ts": "2026-09-16T03:05:24.979408+00:00",
       "entry_price_usd": 2404.28,
-      "peak_price_usd": 2404.28,
+      "peak_price_usd": 2405.17,
       "amount_usd": 24.379332246178862,
       "qty": 0.010098353309140405,
       "sell_tax_pct": 0.0,
@@ -10801,10 +10788,29 @@
       "pnl_usd": -0.2527418746960812,
       "pnl_pct": -0.98,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt",
+      "base_token_address": "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump",
+      "name": "OTC / SOL",
+      "entry_ts": "2026-09-15T21:15:34.711234+00:00",
+      "entry_price_usd": 0.00486649176946934,
+      "peak_price_usd": 0.004886376836622407,
+      "amount_usd": 25.787110574255916,
+      "qty": 5294.419265960692,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-16T03:16:39.826950+00:00",
+      "exit_price_usd": 0.004349677775776237,
+      "proceeds_usd": 23.007440943176086,
+      "pnl_usd": -2.7796696310798303,
+      "pnl_pct": -10.78,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
-    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": "2026-09-15T15:05:45.320444+00:00",
+    "solana_DA4pM4xSDY4M9V4CgAKKBVH1pw1yscTQQa5nEkGHuKpt": "2026-09-16T03:16:39.826950+00:00",
     "solana_7t477j7S8SDcdg1pzCSvjRjYK3nPc14FmrbzPYTjfHYs": "2026-09-10T07:22:02.175591+00:00",
     "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e": "2026-09-12T03:06:24.877296+00:00",
     "base_0xafe30319a948f322585fafc1cab1671a47eb3786": "2026-09-15T02:31:36.249392+00:00",
