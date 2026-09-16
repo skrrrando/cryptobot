@@ -1,34 +1,21 @@
 {
-  "timestamp": "2026-09-16T06:45:34.264411+00:00",
-  "balance": 676.63,
-  "positions_value": 16.51,
-  "net_worth": 693.14,
+  "timestamp": "2026-09-16T06:54:42.221393+00:00",
+  "balance": 678.69,
+  "positions_value": 13.57,
+  "net_worth": 692.26,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
-      "name": "Culture Dog",
-      "symbol": "culture",
-      "entry_ts": "2026-09-16T00:50:35.770457+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.08,
-      "pnl_pct": -89.6,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 73.25,
-      "graduation_pct": 0.03,
-      "graduated": false
-    },
     {
       "mint": "8P4hKQ2Bg6DospeWyTxKM9A2eGRDjA28jxLX66yLUmzn",
       "name": "ALXMONEY",
       "symbol": "ALXMONEY",
       "entry_ts": "2026-09-16T00:55:26.962784+00:00",
       "amount_usd": 20.0,
-      "value_usd": 5.11,
-      "pnl_pct": -74.45,
+      "value_usd": 4.63,
+      "pnl_pct": -76.85,
       "entry_slippage_pct": 1.27,
       "entry_graduation_pct": 59.11,
-      "graduation_pct": 13.0,
+      "graduation_pct": 10.63,
       "graduated": false
     },
     {
@@ -50,11 +37,11 @@
       "symbol": "MARIO",
       "entry_ts": "2026-09-16T01:21:11.583331+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.98,
-      "pnl_pct": -80.1,
+      "value_usd": 3.6,
+      "pnl_pct": -82.0,
       "entry_slippage_pct": 1.27,
       "entry_graduation_pct": 56.46,
-      "graduation_pct": 6.15,
+      "graduation_pct": 4.09,
       "graduated": false
     }
   ],
@@ -538,6 +525,26 @@
       "pnl_usd": 9.42,
       "pnl_pct": 47.08,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
+      "name": "Culture Dog",
+      "symbol": "culture",
+      "bonding_curve_key": "92aFKDNaKHshWuX94wGqoDyAyCSCiPJaaC86Vki2Ddky",
+      "entry_ts": "2026-09-16T00:50:35.770457+00:00",
+      "entry_price_usd": 2.5853370348095495e-05,
+      "entry_spot_price_usd": 2.5538082296409388e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 773593.528840363,
+      "entry_graduation_pct": 73.25,
+      "entry_score": 94.9,
+      "exit_ts": "2026-09-16T06:54:42.221413+00:00",
+      "exit_price_usd": 2.660735422836048e-06,
+      "proceeds_usd": 2.06,
+      "pnl_usd": -17.94,
+      "pnl_pct": -89.71,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -559,20 +566,23 @@
       "signal_ts": "2026-09-16T00:55:26.962784+00:00",
       "alert_score": 92.7,
       "alert_graduation_pct": 59.11,
-      "graduation_pct": 13.0
-    },
+      "graduation_pct": 10.63
+    }
+  ],
+  "history": [
     {
       "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
       "name": "Culture Dog",
       "symbol": "culture",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-09-16T00:50:35.770457+00:00",
+      "recorded_ts": "2026-09-16T06:54:42.221393+00:00",
       "alert_score": 94.9,
       "alert_graduation_pct": 73.25,
-      "graduation_pct": 0.03
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.03,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "FNGqSX4p8wnHHud4du4GdsDbKR3FpacaBcmLRf9jpump",
       "name": "Sydney Weenie",
@@ -1006,17 +1016,17 @@
   "stats": {
     "alerts": 44,
     "graduated": 10,
-    "did_not_graduate": 23,
+    "did_not_graduate": 24,
     "buy_graduated": 6,
-    "buy_total": 19,
+    "buy_total": 20,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 30.3
+    "graduation_rate_pct": 29.4
   },
   "shadow_stats": {
-    "tracked": 54,
+    "tracked": 52,
     "graduated": 226,
-    "did_not_graduate": 1262,
+    "did_not_graduate": 1264,
     "graduation_rate_pct": 15.2
   },
   "daily_cap": 4,
