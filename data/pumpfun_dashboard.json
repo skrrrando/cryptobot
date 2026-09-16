@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-16T00:45:38.310759+00:00",
-  "balance": 756.63,
-  "positions_value": 0.0,
-  "net_worth": 756.63,
+  "timestamp": "2026-09-16T00:50:35.770457+00:00",
+  "balance": 736.63,
+  "positions_value": 19.52,
+  "net_worth": 756.15,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
+      "name": "Culture Dog",
+      "symbol": "culture",
+      "entry_ts": "2026-09-16T00:50:35.770457+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 73.25,
+      "graduation_pct": 73.25,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "FAtf1QNvt9gsmkHQG6bz1gUpMTny1vFua8HrSgchpump",
@@ -487,7 +501,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
+      "name": "Culture Dog",
+      "symbol": "culture",
+      "decision": "buy",
+      "signal_ts": "2026-09-16T00:50:35.770457+00:00",
+      "alert_score": 94.9,
+      "alert_graduation_pct": 73.25,
+      "graduation_pct": 73.25
+    }
+  ],
   "history": [
     {
       "mint": "FNGqSX4p8wnHHud4du4GdsDbKR3FpacaBcmLRf9jpump",
@@ -920,7 +945,7 @@
     }
   ],
   "stats": {
-    "alerts": 40,
+    "alerts": 41,
     "graduated": 10,
     "did_not_graduate": 23,
     "buy_graduated": 6,
@@ -932,7 +957,7 @@
   "shadow_stats": {
     "tracked": 77,
     "graduated": 215,
-    "did_not_graduate": 1187,
+    "did_not_graduate": 1188,
     "graduation_rate_pct": 15.3
   },
   "daily_cap": 4,
