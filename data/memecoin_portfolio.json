@@ -1,19 +1,6 @@
 {
-  "balance": 38.13324880390147,
+  "balance": 39.21544234786748,
   "positions": {
-    "solana_FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q": {
-      "network": "solana",
-      "pool_address": "FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q",
-      "base_token_address": "So11111111111111111111111111111111111111112",
-      "name": "SOL / USDC",
-      "entry_ts": "2026-09-16T15:55:29.561648+00:00",
-      "entry_price_usd": 97.3869256961519,
-      "peak_price_usd": 98.68266686440319,
-      "amount_usd": 22.072718085686095,
-      "qty": 0.22640593893141833,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "solana_HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3": {
       "network": "solana",
       "pool_address": "HMzvsEEmtzHhvZNw9uwbaG85HCTmFnkbhzUx16cy7ca3",
@@ -128,6 +115,19 @@
       "peak_price_usd": 0.21749180650084,
       "amount_usd": 21.082677731991993,
       "qty": 96.5107047665968,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "base_0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31": {
+      "network": "base",
+      "pool_address": "0x566bee7ef7b39f29d150ab3be6b6242c17cc5a31",
+      "base_token_address": "0xfb31f85a8367210b2e4ed2360d2da9dc2d2ccc95",
+      "name": "EDEL / WETH",
+      "entry_ts": "2026-09-16T21:55:26.144348+00:00",
+      "entry_price_usd": 0.0265475796063039,
+      "peak_price_usd": 0.0265475796063039,
+      "amount_usd": 21.08851506663845,
+      "qty": 790.5834566488342,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -11510,6 +11510,25 @@
       "pnl_usd": 0.07004801575748232,
       "pnl_pct": 0.32,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q",
+      "base_token_address": "So11111111111111111111111111111111111111112",
+      "name": "SOL / USDC",
+      "entry_ts": "2026-09-16T15:55:29.561648+00:00",
+      "entry_price_usd": 97.3869256961519,
+      "peak_price_usd": 98.68266686440319,
+      "amount_usd": 22.072718085686095,
+      "qty": 0.22640593893141833,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-16T21:56:30.773460+00:00",
+      "exit_price_usd": 98.02957331344062,
+      "proceeds_usd": 22.17070861060446,
+      "pnl_usd": 0.0979905249183659,
+      "pnl_pct": 0.44,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -11624,7 +11643,7 @@
     "solana_6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC": "2026-09-15T23:16:11.020133+00:00",
     "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": "2026-09-16T15:41:27.998198+00:00",
     "solana_5752ia7jC3ZU1c8ycytaSyi5D4nVhApSKvreGbs7pwWL": "2026-09-16T15:26:16.408300+00:00",
-    "solana_FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q": "2026-09-16T13:41:28.599346+00:00",
+    "solana_FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q": "2026-09-16T21:56:30.773460+00:00",
     "solana_6tuhHpYSinf41V39KW3JmpVUaxehcabCbHZqqFnwR6xf": "2026-09-16T21:41:50.626155+00:00",
     "solana_DAbSqjHryfMDqN6Vj4YF28SSmZftHBYzueM8ykTyQPHZ": "2026-09-16T16:16:24.331326+00:00"
   }
