@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-09-16T23:47:18.799274+00:00",
+  "timestamp": "2026-09-16T23:53:36.628133+00:00",
   "candidates": [
     {
       "id": "solana_zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "solana",
       "name": "STONK / SOL",
       "address": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
@@ -49,11 +49,11 @@
         "sellers": 2
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     },
     {
       "id": "base_0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "base",
       "name": "WETH / USDC 0.3%",
       "address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
@@ -61,7 +61,7 @@
       "rank": 2,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.050000000000000044,
+        "h1_accel": 0.3330000000000001,
         "history_len": 20
       },
       "security": {
@@ -121,34 +121,129 @@
         "checked_at": 1789602336.3227644
       },
       "price_change_pct": {
-        "m5": "0.146",
-        "m15": "0.198",
-        "m30": "0.844",
-        "h1": "0.869",
-        "h6": "1.881",
-        "h24": "0.689"
+        "m5": "0.002",
+        "m15": "0.26",
+        "m30": "0.522",
+        "h1": "1.08",
+        "h6": "1.883",
+        "h24": "0.816"
       },
       "volume_usd": {
-        "m5": "1818945.40035487",
-        "m15": "2334523.26753388",
-        "m30": "6324534.78572308",
-        "h1": "6350304.43765103",
-        "h6": "94980143.6219341",
-        "h24": "136261435.633981"
+        "m5": "5768.2478784702",
+        "m15": "1974698.26636717",
+        "m30": "4435172.49227157",
+        "h1": "6354948.31726864",
+        "h6": "94890536.1898225",
+        "h24": "136265268.885245"
       },
-      "market_cap_usd": 624907299.946251,
+      "market_cap_usd": 625416721.191345,
       "transactions_h1": {
-        "buys": 367,
-        "sells": 33,
-        "buyers": 219,
-        "sellers": 25
+        "buys": 364,
+        "sells": 34,
+        "buyers": 213,
+        "sellers": 26
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
+    },
+    {
+      "id": "base_0xafe30319a948f322585fafc1cab1671a47eb3786",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
+      "network": "base",
+      "name": "FLOWER / USDC 0.3%",
+      "address": "0xafe30319a948f322585fafc1cab1671a47eb3786",
+      "base_token_address": "0x3e12b9d6a4d12cd9b4a6d613872d0eb32f68b380",
+      "rank": 6,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.20100000000000007,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 1.3,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 9209,
+        "whale_buyer_pct": 73.4,
+        "holder_count_history": [
+          {
+            "ts": 1789321234.9445238,
+            "holder_count": 9215
+          },
+          {
+            "ts": 1789338332.792002,
+            "holder_count": 9209
+          },
+          {
+            "ts": 1789411240.1338525,
+            "holder_count": 9197
+          },
+          {
+            "ts": 1789413339.4526155,
+            "holder_count": 9197
+          },
+          {
+            "ts": 1789418443.3307273,
+            "holder_count": 9211
+          },
+          {
+            "ts": 1789566037.828118,
+            "holder_count": 9221
+          },
+          {
+            "ts": 1789568768.0831897,
+            "holder_count": 9221
+          },
+          {
+            "ts": 1789571738.8409781,
+            "holder_count": 9221
+          },
+          {
+            "ts": 1789593041.0979884,
+            "holder_count": 9212
+          },
+          {
+            "ts": 1789602637.723884,
+            "holder_count": 9209
+          }
+        ],
+        "holder_growth_pct": -0.1,
+        "checked_at": 1789602637.723884
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "0.509",
+        "m30": "-0.073",
+        "h1": "1.189",
+        "h6": "2.083",
+        "h24": "-4.566"
+      },
+      "volume_usd": {
+        "m5": "0.0",
+        "m15": "78.4215534793",
+        "m30": "113.5071608579",
+        "h1": "691.4545929944",
+        "h6": "4487.3450440438",
+        "h24": "64507.4459517756"
+      },
+      "market_cap_usd": 3535019.15228847,
+      "transactions_h1": {
+        "buys": 10,
+        "sells": 9,
+        "buyers": 9,
+        "sellers": 8
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": 0.542
     },
     {
       "id": "base_0x1131db5977242a03ebead1acd18f80a9a29e5922",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "base",
       "name": "SOL / USDC 0.031%",
       "address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
@@ -156,7 +251,7 @@
       "rank": 19,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.589,
+        "h1_accel": 0.8119999999999998,
         "history_len": 20
       },
       "security": {
@@ -216,34 +311,34 @@
         "checked_at": 1789601129.488418
       },
       "price_change_pct": {
-        "m5": "0.624",
-        "m15": "0.794",
-        "m30": "1.006",
-        "h1": "1.83",
-        "h6": "3.496",
-        "h24": "2.602"
+        "m5": "-0.033",
+        "m15": "0.85",
+        "m30": "1.03",
+        "h1": "2.022",
+        "h6": "2.946",
+        "h24": "2.16"
       },
       "volume_usd": {
-        "m5": "19767.9859899337",
-        "m15": "41429.9341355545",
-        "m30": "106613.587964226",
-        "h1": "194272.96876345",
-        "h6": "4171986.68469647",
-        "h24": "7674921.16053817"
+        "m5": "5961.9175781265",
+        "m15": "35286.3752499333",
+        "m30": "83189.4139541873",
+        "h1": "192317.428578134",
+        "h6": "4152888.58133899",
+        "h24": "7671912.3363211"
       },
-      "market_cap_usd": 4734914.33323578,
+      "market_cap_usd": 4734789.9908608,
       "transactions_h1": {
-        "buys": 205,
-        "sells": 122,
-        "buyers": 116,
-        "sellers": 87
+        "buys": 204,
+        "sells": 124,
+        "buyers": 115,
+        "sellers": 88
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     },
     {
       "id": "bsc_0x189fcfa548968cbd3b0118c2200f05db00d429f1",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "bsc",
       "name": "\u679c\u8747 / googlb",
       "address": "0x189fcfa548968cbd3b0118c2200f05db00d429f1",
@@ -251,7 +346,7 @@
       "rank": 3,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.0990000000000002,
+        "h1_accel": 3.987,
         "history_len": 20
       },
       "security": {
@@ -311,34 +406,34 @@
         "checked_at": 1789601462.8993793
       },
       "price_change_pct": {
-        "m5": "2.321",
-        "m15": "0.138",
-        "m30": "5.074",
-        "h1": "2.907",
-        "h6": "24.826",
-        "h24": "107.59"
+        "m5": "-0.655",
+        "m15": "1.051",
+        "m30": "1.715",
+        "h1": "1.905",
+        "h6": "19.592",
+        "h24": "117.595"
       },
       "volume_usd": {
-        "m5": "2644.0406889039",
-        "m15": "26096.7487496413",
-        "m30": "43047.6998639223",
-        "h1": "89181.1778288147",
-        "h6": "588737.968772368",
-        "h24": "7678466.17892366"
+        "m5": "2393.5909629808",
+        "m15": "19969.2932992971",
+        "m30": "40139.9015817507",
+        "h1": "83253.8915208218",
+        "h6": "588656.488248057",
+        "h24": "7651184.81219737"
       },
-      "market_cap_usd": 5299389.181,
+      "market_cap_usd": 5149268.972,
       "transactions_h1": {
-        "buys": 295,
-        "sells": 174,
-        "buyers": 213,
-        "sellers": 144
+        "buys": 265,
+        "sells": 178,
+        "buyers": 198,
+        "sellers": 147
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     },
     {
       "id": "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "bsc",
       "name": "$BANANA / WBNB 0.01%",
       "address": "0x7f51bbf34156ba802deb0e38b7671dc4fa32041d",
@@ -346,7 +441,7 @@
       "rank": 5,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.18799999999999994,
+        "h1_accel": 0.020999999999999908,
         "history_len": 20
       },
       "security": {
@@ -406,34 +501,129 @@
         "checked_at": 1789601472.327337
       },
       "price_change_pct": {
-        "m5": "0.166",
-        "m15": "0.462",
-        "m30": "1.194",
-        "h1": "1.508",
-        "h6": "3.324",
-        "h24": "0.136"
+        "m5": "-0.128",
+        "m15": "0.136",
+        "m30": "0.654",
+        "h1": "1.41",
+        "h6": "3.13",
+        "h24": "0.127"
       },
       "volume_usd": {
-        "m5": "4939.3689970982",
-        "m15": "16461.1783031338",
-        "m30": "32663.8548423104",
-        "h1": "52470.129240014",
-        "h6": "522698.702576314",
-        "h24": "1542583.95579776"
+        "m5": "3478.4640230971",
+        "m15": "12803.6315020962",
+        "m30": "29251.2486228808",
+        "h1": "53983.3972289304",
+        "h6": "518496.772475835",
+        "h24": "1542651.76250349"
       },
-      "market_cap_usd": 72785609.0,
+      "market_cap_usd": 72696811.19,
       "transactions_h1": {
-        "buys": 150,
-        "sells": 135,
-        "buyers": 119,
-        "sellers": 102
+        "buys": 155,
+        "sells": 140,
+        "buyers": 120,
+        "sellers": 103
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
+    },
+    {
+      "id": "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
+      "network": "bsc",
+      "name": "4 / WBNB",
+      "address": "0xf0a949d3d93b833c183a27ee067165b6f2c9625e",
+      "base_token_address": "0x0a43fc31a73013089df59194872ecae4cae14444",
+      "rank": 10,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.02999999999999936,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 143562,
+        "whale_buyer_pct": null,
+        "holder_count_history": [
+          {
+            "ts": 1789170342.9868462,
+            "holder_count": 102710
+          },
+          {
+            "ts": 1789181138.2539546,
+            "holder_count": 102712
+          },
+          {
+            "ts": 1789183239.4042096,
+            "holder_count": 102712
+          },
+          {
+            "ts": 1789185670.383882,
+            "holder_count": 102712
+          },
+          {
+            "ts": 1789195249.3168807,
+            "holder_count": 102783
+          },
+          {
+            "ts": 1789203939.8779051,
+            "holder_count": 102809
+          },
+          {
+            "ts": 1789207264.8002155,
+            "holder_count": 102810
+          },
+          {
+            "ts": 1789209640.0624242,
+            "holder_count": 102810
+          },
+          {
+            "ts": 1789572338.007778,
+            "holder_count": 143556
+          },
+          {
+            "ts": 1789602642.4202595,
+            "holder_count": 143562
+          }
+        ],
+        "holder_growth_pct": 39.8,
+        "checked_at": 1789602642.4202595
+      },
+      "price_change_pct": {
+        "m5": "0.378",
+        "m15": "0.35",
+        "m30": "2.499",
+        "h1": "4.137",
+        "h6": "0.228",
+        "h24": "1.128"
+      },
+      "volume_usd": {
+        "m5": "1839.8215229844",
+        "m15": "4940.2605565165",
+        "m30": "14367.0172416744",
+        "h1": "21838.2937385896",
+        "h6": "201195.009080928",
+        "h24": "1512666.25907077"
+      },
+      "market_cap_usd": 21940468.56,
+      "transactions_h1": {
+        "buys": 145,
+        "sells": 94,
+        "buyers": 76,
+        "sellers": 73
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": 0.542
     },
     {
       "id": "eth_0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "eth",
       "name": "LIT / USDC 0.3%",
       "address": "0x8366b1dde4de12c8806985fbb599d408d92d01a6faf2e478cc6bb76189cc00f1",
@@ -441,7 +631,7 @@
       "rank": 8,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.7169999999999996,
+        "h1_accel": 0.33099999999999996,
         "history_len": 20
       },
       "security": {
@@ -454,12 +644,8 @@
         "sell_tax_pct": 0.0,
         "honeypot_with_same_creator": false,
         "holder_count": 8684,
-        "whale_buyer_pct": 18.9,
+        "whale_buyer_pct": 14.5,
         "holder_count_history": [
-          {
-            "ts": 1789541163.9427388,
-            "holder_count": 8625
-          },
           {
             "ts": 1789549539.9368367,
             "holder_count": 8615
@@ -495,40 +681,44 @@
           {
             "ts": 1789600544.4160345,
             "holder_count": 8684
+          },
+          {
+            "ts": 1789602664.4180083,
+            "holder_count": 8684
           }
         ],
-        "holder_growth_pct": 0.7,
-        "checked_at": 1789600544.4160345
+        "holder_growth_pct": 0.8,
+        "checked_at": 1789602664.4180083
       },
       "price_change_pct": {
-        "m5": "0.561",
-        "m15": "1.555",
-        "m30": "2.833",
-        "h1": "3.006",
-        "h6": "8.016",
-        "h24": "15.171"
+        "m5": "-0.592",
+        "m15": "-0.051",
+        "m30": "1.376",
+        "h1": "2.331",
+        "h6": "7.354",
+        "h24": "14.417"
       },
       "volume_usd": {
-        "m5": "3072.944712253",
-        "m15": "7379.3240859984",
-        "m30": "23172.3729799017",
-        "h1": "39326.2316667939",
-        "h6": "1128522.45141577",
-        "h24": "2729875.87003685"
+        "m5": "5185.2008068503",
+        "m15": "9632.2856774556",
+        "m30": "21311.2155460493",
+        "h1": "44511.4324736442",
+        "h6": "1122554.81650984",
+        "h24": "2735061.0708437"
       },
-      "market_cap_usd": 1168061859.875,
+      "market_cap_usd": 1160409932.55,
       "transactions_h1": {
-        "buys": 36,
-        "sells": 15,
-        "buyers": 23,
-        "sellers": 12
+        "buys": 42,
+        "sells": 21,
+        "buyers": 24,
+        "sellers": 15
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     },
     {
       "id": "eth_0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "eth",
       "name": "LINK / WETH 0.3%",
       "address": "0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8",
@@ -536,7 +726,7 @@
       "rank": 9,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.32899999999999996,
+        "h1_accel": 0.43300000000000005,
         "history_len": 20
       },
       "security": {
@@ -596,34 +786,34 @@
         "checked_at": 1789602044.1000013
       },
       "price_change_pct": {
-        "m5": "0.107",
-        "m15": "0.286",
-        "m30": "0.974",
-        "h1": "1.765",
-        "h6": "4.172",
-        "h24": "1.35"
+        "m5": "0.053",
+        "m15": "0.479",
+        "m30": "1.215",
+        "h1": "2.008",
+        "h6": "4.545",
+        "h24": "1.591"
       },
       "volume_usd": {
-        "m5": "22191.3942696935",
-        "m15": "60375.8817570359",
-        "m30": "60375.9081181644",
-        "h1": "60376.0187281395",
-        "h6": "527925.317637254",
-        "h24": "1280889.61725821"
+        "m5": "8379.9899184225",
+        "m15": "57722.509392566",
+        "m30": "70131.731177638",
+        "h1": "70131.8417876131",
+        "h6": "537681.091954107",
+        "h24": "1290645.44031769"
       },
-      "market_cap_usd": 8256881080.46358,
+      "market_cap_usd": 8276558573.85225,
       "transactions_h1": {
-        "buys": 12,
+        "buys": 16,
         "sells": 5,
-        "buyers": 11,
+        "buyers": 15,
         "sellers": 5
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     },
     {
       "id": "eth_0xa4990fece7df531b24eaf855f120ae19cce22a8b",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "eth",
       "name": "ABU / WETH",
       "address": "0xa4990fece7df531b24eaf855f120ae19cce22a8b",
@@ -631,7 +821,7 @@
       "rank": 13,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 4.2989999999999995,
+        "h1_accel": 4.420999999999999,
         "history_len": 20
       },
       "security": {
@@ -691,42 +881,137 @@
         "checked_at": 1789601488.1331117
       },
       "price_change_pct": {
-        "m5": "1.5",
-        "m15": "3.584",
-        "m30": "3.584",
-        "h1": "5.954",
-        "h6": "17.452",
-        "h24": "-51.64"
+        "m5": "0.719",
+        "m15": "1.987",
+        "m30": "4.081",
+        "h1": "6.71",
+        "h6": "15.746",
+        "h24": "-50.298"
       },
       "volume_usd": {
-        "m5": "263.0810931684",
-        "m15": "284.7604911609",
-        "m30": "284.7604911609",
-        "h1": "578.6518948384",
-        "h6": "53271.5473766309",
-        "h24": "98666.6059664057"
+        "m5": "52.0432651783",
+        "m15": "315.1243583466",
+        "m30": "336.8037563391",
+        "h1": "528.4313336963",
+        "h6": "53166.393468774",
+        "h24": "98565.9236420001"
       },
-      "market_cap_usd": 92118.905,
+      "market_cap_usd": 92560.91725,
       "transactions_h1": {
-        "buys": 8,
+        "buys": 9,
         "sells": 2,
-        "buyers": 7,
+        "buyers": 8,
         "sellers": 2
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
+    },
+    {
+      "id": "eth_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
+      "network": "eth",
+      "name": "WETH / USDT 0.3%",
+      "address": "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36",
+      "base_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "rank": 16,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.14700000000000002,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 3668193,
+        "whale_buyer_pct": null,
+        "holder_count_history": [
+          {
+            "ts": 1789528862.3060987,
+            "holder_count": 3667964
+          },
+          {
+            "ts": 1789531874.6251373,
+            "holder_count": 3667962
+          },
+          {
+            "ts": 1789534263.1965034,
+            "holder_count": 3667958
+          },
+          {
+            "ts": 1789537840.69295,
+            "holder_count": 3667987
+          },
+          {
+            "ts": 1789543245.8928955,
+            "holder_count": 3667982
+          },
+          {
+            "ts": 1789555863.9820068,
+            "holder_count": 3668055
+          },
+          {
+            "ts": 1789558548.3421834,
+            "holder_count": 3668055
+          },
+          {
+            "ts": 1789589765.2104087,
+            "holder_count": 3668121
+          },
+          {
+            "ts": 1789600847.6663752,
+            "holder_count": 3668193
+          },
+          {
+            "ts": 1789602675.1537983,
+            "holder_count": 3668193
+          }
+        ],
+        "holder_growth_pct": 0.0,
+        "checked_at": 1789602675.1537983
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "0.091",
+        "m30": "0.461",
+        "h1": "0.919",
+        "h6": "1.807",
+        "h24": "0.637"
+      },
+      "volume_usd": {
+        "m5": "0.0",
+        "m15": "1125883.15249541",
+        "m30": "2418868.80881967",
+        "h1": "3380318.99233056",
+        "h6": "45650286.7749443",
+        "h24": "65382526.6788157"
+      },
+      "market_cap_usd": 5109019565.3791,
+      "transactions_h1": {
+        "buys": 39,
+        "sells": 2,
+        "buyers": 26,
+        "sellers": 2
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": 0.542
     },
     {
       "id": "arbitrum_0x17e073f0fb07b904c3db4fdb1e5b711ae5defb10cf0c27626784d68b0f128c55",
-      "timestamp": "2026-09-16T23:45:32.965714+00:00",
+      "timestamp": "2026-09-16T23:50:34.448940+00:00",
       "network": "arbitrum",
       "name": "RHUB / ARB 0.3%",
       "address": "0x17e073f0fb07b904c3db4fdb1e5b711ae5defb10cf0c27626784d68b0f128c55",
       "base_token_address": "0x8bc265393fa781105d0308f46023014b7cc5441d",
       "rank": 9,
       "features": {
-        "rank_velocity": 1,
-        "h1_accel": 0.01200000000000001,
+        "rank_velocity": 0,
+        "h1_accel": 0.32800000000000007,
         "history_len": 20
       },
       "security": {
@@ -787,29 +1072,29 @@
       },
       "price_change_pct": {
         "m5": "0",
-        "m15": "0",
-        "m30": "0.536",
-        "h1": "1.856",
-        "h6": "5.188",
-        "h24": "-16.282"
+        "m15": "1.09",
+        "m30": "1.09",
+        "h1": "2.172",
+        "h6": "6.335",
+        "h24": "-15.369"
       },
       "volume_usd": {
-        "m5": "14.764760264",
-        "m15": "14.764760264",
-        "m30": "24.7047517592",
-        "h1": "1042.7855121147",
-        "h6": "13079.6086166779",
-        "h24": "62830.8963247447"
+        "m5": "100.1205367089",
+        "m15": "114.8852969729",
+        "m30": "114.8852969729",
+        "h1": "851.6782926972",
+        "h6": "13179.7291533868",
+        "h24": "62931.0168614537"
       },
-      "market_cap_usd": 895243.424704015,
+      "market_cap_usd": 905005.424263117,
       "transactions_h1": {
-        "buys": 6,
+        "buys": 5,
         "sells": 1,
         "buyers": 5,
         "sellers": 1
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.611
+      "sol_h1": 0.542
     }
   ]
 }
