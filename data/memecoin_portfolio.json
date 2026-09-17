@@ -1,19 +1,6 @@
 {
-  "balance": 1.265211885278422,
+  "balance": 40.07878942979444,
   "positions": {
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": {
-      "network": "base",
-      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
-      "base_token_address": "0x4200000000000000000000000000000000000006",
-      "name": "WETH / USDC 0.3%",
-      "entry_ts": "2026-09-16T18:45:32.088705+00:00",
-      "entry_price_usd": 2411.54,
-      "peak_price_usd": 2424.38,
-      "amount_usd": 21.136812142631126,
-      "qty": 0.008723391934852786,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "base_0x72ab388e2e2f6facef59e3c3fa2c4e29011c2d38": {
       "network": "base",
       "pool_address": "0x72ab388e2e2f6facef59e3c3fa2c4e29011c2d38",
@@ -105,19 +92,6 @@
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     },
-    "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": {
-      "network": "solana",
-      "pool_address": "6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA",
-      "base_token_address": "98kfF7rmsg1QDUEoCqNE7g7M1FdrTt92TEp2CLzypump",
-      "name": "PAID / SOL",
-      "entry_ts": "2026-09-16T23:01:00.606680+00:00",
-      "entry_price_usd": 0.01319020659989138,
-      "peak_price_usd": 0.013544246414919888,
-      "amount_usd": 21.452610094126396,
-      "qty": 1624.8104243540736,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": {
       "network": "bsc",
       "pool_address": "0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16",
@@ -125,7 +99,7 @@
       "name": "MarsCoin / USDT 0.25%",
       "entry_ts": "2026-09-16T23:25:26.263264+00:00",
       "entry_price_usd": 0.0898631369994025,
-      "peak_price_usd": 0.0937862755907822,
+      "peak_price_usd": 0.0995867185755212,
       "amount_usd": 21.531887590732918,
       "qty": 237.9181889237596,
       "sell_tax_pct": 0.0,
@@ -11650,6 +11624,44 @@
       "pnl_usd": -1.7786345013044418,
       "pnl_pct": -8.33,
       "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x6c561b446416e1a00e8e93e221854d6ea4171372",
+      "base_token_address": "0x4200000000000000000000000000000000000006",
+      "name": "WETH / USDC 0.3%",
+      "entry_ts": "2026-09-16T18:45:32.088705+00:00",
+      "entry_price_usd": 2411.54,
+      "peak_price_usd": 2424.38,
+      "amount_usd": 21.136812142631126,
+      "qty": 0.008723391934852786,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-17T00:46:48.683268+00:00",
+      "exit_price_usd": 2423.54,
+      "proceeds_usd": 21.041485740625482,
+      "pnl_usd": -0.09532640200564302,
+      "pnl_pct": -0.45,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "solana",
+      "pool_address": "6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA",
+      "base_token_address": "98kfF7rmsg1QDUEoCqNE7g7M1FdrTt92TEp2CLzypump",
+      "name": "PAID / SOL",
+      "entry_ts": "2026-09-16T23:01:00.606680+00:00",
+      "entry_price_usd": 0.01319020659989138,
+      "peak_price_usd": 0.013544246414919888,
+      "amount_usd": 21.452610094126396,
+      "qty": 1624.8104243540736,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false,
+      "exit_ts": "2026-09-17T00:46:48.683268+00:00",
+      "exit_price_usd": 0.010950644888624322,
+      "proceeds_usd": 17.77209180389054,
+      "pnl_usd": -3.680518290235856,
+      "pnl_pct": -17.16,
+      "exit_reason": "momentum_collapse"
     }
   ],
   "recent_exits": {
@@ -11665,7 +11677,7 @@
     "bsc_0x3ea3f9a7b7edbfe0ba3568bfc0f30ba870b7553d": "2026-09-14T15:17:00.179246+00:00",
     "solana_9VcGzbpvLTy5EVt4f1h9NvfYfKSJwbJdhUuGkhVuXbw": "2026-09-10T12:16:36.602106+00:00",
     "bsc_0xa2b1926cb477e92445cf70602f1a7200361f761d": "2026-09-13T17:02:04.375835+00:00",
-    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": "2026-09-16T08:46:30.158329+00:00",
+    "base_0x6c561b446416e1a00e8e93e221854d6ea4171372": "2026-09-17T00:46:48.683268+00:00",
     "base_0x5116773e18a9c7bb03ebb961b38678e45e238923": "2026-09-16T13:41:28.599346+00:00",
     "arbitrum_0x184fb097196a4e2be8dfd44b341cb7d13b41ea7e": "2026-09-08T13:17:12.777256+00:00",
     "solana_AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg": "2026-09-11T07:16:48.874466+00:00",
@@ -11762,7 +11774,7 @@
     "arbitrum_0x17e073f0fb07b904c3db4fdb1e5b711ae5defb10cf0c27626784d68b0f128c55": "2026-09-15T21:10:52.035818+00:00",
     "solana_BNpwtuYGve7G1v2NFaRQVCFvcU4CzjvwAmdUxEVQYvrd": "2026-09-15T21:25:46.762535+00:00",
     "solana_6xRJbNNwpZxQ7kSgufpiJbKFvR2j3pGbRcHkKjnWphAC": "2026-09-15T23:16:11.020133+00:00",
-    "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": "2026-09-16T15:41:27.998198+00:00",
+    "solana_6e3jZLtf4tQbWZm3f7A66jF8tfZn6MRQVrbDFgcNWarA": "2026-09-17T00:46:48.683268+00:00",
     "solana_5752ia7jC3ZU1c8ycytaSyi5D4nVhApSKvreGbs7pwWL": "2026-09-16T15:26:16.408300+00:00",
     "solana_FpCMFDFGYotvufJ7HrFHsWEiiQCGbkLCtwHiDnh7o28Q": "2026-09-16T21:56:30.773460+00:00",
     "solana_6tuhHpYSinf41V39KW3JmpVUaxehcabCbHZqqFnwR6xf": "2026-09-16T21:41:50.626155+00:00",
