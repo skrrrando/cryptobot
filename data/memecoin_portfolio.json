@@ -1,45 +1,6 @@
 {
-  "balance": 30.03666695977703,
+  "balance": 76.73927868106462,
   "positions": {
-    "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": {
-      "network": "bsc",
-      "pool_address": "0x2fe13112be502026671a6e76af45d14ec394022d",
-      "base_token_address": "0xd270d4e1ec6e6e0d28c0ecb8be966ec75997ffff",
-      "name": "4Stock / USDT 0.25%",
-      "entry_ts": "2026-09-17T10:25:28.118941+00:00",
-      "entry_price_usd": 0.0123696173717811,
-      "peak_price_usd": 0.0127723713438617,
-      "amount_usd": 21.849373157014487,
-      "qty": 1754.0355835302587,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": {
-      "network": "base",
-      "pool_address": "0x7692acc1cdd771d09ebcae3663e1843b2911bec7",
-      "base_token_address": "0x5ab000ff9b9ffe0349ce5ffa5fd86f217c3680f5",
-      "name": "STONKEX / WETH 1%",
-      "entry_ts": "2026-09-17T10:35:28.509364+00:00",
-      "entry_price_usd": 0.00897252279478459,
-      "peak_price_usd": 0.0106032623739353,
-      "amount_usd": 21.934228035999663,
-      "qty": 2433.347474435367,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
-    "bsc_0xef470f9ae8512d2762e4f1cd91ae58caea17143afa61b8d56e9b20c8f87688c4": {
-      "network": "bsc",
-      "pool_address": "0xef470f9ae8512d2762e4f1cd91ae58caea17143afa61b8d56e9b20c8f87688c4",
-      "base_token_address": "0x4b3d30992f003c8167699735f5ab2831b2a087d3",
-      "name": "COLLECT / BNB 0.007%",
-      "entry_ts": "2026-09-17T10:35:28.509364+00:00",
-      "entry_price_usd": 0.016029245559441,
-      "peak_price_usd": 0.0168325655918349,
-      "amount_usd": 21.934228035999663,
-      "qty": 1359.0055218403786,
-      "sell_tax_pct": 0.0,
-      "time_exit_evaluated": false
-    },
     "bsc_0xf0a949d3d93b833c183a27ee067165b6f2c9625e": {
       "network": "bsc",
       "pool_address": "0xf0a949d3d93b833c183a27ee067165b6f2c9625e",
@@ -128,6 +89,19 @@
       "peak_price_usd": 0.116005129846191,
       "amount_usd": 21.886932483901262,
       "qty": 187.44620017129208,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": false
+    },
+    "bsc_0x7f51bbf34156ba802deb0e38b7671dc4fa32041d": {
+      "network": "bsc",
+      "pool_address": "0x7f51bbf34156ba802deb0e38b7671dc4fa32041d",
+      "base_token_address": "0x3d4f0513e8a29669b960f9dbca61861548a9a760",
+      "name": "$BANANA / WBNB 0.01%",
+      "entry_ts": "2026-09-17T16:35:29.490334+00:00",
+      "entry_price_usd": 0.00736467092443184,
+      "peak_price_usd": 0.00736467092443184,
+      "amount_usd": 20.756053434260494,
+      "qty": 2797.94549779194,
       "sell_tax_pct": 0.0,
       "time_exit_evaluated": false
     }
@@ -12232,6 +12206,63 @@
       "pnl_usd": -13.570548595689171,
       "pnl_pct": -62.12,
       "exit_reason": "stop_loss"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0x2fe13112be502026671a6e76af45d14ec394022d",
+      "base_token_address": "0xd270d4e1ec6e6e0d28c0ecb8be966ec75997ffff",
+      "name": "4Stock / USDT 0.25%",
+      "entry_ts": "2026-09-17T10:25:28.118941+00:00",
+      "entry_price_usd": 0.0123696173717811,
+      "peak_price_usd": 0.0127723713438617,
+      "amount_usd": 21.849373157014487,
+      "qty": 1754.0355835302587,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-17T16:36:24.756761+00:00",
+      "exit_price_usd": 0.0113537613123898,
+      "proceeds_usd": 19.762603037367388,
+      "pnl_usd": -2.086770119647099,
+      "pnl_pct": -9.55,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "base",
+      "pool_address": "0x7692acc1cdd771d09ebcae3663e1843b2911bec7",
+      "base_token_address": "0x5ab000ff9b9ffe0349ce5ffa5fd86f217c3680f5",
+      "name": "STONKEX / WETH 1%",
+      "entry_ts": "2026-09-17T10:35:28.509364+00:00",
+      "entry_price_usd": 0.00897252279478459,
+      "peak_price_usd": 0.0106032623739353,
+      "amount_usd": 21.934228035999663,
+      "qty": 2433.347474435367,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-17T16:36:24.756761+00:00",
+      "exit_price_usd": 0.0103037714555472,
+      "proceeds_usd": 24.971512153419607,
+      "pnl_usd": 3.0372841174199436,
+      "pnl_pct": 13.85,
+      "exit_reason": "timeout"
+    },
+    {
+      "network": "bsc",
+      "pool_address": "0xef470f9ae8512d2762e4f1cd91ae58caea17143afa61b8d56e9b20c8f87688c4",
+      "base_token_address": "0x4b3d30992f003c8167699735f5ab2831b2a087d3",
+      "name": "COLLECT / BNB 0.007%",
+      "entry_ts": "2026-09-17T10:35:28.509364+00:00",
+      "entry_price_usd": 0.016029245559441,
+      "peak_price_usd": 0.0168325655918349,
+      "amount_usd": 21.934228035999663,
+      "qty": 1359.0055218403786,
+      "sell_tax_pct": 0.0,
+      "time_exit_evaluated": true,
+      "exit_ts": "2026-09-17T16:36:24.756761+00:00",
+      "exit_price_usd": 0.016832140792725,
+      "proceeds_usd": 22.724549964761092,
+      "pnl_usd": 0.7903219287614291,
+      "pnl_pct": 3.6,
+      "exit_reason": "timeout"
     }
   ],
   "recent_exits": {
@@ -12258,7 +12289,7 @@
     "solana_CW5jBQCAw9btDETXs2hZsDUNHYAaXpx9mgKfzYimsebh": "2026-09-09T00:47:00.291146+00:00",
     "bsc_0x8650e3ede7c2d45f89dbbe108bd6568f414167cb": "2026-09-11T05:31:49.575288+00:00",
     "bsc_0x90c3c770087eb9e63ad47e99a66e260aa10c31ae": "2026-09-12T15:06:36.147349+00:00",
-    "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-16T15:56:38.712451+00:00",
+    "base_0x7692acc1cdd771d09ebcae3663e1843b2911bec7": "2026-09-17T16:36:24.756761+00:00",
     "solana_D6VVbDNcakyAvuGk8D4bjz9LHtQQugHdsx57fRTSsqNG": "2026-09-08T10:51:47.871949+00:00",
     "solana_CBfWfU1DBUbTJ2Y475idxxidxwUDnPNzFEVnMFbo4Ge9": "2026-09-08T11:41:25.767912+00:00",
     "base_0x5f547579519beaa158cddd3543604029165f66e86a00c373d0ee90c38784921b": "2026-09-16T21:36:23.798808+00:00",
@@ -12282,7 +12313,7 @@
     "base_0x99cf3e8bfb02c300312c53aac5d0b082e3d5975c": "2026-09-17T11:31:48.213957+00:00",
     "solana_nBXytBBfKLhj6teXarAv8rk6WNgUFBMyybUFRkuK7ad": "2026-09-15T03:41:36.236670+00:00",
     "bsc_0x14ca9d552ed2cf0d5dfd1f89bc6793a464e2ed16": "2026-09-17T05:27:36.233626+00:00",
-    "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": "2026-09-15T17:45:57.875422+00:00",
+    "bsc_0x2fe13112be502026671a6e76af45d14ec394022d": "2026-09-17T16:36:24.756761+00:00",
     "solana_3dcwhqJp6JBTJPq8ga335HWgSQVS7uQmdmeX7iGjMNpj": "2026-09-17T11:12:02.149553+00:00",
     "arbitrum_0xb2d0b9fc11381130897f50656a9705bb6fdeb9d9": "2026-09-09T22:36:35.854739+00:00",
     "solana_2RmBs1KYzkDuaRR4F8zU9rPR6KT16eCgJ9YS1c8XXZgQ": "2026-09-12T08:56:57.516657+00:00",
@@ -12350,6 +12381,7 @@
     "solana_6tuhHpYSinf41V39KW3JmpVUaxehcabCbHZqqFnwR6xf": "2026-09-17T03:36:25.878359+00:00",
     "solana_DAbSqjHryfMDqN6Vj4YF28SSmZftHBYzueM8ykTyQPHZ": "2026-09-16T16:16:24.331326+00:00",
     "bsc_0xbc42145d5a574ede9b8860fca2a49eb7b239efa5": "2026-09-17T09:41:36.654149+00:00",
-    "solana_58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2": "2026-09-17T11:46:08.617158+00:00"
+    "solana_58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2": "2026-09-17T11:46:08.617158+00:00",
+    "bsc_0xef470f9ae8512d2762e4f1cd91ae58caea17143afa61b8d56e9b20c8f87688c4": "2026-09-17T16:36:24.756761+00:00"
   }
 }
