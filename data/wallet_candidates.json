@@ -1,0 +1,798 @@
+{
+  "generated_note": "Initial candidate pool for wallet copy-trading research, sourced 2026-09-20 from Solana Tracker 30d PnL leaderboard, Kolscan monthly KOL leaderboard, and uwuu.ai monthly trader leaderboard. tier=gold means the SAME address appeared independently on 2+ platforms with matching stats (strongest confidence). tier=silver means a single strong source. This is a starting pool for the 2-week real-activity tracking phase, not a final pick. UPDATE 2026-09-21: screened all 50 with a quick live RPC check (100 most recent signatures each) before starting the 2-week tracking window. 8 wallets (all originally gold-tier) showed unmistakable high-frequency-bot signatures - e.g. 100 transactions inside 1-13 seconds with 93-100% of them failing - and were removed: Kadenox, decu, Nyhrox, Trenchman, Limfork.eth, trunoest, theo, Schoen. These are not discretionary traders a human can usefully copy with a few minutes of lag, and tracking them would have starved the RPC/tx-fetch budget every tick at the expense of the genuinely trackable wallets below.",
+  "gold_count": 13,
+  "silver_count": 29,
+  "wallets": [
+    {
+      "address": "J6TDXvarvpBdPXTaTU8eJbtso1PUCYKGkVtMKUUY8iEa",
+      "names": [
+        "Pain"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 3,
+          "name": "Pain",
+          "wins": 1,
+          "losses": 0,
+          "sol_profit_30d": 421.44,
+          "usd_profit_30d": 46433.8
+        },
+        "uwuu": {
+          "rank": 1,
+          "name": "Pain",
+          "trades": 178,
+          "usd_profit_30d": 305888.0
+        }
+      }
+    },
+    {
+      "address": "4cXnf2z85UiZ5cyKsPMEULq1yufAtpkatmX4j4DBZqj2",
+      "names": [
+        "WaiterG"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 30,
+          "name": "WaiterG",
+          "wins": 9,
+          "losses": 11,
+          "sol_profit_30d": 35.06,
+          "usd_profit_30d": 3862.6
+        },
+        "uwuu": {
+          "rank": 8,
+          "name": "WaiterG",
+          "trades": 57,
+          "usd_profit_30d": 22919.0
+        }
+      }
+    },
+    {
+      "address": "4fZFcK8ms3bFMpo1ACzEUz8bH741fQW4zhAMGd5yZMHu",
+      "names": [
+        "Rilsio"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 44,
+          "name": "Rilsio",
+          "wins": 3,
+          "losses": 1,
+          "sol_profit_30d": 17.0,
+          "usd_profit_30d": 1873.2
+        },
+        "uwuu": {
+          "rank": 9,
+          "name": "Rilsio",
+          "trades": 121,
+          "usd_profit_30d": 22047.0
+        }
+      }
+    },
+    {
+      "address": "2T5NgDDidkvhJQg8AHDi74uCFwgp25pYFMRZXBaCUNBH",
+      "names": [
+        "Idontpaytaxes"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 17,
+          "name": "Idontpaytaxes",
+          "wins": 17,
+          "losses": 16,
+          "sol_profit_30d": 70.15,
+          "usd_profit_30d": 7728.8
+        },
+        "uwuu": {
+          "rank": 11,
+          "name": "Idontpaytaxes",
+          "trades": 74,
+          "usd_profit_30d": 14862.0
+        }
+      }
+    },
+    {
+      "address": "CkPFGv2Wv1vwdWjtXioEgb8jhZQfs3eVZez3QCetu7xD",
+      "names": [
+        "Lynk"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 26,
+          "name": "Lynk",
+          "wins": 28,
+          "losses": 40,
+          "sol_profit_30d": 39.27,
+          "usd_profit_30d": 4326.2
+        },
+        "uwuu": {
+          "rank": 12,
+          "name": "Lynk",
+          "trades": 1216,
+          "usd_profit_30d": 14171.0
+        }
+      }
+    },
+    {
+      "address": "Be24Gbf5KisDk1LcWWZsBn8dvB816By7YzYF5zWZnRR6",
+      "names": [
+        "Chairman2"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 15,
+          "name": "Chairman2",
+          "wins": 13,
+          "losses": 4,
+          "sol_profit_30d": 91.78,
+          "usd_profit_30d": 10112.4
+        },
+        "uwuu": {
+          "rank": 32,
+          "name": "Chairman2",
+          "trades": 86,
+          "usd_profit_30d": 2743.0
+        }
+      }
+    },
+    {
+      "address": "G6fUXjMKPJzCY1rveAE6Qm7wy5U3vZgKDJmN1VPAdiZC",
+      "names": [
+        "clukz"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 23,
+          "name": "clukz",
+          "wins": 0,
+          "losses": 1,
+          "sol_profit_30d": 48.65,
+          "usd_profit_30d": 5360.2
+        },
+        "uwuu": {
+          "rank": 19,
+          "name": "clukz",
+          "trades": 39,
+          "usd_profit_30d": 6607.0
+        }
+      }
+    },
+    {
+      "address": "AVjEtg2ECYKXYeqdRQXvaaAZBjfTjYuSMTR4WLhKoeQN",
+      "names": [
+        "Putrick"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 20,
+          "name": "Putrick",
+          "wins": 12,
+          "losses": 15,
+          "sol_profit_30d": 53.87,
+          "usd_profit_30d": 5935.1
+        },
+        "uwuu": {
+          "rank": 80,
+          "name": "Putrick",
+          "trades": 28,
+          "usd_profit_30d": 457.0
+        }
+      }
+    },
+    {
+      "address": "DU323DieHUGPmYamp6A4Ai1V4YSYgRi35mGpzJGrjf7k",
+      "names": [
+        "ToxicWeast"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 45,
+          "name": "ToxicWeast",
+          "wins": 7,
+          "losses": 6,
+          "sol_profit_30d": 15.92,
+          "usd_profit_30d": 1754.0
+        },
+        "uwuu": {
+          "rank": 23,
+          "name": "ToxicWeast",
+          "trades": 73,
+          "usd_profit_30d": 5811.0
+        }
+      }
+    },
+    {
+      "address": "5t9xBNuDdGTGpjaPTx6hKd7sdRJbvtKS8Mhq6qVbo8Qz",
+      "names": [
+        "Smokez"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 36,
+          "name": "Smokez",
+          "wins": 4,
+          "losses": 6,
+          "sol_profit_30d": 26.24,
+          "usd_profit_30d": 2890.8
+        },
+        "uwuu": {
+          "rank": 54,
+          "name": "Smokez",
+          "trades": 23,
+          "usd_profit_30d": 1428.0
+        }
+      }
+    },
+    {
+      "address": "2kv8X2a9bxnBM8NKLc6BBTX2z13GFNRL4oRotMUJRva9",
+      "names": [
+        "Gh0stee"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 41,
+          "name": "Gh0stee",
+          "wins": 17,
+          "losses": 17,
+          "sol_profit_30d": 18.84,
+          "usd_profit_30d": 2075.4
+        },
+        "uwuu": {
+          "rank": 76,
+          "name": "Gh0stee",
+          "trades": 8,
+          "usd_profit_30d": 567.0
+        }
+      }
+    },
+    {
+      "address": "951wq3qDowjKHaycrNaiRB5WpovYVKXnqhnrcKPh46zt",
+      "names": [
+        "jrus",
+        "lyftical"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 42,
+          "name": "jrus",
+          "wins": 6,
+          "losses": 15,
+          "sol_profit_30d": 18.31,
+          "usd_profit_30d": 2017.1
+        },
+        "uwuu": {
+          "rank": 90,
+          "name": "lyftical",
+          "trades": 50,
+          "usd_profit_30d": 235.0
+        }
+      }
+    },
+    {
+      "address": "6aXFYXbFob1ZKAEDCcqZnX2vooA3TgEqDoy5dAQbeWoV",
+      "names": [
+        "Flames"
+      ],
+      "tier": "gold",
+      "n_sources": 2,
+      "sources": {
+        "kolscan": {
+          "rank": 43,
+          "name": "Flames",
+          "wins": 32,
+          "losses": 51,
+          "sol_profit_30d": 17.55,
+          "usd_profit_30d": 1933.5
+        },
+        "uwuu": {
+          "rank": 46,
+          "name": "Flames",
+          "trades": 31,
+          "usd_profit_30d": 1843.0
+        }
+      }
+    },
+    {
+      "address": "jcAS7Vriik3BkQ6taJaCgpETR7He7NwHJpnasroDA1W",
+      "names": [],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "solana_tracker": {
+          "rank": 8,
+          "realized_usd_30d": 7430000.0,
+          "roi_pct": 13800.0,
+          "winrate_pct": 66.7,
+          "trades": 59.0,
+          "tokens": 12.0
+        }
+      }
+    },
+    {
+      "address": "J7VP3NfH9hrVzC6s9fZLpjtCfDpiaDVHYEUkhh3VyMxf",
+      "names": [],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "solana_tracker": {
+          "rank": 16,
+          "realized_usd_30d": 5100000.0,
+          "roi_pct": 65.4,
+          "winrate_pct": 50.0,
+          "trades": 307.0,
+          "tokens": 2.0
+        }
+      }
+    },
+    {
+      "address": "Ginv5i1ai5ae2aLFa9myKLryBs7Masz6oSJiuEp5AhYd",
+      "names": [],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "solana_tracker": {
+          "rank": 18,
+          "realized_usd_30d": 4310000.0,
+          "roi_pct": 36.4,
+          "winrate_pct": 66.7,
+          "trades": 296.0,
+          "tokens": 3.0
+        }
+      }
+    },
+    {
+      "address": "GSqHgS8nrkZz9B1dZjNouMtBFygBDpA7xjJLqtfL1EYq",
+      "names": [],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "solana_tracker": {
+          "rank": 44,
+          "realized_usd_30d": 2360000.0,
+          "roi_pct": 286.3,
+          "winrate_pct": 50.0,
+          "trades": 148.0,
+          "tokens": 2.0
+        }
+      }
+    },
+    {
+      "address": "FsnM2GYdgQPTYG8cFFhnWT6tkbh3NY5Tc5s73ECc2n6o",
+      "names": [],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "solana_tracker": {
+          "rank": 53,
+          "realized_usd_30d": 2100000.0,
+          "roi_pct": 67.5,
+          "winrate_pct": 50.0,
+          "trades": 249.0,
+          "tokens": 4.0
+        }
+      }
+    },
+    {
+      "address": "5T229oePmJGE5Cefys8jE9Jq8C7qfGNNWy3RVA7SmwEP",
+      "names": [
+        "Tuults"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 2,
+          "name": "Tuults",
+          "trades": 131,
+          "usd_profit_30d": 257692.0
+        }
+      }
+    },
+    {
+      "address": "6HJetMbdHBuk3mLUainxAPpBpWzDgYbHGTS2TqDAUSX2",
+      "names": [
+        "LJC"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 3,
+          "name": "LJC",
+          "trades": 51,
+          "usd_profit_30d": 153046.0
+        }
+      }
+    },
+    {
+      "address": "87rRdssFiTJKY4MGARa4G5vQ31hmR7MxSmhzeaJ5AAxJ",
+      "names": [
+        "Dior"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 4,
+          "name": "Dior",
+          "trades": 268,
+          "usd_profit_30d": 88269.0
+        }
+      }
+    },
+    {
+      "address": "G5nxEXuFMfV74DSnsrSatqCW32F34XUnBeq3PfDS7w5E",
+      "names": [
+        "Profit"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 5,
+          "name": "Profit",
+          "trades": 239,
+          "usd_profit_30d": 77460.0
+        }
+      }
+    },
+    {
+      "address": "DNsh1UfJdxmze6T6GV9QK5SoFm7HsM5TRNxVuwVgo8Zj",
+      "names": [
+        "Hash"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 6,
+          "name": "Hash",
+          "trades": 64,
+          "usd_profit_30d": 75258.0
+        }
+      }
+    },
+    {
+      "address": "CxgPWvH2GoEDENELne2XKAR2z2Fr4shG2uaeyqZceGve",
+      "names": [
+        "narc"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 7,
+          "name": "narc",
+          "trades": 33,
+          "usd_profit_30d": 53208.0
+        }
+      }
+    },
+    {
+      "address": "8deJ9xeUvXSJwicYptA9mHsU2rN2pDx37KWzkDkEXhU6",
+      "names": [
+        "Cooker"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 4,
+          "name": "Cooker",
+          "wins": 78,
+          "losses": 17,
+          "sol_profit_30d": 404.85,
+          "usd_profit_30d": 44605.1
+        }
+      }
+    },
+    {
+      "address": "BNahnx13rLru9zxuWNGBD7vVv1pGQXB11Q7qeTyupdWf",
+      "names": [
+        "rayan"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 10,
+          "name": "rayan",
+          "trades": 439,
+          "usd_profit_30d": 20810.0
+        }
+      }
+    },
+    {
+      "address": "4DdrfiDHpmx55i4SPssxVzS9ZaKLb8qr45NKY9Er9nNh",
+      "names": [
+        "Mr. Frog"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 9,
+          "name": "Mr. Frog",
+          "wins": 179,
+          "losses": 19,
+          "sol_profit_30d": 127.11,
+          "usd_profit_30d": 14005.0
+        }
+      }
+    },
+    {
+      "address": "86AEJExyjeNNgcp7GrAvCXTDicf5aGWgoERbXFiG1EdD",
+      "names": [
+        "Publix"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 11,
+          "name": "Publix",
+          "wins": 9,
+          "losses": 24,
+          "sol_profit_30d": 125.64,
+          "usd_profit_30d": 13842.7
+        }
+      }
+    },
+    {
+      "address": "AVAZvHLR2PcWpDf8BXY4rVxNHYRBytycHkcB5z5QNXYm",
+      "names": [
+        "Ansem"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 13,
+          "name": "Ansem",
+          "trades": 25,
+          "usd_profit_30d": 12743.0
+        }
+      }
+    },
+    {
+      "address": "As7HjL7dzzvbRbaD3WCun47robib2kmAKRXMvjHkSMB5",
+      "names": [
+        "Otta"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 12,
+          "name": "Otta",
+          "wins": 11,
+          "losses": 31,
+          "sol_profit_30d": 114.68,
+          "usd_profit_30d": 12635.3
+        }
+      }
+    },
+    {
+      "address": "8nqtxpFpuXwfXG4pBLsDkkuMMPK9FjSkBMCn542HiM3v",
+      "names": [
+        "dov7"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 14,
+          "name": "dov7",
+          "trades": 85,
+          "usd_profit_30d": 12336.0
+        }
+      }
+    },
+    {
+      "address": "GJA1HEbxGnqBhBifH9uQauzXSB53to5rhDrzmKxhSU65",
+      "names": [
+        "Latuche"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 13,
+          "name": "Latuche",
+          "wins": 5,
+          "losses": 6,
+          "sol_profit_30d": 105.85,
+          "usd_profit_30d": 11662.6
+        }
+      }
+    },
+    {
+      "address": "7xwDKXNG9dxMsBSCmiAThp7PyDaUXbm23irLr7iPeh7w",
+      "names": [
+        "shah"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 15,
+          "name": "shah",
+          "trades": 48,
+          "usd_profit_30d": 10923.0
+        }
+      }
+    },
+    {
+      "address": "4xY9T1Q7foJzJsJ6YZDSsfp9zkzeZsXnxd45SixduMmr",
+      "names": [
+        "zeropnl"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 16,
+          "name": "zeropnl",
+          "trades": 36,
+          "usd_profit_30d": 10530.0
+        }
+      }
+    },
+    {
+      "address": "2k7Mnf2K3GhpB7hEVN1CFFeV4oNzzuCS5Q6SmcfAoLHd",
+      "names": [
+        "Setsu"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 17,
+          "name": "Setsu",
+          "trades": 297,
+          "usd_profit_30d": 9214.0
+        }
+      }
+    },
+    {
+      "address": "BTf4A2exGK9BCVDNzy65b9dUzXgMqB4weVkvTMFQsadd",
+      "names": [
+        "Kev"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 18,
+          "name": "Kev",
+          "trades": 68,
+          "usd_profit_30d": 9192.0
+        }
+      }
+    },
+    {
+      "address": "FwjYcbfktK8PC2bzCrqxR6QkUPxmHFbcFGNrz3YAV7ft",
+      "names": [
+        "Paper"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 20,
+          "name": "Paper",
+          "trades": 95,
+          "usd_profit_30d": 6595.0
+        }
+      }
+    },
+    {
+      "address": "A38dM3RtNpewkwkWJeyj8C9c8yWtgaaAdh4Rdj1SXg3M",
+      "names": [
+        "TMH"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 21,
+          "name": "TMH",
+          "trades": 92,
+          "usd_profit_30d": 6114.0
+        }
+      }
+    },
+    {
+      "address": "8rvAsDKeAcEjEkiZMug9k8v1y8mW6gQQiMobd89Uy7qR",
+      "names": [
+        "Casino"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 22,
+          "name": "Casino",
+          "trades": 50,
+          "usd_profit_30d": 5958.0
+        }
+      }
+    },
+    {
+      "address": "3pfqebV65sHMbF5z86HsPKSiTxwpNhCzjK5X7GUqCbtK",
+      "names": [
+        "Rem"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "uwuu": {
+          "rank": 24,
+          "name": "Rem",
+          "trades": 31,
+          "usd_profit_30d": 5810.0
+        }
+      }
+    },
+    {
+      "address": "DjM7Tu7whh6P3pGVBfDzwXAx2zaw51GJWrJE3PwtuN7s",
+      "names": [
+        "LUKEY"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 22,
+          "name": "LUKEY",
+          "wins": 7,
+          "losses": 3,
+          "sol_profit_30d": 48.9,
+          "usd_profit_30d": 5387.8
+        }
+      }
+    },
+    {
+      "address": "BY58Z7N5Adarkx5ed78AzKvR7Kxrq795aa1boZsYyVBT",
+      "names": [
+        "JB"
+      ],
+      "tier": "silver",
+      "n_sources": 1,
+      "sources": {
+        "kolscan": {
+          "rank": 24,
+          "name": "JB",
+          "wins": 10,
+          "losses": 13,
+          "sol_profit_30d": 47.5,
+          "usd_profit_30d": 5233.4
+        }
+      }
+    }
+  ]
+}

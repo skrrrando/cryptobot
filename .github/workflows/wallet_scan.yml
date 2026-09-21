@@ -1,0 +1,59 @@
+name: Wallet copy-trade tracking scan
+
+on:
+  # Same story as the other two sleeves: GitHub's own `schedule:` trigger is
+  # unreliable on this account, so the real trigger is an external cron
+  # service calling this workflow's workflow_dispatch API on a 15-minute
+  # interval. This schedule is only a backstop so tracking doesn't go fully
+  # silent if that service stops. Slower than the other sleeves' backstops on
+  # purpose - this is passive 2-week observation, not time-sensitive.
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed so the workflow can commit the updated data back
+
+# Distinct group from the other two sleeves, so this never queues behind or
+# blocks cryptobot-hourly / cryptobot-memecoin-scan / cryptobot-pumpfun-scan.
+concurrency:
+  group: cryptobot-wallet-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    # A healthy run is well under a minute (stdlib-only HTTP calls, paced but
+    # not held open like the pump.fun WebSocket) - this cap is a safety net,
+    # not a normal-path constraint.
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run wallet tracking scan
+        env:
+          # Optional - falls back to the public Solana endpoint if unset.
+          # Shared with scan_pumpfun.py's same-named secret, if set.
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: python3 scan_wallets.py
+
+      - name: Commit updated wallet-tracking data
+        run: |
+          git config user.name "cryptobot"
+          git config user.email "actions@users.noreply.github.com"
+          # Directory-level add, not a per-file list - see pumpfun_scan.yml's
+          # comment for why (memecoin_scan.yml's file-list approach silently
+          # dropped a file for weeks once).
+          git add data/
+          git diff --staged --quiet || git commit -m "Wallet tracking scan update [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main && git push && break
+            echo "Push attempt $i failed, retrying..."
+            sleep 5
+          done
