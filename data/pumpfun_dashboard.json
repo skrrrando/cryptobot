@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-23T11:45:54.526593+00:00",
-  "balance": 692.69,
-  "positions_value": 0.0,
-  "net_worth": 692.69,
+  "timestamp": "2026-09-23T11:50:39.488751+00:00",
+  "balance": 672.69,
+  "positions_value": 19.49,
+  "net_worth": 692.18,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "DRmcQZGA5mXvWF6vcQH8Z7Ui3TdVeXkgbAXJuZuGKEtf",
+      "name": "bleuchip",
+      "symbol": "bleu",
+      "entry_ts": "2026-09-23T11:50:39.488751+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.49,
+      "pnl_pct": -2.55,
+      "entry_slippage_pct": 1.3,
+      "entry_graduation_pct": 35.13,
+      "graduation_pct": 35.13,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "DRmcQZGA5mXvWF6vcQH8Z7Ui3TdVeXkgbAXJuZuGKEtf",
+      "name": "bleuchip",
+      "symbol": "bleu",
+      "decision": "buy",
+      "signal_ts": "2026-09-23T11:50:39.488751+00:00",
+      "alert_score": 96.0,
+      "alert_graduation_pct": 35.13,
+      "graduation_pct": 35.13
+    }
+  ],
   "history": [
     {
       "mint": "6T1YJrNksBSs7vAeAnL7WpRzZmkiFxEqUuzWwhWzh1Qi",
@@ -979,7 +1004,7 @@
     }
   ],
   "stats": {
-    "alerts": 44,
+    "alerts": 45,
     "graduated": 10,
     "did_not_graduate": 26,
     "buy_graduated": 6,
@@ -991,7 +1016,7 @@
   "shadow_stats": {
     "tracked": 41,
     "graduated": 495,
-    "did_not_graduate": 3248,
+    "did_not_graduate": 3249,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
