@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-09-23T19:25:31.171320+00:00",
-  "balance": 635.67,
-  "positions_value": 3.62,
-  "net_worth": 639.29,
+  "timestamp": "2026-09-23T19:30:56.469819+00:00",
+  "balance": 639.28,
+  "positions_value": 0.0,
+  "net_worth": 639.28,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
-      "name": "Afterpad",
-      "symbol": "afterpad",
-      "entry_ts": "2026-09-23T13:25:33.022144+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.62,
-      "pnl_pct": -81.9,
-      "entry_slippage_pct": 1.25,
-      "entry_graduation_pct": 50.42,
-      "graduation_pct": 1.9,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "EbeW2PZ3sikW4ttF3pmwKPJVkaA4a3FToN3QMFAYpump",
-      "name": "Jose",
-      "symbol": "Jose",
-      "bonding_curve_key": "4CwFc2nhiz1WjDuEN9vAEsgJLLFGskH4fyA8XjthGZrX",
-      "entry_ts": "2026-09-11T04:50:34.784710+00:00",
-      "entry_price_usd": 2.5852614708955893e-05,
-      "entry_spot_price_usd": 2.553835566864818e-05,
-      "entry_slippage_pct": 1.23,
-      "amount_usd": 20.0,
-      "qty": 773616.1399980783,
-      "entry_graduation_pct": 71.3,
-      "entry_score": 93.2,
-      "exit_ts": "2026-09-11T10:55:27.844934+00:00",
-      "exit_price_usd": 3.0474970898366813e-06,
-      "proceeds_usd": 2.36,
-      "pnl_usd": -17.64,
-      "pnl_pct": -88.21,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "DzRAnvAbmcFXjrBUCQdohrNJzhonpzzsYTRHQkiMnBXh",
       "name": "Are you still watching",
@@ -519,21 +485,43 @@
       "pnl_usd": -16.17,
       "pnl_pct": -80.83,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
       "name": "Afterpad",
       "symbol": "afterpad",
-      "decision": "buy",
-      "signal_ts": "2026-09-23T13:25:33.022144+00:00",
-      "alert_score": 90.2,
-      "alert_graduation_pct": 50.42,
-      "graduation_pct": 1.9
+      "bonding_curve_key": "EWkSDvpts98w1u1tD3K4ycGZyfPxic52HsVE4tdfQjK2",
+      "entry_ts": "2026-09-23T13:25:33.022144+00:00",
+      "entry_price_usd": 1.9474482400103994e-05,
+      "entry_spot_price_usd": 1.9234922358413905e-05,
+      "entry_slippage_pct": 1.25,
+      "amount_usd": 20.0,
+      "qty": 1026984.9328520894,
+      "entry_graduation_pct": 50.42,
+      "entry_score": 90.2,
+      "exit_ts": "2026-09-23T19:30:56.469840+00:00",
+      "exit_price_usd": 3.5133339457234573e-06,
+      "proceeds_usd": 3.61,
+      "pnl_usd": -16.39,
+      "pnl_pct": -81.96,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
+      "name": "Afterpad",
+      "symbol": "afterpad",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-23T13:25:33.022144+00:00",
+      "recorded_ts": "2026-09-23T19:30:56.469819+00:00",
+      "alert_score": 90.2,
+      "alert_graduation_pct": 50.42,
+      "final_graduation_pct": 1.9,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "DRmcQZGA5mXvWF6vcQH8Z7Ui3TdVeXkgbAXJuZuGKEtf",
       "name": "bleuchip",
@@ -1032,17 +1020,17 @@
   "stats": {
     "alerts": 48,
     "graduated": 11,
-    "did_not_graduate": 27,
+    "did_not_graduate": 28,
     "buy_graduated": 7,
-    "buy_total": 24,
+    "buy_total": 25,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 28.9
+    "graduation_rate_pct": 28.2
   },
   "shadow_stats": {
-    "tracked": 62,
+    "tracked": 61,
     "graduated": 500,
-    "did_not_graduate": 3305,
+    "did_not_graduate": 3306,
     "graduation_rate_pct": 13.1
   },
   "daily_cap": 4,
