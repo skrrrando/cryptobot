@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-23T11:55:32.890590+00:00",
-  "balance": 672.69,
-  "positions_value": 18.42,
-  "net_worth": 691.11,
+  "timestamp": "2026-09-23T12:01:06.961168+00:00",
+  "balance": 652.69,
+  "positions_value": 38.16,
+  "net_worth": 690.85,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "bleu",
       "entry_ts": "2026-09-23T11:50:39.488751+00:00",
       "amount_usd": 20.0,
-      "value_usd": 18.42,
-      "pnl_pct": -7.9,
+      "value_usd": 18.62,
+      "pnl_pct": -6.9,
       "entry_slippage_pct": 1.3,
       "entry_graduation_pct": 35.13,
-      "graduation_pct": 33.12,
+      "graduation_pct": 33.55,
+      "graduated": false
+    },
+    {
+      "mint": "FdWgweu4TULjE6Vx9UDt44FZfpeVV3ixVFpthwtmWCWg",
+      "name": "The Odyssean Bear",
+      "symbol": "Bear",
+      "entry_ts": "2026-09-23T12:01:06.961168+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.54,
+      "pnl_pct": -2.3,
+      "entry_slippage_pct": 1.17,
+      "entry_graduation_pct": 88.44,
+      "graduation_pct": 88.44,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "FdWgweu4TULjE6Vx9UDt44FZfpeVV3ixVFpthwtmWCWg",
+      "name": "The Odyssean Bear",
+      "symbol": "Bear",
+      "decision": "buy",
+      "signal_ts": "2026-09-23T12:01:06.961168+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 88.44,
+      "graduation_pct": 88.44
+    },
+    {
       "mint": "DRmcQZGA5mXvWF6vcQH8Z7Ui3TdVeXkgbAXJuZuGKEtf",
       "name": "bleuchip",
       "symbol": "bleu",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-09-23T11:50:39.488751+00:00",
       "alert_score": 96.0,
       "alert_graduation_pct": 35.13,
-      "graduation_pct": 33.12
+      "graduation_pct": 33.55
     }
   ],
   "history": [
@@ -1004,7 +1027,7 @@
     }
   ],
   "stats": {
-    "alerts": 45,
+    "alerts": 46,
     "graduated": 10,
     "did_not_graduate": 26,
     "buy_graduated": 6,
