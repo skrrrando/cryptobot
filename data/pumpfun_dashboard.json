@@ -1,31 +1,18 @@
 {
-  "timestamp": "2026-09-24T07:55:31.045198+00:00",
-  "balance": 628.5,
-  "positions_value": 7.08,
-  "net_worth": 635.58,
+  "timestamp": "2026-09-24T08:01:04.353848+00:00",
+  "balance": 632.43,
+  "positions_value": 3.11,
+  "net_worth": 635.54,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
-      "name": "Orang",
-      "symbol": "ORANG",
-      "entry_ts": "2026-09-24T02:01:03.535846+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.96,
-      "pnl_pct": -80.2,
-      "entry_slippage_pct": 1.25,
-      "entry_graduation_pct": 50.47,
-      "graduation_pct": 3.16,
-      "graduated": false
-    },
     {
       "mint": "57bN6RauaHGmSmUBM32BBrrQBgCnmuit4AXXMGLmgvfQ",
       "name": "Pokemon AI",
       "symbol": "POKEAI",
       "entry_ts": "2026-09-24T02:52:15.284434+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.12,
-      "pnl_pct": -84.4,
+      "value_usd": 3.11,
+      "pnl_pct": -84.45,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 55.86,
       "graduation_pct": 1.06,
@@ -33,26 +20,6 @@
     }
   ],
   "closed": [
-    {
-      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
-      "name": "Very Private Niggas",
-      "symbol": "VPN",
-      "bonding_curve_key": "2xtwc5hkQkT2jYB4eXSXyAiq2mCVjE7KMSSm1DM5RaNR",
-      "entry_ts": "2026-09-12T02:50:33.935638+00:00",
-      "entry_price_usd": 2.0323122794807578e-05,
-      "entry_spot_price_usd": 2.007098900620069e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 984100.7310702205,
-      "entry_graduation_pct": 58.23,
-      "entry_score": 90.3,
-      "exit_ts": "2026-09-12T08:50:34.222983+00:00",
-      "exit_price_usd": 3.830537376216978e-06,
-      "proceeds_usd": 3.77,
-      "pnl_usd": -16.23,
-      "pnl_pct": -81.15,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "AiHBG2uFj4jRqwA6nYNyjqjxT7KhwKDTJt17M5Xvpump",
       "name": "Butthole Coin",
@@ -532,21 +499,43 @@
       "pnl_usd": 8.73,
       "pnl_pct": 43.64,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
       "name": "Orang",
       "symbol": "ORANG",
-      "decision": "buy",
-      "signal_ts": "2026-09-24T02:01:03.535846+00:00",
-      "alert_score": 91.1,
-      "alert_graduation_pct": 50.47,
-      "graduation_pct": 3.16
+      "bonding_curve_key": "AvvWqArGhH8DbBMHF4UvsJkj2izthfC593giWCfbVEsG",
+      "entry_ts": "2026-09-24T02:01:03.535846+00:00",
+      "entry_price_usd": 1.916908696476313e-05,
+      "entry_spot_price_usd": 1.8932552154678907e-05,
+      "entry_slippage_pct": 1.25,
+      "amount_usd": 20.0,
+      "qty": 1043346.510804832,
+      "entry_graduation_pct": 50.47,
+      "entry_score": 91.1,
+      "exit_ts": "2026-09-24T08:01:04.353867+00:00",
+      "exit_price_usd": 3.7684783436051677e-06,
+      "proceeds_usd": 3.93,
+      "pnl_usd": -16.07,
+      "pnl_pct": -80.34,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
+      "name": "Orang",
+      "symbol": "ORANG",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-09-24T02:01:03.535846+00:00",
+      "recorded_ts": "2026-09-24T08:01:04.353848+00:00",
+      "alert_score": 91.1,
+      "alert_graduation_pct": 50.47,
+      "final_graduation_pct": 3.16,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "6CJ92jwMXTJsjmXdh5TZgPbbMwyWdSG44hRUQ7kwpump",
       "name": "MINESTOCK",
@@ -1071,17 +1060,17 @@
   "stats": {
     "alerts": 52,
     "graduated": 12,
-    "did_not_graduate": 28,
+    "did_not_graduate": 29,
     "buy_graduated": 8,
-    "buy_total": 26,
+    "buy_total": 27,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 30.0
+    "graduation_rate_pct": 29.3
   },
   "shadow_stats": {
-    "tracked": 43,
-    "graduated": 527,
-    "did_not_graduate": 3416,
+    "tracked": 39,
+    "graduated": 528,
+    "did_not_graduate": 3420,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
