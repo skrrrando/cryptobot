@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-24T02:22:47.526280+00:00",
+  "timestamp": "2026-09-24T02:32:58.223094+00:00",
   "balance": 639.77,
-  "positions_value": 4.44,
-  "net_worth": 644.21,
+  "positions_value": 3.87,
+  "net_worth": 643.64,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "ORANG",
       "entry_ts": "2026-09-24T02:01:03.535846+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.44,
-      "pnl_pct": -77.8,
+      "value_usd": 3.87,
+      "pnl_pct": -80.65,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 50.47,
-      "graduation_pct": 5.61,
+      "graduation_pct": 2.82,
       "graduated": false
     }
   ],
@@ -523,16 +523,6 @@
   ],
   "watching": [
     {
-      "mint": "6CJ92jwMXTJsjmXdh5TZgPbbMwyWdSG44hRUQ7kwpump",
-      "name": "MINESTOCK",
-      "symbol": "MINESTOCK",
-      "decision": "buy",
-      "signal_ts": "2026-09-24T02:10:35.830964+00:00",
-      "alert_score": 92.8,
-      "alert_graduation_pct": 57.58,
-      "graduation_pct": 98.42
-    },
-    {
       "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
       "name": "Orang",
       "symbol": "ORANG",
@@ -540,10 +530,23 @@
       "signal_ts": "2026-09-24T02:01:03.535846+00:00",
       "alert_score": 91.1,
       "alert_graduation_pct": 50.47,
-      "graduation_pct": 5.61
+      "graduation_pct": 2.82
     }
   ],
   "history": [
+    {
+      "mint": "6CJ92jwMXTJsjmXdh5TZgPbbMwyWdSG44hRUQ7kwpump",
+      "name": "MINESTOCK",
+      "symbol": "MINESTOCK",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-09-24T02:10:35.830964+00:00",
+      "recorded_ts": "2026-09-24T02:32:58.223094+00:00",
+      "alert_score": 92.8,
+      "alert_graduation_pct": 57.58,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 22.4
+    },
     {
       "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
       "name": "Afterpad",
@@ -1054,19 +1057,19 @@
   ],
   "stats": {
     "alerts": 50,
-    "graduated": 11,
+    "graduated": 12,
     "did_not_graduate": 28,
-    "buy_graduated": 7,
-    "buy_total": 25,
+    "buy_graduated": 8,
+    "buy_total": 26,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 28.2
+    "graduation_rate_pct": 30.0
   },
   "shadow_stats": {
-    "tracked": 52,
+    "tracked": 48,
     "graduated": 520,
-    "did_not_graduate": 3373,
-    "graduation_rate_pct": 13.4
+    "did_not_graduate": 3377,
+    "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
