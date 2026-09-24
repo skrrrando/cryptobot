@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-09-24T01:55:34.418996+00:00",
-  "balance": 639.28,
-  "positions_value": 0.0,
-  "net_worth": 639.28,
+  "timestamp": "2026-09-24T02:01:03.535846+00:00",
+  "balance": 619.28,
+  "positions_value": 19.51,
+  "net_worth": 638.79,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
+      "name": "Orang",
+      "symbol": "ORANG",
+      "entry_ts": "2026-09-24T02:01:03.535846+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 50.47,
+      "graduation_pct": 50.47,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "DzRAnvAbmcFXjrBUCQdohrNJzhonpzzsYTRHQkiMnBXh",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
+      "name": "Orang",
+      "symbol": "ORANG",
+      "decision": "buy",
+      "signal_ts": "2026-09-24T02:01:03.535846+00:00",
+      "alert_score": 91.1,
+      "alert_graduation_pct": 50.47,
+      "graduation_pct": 50.47
+    }
+  ],
   "history": [
     {
       "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
@@ -1018,7 +1043,7 @@
     }
   ],
   "stats": {
-    "alerts": 48,
+    "alerts": 49,
     "graduated": 11,
     "did_not_graduate": 28,
     "buy_graduated": 7,
@@ -1028,9 +1053,9 @@
     "graduation_rate_pct": 28.2
   },
   "shadow_stats": {
-    "tracked": 51,
+    "tracked": 53,
     "graduated": 520,
-    "did_not_graduate": 3368,
+    "did_not_graduate": 3369,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
