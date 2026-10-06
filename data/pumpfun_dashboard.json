@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-06T19:12:28.058379+00:00",
-  "balance": 635.41,
-  "positions_value": 0.0,
-  "net_worth": 635.41,
+  "timestamp": "2026-10-06T19:32:30.221649+00:00",
+  "balance": 615.41,
+  "positions_value": 19.52,
+  "net_worth": 634.93,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
+      "name": "Miners",
+      "symbol": "MINER",
+      "entry_ts": "2026-10-06T19:32:30.221649+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 59.44,
+      "graduation_pct": 59.44,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "CURgresJFA4BLkH6iyGqMyPV8ExrXigD7CD1U9ysXqPt",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
+      "name": "Miners",
+      "symbol": "MINER",
+      "decision": "buy",
+      "signal_ts": "2026-10-06T19:32:30.221649+00:00",
+      "alert_score": 100.4,
+      "alert_graduation_pct": 59.44,
+      "graduation_pct": 59.44
+    }
+  ],
   "history": [
     {
       "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
@@ -1044,7 +1069,7 @@
     }
   ],
   "stats": {
-    "alerts": 52,
+    "alerts": 53,
     "graduated": 12,
     "did_not_graduate": 29,
     "buy_graduated": 8,
