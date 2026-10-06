@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-06T20:10:39.643829+00:00",
-  "balance": 615.41,
-  "positions_value": 23.83,
-  "net_worth": 639.24,
+  "timestamp": "2026-10-06T20:46:51.888644+00:00",
+  "balance": 639.3,
+  "positions_value": 0.0,
+  "net_worth": 639.3,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
-      "name": "Miners",
-      "symbol": "MINER",
-      "entry_ts": "2026-10-06T19:32:30.221649+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 23.83,
-      "pnl_pct": 19.15,
-      "entry_slippage_pct": 1.22,
-      "entry_graduation_pct": 59.44,
-      "graduation_pct": 69.32,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "CURgresJFA4BLkH6iyGqMyPV8ExrXigD7CD1U9ysXqPt",
-      "name": "Revolve Dog",
-      "symbol": "REVDOG",
-      "bonding_curve_key": "4MQcAiBgvmfBHfDCqBrt6B1sJHQ2cuixiZfmQGZkomKk",
-      "entry_ts": "2026-09-12T06:20:34.340069+00:00",
-      "entry_price_usd": 2.1238494116311495e-05,
-      "entry_spot_price_usd": 2.097599605310216e-05,
-      "entry_slippage_pct": 1.25,
-      "amount_usd": 20.0,
-      "qty": 941686.3498170376,
-      "entry_graduation_pct": 60.55,
-      "entry_score": 93.6,
-      "exit_ts": "2026-09-12T12:20:34.632700+00:00",
-      "exit_price_usd": 7.997568310077378e-06,
-      "proceeds_usd": 7.53,
-      "pnl_usd": -12.47,
-      "pnl_pct": -62.34,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "7eQ6SVLzrqmQCBcwZNCj7dsoqRVufWG8V6viJrfvpump",
       "name": "When Lambo",
@@ -519,21 +485,43 @@
       "pnl_usd": -17.01,
       "pnl_pct": -85.07,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
       "name": "Miners",
       "symbol": "MINER",
-      "decision": "buy",
-      "signal_ts": "2026-10-06T19:32:30.221649+00:00",
-      "alert_score": 100.4,
-      "alert_graduation_pct": 59.44,
-      "graduation_pct": 69.32
+      "bonding_curve_key": "AveREMGVRqVQKwSWbZjh4FsdRv2eUXx2WSqpECNQjcDx",
+      "entry_ts": "2026-10-06T19:32:30.221649+00:00",
+      "entry_price_usd": 2.455474080742026e-05,
+      "entry_spot_price_usd": 2.4259659009550875e-05,
+      "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 814506.6631677151,
+      "entry_graduation_pct": 59.44,
+      "entry_score": 100.4,
+      "exit_ts": "2026-10-06T20:46:51.888665+00:00",
+      "exit_price_usd": 2.9330132100412347e-05,
+      "proceeds_usd": 23.89,
+      "pnl_usd": 3.89,
+      "pnl_pct": 19.45,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
+      "name": "Miners",
+      "symbol": "MINER",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-06T19:32:30.221649+00:00",
+      "recorded_ts": "2026-10-06T20:46:51.888644+00:00",
+      "alert_score": 100.4,
+      "alert_graduation_pct": 59.44,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 74.4
+    },
     {
       "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
       "name": "Orang",
@@ -1070,16 +1058,16 @@
   ],
   "stats": {
     "alerts": 53,
-    "graduated": 12,
+    "graduated": 13,
     "did_not_graduate": 29,
-    "buy_graduated": 8,
-    "buy_total": 27,
+    "buy_graduated": 9,
+    "buy_total": 28,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 29.3
+    "graduation_rate_pct": 31.0
   },
   "shadow_stats": {
-    "tracked": 1,
+    "tracked": 2,
     "graduated": 545,
     "did_not_graduate": 3570,
     "graduation_rate_pct": 13.2
