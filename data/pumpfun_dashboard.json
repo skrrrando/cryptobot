@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-07T06:41:08.852729+00:00",
-  "balance": 642.35,
-  "positions_value": 3.33,
-  "net_worth": 645.68,
+  "timestamp": "2026-10-07T06:55:53.518365+00:00",
+  "balance": 622.35,
+  "positions_value": 22.18,
+  "net_worth": 644.53,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "JUMPER",
       "entry_ts": "2026-10-07T04:02:01.392701+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.33,
-      "pnl_pct": -83.35,
+      "value_usd": 2.66,
+      "pnl_pct": -86.7,
       "entry_slippage_pct": 1.19,
       "entry_graduation_pct": 73.55,
-      "graduation_pct": 9.53,
+      "graduation_pct": 4.84,
+      "graduated": false
+    },
+    {
+      "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
+      "name": "DeciroAgent",
+      "symbol": "DECIROAI",
+      "entry_ts": "2026-10-07T06:55:53.518365+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.21,
+      "entry_graduation_pct": 61.98,
+      "graduation_pct": 61.98,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "take_profit"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
+      "name": "DeciroAgent",
+      "symbol": "DECIROAI",
+      "decision": "buy",
+      "signal_ts": "2026-10-07T06:55:53.518365+00:00",
+      "alert_score": 99.0,
+      "alert_graduation_pct": 61.98,
+      "graduation_pct": 61.98
+    }
+  ],
   "history": [
     {
       "mint": "8VuX44xmXrugHPBUWtuzx3kNxsC5L8qX9nwKhhohpump",
@@ -1084,7 +1108,7 @@
     }
   ],
   "stats": {
-    "alerts": 55,
+    "alerts": 56,
     "graduated": 14,
     "did_not_graduate": 29,
     "buy_graduated": 10,
