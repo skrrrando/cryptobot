@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-07T12:45:43.744735+00:00",
-  "balance": 642.38,
-  "positions_value": 2.62,
-  "net_worth": 645.0,
+  "timestamp": "2026-10-07T13:01:09.622337+00:00",
+  "balance": 644.98,
+  "positions_value": 0.0,
+  "net_worth": 644.98,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
-      "name": "DeciroAgent",
-      "symbol": "DECIROAI",
-      "entry_ts": "2026-10-07T06:55:53.518365+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.62,
-      "pnl_pct": -86.9,
-      "entry_slippage_pct": 1.21,
-      "entry_graduation_pct": 61.98,
-      "graduation_pct": 0.66,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
-      "name": "UP SYNDROME",
-      "symbol": "UP",
-      "bonding_curve_key": "3S6S1trZ37aZTLRY19RPjkQxqCbXBxSaffeDcjhR9gmG",
-      "entry_ts": "2026-09-13T03:10:34.489748+00:00",
-      "entry_price_usd": 3.2375937405260146e-05,
-      "entry_spot_price_usd": 3.1990302704897366e-05,
-      "entry_slippage_pct": 1.21,
-      "amount_usd": 20.0,
-      "qty": 617742.7312653065,
-      "entry_graduation_pct": 83.04,
-      "entry_score": 95.4,
-      "exit_ts": "2026-09-13T09:11:23.478540+00:00",
-      "exit_price_usd": 2.8257077885590402e-06,
-      "proceeds_usd": 1.75,
-      "pnl_usd": -18.25,
-      "pnl_pct": -91.27,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "6mokJ8icQKGZGJCsF3S3x4cmHVECfH55u6Tc6ikXpump",
       "name": "The Spirit of Bull",
@@ -519,21 +485,43 @@
       "pnl_usd": 17.21,
       "pnl_pct": 86.07,
       "exit_reason": "take_profit"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
       "name": "DeciroAgent",
       "symbol": "DECIROAI",
-      "decision": "buy",
-      "signal_ts": "2026-10-07T06:55:53.518365+00:00",
-      "alert_score": 99.0,
-      "alert_graduation_pct": 61.98,
-      "graduation_pct": 0.66
+      "bonding_curve_key": "8ZLaQKNcmQpfhaLmF8xfdgQbQuPtKn8V1PgPiq9p3kPM",
+      "entry_ts": "2026-10-07T06:55:53.518365+00:00",
+      "entry_price_usd": 2.550047178190605e-05,
+      "entry_spot_price_usd": 2.5194603414147767e-05,
+      "entry_slippage_pct": 1.21,
+      "amount_usd": 20.0,
+      "qty": 784299.2149733901,
+      "entry_graduation_pct": 61.98,
+      "entry_score": 99.0,
+      "exit_ts": "2026-10-07T13:01:09.622359+00:00",
+      "exit_price_usd": 3.3147645092064574e-06,
+      "proceeds_usd": 2.6,
+      "pnl_usd": -17.4,
+      "pnl_pct": -87.0,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
+      "name": "DeciroAgent",
+      "symbol": "DECIROAI",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-07T06:55:53.518365+00:00",
+      "recorded_ts": "2026-10-07T13:01:09.622337+00:00",
+      "alert_score": 99.0,
+      "alert_graduation_pct": 61.98,
+      "final_graduation_pct": 0.66,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "J1tjLHnNFZQX3JccUxX4etq8sgtZ53rAWQZDCcNpump",
       "name": "stash",
@@ -1110,12 +1098,12 @@
   "stats": {
     "alerts": 57,
     "graduated": 15,
-    "did_not_graduate": 29,
+    "did_not_graduate": 30,
     "buy_graduated": 11,
-    "buy_total": 30,
+    "buy_total": 31,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 34.1
+    "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
     "tracked": 6,
