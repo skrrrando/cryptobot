@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-07T04:21:44.108060+00:00",
-  "balance": 619.3,
-  "positions_value": 3.67,
-  "net_worth": 622.97,
+  "timestamp": "2026-10-07T04:41:07.253881+00:00",
+  "balance": 599.3,
+  "positions_value": 26.73,
+  "net_worth": 626.03,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "JUMPER",
       "entry_ts": "2026-10-07T04:02:01.392701+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.67,
-      "pnl_pct": -81.65,
+      "value_usd": 7.22,
+      "pnl_pct": -63.9,
       "entry_slippage_pct": 1.19,
       "entry_graduation_pct": 73.55,
-      "graduation_pct": 11.81,
+      "graduation_pct": 30.88,
+      "graduated": false
+    },
+    {
+      "mint": "8VuX44xmXrugHPBUWtuzx3kNxsC5L8qX9nwKhhohpump",
+      "name": "\u8de8\u63a5\u5668",
+      "symbol": "Jumper",
+      "entry_ts": "2026-10-07T04:41:07.253881+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 47.75,
+      "graduation_pct": 47.75,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "8VuX44xmXrugHPBUWtuzx3kNxsC5L8qX9nwKhhohpump",
+      "name": "\u8de8\u63a5\u5668",
+      "symbol": "Jumper",
+      "decision": "buy",
+      "signal_ts": "2026-10-07T04:41:07.253881+00:00",
+      "alert_score": 91.2,
+      "alert_graduation_pct": 47.75,
+      "graduation_pct": 47.75
+    }
+  ],
   "history": [
     {
       "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
@@ -1071,7 +1095,7 @@
     }
   ],
   "stats": {
-    "alerts": 54,
+    "alerts": 55,
     "graduated": 13,
     "did_not_graduate": 29,
     "buy_graduated": 9,
@@ -1081,9 +1105,9 @@
     "graduation_rate_pct": 31.0
   },
   "shadow_stats": {
-    "tracked": 8,
+    "tracked": 7,
     "graduated": 547,
-    "did_not_graduate": 3572,
+    "did_not_graduate": 3573,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
