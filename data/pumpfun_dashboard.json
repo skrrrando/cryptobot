@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-07T12:06:04.764572+00:00",
+  "timestamp": "2026-10-07T12:30:51.131311+00:00",
   "balance": 642.38,
-  "positions_value": 2.64,
-  "net_worth": 645.02,
+  "positions_value": 2.62,
+  "net_worth": 645.0,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,8 +11,8 @@
       "symbol": "DECIROAI",
       "entry_ts": "2026-10-07T06:55:53.518365+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.64,
-      "pnl_pct": -86.8,
+      "value_usd": 2.62,
+      "pnl_pct": -86.9,
       "entry_slippage_pct": 1.21,
       "entry_graduation_pct": 61.98,
       "graduation_pct": 0.66,
@@ -523,16 +523,6 @@
   ],
   "watching": [
     {
-      "mint": "J1tjLHnNFZQX3JccUxX4etq8sgtZ53rAWQZDCcNpump",
-      "name": "stash",
-      "symbol": "stash",
-      "decision": "buy",
-      "signal_ts": "2026-10-07T07:06:09.969978+00:00",
-      "alert_score": 93.2,
-      "alert_graduation_pct": 49.15,
-      "graduation_pct": 78.08
-    },
-    {
       "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
       "name": "DeciroAgent",
       "symbol": "DECIROAI",
@@ -544,6 +534,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "J1tjLHnNFZQX3JccUxX4etq8sgtZ53rAWQZDCcNpump",
+      "name": "stash",
+      "symbol": "stash",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-07T07:06:09.969978+00:00",
+      "recorded_ts": "2026-10-07T12:30:51.131311+00:00",
+      "alert_score": 93.2,
+      "alert_graduation_pct": 49.15,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 324.7
+    },
     {
       "mint": "8VuX44xmXrugHPBUWtuzx3kNxsC5L8qX9nwKhhohpump",
       "name": "\u8de8\u63a5\u5668",
@@ -1106,18 +1109,18 @@
   ],
   "stats": {
     "alerts": 57,
-    "graduated": 14,
+    "graduated": 15,
     "did_not_graduate": 29,
-    "buy_graduated": 10,
-    "buy_total": 29,
+    "buy_graduated": 11,
+    "buy_total": 30,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 32.6
+    "graduation_rate_pct": 34.1
   },
   "shadow_stats": {
     "tracked": 6,
     "graduated": 548,
-    "did_not_graduate": 3580,
+    "did_not_graduate": 3581,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
