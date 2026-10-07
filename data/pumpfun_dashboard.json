@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-07T04:55:45.459882+00:00",
+  "timestamp": "2026-10-07T05:06:04.531074+00:00",
   "balance": 642.35,
-  "positions_value": 7.45,
-  "net_worth": 649.8,
+  "positions_value": 4.35,
+  "net_worth": 646.7,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "JUMPER",
       "entry_ts": "2026-10-07T04:02:01.392701+00:00",
       "amount_usd": 20.0,
-      "value_usd": 7.45,
-      "pnl_pct": -62.75,
+      "value_usd": 4.35,
+      "pnl_pct": -78.25,
       "entry_slippage_pct": 1.19,
       "entry_graduation_pct": 73.55,
-      "graduation_pct": 31.92,
+      "graduation_pct": 16.07,
       "graduated": false
     }
   ],
@@ -521,19 +521,21 @@
       "exit_reason": "take_profit"
     }
   ],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "8VuX44xmXrugHPBUWtuzx3kNxsC5L8qX9nwKhhohpump",
       "name": "\u8de8\u63a5\u5668",
       "symbol": "Jumper",
+      "outcome": "graduated",
       "decision": "buy",
       "signal_ts": "2026-10-07T04:41:07.253881+00:00",
+      "recorded_ts": "2026-10-07T05:06:04.531074+00:00",
       "alert_score": 91.2,
       "alert_graduation_pct": 47.75,
-      "graduation_pct": 88.15
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 25.0
+    },
     {
       "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
       "name": "Miners",
@@ -1083,13 +1085,13 @@
   ],
   "stats": {
     "alerts": 55,
-    "graduated": 13,
+    "graduated": 14,
     "did_not_graduate": 29,
-    "buy_graduated": 9,
-    "buy_total": 28,
+    "buy_graduated": 10,
+    "buy_total": 29,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 31.0
+    "graduation_rate_pct": 32.6
   },
   "shadow_stats": {
     "tracked": 7,
