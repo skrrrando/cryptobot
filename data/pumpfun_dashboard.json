@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-08T10:50:37.868509+00:00",
-  "balance": 591.81,
-  "positions_value": 9.47,
-  "net_worth": 601.28,
+  "timestamp": "2026-10-08T10:55:29.940036+00:00",
+  "balance": 571.81,
+  "positions_value": 26.39,
+  "net_worth": 598.2,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "PIG",
       "entry_ts": "2026-10-08T10:40:45.117032+00:00",
       "amount_usd": 20.0,
-      "value_usd": 9.47,
-      "pnl_pct": -52.65,
+      "value_usd": 6.86,
+      "pnl_pct": -65.7,
       "entry_slippage_pct": 1.24,
       "entry_graduation_pct": 55.7,
-      "graduation_pct": 28.12,
+      "graduation_pct": 18.69,
+      "graduated": false
+    },
+    {
+      "mint": "F3Xr27etgJK76dgeEQPpjyWUN5C8EB6NauEHwsFjpump",
+      "name": "The Larp Cat",
+      "symbol": "Nyazsche",
+      "entry_ts": "2026-10-08T10:55:29.940036+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.2,
+      "entry_graduation_pct": 72.43,
+      "graduation_pct": 72.43,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "F3Xr27etgJK76dgeEQPpjyWUN5C8EB6NauEHwsFjpump",
+      "name": "The Larp Cat",
+      "symbol": "Nyazsche",
+      "decision": "buy",
+      "signal_ts": "2026-10-08T10:55:29.940036+00:00",
+      "alert_score": 99.1,
+      "alert_graduation_pct": 72.43,
+      "graduation_pct": 72.43
+    },
+    {
       "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
       "name": "The Pig",
       "symbol": "PIG",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-08T10:40:45.117032+00:00",
       "alert_score": 108.3,
       "alert_graduation_pct": 55.7,
-      "graduation_pct": 28.12
+      "graduation_pct": 18.69
     }
   ],
   "history": [
@@ -1121,7 +1144,7 @@
     }
   ],
   "stats": {
-    "alerts": 60,
+    "alerts": 61,
     "graduated": 15,
     "did_not_graduate": 30,
     "buy_graduated": 11,
@@ -1131,7 +1154,7 @@
     "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
-    "tracked": 15,
+    "tracked": 17,
     "graduated": 559,
     "did_not_graduate": 3653,
     "graduation_rate_pct": 13.3
