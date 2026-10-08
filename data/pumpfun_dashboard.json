@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-08T10:30:58.926123+00:00",
-  "balance": 611.81,
-  "positions_value": 0.0,
-  "net_worth": 611.81,
+  "timestamp": "2026-10-08T10:40:45.117032+00:00",
+  "balance": 591.81,
+  "positions_value": 19.51,
+  "net_worth": 611.32,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
+      "name": "The Pig",
+      "symbol": "PIG",
+      "entry_ts": "2026-10-08T10:40:45.117032+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 55.7,
+      "graduation_pct": 55.7,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
+      "name": "The Pig",
+      "symbol": "PIG",
+      "decision": "buy",
+      "signal_ts": "2026-10-08T10:40:45.117032+00:00",
+      "alert_score": 108.3,
+      "alert_graduation_pct": 55.7,
+      "graduation_pct": 55.7
+    }
+  ],
   "history": [
     {
       "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
@@ -1096,7 +1121,7 @@
     }
   ],
   "stats": {
-    "alerts": 59,
+    "alerts": 60,
     "graduated": 15,
     "did_not_graduate": 30,
     "buy_graduated": 11,
