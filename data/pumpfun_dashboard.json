@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-08T16:26:08.563144+00:00",
-  "balance": 591.24,
-  "positions_value": 2.88,
-  "net_worth": 594.12,
+  "timestamp": "2026-10-08T16:41:09.605559+00:00",
+  "balance": 594.1,
+  "positions_value": 0.0,
+  "net_worth": 594.1,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
-      "name": "The Pig",
-      "symbol": "PIG",
-      "entry_ts": "2026-10-08T10:40:45.117032+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.88,
-      "pnl_pct": -85.6,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 55.7,
-      "graduation_pct": 0.51,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "5NM8PsopGA77PBiH6jMWShEu1aGENwAwoN5hg9Pfpump",
-      "name": "Life Before AI",
-      "symbol": "AI",
-      "bonding_curve_key": "BmybfvNw8XGKeUiGVMh1fjmUEUkz7GE1RDfLrbDcucp8",
-      "entry_ts": "2026-09-14T05:25:28.808116+00:00",
-      "entry_price_usd": 2.061240717054886e-05,
-      "entry_spot_price_usd": 2.0356853739484615e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 970289.3909730315,
-      "entry_graduation_pct": 59.24,
-      "entry_score": 109.5,
-      "exit_ts": "2026-09-14T11:25:31.710363+00:00",
-      "exit_price_usd": 2.94263476445895e-06,
-      "proceeds_usd": 2.86,
-      "pnl_usd": -17.14,
-      "pnl_pct": -85.72,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
       "name": "Hybrid Memes",
@@ -519,21 +485,43 @@
       "pnl_usd": -0.57,
       "pnl_pct": -2.84,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
       "name": "The Pig",
       "symbol": "PIG",
-      "decision": "buy",
-      "signal_ts": "2026-10-08T10:40:45.117032+00:00",
-      "alert_score": 108.3,
-      "alert_graduation_pct": 55.7,
-      "graduation_pct": 0.51
+      "bonding_curve_key": "4dSoELeawFgiXYYv6q5AmUyVEkipWUofG1qr8Fiuj7qy",
+      "entry_ts": "2026-10-08T10:40:45.117032+00:00",
+      "entry_price_usd": 2.154126614776118e-05,
+      "entry_spot_price_usd": 2.1278274572133878e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 928450.5313109756,
+      "entry_graduation_pct": 55.7,
+      "entry_score": 108.3,
+      "exit_ts": "2026-10-08T16:41:09.605580+00:00",
+      "exit_price_usd": 3.0722196765781553e-06,
+      "proceeds_usd": 2.85,
+      "pnl_usd": -17.15,
+      "pnl_pct": -85.74,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
+      "name": "The Pig",
+      "symbol": "PIG",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-08T10:40:45.117032+00:00",
+      "recorded_ts": "2026-10-08T16:41:09.605559+00:00",
+      "alert_score": 108.3,
+      "alert_graduation_pct": 55.7,
+      "final_graduation_pct": 0.51,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "F3Xr27etgJK76dgeEQPpjyWUN5C8EB6NauEHwsFjpump",
       "name": "The Larp Cat",
@@ -1136,17 +1124,17 @@
   "stats": {
     "alerts": 61,
     "graduated": 16,
-    "did_not_graduate": 30,
+    "did_not_graduate": 31,
     "buy_graduated": 12,
-    "buy_total": 32,
+    "buy_total": 33,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 34.8
+    "graduation_rate_pct": 34.0
   },
   "shadow_stats": {
-    "tracked": 34,
+    "tracked": 32,
     "graduated": 561,
-    "did_not_graduate": 3666,
+    "did_not_graduate": 3668,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
