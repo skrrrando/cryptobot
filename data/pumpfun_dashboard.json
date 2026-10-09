@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-09T10:16:36.580375+00:00",
-  "balance": 578.9,
-  "positions_value": 4.07,
-  "net_worth": 582.97,
+  "timestamp": "2026-10-09T10:31:09.707294+00:00",
+  "balance": 582.92,
+  "positions_value": 0.0,
+  "net_worth": 582.92,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
-      "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
-      "symbol": "\u2820\u2801",
-      "entry_ts": "2026-10-09T04:20:44.567993+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 4.07,
-      "pnl_pct": -79.65,
-      "entry_slippage_pct": 1.26,
-      "entry_graduation_pct": 50.89,
-      "graduation_pct": 4.05,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "FNGqSX4p8wnHHud4du4GdsDbKR3FpacaBcmLRf9jpump",
-      "name": "Sydney Weenie",
-      "symbol": "Weenie",
-      "bonding_curve_key": "24VBs6eucA8dsFZB6y2ocNfZYY3JcdepLs9tuchvSAAo",
-      "entry_ts": "2026-09-15T01:50:47.878927+00:00",
-      "entry_price_usd": 0.003307308645615285,
-      "entry_spot_price_usd": 0.003274186090845571,
-      "entry_slippage_pct": 1.01,
-      "amount_usd": 20.0,
-      "qty": 6047.213049352169,
-      "entry_graduation_pct": 9423.39,
-      "entry_score": 92.5,
-      "exit_ts": "2026-09-15T07:55:31.510066+00:00",
-      "exit_price_usd": 0.0005380818947870389,
-      "proceeds_usd": 3.25,
-      "pnl_usd": -16.75,
-      "pnl_pct": -83.73,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "ARejCawoEuKGRQ1oYdTwf7yf7FvmNnt9iwdKDXxiR5tk",
       "name": "sqlana",
@@ -519,21 +485,43 @@
       "pnl_usd": 5.29,
       "pnl_pct": 26.46,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
       "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
       "symbol": "\u2820\u2801",
-      "decision": "buy",
-      "signal_ts": "2026-10-09T04:20:44.567993+00:00",
-      "alert_score": 94.2,
-      "alert_graduation_pct": 50.89,
-      "graduation_pct": 4.05
+      "bonding_curve_key": "FQmnNHsCjJCU9219ZduXymZtzxAJd8iiG7NLVY7K4dWk",
+      "entry_ts": "2026-10-09T04:20:44.567993+00:00",
+      "entry_price_usd": 1.863199307971421e-05,
+      "entry_spot_price_usd": 1.8400608418409116e-05,
+      "entry_slippage_pct": 1.26,
+      "amount_usd": 20.0,
+      "qty": 1073422.468247652,
+      "entry_graduation_pct": 50.89,
+      "entry_score": 94.2,
+      "exit_ts": "2026-10-09T10:31:09.707319+00:00",
+      "exit_price_usd": 3.7498031745886633e-06,
+      "proceeds_usd": 4.03,
+      "pnl_usd": -15.97,
+      "pnl_pct": -79.87,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
+      "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
+      "symbol": "\u2820\u2801",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-09T04:20:44.567993+00:00",
+      "recorded_ts": "2026-10-09T10:31:09.707294+00:00",
+      "alert_score": 94.2,
+      "alert_graduation_pct": 50.89,
+      "final_graduation_pct": 3.96,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
       "name": "The Pig",
@@ -1149,12 +1137,12 @@
   "stats": {
     "alerts": 64,
     "graduated": 16,
-    "did_not_graduate": 31,
+    "did_not_graduate": 32,
     "buy_graduated": 12,
-    "buy_total": 33,
+    "buy_total": 34,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 34.0
+    "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
     "tracked": 11,
