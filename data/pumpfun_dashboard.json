@@ -1,45 +1,25 @@
 {
-  "timestamp": "2026-10-09T04:11:16.150249+00:00",
-  "balance": 574.1,
-  "positions_value": 19.53,
-  "net_worth": 593.63,
+  "timestamp": "2026-10-09T04:20:44.567993+00:00",
+  "balance": 573.6,
+  "positions_value": 19.51,
+  "net_worth": 593.11,
   "starting_balance": 1000.0,
   "positions": [
     {
-      "mint": "8uZieiVy2AanCpYkfxR1quKSbzPKuMUaNYwQ61mrT3iu",
-      "name": "Reverse Engineer Anything",
-      "symbol": "REA",
-      "entry_ts": "2026-10-09T04:11:16.150249+00:00",
+      "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
+      "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
+      "symbol": "\u2820\u2801",
+      "entry_ts": "2026-10-09T04:20:44.567993+00:00",
       "amount_usd": 20.0,
-      "value_usd": 19.53,
-      "pnl_pct": -2.35,
-      "entry_slippage_pct": 1.21,
-      "entry_graduation_pct": 72.96,
-      "graduation_pct": 72.96,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 50.89,
+      "graduation_pct": 50.89,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
-      "name": "Hybrid Memes",
-      "symbol": "HYBRID",
-      "bonding_curve_key": "1Q5KJBViqF8jPgdQ6ibCFexE5A2h8WqUsB724ta3Vsp",
-      "entry_ts": "2026-09-15T00:10:36.987665+00:00",
-      "entry_price_usd": 3.8882273228351787e-05,
-      "entry_spot_price_usd": 3.842597640640762e-05,
-      "entry_slippage_pct": 1.19,
-      "amount_usd": 20.0,
-      "qty": 514373.2179068327,
-      "entry_graduation_pct": 93.75,
-      "entry_score": 99.3,
-      "exit_ts": "2026-09-15T00:15:36.295139+00:00",
-      "exit_price_usd": 3.780582580928909e-05,
-      "proceeds_usd": 19.45,
-      "pnl_usd": -0.55,
-      "pnl_pct": -2.77,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "8kL5vd6PsbkLNMyLXh1F2vDFr17t1CZnPzesvdm1pump",
       "name": "The White Bull",
@@ -519,9 +499,40 @@
       "pnl_usd": -17.15,
       "pnl_pct": -85.74,
       "exit_reason": "timeout"
+    },
+    {
+      "mint": "8uZieiVy2AanCpYkfxR1quKSbzPKuMUaNYwQ61mrT3iu",
+      "name": "Reverse Engineer Anything",
+      "symbol": "REA",
+      "bonding_curve_key": "77E7zcy2pfE2yJisHsirevzbMMtKsVha5UZBYiAt8TNt",
+      "entry_ts": "2026-10-09T04:11:16.150249+00:00",
+      "entry_price_usd": 2.937827166896377e-05,
+      "entry_spot_price_usd": 2.902788421167399e-05,
+      "entry_slippage_pct": 1.21,
+      "amount_usd": 20.0,
+      "qty": 680775.2418304682,
+      "entry_graduation_pct": 72.96,
+      "entry_score": 110.2,
+      "exit_ts": "2026-10-09T04:20:44.568013+00:00",
+      "exit_price_usd": 2.8655632791217343e-05,
+      "proceeds_usd": 19.51,
+      "pnl_usd": -0.49,
+      "pnl_pct": -2.46,
+      "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
+      "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
+      "symbol": "\u2820\u2801",
+      "decision": "buy",
+      "signal_ts": "2026-10-09T04:20:44.567993+00:00",
+      "alert_score": 94.2,
+      "alert_graduation_pct": 50.89,
+      "graduation_pct": 50.89
+    }
+  ],
   "history": [
     {
       "mint": "EWfUpAnvciP45xRZKbBCoUuhKMHDierhJXtw4AWHpump",
@@ -1136,7 +1147,7 @@
     }
   ],
   "stats": {
-    "alerts": 62,
+    "alerts": 63,
     "graduated": 16,
     "did_not_graduate": 31,
     "buy_graduated": 12,
@@ -1146,9 +1157,9 @@
     "graduation_rate_pct": 34.0
   },
   "shadow_stats": {
-    "tracked": 30,
-    "graduated": 568,
-    "did_not_graduate": 3737,
+    "tracked": 26,
+    "graduated": 569,
+    "did_not_graduate": 3740,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
