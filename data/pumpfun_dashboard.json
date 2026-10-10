@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-10T07:06:10.919088+00:00",
-  "balance": 554.76,
-  "positions_value": 3.44,
-  "net_worth": 558.2,
+  "timestamp": "2026-10-10T07:25:32.531847+00:00",
+  "balance": 558.23,
+  "positions_value": 0.0,
+  "net_worth": 558.23,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
-      "name": "nami",
-      "symbol": "nami",
-      "entry_ts": "2026-10-10T01:20:46.393782+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.44,
-      "pnl_pct": -82.8,
-      "entry_slippage_pct": 1.22,
-      "entry_graduation_pct": 66.86,
-      "graduation_pct": 7.53,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "E8SUVM5LniaecPyBFTU83o2gX5dNZMzXojafyiNvfh1L",
-      "name": "Mario Nawfal",
-      "symbol": "MARIO",
-      "bonding_curve_key": "2rLnb47uMWcuXKkkFDLXHb5S12RkN8JrD7pTY4BFHLYV",
-      "entry_ts": "2026-09-16T01:21:11.583331+00:00",
-      "entry_price_usd": 1.855878784682252e-05,
-      "entry_spot_price_usd": 1.8325222811119786e-05,
-      "entry_slippage_pct": 1.27,
-      "amount_usd": 20.0,
-      "qty": 1077656.5886238217,
-      "entry_graduation_pct": 56.46,
-      "entry_score": 105.0,
-      "exit_ts": "2026-09-16T07:22:55.792443+00:00",
-      "exit_price_usd": 3.3120237325195547e-06,
-      "proceeds_usd": 3.57,
-      "pnl_usd": -16.43,
-      "pnl_pct": -82.15,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "FdWgweu4TULjE6Vx9UDt44FZfpeVV3ixVFpthwtmWCWg",
       "name": "The Odyssean Bear",
@@ -519,21 +485,43 @@
       "pnl_usd": -5.06,
       "pnl_pct": -25.28,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
       "name": "nami",
       "symbol": "nami",
-      "decision": "buy",
-      "signal_ts": "2026-10-10T01:20:46.393782+00:00",
-      "alert_score": 95.0,
-      "alert_graduation_pct": 66.86,
-      "graduation_pct": 7.53
+      "bonding_curve_key": "DKsKkX9hpx1jL3T2i7HXAkszfzEppCgPmpCs69SZdx5G",
+      "entry_ts": "2026-10-10T01:20:46.393782+00:00",
+      "entry_price_usd": 2.59546120385443e-05,
+      "entry_spot_price_usd": 2.5641650580495754e-05,
+      "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 770575.956608355,
+      "entry_graduation_pct": 66.86,
+      "entry_score": 95.0,
+      "exit_ts": "2026-10-10T07:25:32.531871+00:00",
+      "exit_price_usd": 4.495249095472499e-06,
+      "proceeds_usd": 3.46,
+      "pnl_usd": -16.54,
+      "pnl_pct": -82.68,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
+      "name": "nami",
+      "symbol": "nami",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-10T01:20:46.393782+00:00",
+      "recorded_ts": "2026-10-10T07:25:32.531847+00:00",
+      "alert_score": 95.0,
+      "alert_graduation_pct": 66.86,
+      "final_graduation_pct": 7.82,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "5QbpbvUufCgm5rjaoCeuQz2R2nkgPRMmQ4KViAyvXkcF",
       "name": "BrewApp",
@@ -1170,35 +1158,22 @@
       "alert_graduation_pct": 22.32,
       "final_graduation_pct": 0.18,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "AmZHqnabM4TdoiaRWo5qxRWPTB8RFtYF4tjUqgSepump",
-      "name": "Fun Cat",
-      "symbol": "FCAT",
-      "outcome": "graduated",
-      "decision": null,
-      "signal_ts": "2026-09-06T18:23:09.138275+00:00",
-      "recorded_ts": "2026-09-06T18:31:59.825315+00:00",
-      "alert_score": 100.0,
-      "alert_graduation_pct": 65.12,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 8.8
     }
   ],
   "stats": {
     "alerts": 69,
     "graduated": 18,
-    "did_not_graduate": 32,
+    "did_not_graduate": 33,
     "buy_graduated": 14,
-    "buy_total": 36,
+    "buy_total": 37,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 36.0
+    "graduation_rate_pct": 35.3
   },
   "shadow_stats": {
-    "tracked": 11,
+    "tracked": 10,
     "graduated": 587,
-    "did_not_graduate": 3848,
+    "did_not_graduate": 3849,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
