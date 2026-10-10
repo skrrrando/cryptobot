@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-10T03:58:15.756701+00:00",
-  "balance": 520.79,
-  "positions_value": 47.45,
-  "net_worth": 568.24,
+  "timestamp": "2026-10-10T04:07:47.997862+00:00",
+  "balance": 540.29,
+  "positions_value": 27.94,
+  "net_worth": 568.23,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -30,42 +30,9 @@
       "entry_graduation_pct": 66.86,
       "graduation_pct": 7.61,
       "graduated": false
-    },
-    {
-      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
-      "name": "Qolony",
-      "symbol": "Qolony",
-      "entry_ts": "2026-10-10T03:58:15.756701+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.51,
-      "pnl_pct": -2.45,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 58.13,
-      "graduation_pct": 58.13,
-      "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
-      "name": "Culture Dog",
-      "symbol": "culture",
-      "bonding_curve_key": "92aFKDNaKHshWuX94wGqoDyAyCSCiPJaaC86Vki2Ddky",
-      "entry_ts": "2026-09-16T00:50:35.770457+00:00",
-      "entry_price_usd": 2.5853370348095495e-05,
-      "entry_spot_price_usd": 2.5538082296409388e-05,
-      "entry_slippage_pct": 1.23,
-      "amount_usd": 20.0,
-      "qty": 773593.528840363,
-      "entry_graduation_pct": 73.25,
-      "entry_score": 94.9,
-      "exit_ts": "2026-09-16T06:54:42.221413+00:00",
-      "exit_price_usd": 2.660735422836048e-06,
-      "proceeds_usd": 2.06,
-      "pnl_usd": -17.94,
-      "pnl_pct": -89.71,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "8P4hKQ2Bg6DospeWyTxKM9A2eGRDjA28jxLX66yLUmzn",
       "name": "ALXMONEY",
@@ -545,19 +512,29 @@
       "pnl_usd": -2.13,
       "pnl_pct": -10.66,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
       "name": "Qolony",
       "symbol": "Qolony",
-      "decision": "buy",
-      "signal_ts": "2026-10-10T03:58:15.756701+00:00",
-      "alert_score": 93.9,
-      "alert_graduation_pct": 58.13,
-      "graduation_pct": 58.13
-    },
+      "bonding_curve_key": "2v4MvRxwPFcRyKQzePcjjkXgpJhoYuS9kbCHdd1sBvTd",
+      "entry_ts": "2026-10-10T03:58:15.756701+00:00",
+      "entry_price_usd": 2.176102335660708e-05,
+      "entry_spot_price_usd": 2.1494562338880323e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 919074.4236726165,
+      "entry_graduation_pct": 58.13,
+      "entry_score": 93.9,
+      "exit_ts": "2026-10-10T04:07:47.997883+00:00",
+      "exit_price_usd": 2.121568100127157e-05,
+      "proceeds_usd": 19.5,
+      "pnl_usd": -0.5,
+      "pnl_pct": -2.51,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
       "name": "nami",
@@ -570,6 +547,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
+      "name": "Qolony",
+      "symbol": "Qolony",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-10T03:58:15.756701+00:00",
+      "recorded_ts": "2026-10-10T04:07:47.997862+00:00",
+      "alert_score": 93.9,
+      "alert_graduation_pct": 58.13,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.5
+    },
     {
       "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
       "name": "\u2820\u2803\u2820\u2807\u2820\u280a\u2820\u281d\u2820\u2819",
@@ -1197,18 +1187,18 @@
   ],
   "stats": {
     "alerts": 68,
-    "graduated": 16,
+    "graduated": 17,
     "did_not_graduate": 32,
-    "buy_graduated": 12,
-    "buy_total": 34,
+    "buy_graduated": 13,
+    "buy_total": 35,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 33.3
+    "graduation_rate_pct": 34.7
   },
   "shadow_stats": {
-    "tracked": 15,
+    "tracked": 14,
     "graduated": 584,
-    "did_not_graduate": 3838,
+    "did_not_graduate": 3839,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
