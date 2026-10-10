@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-10T01:11:07.193266+00:00",
-  "balance": 560.79,
-  "positions_value": 18.62,
-  "net_worth": 579.41,
+  "timestamp": "2026-10-10T01:20:46.393782+00:00",
+  "balance": 540.79,
+  "positions_value": 38.12,
+  "net_worth": 578.91,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "ANDY",
       "entry_ts": "2026-10-10T00:06:11.357360+00:00",
       "amount_usd": 20.0,
-      "value_usd": 18.62,
-      "pnl_pct": -6.9,
+      "value_usd": 18.6,
+      "pnl_pct": -7.0,
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 6227.85,
-      "graduation_pct": 5798.47,
+      "graduation_pct": 5783.68,
+      "graduated": false
+    },
+    {
+      "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
+      "name": "nami",
+      "symbol": "nami",
+      "entry_ts": "2026-10-10T01:20:46.393782+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 66.86,
+      "graduation_pct": 66.86,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
+      "name": "nami",
+      "symbol": "nami",
+      "decision": "buy",
+      "signal_ts": "2026-10-10T01:20:46.393782+00:00",
+      "alert_score": 95.0,
+      "alert_graduation_pct": 66.86,
+      "graduation_pct": 66.86
+    }
+  ],
   "history": [
     {
       "mint": "FBrTHPyCk5jLWADrvGYC8nEgf1ZEs838X1QQgrrffW9L",
@@ -1149,7 +1173,7 @@
     }
   ],
   "stats": {
-    "alerts": 66,
+    "alerts": 67,
     "graduated": 16,
     "did_not_graduate": 32,
     "buy_graduated": 12,
@@ -1159,7 +1183,7 @@
     "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
-    "tracked": 32,
+    "tracked": 33,
     "graduated": 582,
     "did_not_graduate": 3816,
     "graduation_rate_pct": 13.2
