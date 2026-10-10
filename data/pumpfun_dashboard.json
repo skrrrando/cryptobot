@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-10T03:48:52.207647+00:00",
-  "balance": 540.79,
-  "positions_value": 27.96,
-  "net_worth": 568.75,
+  "timestamp": "2026-10-10T03:58:15.756701+00:00",
+  "balance": 520.79,
+  "positions_value": 47.45,
+  "net_worth": 568.24,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,8 +11,8 @@
       "symbol": "ANDY",
       "entry_ts": "2026-10-10T00:06:11.357360+00:00",
       "amount_usd": 20.0,
-      "value_usd": 24.5,
-      "pnl_pct": 22.5,
+      "value_usd": 24.49,
+      "pnl_pct": 22.45,
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 6227.85,
       "graduation_pct": 8072.29,
@@ -24,11 +24,24 @@
       "symbol": "nami",
       "entry_ts": "2026-10-10T01:20:46.393782+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.46,
-      "pnl_pct": -82.7,
+      "value_usd": 3.45,
+      "pnl_pct": -82.75,
       "entry_slippage_pct": 1.22,
       "entry_graduation_pct": 66.86,
       "graduation_pct": 7.61,
+      "graduated": false
+    },
+    {
+      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
+      "name": "Qolony",
+      "symbol": "Qolony",
+      "entry_ts": "2026-10-10T03:58:15.756701+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 58.13,
+      "graduation_pct": 58.13,
       "graduated": false
     }
   ],
@@ -535,6 +548,16 @@
     }
   ],
   "watching": [
+    {
+      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
+      "name": "Qolony",
+      "symbol": "Qolony",
+      "decision": "buy",
+      "signal_ts": "2026-10-10T03:58:15.756701+00:00",
+      "alert_score": 93.9,
+      "alert_graduation_pct": 58.13,
+      "graduation_pct": 58.13
+    },
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
       "name": "nami",
@@ -1173,7 +1196,7 @@
     }
   ],
   "stats": {
-    "alerts": 67,
+    "alerts": 68,
     "graduated": 16,
     "did_not_graduate": 32,
     "buy_graduated": 12,
@@ -1183,9 +1206,9 @@
     "graduation_rate_pct": 33.3
   },
   "shadow_stats": {
-    "tracked": 17,
-    "graduated": 583,
-    "did_not_graduate": 3837,
+    "tracked": 15,
+    "graduated": 584,
+    "did_not_graduate": 3838,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
