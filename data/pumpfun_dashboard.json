@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-12T02:01:03.145415+00:00",
-  "balance": 501.9,
-  "positions_value": 20.36,
-  "net_worth": 522.26,
+  "timestamp": "2026-10-12T02:20:47.766416+00:00",
+  "balance": 519.83,
+  "positions_value": 2.51,
+  "net_worth": 522.34,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,15 @@
       "symbol": "SELFMADE",
       "entry_ts": "2026-10-12T00:50:38.007297+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.5,
-      "pnl_pct": -87.5,
+      "value_usd": 2.51,
+      "pnl_pct": -87.45,
       "entry_slippage_pct": 1.22,
       "entry_graduation_pct": 65.43,
       "graduation_pct": 0.72,
       "graduated": false
-    },
-    {
-      "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
-      "name": "debpf",
-      "symbol": "DEBPF",
-      "entry_ts": "2026-10-12T01:01:03.217025+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 17.86,
-      "pnl_pct": -10.7,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 57.11,
-      "graduation_pct": 53.14,
-      "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "3EDzSJKb4aAYYPt3nUHj8SELUMtMBWB8Lvnw2eb8pump",
-      "name": "Double",
-      "symbol": "Double",
-      "bonding_curve_key": "zPRrDRVZvYEfeNY6LwrzrQ6cfEMUd5bNET6A3MuiujE",
-      "entry_ts": "2026-09-24T04:20:38.409106+00:00",
-      "entry_price_usd": 0.0007672369918617728,
-      "entry_spot_price_usd": 0.0007595153540168978,
-      "entry_slippage_pct": 1.02,
-      "amount_usd": 20.0,
-      "qty": 26067.564796984196,
-      "entry_graduation_pct": 1960.73,
-      "entry_score": 92.2,
-      "exit_ts": "2026-09-24T04:45:39.458116+00:00",
-      "exit_price_usd": 0.0011020448830113805,
-      "proceeds_usd": 28.73,
-      "pnl_usd": 8.73,
-      "pnl_pct": 43.64,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
       "name": "Orang",
@@ -532,19 +499,29 @@
       "pnl_usd": -0.47,
       "pnl_pct": -2.36,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
       "name": "debpf",
       "symbol": "DEBPF",
-      "decision": "buy",
-      "signal_ts": "2026-10-12T01:01:03.217025+00:00",
-      "alert_score": 92.2,
-      "alert_graduation_pct": 57.11,
-      "graduation_pct": 53.14
-    },
+      "bonding_curve_key": "ARnLzJgHuTbSPBcbZZaDvZsqMzKfpqTMNoFYGGE1R2um",
+      "entry_ts": "2026-10-12T01:01:03.217025+00:00",
+      "entry_price_usd": 2.1640408588970467e-05,
+      "entry_spot_price_usd": 2.137568888339196e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 924196.9678055644,
+      "entry_graduation_pct": 57.11,
+      "entry_score": 92.2,
+      "exit_ts": "2026-10-12T02:20:47.766436+00:00",
+      "exit_price_usd": 1.9400966077094655e-05,
+      "proceeds_usd": 17.93,
+      "pnl_usd": -2.07,
+      "pnl_pct": -10.35,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
     {
       "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
       "name": "Self Made",
@@ -557,6 +534,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
+      "name": "debpf",
+      "symbol": "DEBPF",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-12T01:01:03.217025+00:00",
+      "recorded_ts": "2026-10-12T02:20:47.766416+00:00",
+      "alert_score": 92.2,
+      "alert_graduation_pct": 57.11,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 79.7
+    },
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
       "name": "nami",
@@ -1193,30 +1183,17 @@
       "alert_graduation_pct": 94.93,
       "final_graduation_pct": null,
       "minutes_to_graduate": 8.9
-    },
-    {
-      "mint": "Dvs6bwLNyh9ShHg7Hcs5vWvwzzAPVnqrNKYXPQvmpump",
-      "name": "Bring Back Pump ",
-      "symbol": "BBP",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-06T18:23:09.138275+00:00",
-      "recorded_ts": "2026-09-07T00:31:43.045996+00:00",
-      "alert_score": 62.3,
-      "alert_graduation_pct": 22.32,
-      "final_graduation_pct": 0.18,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 76,
-    "graduated": 18,
+    "graduated": 19,
     "did_not_graduate": 33,
-    "buy_graduated": 14,
-    "buy_total": 37,
+    "buy_graduated": 15,
+    "buy_total": 38,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 35.3
+    "graduation_rate_pct": 36.5
   },
   "shadow_stats": {
     "tracked": 39,
