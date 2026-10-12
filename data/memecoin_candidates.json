@@ -1,17 +1,104 @@
 {
-  "timestamp": "2026-10-12T13:26:13.015528+00:00",
+  "timestamp": "2026-10-12T13:31:23.084998+00:00",
   "candidates": [
     {
-      "id": "base_0x717e174d5dae280802d1a2c15c1c0976561a3f61",
-      "timestamp": "2026-10-12T13:25:29.316461+00:00",
-      "network": "base",
-      "name": "ZRO / WETH 0.048%",
-      "address": "0x717e174d5dae280802d1a2c15c1c0976561a3f61",
-      "base_token_address": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
-      "rank": 7,
+      "id": "eth_0x1ac97b51ca74fd1f395c343b305d58e4c2b01aca",
+      "timestamp": "2026-10-12T13:30:55.159562+00:00",
+      "network": "eth",
+      "name": "NEX / WETH 0.01%",
+      "address": "0x1ac97b51ca74fd1f395c343b305d58e4c2b01aca",
+      "base_token_address": "0x918f03d7727aad7b68f9048dabdd7c1bfbf4a959",
+      "rank": 4,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.6910000000000001,
+        "h1_accel": 0.6510000000000016,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 789,
+        "whale_buyer_pct": 3.9,
+        "holder_count_history": [
+          {
+            "ts": 1791785764.5137262,
+            "holder_count": 255
+          },
+          {
+            "ts": 1791787887.1860917,
+            "holder_count": 456
+          },
+          {
+            "ts": 1791793538.843951,
+            "holder_count": 660
+          },
+          {
+            "ts": 1791795675.850295,
+            "holder_count": 660
+          },
+          {
+            "ts": 1791799883.9222422,
+            "holder_count": 662
+          },
+          {
+            "ts": 1791805246.302094,
+            "holder_count": 789
+          },
+          {
+            "ts": 1791808540.6608644,
+            "holder_count": 789
+          },
+          {
+            "ts": 1791810950.1910713,
+            "holder_count": 789
+          }
+        ],
+        "holder_growth_pct": 209.4,
+        "checked_at": 1791810950.1910713
+      },
+      "price_change_pct": {
+        "m5": "1.154",
+        "m15": "5.093",
+        "m30": "4.906",
+        "h1": "13.191",
+        "h6": "51.827",
+        "h24": "585994.924"
+      },
+      "volume_usd": {
+        "m5": "21103.7101693449",
+        "m15": "56553.1548370523",
+        "m30": "99870.1374317703",
+        "h1": "186187.920352662",
+        "h6": "1932120.31206562",
+        "h24": "3618154.30015062"
+      },
+      "market_cap_usd": 15014812.86,
+      "transactions_h1": {
+        "buys": 71,
+        "sells": 29,
+        "buyers": 47,
+        "sellers": 23
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.94
+    },
+    {
+      "id": "arbitrum_0x4cef551255ec96d89fec975446301b5c4e164c59",
+      "timestamp": "2026-10-12T13:30:55.159562+00:00",
+      "network": "arbitrum",
+      "name": "ZRO / WETH 0.3%",
+      "address": "0x4cef551255ec96d89fec975446301b5c4e164c59",
+      "base_token_address": "0x6985884c4392d348587b19cb9eaaf157f13271cd",
+      "rank": 15,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 1.437,
         "history_len": 20
       },
       "security": {
@@ -71,30 +158,30 @@
         "checked_at": 1791811261.711278
       },
       "price_change_pct": {
-        "m5": "0.542",
-        "m15": "0.295",
-        "m30": "1.817",
-        "h1": "1.975",
-        "h6": "0.694",
-        "h24": "17.675"
+        "m5": "0.841",
+        "m15": "0.971",
+        "m30": "1.975",
+        "h1": "2.883",
+        "h6": "0.06",
+        "h24": "17.865"
       },
       "volume_usd": {
-        "m5": "3437.7918766367",
-        "m15": "13010.2979430031",
-        "m30": "34865.3983111576",
-        "h1": "76620.5494991458",
-        "h6": "520459.582841727",
-        "h24": "2394181.88343772"
+        "m5": "469.7159459843",
+        "m15": "1104.1337236923",
+        "m30": "2226.0197500541",
+        "h1": "4963.708642146",
+        "h6": "29655.3693943589",
+        "h24": "88524.0059414583"
       },
-      "market_cap_usd": 959047289.30078,
+      "market_cap_usd": 964097082.289097,
       "transactions_h1": {
-        "buys": 256,
-        "sells": 136,
-        "buyers": 85,
-        "sellers": 40
+        "buys": 67,
+        "sells": 27,
+        "buyers": 22,
+        "sellers": 11
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": -0.573
+      "sol_h1": -0.94
     }
   ]
 }
