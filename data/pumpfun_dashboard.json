@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-12T12:46:25.400330+00:00",
-  "balance": 502.32,
-  "positions_value": 4.91,
-  "net_worth": 507.23,
+  "timestamp": "2026-10-12T12:56:01.190513+00:00",
+  "balance": 507.22,
+  "positions_value": 0.0,
+  "net_worth": 507.22,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "HYsAoZKk8uALR7jTex2i2Ey4JMnB3Twmm9LDxvz2pump",
-      "name": "The Tawny Frogmouth",
-      "symbol": "Vincent",
-      "entry_ts": "2026-10-12T06:55:29.785670+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 4.91,
-      "pnl_pct": -75.45,
-      "entry_slippage_pct": 1.28,
-      "entry_graduation_pct": 40.99,
-      "graduation_pct": 3.36,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "57bN6RauaHGmSmUBM32BBrrQBgCnmuit4AXXMGLmgvfQ",
-      "name": "Pokemon AI",
-      "symbol": "POKEAI",
-      "bonding_curve_key": "BxH1F17o9QrrTohwzZGqtufaKhdiQAZ5FegeyghKGDAq",
-      "entry_ts": "2026-09-24T02:52:15.284434+00:00",
-      "entry_price_usd": 2.1765308605223928e-05,
-      "entry_spot_price_usd": 2.1499994902584493e-05,
-      "entry_slippage_pct": 1.23,
-      "amount_usd": 20.0,
-      "qty": 918893.4723029733,
-      "entry_graduation_pct": 55.86,
-      "entry_score": 90.0,
-      "exit_ts": "2026-09-24T08:54:03.323251+00:00",
-      "exit_price_usd": 3.2494992954433392e-06,
-      "proceeds_usd": 2.99,
-      "pnl_usd": -17.01,
-      "pnl_pct": -85.07,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
       "name": "Miners",
@@ -519,21 +485,43 @@
       "pnl_usd": -17.5,
       "pnl_pct": -87.52,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "HYsAoZKk8uALR7jTex2i2Ey4JMnB3Twmm9LDxvz2pump",
       "name": "The Tawny Frogmouth",
       "symbol": "Vincent",
-      "decision": "buy",
-      "signal_ts": "2026-10-12T06:55:29.785670+00:00",
-      "alert_score": 101.8,
-      "alert_graduation_pct": 40.99,
-      "graduation_pct": 3.36
+      "bonding_curve_key": "GNbkSb8EBhfzXjvQg6dmRgTMuxbXS22N3eh5R68ForUk",
+      "entry_ts": "2026-10-12T06:55:29.785670+00:00",
+      "entry_price_usd": 1.4885041384720086e-05,
+      "entry_spot_price_usd": 1.4696306873679113e-05,
+      "entry_slippage_pct": 1.28,
+      "amount_usd": 20.0,
+      "qty": 1343630.7957148552,
+      "entry_graduation_pct": 40.99,
+      "entry_score": 101.8,
+      "exit_ts": "2026-10-12T12:56:01.190535+00:00",
+      "exit_price_usd": 3.6428109925657347e-06,
+      "proceeds_usd": 4.89,
+      "pnl_usd": -15.11,
+      "pnl_pct": -75.53,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "HYsAoZKk8uALR7jTex2i2Ey4JMnB3Twmm9LDxvz2pump",
+      "name": "The Tawny Frogmouth",
+      "symbol": "Vincent",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-12T06:55:29.785670+00:00",
+      "recorded_ts": "2026-10-12T12:56:01.190513+00:00",
+      "alert_score": 101.8,
+      "alert_graduation_pct": 40.99,
+      "final_graduation_pct": 3.36,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
       "name": "Self Made",
@@ -1170,35 +1158,22 @@
       "alert_graduation_pct": 70.84,
       "final_graduation_pct": 0.05,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "B3hmVfkjgQy9WbAVZ5Rxn9AMyPHqmtJsugn8aCUApump",
-      "name": "late",
-      "symbol": "LATE",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-06T18:31:59.825315+00:00",
-      "recorded_ts": "2026-09-07T00:40:53.419990+00:00",
-      "alert_score": 82.7,
-      "alert_graduation_pct": 47.82,
-      "final_graduation_pct": 1.35,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 77,
     "graduated": 19,
-    "did_not_graduate": 34,
+    "did_not_graduate": 35,
     "buy_graduated": 15,
-    "buy_total": 39,
+    "buy_total": 40,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 35.8
+    "graduation_rate_pct": 35.2
   },
   "shadow_stats": {
-    "tracked": 19,
+    "tracked": 18,
     "graduated": 626,
-    "did_not_graduate": 4125,
+    "did_not_graduate": 4126,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
