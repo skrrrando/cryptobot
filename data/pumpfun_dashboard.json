@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-12T00:55:31.298163+00:00",
-  "balance": 522.37,
-  "positions_value": 5.13,
-  "net_worth": 527.5,
+  "timestamp": "2026-10-12T01:01:03.217025+00:00",
+  "balance": 502.37,
+  "positions_value": 22.25,
+  "net_worth": 524.62,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "SELFMADE",
       "entry_ts": "2026-10-12T00:50:38.007297+00:00",
       "amount_usd": 20.0,
-      "value_usd": 5.13,
-      "pnl_pct": -74.35,
+      "value_usd": 2.74,
+      "pnl_pct": -86.3,
       "entry_slippage_pct": 1.22,
       "entry_graduation_pct": 65.43,
-      "graduation_pct": 16.35,
+      "graduation_pct": 2.37,
+      "graduated": false
+    },
+    {
+      "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
+      "name": "debpf",
+      "symbol": "DEBPF",
+      "entry_ts": "2026-10-12T01:01:03.217025+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 57.11,
+      "graduation_pct": 57.11,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
+      "name": "debpf",
+      "symbol": "DEBPF",
+      "decision": "buy",
+      "signal_ts": "2026-10-12T01:01:03.217025+00:00",
+      "alert_score": 92.2,
+      "alert_graduation_pct": 57.11,
+      "graduation_pct": 57.11
+    },
+    {
       "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
       "name": "Self Made",
       "symbol": "SELFMADE",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-12T00:50:38.007297+00:00",
       "alert_score": 99.3,
       "alert_graduation_pct": 65.43,
-      "graduation_pct": 16.35
+      "graduation_pct": 2.37
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 74,
+    "alerts": 75,
     "graduated": 18,
     "did_not_graduate": 33,
     "buy_graduated": 14,
