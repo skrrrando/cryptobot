@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-12T00:45:38.346411+00:00",
-  "balance": 542.37,
-  "positions_value": 0.0,
-  "net_worth": 542.37,
+  "timestamp": "2026-10-12T00:50:38.007297+00:00",
+  "balance": 522.37,
+  "positions_value": 19.52,
+  "net_worth": 541.89,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
+      "name": "Self Made",
+      "symbol": "SELFMADE",
+      "entry_ts": "2026-10-12T00:50:38.007297+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 65.43,
+      "graduation_pct": 65.43,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "6CJ92jwMXTJsjmXdh5TZgPbbMwyWdSG44hRUQ7kwpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
+      "name": "Self Made",
+      "symbol": "SELFMADE",
+      "decision": "buy",
+      "signal_ts": "2026-10-12T00:50:38.007297+00:00",
+      "alert_score": 99.3,
+      "alert_graduation_pct": 65.43,
+      "graduation_pct": 65.43
+    }
+  ],
   "history": [
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 73,
+    "alerts": 74,
     "graduated": 18,
     "did_not_graduate": 33,
     "buy_graduated": 14,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 35.3
   },
   "shadow_stats": {
-    "tracked": 39,
+    "tracked": 41,
     "graduated": 619,
-    "did_not_graduate": 4071,
+    "did_not_graduate": 4072,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
