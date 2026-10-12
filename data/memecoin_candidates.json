@@ -1,59 +1,104 @@
 {
-  "timestamp": "2026-10-12T20:36:24.104507+00:00",
+  "timestamp": "2026-10-12T20:41:23.980585+00:00",
   "candidates": [
     {
-      "id": "solana_745ATaSSWxvry5qt1XVv9eXuG884hDvNJfvA2o82dNBi",
-      "timestamp": "2026-10-12T20:35:30.285425+00:00",
-      "network": "solana",
-      "name": "Frank / SOL",
-      "address": "745ATaSSWxvry5qt1XVv9eXuG884hDvNJfvA2o82dNBi",
-      "base_token_address": "HbPDWSqu8hpVMX6gMjwMDGe5rVgicWo3Qh3Jaojypump",
-      "rank": 15,
+      "id": "base_0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "timestamp": "2026-10-12T20:40:35.942879+00:00",
+      "network": "base",
+      "name": "SOL / USDC 0.007%",
+      "address": "0x1131db5977242a03ebead1acd18f80a9a29e5922",
+      "base_token_address": "0x311935cd80b76769bf2ecc9d8ab7635b2139cf82",
+      "rank": 7,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 9.966,
+        "h1_accel": 0.632,
         "history_len": 20
       },
       "security": {
         "passed": true,
-        "mint_authority_active": false,
-        "freeze_authority_active": false,
-        "top10_pct": 27.7,
-        "has_danger_risk": false,
-        "whale_buyer_pct": 22.9,
-        "holder_count_history": [],
-        "holder_growth_pct": null,
-        "checked_at": 1791835835.0495284
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 28614,
+        "whale_buyer_pct": 12.1,
+        "holder_count_history": [
+          {
+            "ts": 1791682530.9918349,
+            "holder_count": 28523
+          },
+          {
+            "ts": 1791694240.6204655,
+            "holder_count": 28537
+          },
+          {
+            "ts": 1791696332.808781,
+            "holder_count": 28537
+          },
+          {
+            "ts": 1791702068.1006942,
+            "holder_count": 28537
+          },
+          {
+            "ts": 1791779731.6229022,
+            "holder_count": 28566
+          },
+          {
+            "ts": 1791781840.3215613,
+            "holder_count": 28566
+          },
+          {
+            "ts": 1791788737.8088684,
+            "holder_count": 28582
+          },
+          {
+            "ts": 1791795939.3643143,
+            "holder_count": 28586
+          },
+          {
+            "ts": 1791799268.3696022,
+            "holder_count": 28586
+          },
+          {
+            "ts": 1791837639.4005644,
+            "holder_count": 28614
+          }
+        ],
+        "holder_growth_pct": 0.3,
+        "checked_at": 1791837639.4005644
       },
       "price_change_pct": {
-        "m5": "6.287",
-        "m15": "-3.067",
-        "m30": "-6.738",
-        "h1": "7.169",
-        "h6": "14.281",
-        "h24": "14.865"
+        "m5": "0.003",
+        "m15": "0.006",
+        "m30": "-0.191",
+        "h1": "0.357",
+        "h6": "0.171",
+        "h24": "-2.266"
       },
       "volume_usd": {
-        "m5": "4480.9397437121",
-        "m15": "17190.5930512908",
-        "m30": "38033.9624690996",
-        "h1": "83453.1011924735",
-        "h6": "387709.14968755",
-        "h24": "1046876.6467762"
+        "m5": "4200.5579369052",
+        "m15": "15221.4366708328",
+        "m30": "35092.8117852071",
+        "h1": "95188.308995862",
+        "h6": "1114469.32390048",
+        "h24": "5538913.32972223"
       },
-      "market_cap_usd": 519706.970092507,
+      "market_cap_usd": 5176045.36626997,
       "transactions_h1": {
-        "buys": 937,
-        "sells": 870,
-        "buyers": 725,
-        "sellers": 473
+        "buys": 99,
+        "sells": 63,
+        "buyers": 68,
+        "sellers": 46
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.104
+      "sol_h1": 0.524
     },
     {
       "id": "base_0x0c3b466104545efa096b8f944c1e524e1d0d4888",
-      "timestamp": "2026-10-12T20:35:30.285425+00:00",
+      "timestamp": "2026-10-12T20:40:35.942879+00:00",
       "network": "base",
       "name": "TIBBIR / VIRTUAL",
       "address": "0x0c3b466104545efa096b8f944c1e524e1d0d4888",
@@ -144,7 +189,7 @@
         "sellers": 2
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.104
+      "sol_h1": 0.524
     }
   ]
 }
