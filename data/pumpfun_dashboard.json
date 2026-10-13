@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-13T06:11:07.773592+00:00",
-  "balance": 455.5,
-  "positions_value": 7.14,
-  "net_worth": 462.64,
+  "timestamp": "2026-10-13T06:20:58.123073+00:00",
+  "balance": 457.67,
+  "positions_value": 4.95,
+  "net_worth": 462.62,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "Co7pxWbXYw71G2bHWJiaxhNnXHBjvsWQJNSZrapfpump",
-      "name": "Fire crawler",
-      "symbol": "CRAWLY",
-      "entry_ts": "2026-10-13T00:11:12.570385+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.19,
-      "pnl_pct": -89.05,
-      "entry_slippage_pct": 1.22,
-      "entry_graduation_pct": 72.03,
-      "graduation_pct": 0.03,
-      "graduated": false
-    },
     {
       "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
       "name": "Bear in depression",
@@ -33,26 +20,6 @@
     }
   ],
   "closed": [
-    {
-      "mint": "NYKT9ywUR21WLQ1HRxz5SHaEn7FHGPkvzZLC7YZdaSw",
-      "name": "The Dancing Robot Crab",
-      "symbol": "JUMPER",
-      "bonding_curve_key": "9aFnszsTaLvBSM2TN6kkMMZA4yZFNHFoZRMgH5At6kCq",
-      "entry_ts": "2026-10-07T04:02:01.392701+00:00",
-      "entry_price_usd": 3.184192413137391e-05,
-      "entry_spot_price_usd": 3.146659369312573e-05,
-      "entry_slippage_pct": 1.19,
-      "amount_usd": 20.0,
-      "qty": 628102.7464761138,
-      "entry_graduation_pct": 73.55,
-      "entry_score": 95.1,
-      "exit_ts": "2026-10-07T10:16:36.269555+00:00",
-      "exit_price_usd": 4.4859155493928675e-06,
-      "proceeds_usd": 2.82,
-      "pnl_usd": -17.18,
-      "pnl_pct": -85.91,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "J1tjLHnNFZQX3JccUxX4etq8sgtZ53rAWQZDCcNpump",
       "name": "stash",
@@ -532,6 +499,26 @@
       "pnl_usd": -11.18,
       "pnl_pct": -55.9,
       "exit_reason": "timeout"
+    },
+    {
+      "mint": "Co7pxWbXYw71G2bHWJiaxhNnXHBjvsWQJNSZrapfpump",
+      "name": "Fire crawler",
+      "symbol": "CRAWLY",
+      "bonding_curve_key": "EbggMHvXHouKQXy9SA2ibrUmUWA91P5xE9z7iQFGQNcm",
+      "entry_ts": "2026-10-13T00:11:12.570385+00:00",
+      "entry_price_usd": 2.7360253919773648e-05,
+      "entry_spot_price_usd": 2.703053565720029e-05,
+      "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 730987.3679770827,
+      "entry_graduation_pct": 72.03,
+      "entry_score": 94.1,
+      "exit_ts": "2026-10-13T06:20:58.123093+00:00",
+      "exit_price_usd": 2.971149948884874e-06,
+      "proceeds_usd": 2.17,
+      "pnl_usd": -17.83,
+      "pnl_pct": -89.14,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -544,19 +531,22 @@
       "alert_score": 95.8,
       "alert_graduation_pct": 44.29,
       "graduation_pct": 3.93
-    },
+    }
+  ],
+  "history": [
     {
       "mint": "Co7pxWbXYw71G2bHWJiaxhNnXHBjvsWQJNSZrapfpump",
       "name": "Fire crawler",
       "symbol": "CRAWLY",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-13T00:11:12.570385+00:00",
+      "recorded_ts": "2026-10-13T06:20:58.123073+00:00",
       "alert_score": 94.1,
       "alert_graduation_pct": 72.03,
-      "graduation_pct": 0.03
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.03,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "AW6dYusASnCYdHzFTLqtiP2LrYV45j5caRJYJFaKpump",
       "name": "\u041c\u0430\u043d\u044f",
@@ -1193,33 +1183,20 @@
       "alert_graduation_pct": 8.22,
       "final_graduation_pct": 3.5,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "Fu9eSogPLzqDksdmdrk9Ng4dwEEciCm4qBaWnoYBpump",
-      "name": "YBAS",
-      "symbol": "YBAS",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-07T00:13:50.127063+00:00",
-      "recorded_ts": "2026-09-07T06:15:32.253003+00:00",
-      "alert_score": 39.4,
-      "alert_graduation_pct": 11.98,
-      "final_graduation_pct": 0.78,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 81,
     "graduated": 20,
-    "did_not_graduate": 36,
+    "did_not_graduate": 37,
     "buy_graduated": 16,
-    "buy_total": 42,
+    "buy_total": 43,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 35.7
+    "graduation_rate_pct": 35.1
   },
   "shadow_stats": {
-    "tracked": 22,
+    "tracked": 23,
     "graduated": 641,
     "did_not_graduate": 4192,
     "graduation_rate_pct": 13.3
