@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-13T06:20:58.123073+00:00",
-  "balance": 457.67,
-  "positions_value": 4.95,
-  "net_worth": 462.62,
+  "timestamp": "2026-10-13T06:30:55.661658+00:00",
+  "balance": 462.61,
+  "positions_value": 0.0,
+  "net_worth": 462.61,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
-      "name": "Bear in depression",
-      "symbol": "BID",
-      "entry_ts": "2026-10-13T00:30:54.463200+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 4.95,
-      "pnl_pct": -75.25,
-      "entry_slippage_pct": 1.3,
-      "entry_graduation_pct": 44.29,
-      "graduation_pct": 3.93,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "J1tjLHnNFZQX3JccUxX4etq8sgtZ53rAWQZDCcNpump",
-      "name": "stash",
-      "symbol": "stash",
-      "bonding_curve_key": "38m7T3n1TXL9WjTsTkTvP1txySmxuCbQJjPEL5DgifmZ",
-      "entry_ts": "2026-10-07T07:06:09.969978+00:00",
-      "entry_price_usd": 1.922678649496189e-05,
-      "entry_spot_price_usd": 1.899036521831148e-05,
-      "entry_slippage_pct": 1.24,
-      "amount_usd": 20.0,
-      "qty": 1040215.4309687018,
-      "entry_graduation_pct": 49.15,
-      "entry_score": 93.2,
-      "exit_ts": "2026-10-07T10:16:36.269555+00:00",
-      "exit_price_usd": 3.5775635048957304e-05,
-      "proceeds_usd": 37.21,
-      "pnl_usd": 17.21,
-      "pnl_pct": 86.07,
-      "exit_reason": "take_profit"
-    },
     {
       "mint": "9bC7HaJGtEASb9ipk9g8J46euavZ9zVefBh7UWfRpump",
       "name": "DeciroAgent",
@@ -519,21 +485,43 @@
       "pnl_usd": -17.83,
       "pnl_pct": -89.14,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
       "name": "Bear in depression",
       "symbol": "BID",
-      "decision": "buy",
-      "signal_ts": "2026-10-13T00:30:54.463200+00:00",
-      "alert_score": 95.8,
-      "alert_graduation_pct": 44.29,
-      "graduation_pct": 3.93
+      "bonding_curve_key": "H17FUf2DGnMhpWZw2eaxAT7ArjKYzJHyr4xDHuXVmse5",
+      "entry_ts": "2026-10-13T00:30:54.463200+00:00",
+      "entry_price_usd": 1.4934943651543617e-05,
+      "entry_spot_price_usd": 1.4743982872096355e-05,
+      "entry_slippage_pct": 1.3,
+      "amount_usd": 20.0,
+      "qty": 1339141.3095778823,
+      "entry_graduation_pct": 44.29,
+      "entry_score": 95.8,
+      "exit_ts": "2026-10-13T06:30:55.661676+00:00",
+      "exit_price_usd": 3.6835496428559533e-06,
+      "proceeds_usd": 4.93,
+      "pnl_usd": -15.07,
+      "pnl_pct": -75.34,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
+      "name": "Bear in depression",
+      "symbol": "BID",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-13T00:30:54.463200+00:00",
+      "recorded_ts": "2026-10-13T06:30:55.661658+00:00",
+      "alert_score": 95.8,
+      "alert_graduation_pct": 44.29,
+      "final_graduation_pct": 3.93,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "Co7pxWbXYw71G2bHWJiaxhNnXHBjvsWQJNSZrapfpump",
       "name": "Fire crawler",
@@ -1170,35 +1158,22 @@
       "alert_graduation_pct": 24.79,
       "final_graduation_pct": 1.09,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "6ySe3YkoNbCXHp86YAnie5zuwXKaP1jWj2be18UUpump",
-      "name": "ZecZebra",
-      "symbol": "ZecDonkey",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-07T00:22:50.875454+00:00",
-      "recorded_ts": "2026-09-07T06:25:27.344091+00:00",
-      "alert_score": 26.7,
-      "alert_graduation_pct": 8.22,
-      "final_graduation_pct": 3.5,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 81,
     "graduated": 20,
-    "did_not_graduate": 37,
+    "did_not_graduate": 38,
     "buy_graduated": 16,
-    "buy_total": 43,
+    "buy_total": 44,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 35.1
+    "graduation_rate_pct": 34.5
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 22,
     "graduated": 641,
-    "did_not_graduate": 4192,
+    "did_not_graduate": 4194,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
