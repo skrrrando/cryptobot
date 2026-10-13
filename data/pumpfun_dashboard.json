@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-12T23:55:32.362462+00:00",
-  "balance": 507.22,
-  "positions_value": 0.0,
-  "net_worth": 507.22,
+  "timestamp": "2026-10-13T00:01:09.766771+00:00",
+  "balance": 487.22,
+  "positions_value": 19.51,
+  "net_worth": 506.73,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "AW6dYusASnCYdHzFTLqtiP2LrYV45j5caRJYJFaKpump",
+      "name": "\u041c\u0430\u043d\u044f",
+      "symbol": "Manya",
+      "entry_ts": "2026-10-13T00:01:09.766771+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 57.71,
+      "graduation_pct": 57.71,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "2T6Wg3urxPQHaoGh4gqNHyYL6FAfyWA5BaH6Lo37pump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "AW6dYusASnCYdHzFTLqtiP2LrYV45j5caRJYJFaKpump",
+      "name": "\u041c\u0430\u043d\u044f",
+      "symbol": "Manya",
+      "decision": "buy",
+      "signal_ts": "2026-10-13T00:01:09.766771+00:00",
+      "alert_score": 112.3,
+      "alert_graduation_pct": 57.71,
+      "graduation_pct": 57.71
+    }
+  ],
   "history": [
     {
       "mint": "HYsAoZKk8uALR7jTex2i2Ey4JMnB3Twmm9LDxvz2pump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 77,
+    "alerts": 78,
     "graduated": 19,
     "did_not_graduate": 35,
     "buy_graduated": 15,
@@ -1173,7 +1198,7 @@
   "shadow_stats": {
     "tracked": 29,
     "graduated": 637,
-    "did_not_graduate": 4163,
+    "did_not_graduate": 4164,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
