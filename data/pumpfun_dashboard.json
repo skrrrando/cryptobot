@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-14T02:32:43.263401+00:00",
-  "balance": 422.15,
-  "positions_value": 32.32,
-  "net_worth": 454.47,
+  "timestamp": "2026-10-14T02:42:11.957605+00:00",
+  "balance": 441.67,
+  "positions_value": 10.62,
+  "net_worth": 452.29,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,15 @@
       "symbol": "Nursery",
       "entry_ts": "2026-10-14T01:20:41.619906+00:00",
       "amount_usd": 20.0,
-      "value_usd": 12.79,
-      "pnl_pct": -36.05,
+      "value_usd": 10.62,
+      "pnl_pct": -46.9,
       "entry_slippage_pct": 1.2,
       "entry_graduation_pct": 81.88,
-      "graduation_pct": 59.52,
-      "graduated": false
-    },
-    {
-      "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
-      "name": "SCASH",
-      "symbol": "SCASH",
-      "entry_ts": "2026-10-14T02:32:43.263401+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.53,
-      "pnl_pct": -2.35,
-      "entry_slippage_pct": 1.19,
-      "entry_graduation_pct": 86.24,
-      "graduation_pct": 86.24,
+      "graduation_pct": 51.1,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "5ew49u39RbCdD2GE5EmDjdwfiZbnFTUJ79bcVZrKTdKE",
-      "name": "Error404",
-      "symbol": "ERROR404",
-      "bonding_curve_key": "4ewncTZQJ6rUHPyLhSrm3Uj5dbqEebU7S75b9fLdMp91",
-      "entry_ts": "2026-10-08T01:01:09.662570+00:00",
-      "entry_price_usd": 3.4197189220630055e-05,
-      "entry_spot_price_usd": 3.3795751088202075e-05,
-      "entry_slippage_pct": 1.19,
-      "amount_usd": 20.0,
-      "qty": 584843.3878868222,
-      "entry_graduation_pct": 78.44,
-      "entry_score": 91.1,
-      "exit_ts": "2026-10-08T07:06:07.687648+00:00",
-      "exit_price_usd": 5.403912447699184e-06,
-      "proceeds_usd": 3.16,
-      "pnl_usd": -16.84,
-      "pnl_pct": -84.2,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "Cj1ijAKpUq6y4hDFSjPiuP2Ltk4ZgUhpLsUFc4Q4teWh",
       "name": "Bunker Coin",
@@ -532,19 +499,29 @@
       "pnl_usd": -0.46,
       "pnl_pct": -2.29,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
       "name": "SCASH",
       "symbol": "SCASH",
-      "decision": "buy",
-      "signal_ts": "2026-10-14T02:32:43.263401+00:00",
-      "alert_score": 90.8,
-      "alert_graduation_pct": 86.24,
-      "graduation_pct": 86.24
-    },
+      "bonding_curve_key": "HgQTV7VLCq75eyQBwkMBZBW1ENwG1eswtimLfza6TAQr",
+      "entry_ts": "2026-10-14T02:32:43.263401+00:00",
+      "entry_price_usd": 3.5972602476530837e-05,
+      "entry_spot_price_usd": 3.5549327784376615e-05,
+      "entry_slippage_pct": 1.19,
+      "amount_usd": 20.0,
+      "qty": 555978.6788583994,
+      "entry_graduation_pct": 86.24,
+      "entry_score": 90.8,
+      "exit_ts": "2026-10-14T02:42:11.957626+00:00",
+      "exit_price_usd": 3.5105844631715375e-05,
+      "proceeds_usd": 19.52,
+      "pnl_usd": -0.48,
+      "pnl_pct": -2.41,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
     {
       "mint": "FUHux68mpPa3hBEWXdwUKwUHuTv5JmgDJygT6Lh8M58U",
       "name": "Nurserypad",
@@ -553,10 +530,23 @@
       "signal_ts": "2026-10-14T01:20:41.619906+00:00",
       "alert_score": 96.8,
       "alert_graduation_pct": 81.88,
-      "graduation_pct": 59.52
+      "graduation_pct": 51.1
     }
   ],
   "history": [
+    {
+      "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
+      "name": "SCASH",
+      "symbol": "SCASH",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-14T02:32:43.263401+00:00",
+      "recorded_ts": "2026-10-14T02:42:11.957605+00:00",
+      "alert_score": 90.8,
+      "alert_graduation_pct": 86.24,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.5
+    },
     {
       "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
       "name": "Bear in depression",
@@ -1193,35 +1183,22 @@
       "alert_graduation_pct": 38.25,
       "final_graduation_pct": 3.15,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "DpSzph7Fxw6jMYCEBHkMpj3wAtSD5FdGuFNgmaZKfvrd",
-      "name": "pussyinbio",
-      "symbol": "pussyinbio",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-08T00:07:46.029658+00:00",
-      "recorded_ts": "2026-09-08T06:14:17.885552+00:00",
-      "alert_score": 39.2,
-      "alert_graduation_pct": 24.79,
-      "final_graduation_pct": 1.09,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 84,
-    "graduated": 20,
+    "graduated": 21,
     "did_not_graduate": 38,
-    "buy_graduated": 16,
-    "buy_total": 44,
+    "buy_graduated": 17,
+    "buy_total": 45,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 34.5
+    "graduation_rate_pct": 35.6
   },
   "shadow_stats": {
     "tracked": 21,
     "graduated": 657,
-    "did_not_graduate": 4297,
+    "did_not_graduate": 4298,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
