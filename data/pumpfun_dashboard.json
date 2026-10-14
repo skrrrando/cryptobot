@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-14T02:22:54.719026+00:00",
-  "balance": 442.15,
-  "positions_value": 12.0,
-  "net_worth": 454.15,
+  "timestamp": "2026-10-14T02:32:43.263401+00:00",
+  "balance": 422.15,
+  "positions_value": 32.32,
+  "net_worth": 454.47,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "Nursery",
       "entry_ts": "2026-10-14T01:20:41.619906+00:00",
       "amount_usd": 20.0,
-      "value_usd": 12.0,
-      "pnl_pct": -40.0,
+      "value_usd": 12.79,
+      "pnl_pct": -36.05,
       "entry_slippage_pct": 1.2,
       "entry_graduation_pct": 81.88,
-      "graduation_pct": 56.45,
+      "graduation_pct": 59.52,
+      "graduated": false
+    },
+    {
+      "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
+      "name": "SCASH",
+      "symbol": "SCASH",
+      "entry_ts": "2026-10-14T02:32:43.263401+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.19,
+      "entry_graduation_pct": 86.24,
+      "graduation_pct": 86.24,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
+      "name": "SCASH",
+      "symbol": "SCASH",
+      "decision": "buy",
+      "signal_ts": "2026-10-14T02:32:43.263401+00:00",
+      "alert_score": 90.8,
+      "alert_graduation_pct": 86.24,
+      "graduation_pct": 86.24
+    },
+    {
       "mint": "FUHux68mpPa3hBEWXdwUKwUHuTv5JmgDJygT6Lh8M58U",
       "name": "Nurserypad",
       "symbol": "Nursery",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-14T01:20:41.619906+00:00",
       "alert_score": 96.8,
       "alert_graduation_pct": 81.88,
-      "graduation_pct": 56.45
+      "graduation_pct": 59.52
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 83,
+    "alerts": 84,
     "graduated": 20,
     "did_not_graduate": 38,
     "buy_graduated": 16,
