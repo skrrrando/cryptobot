@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-16T07:25:35.400913+00:00",
-  "balance": 399.8,
-  "positions_value": 11.34,
-  "net_worth": 411.14,
+  "timestamp": "2026-10-16T07:30:57.807098+00:00",
+  "balance": 379.8,
+  "positions_value": 24.29,
+  "net_worth": 404.09,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "OFT",
       "entry_ts": "2026-10-16T07:15:40.316844+00:00",
       "amount_usd": 20.0,
-      "value_usd": 11.34,
-      "pnl_pct": -43.3,
+      "value_usd": 4.78,
+      "pnl_pct": -76.1,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 53.27,
-      "graduation_pct": 32.15,
+      "graduation_pct": 8.46,
+      "graduated": false
+    },
+    {
+      "mint": "drXZUgnPeyM5Poau4xSEPvSoh2BRpQRSgrvtqgzpump",
+      "name": "dickbutt",
+      "symbol": "DICKBUTT",
+      "entry_ts": "2026-10-16T07:30:57.807098+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 61.7,
+      "graduation_pct": 61.7,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "drXZUgnPeyM5Poau4xSEPvSoh2BRpQRSgrvtqgzpump",
+      "name": "dickbutt",
+      "symbol": "DICKBUTT",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T07:30:57.807098+00:00",
+      "alert_score": 98.8,
+      "alert_graduation_pct": 61.7,
+      "graduation_pct": 61.7
+    },
+    {
       "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
       "name": "OFT",
       "symbol": "OFT",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-16T07:15:40.316844+00:00",
       "alert_score": 92.6,
       "alert_graduation_pct": 53.27,
-      "graduation_pct": 32.15
+      "graduation_pct": 8.46
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 92,
+    "alerts": 93,
     "graduated": 24,
     "did_not_graduate": 39,
     "buy_graduated": 20,
@@ -1196,7 +1219,7 @@
     "graduation_rate_pct": 38.1
   },
   "shadow_stats": {
-    "tracked": 30,
+    "tracked": 31,
     "graduated": 705,
     "did_not_graduate": 4514,
     "graduation_rate_pct": 13.5
