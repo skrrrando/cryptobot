@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-16T07:10:49.951132+00:00",
-  "balance": 419.8,
-  "positions_value": 0.0,
-  "net_worth": 419.8,
+  "timestamp": "2026-10-16T07:15:40.316844+00:00",
+  "balance": 399.8,
+  "positions_value": 19.51,
+  "net_worth": 419.31,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
+      "name": "OFT",
+      "symbol": "OFT",
+      "entry_ts": "2026-10-16T07:15:40.316844+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 53.27,
+      "graduation_pct": 53.27,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "5QbpbvUufCgm5rjaoCeuQz2R2nkgPRMmQ4KViAyvXkcF",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
+      "name": "OFT",
+      "symbol": "OFT",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T07:15:40.316844+00:00",
+      "alert_score": 92.6,
+      "alert_graduation_pct": 53.27,
+      "graduation_pct": 53.27
+    }
+  ],
   "history": [
     {
       "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 91,
+    "alerts": 92,
     "graduated": 24,
     "did_not_graduate": 39,
     "buy_graduated": 20,
