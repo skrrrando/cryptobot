@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-16T06:55:30.688792+00:00",
-  "balance": 420.31,
-  "positions_value": 0.0,
-  "net_worth": 420.31,
+  "timestamp": "2026-10-16T07:01:13.720503+00:00",
+  "balance": 400.31,
+  "positions_value": 19.52,
+  "net_worth": 419.83,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
+      "name": "Muskpad",
+      "symbol": "Muskpad",
+      "entry_ts": "2026-10-16T07:01:13.720503+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 70.0,
+      "graduation_pct": 70.0,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
+      "name": "Muskpad",
+      "symbol": "Muskpad",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T07:01:13.720503+00:00",
+      "alert_score": 92.8,
+      "alert_graduation_pct": 70.0,
+      "graduation_pct": 70.0
+    }
+  ],
   "history": [
     {
       "mint": "7GCMYJcykHZ3qJH3e5vQi4J9qAPdb3Xninkgk6sYpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 90,
+    "alerts": 91,
     "graduated": 23,
     "did_not_graduate": 39,
     "buy_graduated": 19,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 37.1
   },
   "shadow_stats": {
-    "tracked": 31,
+    "tracked": 29,
     "graduated": 705,
-    "did_not_graduate": 4512,
+    "did_not_graduate": 4514,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
