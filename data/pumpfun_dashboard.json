@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-16T06:40:41.578257+00:00",
-  "balance": 420.81,
-  "positions_value": 0.0,
-  "net_worth": 420.81,
+  "timestamp": "2026-10-16T06:45:38.731523+00:00",
+  "balance": 400.81,
+  "positions_value": 19.51,
+  "net_worth": 420.32,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "7GCMYJcykHZ3qJH3e5vQi4J9qAPdb3Xninkgk6sYpump",
+      "name": "The Loom",
+      "symbol": "LOOM",
+      "entry_ts": "2026-10-16T06:45:38.731523+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 56.32,
+      "graduation_pct": 56.32,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "8kioiYtqdtDNFSmhbMd1W5dP8wGbS8e7L1umXddEpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "7GCMYJcykHZ3qJH3e5vQi4J9qAPdb3Xninkgk6sYpump",
+      "name": "The Loom",
+      "symbol": "LOOM",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T06:45:38.731523+00:00",
+      "alert_score": 93.1,
+      "alert_graduation_pct": 56.32,
+      "graduation_pct": 56.32
+    }
+  ],
   "history": [
     {
       "mint": "GhxrSCgR1FPpDKqrLZrSF3zLwkjZTxg3QLq6E8jwpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 89,
+    "alerts": 90,
     "graduated": 22,
     "did_not_graduate": 39,
     "buy_graduated": 18,
@@ -1171,7 +1196,7 @@
     "graduation_rate_pct": 36.1
   },
   "shadow_stats": {
-    "tracked": 29,
+    "tracked": 31,
     "graduated": 705,
     "did_not_graduate": 4512,
     "graduation_rate_pct": 13.5
