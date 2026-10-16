@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-16T07:01:13.720503+00:00",
-  "balance": 400.31,
-  "positions_value": 19.52,
-  "net_worth": 419.83,
+  "timestamp": "2026-10-16T07:10:49.951132+00:00",
+  "balance": 419.8,
+  "positions_value": 0.0,
+  "net_worth": 419.8,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
-      "name": "Muskpad",
-      "symbol": "Muskpad",
-      "entry_ts": "2026-10-16T07:01:13.720503+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
-      "entry_slippage_pct": 1.22,
-      "entry_graduation_pct": 70.0,
-      "graduation_pct": 70.0,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
-      "name": "Qolony",
-      "symbol": "Qolony",
-      "bonding_curve_key": "2v4MvRxwPFcRyKQzePcjjkXgpJhoYuS9kbCHdd1sBvTd",
-      "entry_ts": "2026-10-10T03:58:15.756701+00:00",
-      "entry_price_usd": 2.176102335660708e-05,
-      "entry_spot_price_usd": 2.1494562338880323e-05,
-      "entry_slippage_pct": 1.24,
-      "amount_usd": 20.0,
-      "qty": 919074.4236726165,
-      "entry_graduation_pct": 58.13,
-      "entry_score": 93.9,
-      "exit_ts": "2026-10-10T04:07:47.997883+00:00",
-      "exit_price_usd": 2.121568100127157e-05,
-      "proceeds_usd": 19.5,
-      "pnl_usd": -0.5,
-      "pnl_pct": -2.51,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "5QbpbvUufCgm5rjaoCeuQz2R2nkgPRMmQ4KViAyvXkcF",
       "name": "BrewApp",
@@ -519,21 +485,43 @@
       "pnl_usd": -0.51,
       "pnl_pct": -2.54,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
       "name": "Muskpad",
       "symbol": "Muskpad",
-      "decision": "buy",
-      "signal_ts": "2026-10-16T07:01:13.720503+00:00",
-      "alert_score": 92.8,
-      "alert_graduation_pct": 70.0,
-      "graduation_pct": 70.0
+      "bonding_curve_key": "Hv2PobuB2cHbj6gszn8FvNogncYLw8nShUTb6wpE9WVm",
+      "entry_ts": "2026-10-16T07:01:13.720503+00:00",
+      "entry_price_usd": 2.6748423474431518e-05,
+      "entry_spot_price_usd": 2.642588433782584e-05,
+      "entry_slippage_pct": 1.22,
+      "amount_usd": 20.0,
+      "qty": 747707.6179505587,
+      "entry_graduation_pct": 70.0,
+      "entry_score": 92.8,
+      "exit_ts": "2026-10-16T07:10:49.951155+00:00",
+      "exit_price_usd": 2.6069858899816562e-05,
+      "proceeds_usd": 19.49,
+      "pnl_usd": -0.51,
+      "pnl_pct": -2.54,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
+      "name": "Muskpad",
+      "symbol": "Muskpad",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T07:01:13.720503+00:00",
+      "recorded_ts": "2026-10-16T07:10:49.951132+00:00",
+      "alert_score": 92.8,
+      "alert_graduation_pct": 70.0,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.6
+    },
     {
       "mint": "7GCMYJcykHZ3qJH3e5vQi4J9qAPdb3Xninkgk6sYpump",
       "name": "The Loom",
@@ -1170,33 +1158,20 @@
       "alert_graduation_pct": 76.09,
       "final_graduation_pct": 0.1,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "Hz3cAMP5ruvLaKPiwAmVBzu1sQfNeiZrnBYzk12spump",
-      "name": "Garagecoin",
-      "symbol": "Garage",
-      "outcome": "graduated",
-      "decision": null,
-      "signal_ts": "2026-09-09T01:20:33.458180+00:00",
-      "recorded_ts": "2026-09-09T01:29:57.138237+00:00",
-      "alert_score": 112.9,
-      "alert_graduation_pct": 77.22,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 9.4
     }
   ],
   "stats": {
     "alerts": 91,
-    "graduated": 23,
+    "graduated": 24,
     "did_not_graduate": 39,
-    "buy_graduated": 19,
-    "buy_total": 48,
+    "buy_graduated": 20,
+    "buy_total": 49,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 37.1
+    "graduation_rate_pct": 38.1
   },
   "shadow_stats": {
-    "tracked": 29,
+    "tracked": 30,
     "graduated": 705,
     "did_not_graduate": 4514,
     "graduation_rate_pct": 13.5
