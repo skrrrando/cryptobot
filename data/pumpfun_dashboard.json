@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-16T07:30:57.807098+00:00",
-  "balance": 379.8,
-  "positions_value": 24.29,
-  "net_worth": 404.09,
+  "timestamp": "2026-10-16T07:40:37.623430+00:00",
+  "balance": 399.28,
+  "positions_value": 3.97,
+  "net_worth": 403.25,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,15 @@
       "symbol": "OFT",
       "entry_ts": "2026-10-16T07:15:40.316844+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.78,
-      "pnl_pct": -76.1,
+      "value_usd": 3.97,
+      "pnl_pct": -80.15,
       "entry_slippage_pct": 1.26,
       "entry_graduation_pct": 53.27,
-      "graduation_pct": 8.46,
-      "graduated": false
-    },
-    {
-      "mint": "drXZUgnPeyM5Poau4xSEPvSoh2BRpQRSgrvtqgzpump",
-      "name": "dickbutt",
-      "symbol": "DICKBUTT",
-      "entry_ts": "2026-10-16T07:30:57.807098+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.51,
-      "pnl_pct": -2.45,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 61.7,
-      "graduation_pct": 61.7,
+      "graduation_pct": 4.6,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "5QbpbvUufCgm5rjaoCeuQz2R2nkgPRMmQ4KViAyvXkcF",
-      "name": "BrewApp",
-      "symbol": "BrewApp",
-      "bonding_curve_key": "CeD9hfikiq56Y6XVEcaZMd2NHYRGZhc6dBn3fNMFYhxZ",
-      "entry_ts": "2026-10-10T04:17:11.550556+00:00",
-      "entry_price_usd": 3.9088676528781e-05,
-      "entry_spot_price_usd": 3.8632298363066464e-05,
-      "entry_slippage_pct": 1.18,
-      "amount_usd": 20.0,
-      "qty": 511657.1287665367,
-      "entry_graduation_pct": 89.96,
-      "entry_score": 91.1,
-      "exit_ts": "2026-10-10T04:26:53.138588+00:00",
-      "exit_price_usd": 3.817451761489991e-05,
-      "proceeds_usd": 19.53,
-      "pnl_usd": -0.47,
-      "pnl_pct": -2.34,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "8SeqFVz8aKYQnXrkG5SYp1dFNPtcqE4W5MNuVFD1pump",
       "name": "ANDY",
@@ -532,19 +499,29 @@
       "pnl_usd": -0.51,
       "pnl_pct": -2.54,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "drXZUgnPeyM5Poau4xSEPvSoh2BRpQRSgrvtqgzpump",
       "name": "dickbutt",
       "symbol": "DICKBUTT",
-      "decision": "buy",
-      "signal_ts": "2026-10-16T07:30:57.807098+00:00",
-      "alert_score": 98.8,
-      "alert_graduation_pct": 61.7,
-      "graduation_pct": 61.7
-    },
+      "bonding_curve_key": "9ntypj7hFv2kzLp7XyukeZjKieiYLqCdNdsPQxXry6Ev",
+      "entry_ts": "2026-10-16T07:30:57.807098+00:00",
+      "entry_price_usd": 2.2711497395192416e-05,
+      "entry_spot_price_usd": 2.2433669491245737e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 880611.2451323271,
+      "entry_graduation_pct": 61.7,
+      "entry_score": 98.8,
+      "exit_ts": "2026-10-16T07:40:37.623458+00:00",
+      "exit_price_usd": 2.21195834956257e-05,
+      "proceeds_usd": 19.48,
+      "pnl_usd": -0.52,
+      "pnl_pct": -2.61,
+      "exit_reason": "graduated"
+    }
+  ],
+  "watching": [
     {
       "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
       "name": "OFT",
@@ -553,10 +530,23 @@
       "signal_ts": "2026-10-16T07:15:40.316844+00:00",
       "alert_score": 92.6,
       "alert_graduation_pct": 53.27,
-      "graduation_pct": 8.46
+      "graduation_pct": 4.6
     }
   ],
   "history": [
+    {
+      "mint": "drXZUgnPeyM5Poau4xSEPvSoh2BRpQRSgrvtqgzpump",
+      "name": "dickbutt",
+      "symbol": "DICKBUTT",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-16T07:30:57.807098+00:00",
+      "recorded_ts": "2026-10-16T07:40:37.623430+00:00",
+      "alert_score": 98.8,
+      "alert_graduation_pct": 61.7,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.7
+    },
     {
       "mint": "UZcE4ws4kERR6prnmgGMCSfUL1XynhZbzJCyKo5pump",
       "name": "Muskpad",
@@ -1193,35 +1183,22 @@
       "alert_graduation_pct": 74.95,
       "final_graduation_pct": null,
       "minutes_to_graduate": 9.1
-    },
-    {
-      "mint": "5GcHjLKJjW9MHCh9scyxnnJYTait5uosH4ztkeZ2pump",
-      "name": "A Mini Cock",
-      "symbol": "AMC",
-      "outcome": "did_not_graduate",
-      "decision": null,
-      "signal_ts": "2026-09-09T01:15:32.749802+00:00",
-      "recorded_ts": "2026-09-09T07:15:36.627535+00:00",
-      "alert_score": 95.8,
-      "alert_graduation_pct": 76.09,
-      "final_graduation_pct": 0.1,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 93,
-    "graduated": 24,
+    "graduated": 25,
     "did_not_graduate": 39,
-    "buy_graduated": 20,
-    "buy_total": 49,
+    "buy_graduated": 21,
+    "buy_total": 50,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.1
+    "graduation_rate_pct": 39.1
   },
   "shadow_stats": {
-    "tracked": 31,
+    "tracked": 30,
     "graduated": 705,
-    "did_not_graduate": 4514,
+    "did_not_graduate": 4515,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
