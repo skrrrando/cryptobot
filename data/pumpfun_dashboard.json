@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-17T08:25:31.365790+00:00",
-  "balance": 341.97,
-  "positions_value": 17.23,
-  "net_worth": 359.2,
+  "timestamp": "2026-10-17T08:30:54.788304+00:00",
+  "balance": 345.75,
+  "positions_value": 13.43,
+  "net_worth": 359.18,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
-      "name": "Perpsguy",
-      "symbol": "Perpsguy",
-      "entry_ts": "2026-10-17T02:27:40.495195+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.8,
-      "pnl_pct": -81.0,
-      "entry_slippage_pct": 1.28,
-      "entry_graduation_pct": 46.89,
-      "graduation_pct": 0.86,
-      "graduated": false
-    },
     {
       "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
       "name": "Max Leverage",
@@ -46,26 +33,6 @@
     }
   ],
   "closed": [
-    {
-      "mint": "EGyWZmRcQx5UNeigvVEE2cwoLxnLjw3bXZwNwoFppump",
-      "name": "AI Animals",
-      "symbol": "AINIMALS",
-      "bonding_curve_key": "dtHujh3DBUzV8fjSZxmupgW42wA671Pc7T9nZhtzt5Q",
-      "entry_ts": "2026-10-11T03:40:36.574375+00:00",
-      "entry_price_usd": 3.601908356858766e-05,
-      "entry_spot_price_usd": 3.559589666690318e-05,
-      "entry_slippage_pct": 1.19,
-      "amount_usd": 20.0,
-      "qty": 555261.212071538,
-      "entry_graduation_pct": 85.19,
-      "entry_score": 113.5,
-      "exit_ts": "2026-10-11T04:10:35.660042+00:00",
-      "exit_price_usd": 2.7242412468495476e-05,
-      "proceeds_usd": 15.13,
-      "pnl_usd": -4.87,
-      "pnl_pct": -24.37,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "EbxjHaG7cEL9ExibJwCHVe6TB8sarEddYP5ourarpump",
       "name": "41Coin",
@@ -545,6 +512,26 @@
       "pnl_usd": -0.52,
       "pnl_pct": -2.62,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
+      "name": "Perpsguy",
+      "symbol": "Perpsguy",
+      "bonding_curve_key": "DmzsGdfoAPFNJdVF7jxPWbiwgv3A5YT9WsRsPseM9MWB",
+      "entry_ts": "2026-10-17T02:27:40.495195+00:00",
+      "entry_price_usd": 1.6036438017335243e-05,
+      "entry_spot_price_usd": 1.5833100127823126e-05,
+      "entry_slippage_pct": 1.28,
+      "amount_usd": 20.0,
+      "qty": 1247159.7482171655,
+      "entry_graduation_pct": 46.89,
+      "entry_score": 92.1,
+      "exit_ts": "2026-10-17T08:30:54.788324+00:00",
+      "exit_price_usd": 3.0275514822764576e-06,
+      "proceeds_usd": 3.78,
+      "pnl_usd": -16.22,
+      "pnl_pct": -81.12,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -567,19 +554,22 @@
       "alert_score": 90.8,
       "alert_graduation_pct": 43.53,
       "graduation_pct": 4.7
-    },
+    }
+  ],
+  "history": [
     {
       "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
       "name": "Perpsguy",
       "symbol": "Perpsguy",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-17T02:27:40.495195+00:00",
+      "recorded_ts": "2026-10-17T08:30:54.788304+00:00",
       "alert_score": 92.1,
       "alert_graduation_pct": 46.89,
-      "graduation_pct": 0.86
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.86,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "D7orGL5t9d4eJNcjFoabSKapGLQkeDTFEY3KQ1rHpump",
       "name": "Horny Token",
@@ -1216,33 +1206,20 @@
       "alert_graduation_pct": 64.39,
       "final_graduation_pct": null,
       "minutes_to_graduate": 20.1
-    },
-    {
-      "mint": "2dVo2HAmQKqwFKHMZh12WnS7XD4MvG9yCRZzjmJupump",
-      "name": "Eternal Twap Faucet",
-      "symbol": "ETF",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-10T03:20:36.753440+00:00",
-      "recorded_ts": "2026-09-10T09:25:28.945250+00:00",
-      "alert_score": 113.7,
-      "alert_graduation_pct": 57.34,
-      "final_graduation_pct": 2.99,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 97,
     "graduated": 26,
-    "did_not_graduate": 40,
+    "did_not_graduate": 41,
     "buy_graduated": 22,
-    "buy_total": 52,
+    "buy_total": 53,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.4
+    "graduation_rate_pct": 38.8
   },
   "shadow_stats": {
-    "tracked": 27,
+    "tracked": 28,
     "graduated": 730,
     "did_not_graduate": 4653,
     "graduation_rate_pct": 13.6
