@@ -1,58 +1,25 @@
 {
-  "timestamp": "2026-10-17T09:30:53.125153+00:00",
-  "balance": 345.75,
-  "positions_value": 13.31,
-  "net_worth": 359.06,
+  "timestamp": "2026-10-17T09:40:37.580891+00:00",
+  "balance": 354.1,
+  "positions_value": 5.03,
+  "net_worth": 359.13,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
-      "name": "Max Leverage",
-      "symbol": "Max",
-      "entry_ts": "2026-10-17T03:40:36.269555+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 8.37,
-      "pnl_pct": -58.15,
-      "entry_slippage_pct": 1.2,
-      "entry_graduation_pct": 67.21,
-      "graduation_pct": 27.12,
-      "graduated": false
-    },
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
       "name": "The Anomaly",
       "symbol": "ANOMALY",
       "entry_ts": "2026-10-17T04:45:40.650010+00:00",
       "amount_usd": 20.0,
-      "value_usd": 4.94,
-      "pnl_pct": -75.3,
+      "value_usd": 5.03,
+      "pnl_pct": -74.85,
       "entry_slippage_pct": 1.29,
       "entry_graduation_pct": 43.53,
-      "graduation_pct": 4.33,
+      "graduation_pct": 4.66,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "EbxjHaG7cEL9ExibJwCHVe6TB8sarEddYP5ourarpump",
-      "name": "41Coin",
-      "symbol": "41",
-      "bonding_curve_key": "CemuRrPB5hK8oG96LJshgo3TS32bpTRyWQZfHNV6tFe3",
-      "entry_ts": "2026-10-11T03:50:38.039769+00:00",
-      "entry_price_usd": 2.9199691833366253e-05,
-      "entry_spot_price_usd": 2.8850987949397353e-05,
-      "entry_slippage_pct": 1.21,
-      "amount_usd": 20.0,
-      "qty": 684938.7354542613,
-      "entry_graduation_pct": 73.16,
-      "entry_score": 91.9,
-      "exit_ts": "2026-10-11T04:10:35.660042+00:00",
-      "exit_price_usd": 3.957717540700082e-05,
-      "proceeds_usd": 27.11,
-      "pnl_usd": 7.11,
-      "pnl_pct": 35.54,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "7W5KAUYmPc5PvdS1tvDHy8Lvt4ERXmzGue7yEoSNpump",
       "name": "Volume Launchpad",
@@ -532,19 +499,29 @@
       "pnl_usd": -16.22,
       "pnl_pct": -81.12,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
       "name": "Max Leverage",
       "symbol": "Max",
-      "decision": "buy",
-      "signal_ts": "2026-10-17T03:40:36.269555+00:00",
-      "alert_score": 90.8,
-      "alert_graduation_pct": 67.21,
-      "graduation_pct": 27.12
-    },
+      "bonding_curve_key": "C6xVbuDaQLAQ9DhqsFvwokvmeVAgoTenKnEWG9tphdGe",
+      "entry_ts": "2026-10-17T03:40:36.269555+00:00",
+      "entry_price_usd": 2.3195804081132546e-05,
+      "entry_spot_price_usd": 2.291988003426491e-05,
+      "entry_slippage_pct": 1.2,
+      "amount_usd": 20.0,
+      "qty": 862224.9062824249,
+      "entry_graduation_pct": 67.21,
+      "entry_score": 90.8,
+      "exit_ts": "2026-10-17T09:40:37.580911+00:00",
+      "exit_price_usd": 9.688892877309135e-06,
+      "proceeds_usd": 8.35,
+      "pnl_usd": -11.65,
+      "pnl_pct": -58.23,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
       "name": "The Anomaly",
@@ -553,10 +530,23 @@
       "signal_ts": "2026-10-17T04:45:40.650010+00:00",
       "alert_score": 90.8,
       "alert_graduation_pct": 43.53,
-      "graduation_pct": 4.33
+      "graduation_pct": 4.66
     }
   ],
   "history": [
+    {
+      "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
+      "name": "Max Leverage",
+      "symbol": "Max",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-17T03:40:36.269555+00:00",
+      "recorded_ts": "2026-10-17T09:40:37.580891+00:00",
+      "alert_score": 90.8,
+      "alert_graduation_pct": 67.21,
+      "final_graduation_pct": 27.12,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
       "name": "Perpsguy",
@@ -1193,30 +1183,17 @@
       "alert_graduation_pct": 43.17,
       "final_graduation_pct": 6.05,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "1HQAydhWYYauYZYG9NDsLejMFeQ8L9XvYMfQT8FcNu7",
-      "name": "liquid silver",
-      "symbol": "cumcoin",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-09-11T06:25:30.083685+00:00",
-      "recorded_ts": "2026-09-11T06:45:33.486275+00:00",
-      "alert_score": 104.0,
-      "alert_graduation_pct": 64.39,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 20.1
     }
   ],
   "stats": {
     "alerts": 97,
     "graduated": 26,
-    "did_not_graduate": 41,
+    "did_not_graduate": 42,
     "buy_graduated": 22,
-    "buy_total": 53,
+    "buy_total": 54,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.8
+    "graduation_rate_pct": 38.2
   },
   "shadow_stats": {
     "tracked": 25,
