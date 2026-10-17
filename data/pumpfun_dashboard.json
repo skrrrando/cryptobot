@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-17T02:17:57.921440+00:00",
-  "balance": 402.5,
-  "positions_value": 0.0,
-  "net_worth": 402.5,
+  "timestamp": "2026-10-17T02:27:40.495195+00:00",
+  "balance": 382.5,
+  "positions_value": 19.5,
+  "net_worth": 402.0,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
+      "name": "Perpsguy",
+      "symbol": "Perpsguy",
+      "entry_ts": "2026-10-17T02:27:40.495195+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.28,
+      "entry_graduation_pct": 46.89,
+      "graduation_pct": 46.89,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
+      "name": "Perpsguy",
+      "symbol": "Perpsguy",
+      "decision": "buy",
+      "signal_ts": "2026-10-17T02:27:40.495195+00:00",
+      "alert_score": 92.1,
+      "alert_graduation_pct": 46.89,
+      "graduation_pct": 46.89
+    }
+  ],
   "history": [
     {
       "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 93,
+    "alerts": 94,
     "graduated": 25,
     "did_not_graduate": 40,
     "buy_graduated": 21,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 38.5
   },
   "shadow_stats": {
-    "tracked": 28,
+    "tracked": 25,
     "graduated": 726,
-    "did_not_graduate": 4625,
+    "did_not_graduate": 4628,
     "graduation_rate_pct": 13.6
   },
   "daily_cap": 4,
