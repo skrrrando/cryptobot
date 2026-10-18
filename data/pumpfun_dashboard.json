@@ -1,58 +1,25 @@
 {
-  "timestamp": "2026-10-18T00:15:38.038617+00:00",
-  "balance": 319.42,
-  "positions_value": 34.88,
-  "net_worth": 354.3,
+  "timestamp": "2026-10-18T00:20:39.335573+00:00",
+  "balance": 334.17,
+  "positions_value": 23.77,
+  "net_worth": 357.94,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
-      "name": "Interim",
-      "symbol": "Interim",
-      "entry_ts": "2026-10-18T00:10:39.013836+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 14.77,
-      "pnl_pct": -26.15,
-      "entry_slippage_pct": 1.2,
-      "entry_graduation_pct": 87.76,
-      "graduation_pct": 71.71,
-      "graduated": false
-    },
     {
       "mint": "4Bf4faWwx4dnRvCAtDThgyCcJ9QX1wcwpoX1ZWqbpump",
       "name": "wifout",
       "symbol": "wifout",
       "entry_ts": "2026-10-18T00:10:39.013836+00:00",
       "amount_usd": 20.0,
-      "value_usd": 20.11,
-      "pnl_pct": 0.55,
+      "value_usd": 23.77,
+      "pnl_pct": 18.85,
       "entry_slippage_pct": 1.28,
       "entry_graduation_pct": 50.2,
-      "graduation_pct": 51.53,
+      "graduation_pct": 59.12,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "7XFsfb9ypRHyFpJQYFtyJLG3vRf7duKBQ8CMksJ5pump",
-      "name": "Qhost",
-      "symbol": "QHOST",
-      "bonding_curve_key": "4rV8wtzxHECDgEnNKu31ehEGcPWxBfwJX98R9KCXw6jL",
-      "entry_ts": "2026-10-11T04:01:06.799172+00:00",
-      "entry_price_usd": 3.0541973655585496e-05,
-      "entry_spot_price_usd": 3.0178516132999422e-05,
-      "entry_slippage_pct": 1.2,
-      "amount_usd": 20.0,
-      "qty": 654836.5284292102,
-      "entry_graduation_pct": 75.7,
-      "entry_score": 92.0,
-      "exit_ts": "2026-10-11T10:15:37.951030+00:00",
-      "exit_price_usd": 3.652379488340298e-06,
-      "proceeds_usd": 2.39,
-      "pnl_usd": -17.61,
-      "pnl_pct": -88.04,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "8HbBuMvWeMqfc5AeKcmomQLVc4ZXNHFJ7XCubdBgpump",
       "name": "oracle",
@@ -532,21 +499,43 @@
       "pnl_usd": -14.69,
       "pnl_pct": -73.44,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
       "name": "Interim",
       "symbol": "Interim",
-      "decision": "buy",
-      "signal_ts": "2026-10-18T00:10:39.013836+00:00",
-      "alert_score": 114.4,
-      "alert_graduation_pct": 87.76,
-      "graduation_pct": 71.71
+      "bonding_curve_key": "8ZNLiDMqMPxs6P1VnEBjmvPy269RxWwLXD3pnDquM1fY",
+      "entry_ts": "2026-10-18T00:10:39.013836+00:00",
+      "entry_price_usd": 3.546911202242208e-05,
+      "entry_spot_price_usd": 3.505007803993065e-05,
+      "entry_slippage_pct": 1.2,
+      "amount_usd": 20.0,
+      "qty": 563870.8966651559,
+      "entry_graduation_pct": 87.76,
+      "entry_score": 114.4,
+      "exit_ts": "2026-10-18T00:20:39.335593+00:00",
+      "exit_price_usd": 2.616037866569909e-05,
+      "proceeds_usd": 14.75,
+      "pnl_usd": -5.25,
+      "pnl_pct": -26.24,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
+      "name": "Interim",
+      "symbol": "Interim",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T00:10:39.013836+00:00",
+      "recorded_ts": "2026-10-18T00:20:39.335573+00:00",
+      "alert_score": 114.4,
+      "alert_graduation_pct": 87.76,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 10.0
+    },
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
       "name": "The Anomaly",
@@ -1183,35 +1172,22 @@
       "alert_graduation_pct": 78.43,
       "final_graduation_pct": null,
       "minutes_to_graduate": 4.6
-    },
-    {
-      "mint": "DzRAnvAbmcFXjrBUCQdohrNJzhonpzzsYTRHQkiMnBXh",
-      "name": "Are you still watching",
-      "symbol": "Watching",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-11T07:55:27.661804+00:00",
-      "recorded_ts": "2026-09-11T14:03:07.941280+00:00",
-      "alert_score": 106.2,
-      "alert_graduation_pct": 46.59,
-      "final_graduation_pct": 1.81,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 99,
-    "graduated": 26,
+    "graduated": 27,
     "did_not_graduate": 43,
-    "buy_graduated": 22,
-    "buy_total": 55,
+    "buy_graduated": 23,
+    "buy_total": 56,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 37.7
+    "graduation_rate_pct": 38.6
   },
   "shadow_stats": {
-    "tracked": 36,
+    "tracked": 35,
     "graduated": 747,
-    "did_not_graduate": 4740,
+    "did_not_graduate": 4741,
     "graduation_rate_pct": 13.6
   },
   "daily_cap": 4,
