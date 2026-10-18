@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-18T07:15:38.013335+00:00",
-  "balance": 329.84,
-  "positions_value": 3.07,
-  "net_worth": 332.91,
+  "timestamp": "2026-10-18T07:20:39.419578+00:00",
+  "balance": 332.89,
+  "positions_value": 0.0,
+  "net_worth": 332.89,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
-      "name": "Excavate",
-      "symbol": "EXCAVATE",
-      "entry_ts": "2026-10-18T01:18:55.061017+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 3.07,
-      "pnl_pct": -84.65,
-      "entry_slippage_pct": 1.26,
-      "entry_graduation_pct": 56.7,
-      "graduation_pct": 1.17,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
-      "name": "Self Made",
-      "symbol": "SELFMADE",
-      "bonding_curve_key": "EQrnG6j9QBW3dHsCpiPDLr9VBwaDuYLPy2G9vptr5LEV",
-      "entry_ts": "2026-10-12T00:50:38.007297+00:00",
-      "entry_price_usd": 2.5669079076745858e-05,
-      "entry_spot_price_usd": 2.535972167466313e-05,
-      "entry_slippage_pct": 1.22,
-      "amount_usd": 20.0,
-      "qty": 779147.5471404195,
-      "entry_graduation_pct": 65.43,
-      "entry_score": 99.3,
-      "exit_ts": "2026-10-12T06:50:47.712418+00:00",
-      "exit_price_usd": 3.204422367816144e-06,
-      "proceeds_usd": 2.5,
-      "pnl_usd": -17.5,
-      "pnl_pct": -87.52,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "HYsAoZKk8uALR7jTex2i2Ey4JMnB3Twmm9LDxvz2pump",
       "name": "The Tawny Frogmouth",
@@ -519,21 +485,43 @@
       "pnl_usd": -3.9,
       "pnl_pct": -19.51,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
       "name": "Excavate",
       "symbol": "EXCAVATE",
-      "decision": "buy",
-      "signal_ts": "2026-10-18T01:18:55.061017+00:00",
-      "alert_score": 97.2,
-      "alert_graduation_pct": 56.7,
-      "graduation_pct": 1.17
+      "bonding_curve_key": "AWRZgXAkmC7LHNmMcBRHzXaZ7Bi7cPVPFxXaXHij9srg",
+      "entry_ts": "2026-10-18T01:18:55.061017+00:00",
+      "entry_price_usd": 1.9920052905441257e-05,
+      "entry_spot_price_usd": 1.9672750070042177e-05,
+      "entry_slippage_pct": 1.26,
+      "amount_usd": 20.0,
+      "qty": 1004013.3977022171,
+      "entry_graduation_pct": 56.7,
+      "entry_score": 97.2,
+      "exit_ts": "2026-10-18T07:20:39.419598+00:00",
+      "exit_price_usd": 3.0370531263336235e-06,
+      "proceeds_usd": 3.05,
+      "pnl_usd": -16.95,
+      "pnl_pct": -84.75,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
+      "name": "Excavate",
+      "symbol": "EXCAVATE",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T01:18:55.061017+00:00",
+      "recorded_ts": "2026-10-18T07:20:39.419578+00:00",
+      "alert_score": 97.2,
+      "alert_graduation_pct": 56.7,
+      "final_graduation_pct": 1.17,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
       "name": "inugrant",
@@ -1170,30 +1158,17 @@
       "alert_graduation_pct": 89.29,
       "final_graduation_pct": 6.23,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "D2ZhP2s5BBxbReJo8N1kB5LhgcZrEphVgLsyBsJbiF7n",
-      "name": "Very Private Niggas",
-      "symbol": "VPN",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-12T02:50:33.935638+00:00",
-      "recorded_ts": "2026-09-12T08:50:34.222946+00:00",
-      "alert_score": 90.3,
-      "alert_graduation_pct": 58.23,
-      "final_graduation_pct": 6.0,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 101,
     "graduated": 28,
-    "did_not_graduate": 43,
+    "did_not_graduate": 44,
     "buy_graduated": 24,
-    "buy_total": 57,
+    "buy_total": 58,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.4
+    "graduation_rate_pct": 38.9
   },
   "shadow_stats": {
     "tracked": 26,
