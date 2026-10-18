@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-18T00:39:40.986253+00:00",
-  "balance": 314.17,
-  "positions_value": 31.07,
-  "net_worth": 345.24,
+  "timestamp": "2026-10-18T00:49:28.027286+00:00",
+  "balance": 333.74,
+  "positions_value": 12.18,
+  "net_worth": 345.92,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,15 @@
       "symbol": "wifout",
       "entry_ts": "2026-10-18T00:10:39.013836+00:00",
       "amount_usd": 20.0,
-      "value_usd": 11.54,
-      "pnl_pct": -42.3,
+      "value_usd": 12.18,
+      "pnl_pct": -39.1,
       "entry_slippage_pct": 1.28,
       "entry_graduation_pct": 50.2,
-      "graduation_pct": 30.53,
-      "graduated": false
-    },
-    {
-      "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
-      "name": "inugrant",
-      "symbol": "inugrant",
-      "entry_ts": "2026-10-18T00:39:40.986253+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.53,
-      "pnl_pct": -2.35,
-      "entry_slippage_pct": 1.19,
-      "entry_graduation_pct": 89.06,
-      "graduation_pct": 89.06,
+      "graduation_pct": 32.22,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "8HbBuMvWeMqfc5AeKcmomQLVc4ZXNHFJ7XCubdBgpump",
-      "name": "oracle",
-      "symbol": "oracle",
-      "bonding_curve_key": "9FFQeW6e5ff9VXQyT1xmZYd5oTL9KQBeMqPhrTtkFQRm",
-      "entry_ts": "2026-10-12T01:15:38.243307+00:00",
-      "entry_price_usd": 4.083696483246245e-05,
-      "entry_spot_price_usd": 4.0362223809960207e-05,
-      "entry_slippage_pct": 1.18,
-      "amount_usd": 20.0,
-      "qty": 489752.36240136623,
-      "entry_graduation_pct": 91.64,
-      "entry_score": 98.3,
-      "exit_ts": "2026-10-12T01:20:34.896263+00:00",
-      "exit_price_usd": 3.9873404096596784e-05,
-      "proceeds_usd": 19.53,
-      "pnl_usd": -0.47,
-      "pnl_pct": -2.36,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
       "name": "debpf",
@@ -532,21 +499,43 @@
       "pnl_usd": -5.25,
       "pnl_pct": -26.24,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
       "name": "inugrant",
       "symbol": "inugrant",
-      "decision": "buy",
-      "signal_ts": "2026-10-18T00:39:40.986253+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 89.06,
-      "graduation_pct": 89.06
+      "bonding_curve_key": "8xTNGAGSCBPmcLeXxAnob3VUHD6xnfEFAN749yF6S8p5",
+      "entry_ts": "2026-10-18T00:39:40.986253+00:00",
+      "entry_price_usd": 3.6157580146043286e-05,
+      "entry_spot_price_usd": 3.573098156896422e-05,
+      "entry_slippage_pct": 1.19,
+      "amount_usd": 20.0,
+      "qty": 553134.3612934947,
+      "entry_graduation_pct": 89.06,
+      "entry_score": 115.0,
+      "exit_ts": "2026-10-18T00:49:28.027308+00:00",
+      "exit_price_usd": 3.5386942386441143e-05,
+      "proceeds_usd": 19.57,
+      "pnl_usd": -0.43,
+      "pnl_pct": -2.13,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
+      "name": "inugrant",
+      "symbol": "inugrant",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T00:39:40.986253+00:00",
+      "recorded_ts": "2026-10-18T00:49:28.027286+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 89.06,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.8
+    },
     {
       "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
       "name": "Interim",
@@ -1183,35 +1172,22 @@
       "alert_graduation_pct": 58.23,
       "final_graduation_pct": 6.0,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "J8X5ygWHY5uHFch7m3MisSC7eDAWpAkgi1pyqfT5pump",
-      "name": "revolve ",
-      "symbol": "revolve ",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-09-12T05:30:50.972451+00:00",
-      "recorded_ts": "2026-09-12T05:35:27.854127+00:00",
-      "alert_score": 96.2,
-      "alert_graduation_pct": 78.43,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 4.6
     }
   ],
   "stats": {
     "alerts": 100,
-    "graduated": 27,
+    "graduated": 28,
     "did_not_graduate": 43,
-    "buy_graduated": 23,
-    "buy_total": 56,
+    "buy_graduated": 24,
+    "buy_total": 57,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.6
+    "graduation_rate_pct": 39.4
   },
   "shadow_stats": {
-    "tracked": 37,
+    "tracked": 33,
     "graduated": 747,
-    "did_not_graduate": 4742,
+    "did_not_graduate": 4746,
     "graduation_rate_pct": 13.6
   },
   "daily_cap": 4,
