@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-18T00:30:09.901815+00:00",
-  "balance": 334.17,
-  "positions_value": 12.98,
-  "net_worth": 347.15,
+  "timestamp": "2026-10-18T00:39:40.986253+00:00",
+  "balance": 314.17,
+  "positions_value": 31.07,
+  "net_worth": 345.24,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "wifout",
       "entry_ts": "2026-10-18T00:10:39.013836+00:00",
       "amount_usd": 20.0,
-      "value_usd": 12.98,
-      "pnl_pct": -35.1,
+      "value_usd": 11.54,
+      "pnl_pct": -42.3,
       "entry_slippage_pct": 1.28,
       "entry_graduation_pct": 50.2,
-      "graduation_pct": 34.44,
+      "graduation_pct": 30.53,
+      "graduated": false
+    },
+    {
+      "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
+      "name": "inugrant",
+      "symbol": "inugrant",
+      "entry_ts": "2026-10-18T00:39:40.986253+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.19,
+      "entry_graduation_pct": 89.06,
+      "graduation_pct": 89.06,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
+      "name": "inugrant",
+      "symbol": "inugrant",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T00:39:40.986253+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 89.06,
+      "graduation_pct": 89.06
+    }
+  ],
   "history": [
     {
       "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
@@ -1175,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 99,
+    "alerts": 100,
     "graduated": 27,
     "did_not_graduate": 43,
     "buy_graduated": 23,
@@ -1187,7 +1211,7 @@
   "shadow_stats": {
     "tracked": 37,
     "graduated": 747,
-    "did_not_graduate": 4741,
+    "did_not_graduate": 4742,
     "graduation_rate_pct": 13.6
   },
   "daily_cap": 4,
