@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-18T01:08:56.892047+00:00",
-  "balance": 333.74,
-  "positions_value": 16.3,
-  "net_worth": 350.04,
+  "timestamp": "2026-10-18T01:18:55.061017+00:00",
+  "balance": 313.74,
+  "positions_value": 36.43,
+  "net_worth": 350.17,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "wifout",
       "entry_ts": "2026-10-18T00:10:39.013836+00:00",
       "amount_usd": 20.0,
-      "value_usd": 16.3,
-      "pnl_pct": -18.5,
+      "value_usd": 16.92,
+      "pnl_pct": -15.4,
       "entry_slippage_pct": 1.28,
       "entry_graduation_pct": 50.2,
-      "graduation_pct": 42.75,
+      "graduation_pct": 44.18,
+      "graduated": false
+    },
+    {
+      "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
+      "name": "Excavate",
+      "symbol": "EXCAVATE",
+      "entry_ts": "2026-10-18T01:18:55.061017+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 56.7,
+      "graduation_pct": 56.7,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
+      "name": "Excavate",
+      "symbol": "EXCAVATE",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T01:18:55.061017+00:00",
+      "alert_score": 97.2,
+      "alert_graduation_pct": 56.7,
+      "graduation_pct": 56.7
+    }
+  ],
   "history": [
     {
       "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
@@ -1175,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 100,
+    "alerts": 101,
     "graduated": 28,
     "did_not_graduate": 43,
     "buy_graduated": 24,
