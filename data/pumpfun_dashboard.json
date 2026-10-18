@@ -1,10 +1,37 @@
 {
-  "timestamp": "2026-10-18T00:01:05.754916+00:00",
-  "balance": 359.42,
-  "positions_value": 0.0,
-  "net_worth": 359.42,
+  "timestamp": "2026-10-18T00:10:39.013836+00:00",
+  "balance": 319.42,
+  "positions_value": 39.03,
+  "net_worth": 358.45,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
+      "name": "Interim",
+      "symbol": "Interim",
+      "entry_ts": "2026-10-18T00:10:39.013836+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.2,
+      "entry_graduation_pct": 87.76,
+      "graduation_pct": 87.76,
+      "graduated": false
+    },
+    {
+      "mint": "4Bf4faWwx4dnRvCAtDThgyCcJ9QX1wcwpoX1ZWqbpump",
+      "name": "wifout",
+      "symbol": "wifout",
+      "entry_ts": "2026-10-18T00:10:39.013836+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.28,
+      "entry_graduation_pct": 50.2,
+      "graduation_pct": 50.2,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "7XFsfb9ypRHyFpJQYFtyJLG3vRf7duKBQ8CMksJ5pump",
@@ -507,7 +534,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
+      "name": "Interim",
+      "symbol": "Interim",
+      "decision": "buy",
+      "signal_ts": "2026-10-18T00:10:39.013836+00:00",
+      "alert_score": 114.4,
+      "alert_graduation_pct": 87.76,
+      "graduation_pct": 87.76
+    }
+  ],
   "history": [
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
@@ -1161,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 97,
+    "alerts": 99,
     "graduated": 26,
     "did_not_graduate": 43,
     "buy_graduated": 22,
