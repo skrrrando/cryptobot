@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-19T11:10:47.785583+00:00",
-  "balance": 311.5,
-  "positions_value": 22.38,
-  "net_worth": 333.88,
+  "timestamp": "2026-10-19T11:15:38.847370+00:00",
+  "balance": 291.5,
+  "positions_value": 27.05,
+  "net_worth": 318.55,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "REMIGRATION",
       "entry_ts": "2026-10-19T11:01:08.562257+00:00",
       "amount_usd": 20.0,
-      "value_usd": 22.38,
-      "pnl_pct": 11.9,
+      "value_usd": 7.59,
+      "pnl_pct": -62.05,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 68.97,
-      "graduation_pct": 76.41,
+      "graduation_pct": 29.77,
+      "graduated": false
+    },
+    {
+      "mint": "HMGhmnNL3JMJ9BPYdJVsgW3jtK4Yj9nzQ17gYPtrZnLV",
+      "name": "the plagued flight",
+      "symbol": "LH9912",
+      "entry_ts": "2026-10-19T11:15:38.847370+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.46,
+      "pnl_pct": -2.7,
+      "entry_slippage_pct": 1.37,
+      "entry_graduation_pct": 28.0,
+      "graduation_pct": 28.0,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "HMGhmnNL3JMJ9BPYdJVsgW3jtK4Yj9nzQ17gYPtrZnLV",
+      "name": "the plagued flight",
+      "symbol": "LH9912",
+      "decision": "buy",
+      "signal_ts": "2026-10-19T11:15:38.847370+00:00",
+      "alert_score": 95.2,
+      "alert_graduation_pct": 28.0,
+      "graduation_pct": 28.0
+    }
+  ],
   "history": [
     {
       "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
@@ -1175,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 103,
+    "alerts": 104,
     "graduated": 28,
     "did_not_graduate": 44,
     "buy_graduated": 24,
@@ -1185,7 +1209,7 @@
     "graduation_rate_pct": 38.9
   },
   "shadow_stats": {
-    "tracked": 9,
+    "tracked": 10,
     "graduated": 763,
     "did_not_graduate": 4932,
     "graduation_rate_pct": 13.4
