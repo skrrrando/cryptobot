@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-20T01:01:07.528423+00:00",
-  "balance": 250.42,
-  "positions_value": 25.9,
-  "net_worth": 276.32,
+  "timestamp": "2026-10-20T01:10:48.443759+00:00",
+  "balance": 269.78,
+  "positions_value": 6.35,
+  "net_worth": 276.13,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,15 @@
       "symbol": "COLLECTINU",
       "entry_ts": "2026-10-20T00:10:40.905877+00:00",
       "amount_usd": 20.0,
-      "value_usd": 6.39,
-      "pnl_pct": -68.05,
+      "value_usd": 6.35,
+      "pnl_pct": -68.25,
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 6020.16,
       "graduation_pct": 221.92,
       "graduated": false
-    },
-    {
-      "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
-      "name": "little rocket man",
-      "symbol": "lilrocketman",
-      "entry_ts": "2026-10-20T01:01:07.528423+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.51,
-      "pnl_pct": -2.45,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 64.11,
-      "graduation_pct": 64.11,
-      "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "DyLkvPi2Dn9fNgSJcN8mV6FruFuAcPAV9y4aG1WBpump",
-      "name": "Bear in depression",
-      "symbol": "BID",
-      "bonding_curve_key": "H17FUf2DGnMhpWZw2eaxAT7ArjKYzJHyr4xDHuXVmse5",
-      "entry_ts": "2026-10-13T00:30:54.463200+00:00",
-      "entry_price_usd": 1.4934943651543617e-05,
-      "entry_spot_price_usd": 1.4743982872096355e-05,
-      "entry_slippage_pct": 1.3,
-      "amount_usd": 20.0,
-      "qty": 1339141.3095778823,
-      "entry_graduation_pct": 44.29,
-      "entry_score": 95.8,
-      "exit_ts": "2026-10-13T06:30:55.661676+00:00",
-      "exit_price_usd": 3.6835496428559533e-06,
-      "proceeds_usd": 4.93,
-      "pnl_usd": -15.07,
-      "pnl_pct": -75.34,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "4bhV1DPku6KvsqWCL9GLDaDWgJ78M4kBRgKoNdjBpump",
       "name": "dweeble",
@@ -532,21 +499,43 @@
       "pnl_usd": -15.12,
       "pnl_pct": -75.61,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
       "name": "little rocket man",
       "symbol": "lilrocketman",
-      "decision": "buy",
-      "signal_ts": "2026-10-20T01:01:07.528423+00:00",
-      "alert_score": 112.6,
-      "alert_graduation_pct": 64.11,
-      "graduation_pct": 64.11
+      "bonding_curve_key": "Am41DL3TtQhyco3irsDLBf9Lvmvt8P6h8HqwAh3yygSR",
+      "entry_ts": "2026-10-20T01:01:07.528423+00:00",
+      "entry_price_usd": 2.3469406883094496e-05,
+      "entry_spot_price_usd": 2.3182736188682846e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 852173.2185062766,
+      "entry_graduation_pct": 64.11,
+      "entry_score": 112.6,
+      "exit_ts": "2026-10-20T01:10:48.443778+00:00",
+      "exit_price_usd": 2.2726516537485106e-05,
+      "proceeds_usd": 19.37,
+      "pnl_usd": -0.63,
+      "pnl_pct": -3.17,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
+      "name": "little rocket man",
+      "symbol": "lilrocketman",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-20T01:01:07.528423+00:00",
+      "recorded_ts": "2026-10-20T01:10:48.443759+00:00",
+      "alert_score": 112.6,
+      "alert_graduation_pct": 64.11,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.7
+    },
     {
       "mint": "HMGhmnNL3JMJ9BPYdJVsgW3jtK4Yj9nzQ17gYPtrZnLV",
       "name": "the plagued flight",
@@ -1183,35 +1172,22 @@
       "alert_graduation_pct": 89.03,
       "final_graduation_pct": 1.25,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "STagEBz7PG1cNLcVMj51Wyoige4qieKzQDNXd3Epump",
-      "name": "wank",
-      "symbol": "wank",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-13T00:01:02.016265+00:00",
-      "recorded_ts": "2026-09-13T06:02:18.807400+00:00",
-      "alert_score": 94.2,
-      "alert_graduation_pct": 68.84,
-      "final_graduation_pct": 0.17,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 107,
-    "graduated": 28,
+    "graduated": 29,
     "did_not_graduate": 45,
-    "buy_graduated": 24,
-    "buy_total": 59,
+    "buy_graduated": 25,
+    "buy_total": 60,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.4
+    "graduation_rate_pct": 39.2
   },
   "shadow_stats": {
-    "tracked": 51,
+    "tracked": 47,
     "graduated": 781,
-    "did_not_graduate": 5003,
+    "did_not_graduate": 5008,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
