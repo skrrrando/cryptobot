@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-20T01:25:06.349112+00:00",
-  "balance": 269.78,
-  "positions_value": 6.36,
-  "net_worth": 276.14,
+  "timestamp": "2026-10-20T01:34:41.763056+00:00",
+  "balance": 249.78,
+  "positions_value": 25.87,
+  "net_worth": 275.65,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "COLLECTINU",
       "entry_ts": "2026-10-20T00:10:40.905877+00:00",
       "amount_usd": 20.0,
-      "value_usd": 6.36,
-      "pnl_pct": -68.2,
+      "value_usd": 6.37,
+      "pnl_pct": -68.15,
       "entry_slippage_pct": 1.01,
       "entry_graduation_pct": 6020.16,
-      "graduation_pct": 221.92,
+      "graduation_pct": 217.92,
+      "graduated": false
+    },
+    {
+      "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
+      "name": "Dogemon",
+      "symbol": "DOGEMON",
+      "entry_ts": "2026-10-20T01:34:41.763056+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.27,
+      "entry_graduation_pct": 52.06,
+      "graduation_pct": 52.06,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
+      "name": "Dogemon",
+      "symbol": "DOGEMON",
+      "decision": "buy",
+      "signal_ts": "2026-10-20T01:34:41.763056+00:00",
+      "alert_score": 94.4,
+      "alert_graduation_pct": 52.06,
+      "graduation_pct": 52.06
+    }
+  ],
   "history": [
     {
       "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
@@ -1175,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 107,
+    "alerts": 108,
     "graduated": 29,
     "did_not_graduate": 45,
     "buy_graduated": 25,
@@ -1185,9 +1209,9 @@
     "graduation_rate_pct": 39.2
   },
   "shadow_stats": {
-    "tracked": 44,
+    "tracked": 40,
     "graduated": 782,
-    "did_not_graduate": 5010,
+    "did_not_graduate": 5014,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
