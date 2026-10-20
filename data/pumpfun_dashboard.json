@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-20T07:30:57.826252+00:00",
-  "balance": 256.92,
-  "positions_value": 5.38,
-  "net_worth": 262.3,
+  "timestamp": "2026-10-20T07:40:37.537151+00:00",
+  "balance": 262.28,
+  "positions_value": 0.0,
+  "net_worth": 262.28,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
-      "name": "Dogemon",
-      "symbol": "DOGEMON",
-      "entry_ts": "2026-10-20T01:34:41.763056+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 5.38,
-      "pnl_pct": -73.1,
-      "entry_slippage_pct": 1.27,
-      "entry_graduation_pct": 52.06,
-      "graduation_pct": 10.57,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "FUHux68mpPa3hBEWXdwUKwUHuTv5JmgDJygT6Lh8M58U",
-      "name": "Nurserypad",
-      "symbol": "Nursery",
-      "bonding_curve_key": "7MujPWQXzTZtweVbMdUdFrPFx2WUHc7qHmk1kYWqnkTJ",
-      "entry_ts": "2026-10-14T01:20:41.619906+00:00",
-      "entry_price_usd": 3.345209454791309e-05,
-      "entry_spot_price_usd": 3.3056303528294346e-05,
-      "entry_slippage_pct": 1.2,
-      "amount_usd": 20.0,
-      "qty": 597869.8873804212,
-      "entry_graduation_pct": 81.88,
-      "entry_score": 96.8,
-      "exit_ts": "2026-10-14T03:10:42.073887+00:00",
-      "exit_price_usd": 1.6408580675579987e-05,
-      "proceeds_usd": 9.81,
-      "pnl_usd": -10.19,
-      "pnl_pct": -50.95,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "HnQRcdnQ2Ta65kyqX6VXiS2PaoVaTexfDEBz6GAMpump",
       "name": "Flying Ketamine Inu",
@@ -519,21 +485,43 @@
       "pnl_usd": -13.67,
       "pnl_pct": -68.34,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
       "name": "Dogemon",
       "symbol": "DOGEMON",
-      "decision": "buy",
-      "signal_ts": "2026-10-20T01:34:41.763056+00:00",
-      "alert_score": 94.4,
-      "alert_graduation_pct": 52.06,
-      "graduation_pct": 10.57
+      "bonding_curve_key": "8Bo97HmR3HXWCXFerrneSWNHGB9NYwMsfXf4HLHFv3aZ",
+      "entry_ts": "2026-10-20T01:34:41.763056+00:00",
+      "entry_price_usd": 1.8098946776337405e-05,
+      "entry_spot_price_usd": 1.787228391595461e-05,
+      "entry_slippage_pct": 1.27,
+      "amount_usd": 20.0,
+      "qty": 1105036.6768384576,
+      "entry_graduation_pct": 52.06,
+      "entry_score": 94.4,
+      "exit_ts": "2026-10-20T07:40:37.537171+00:00",
+      "exit_price_usd": 4.855861156153775e-06,
+      "proceeds_usd": 5.37,
+      "pnl_usd": -14.63,
+      "pnl_pct": -73.17,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
+      "name": "Dogemon",
+      "symbol": "DOGEMON",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-20T01:34:41.763056+00:00",
+      "recorded_ts": "2026-10-20T07:40:37.537151+00:00",
+      "alert_score": 94.4,
+      "alert_graduation_pct": 52.06,
+      "final_graduation_pct": 10.57,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "DxrKhpjZT82HYa5k6iNfyEf5Z94wfAHo5b2pM9X2pump",
       "name": "Gacha",
@@ -1170,30 +1158,17 @@
       "alert_graduation_pct": 78.84,
       "final_graduation_pct": null,
       "minutes_to_graduate": 9.6
-    },
-    {
-      "mint": "aD8RX3iaA4gPoLPHLX6zB6xsB6e1qzLzmT2Jv4Lpump",
-      "name": "UP SYNDROME",
-      "symbol": "UP",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-13T03:10:34.489748+00:00",
-      "recorded_ts": "2026-09-13T09:11:23.478519+00:00",
-      "alert_score": 95.4,
-      "alert_graduation_pct": 83.04,
-      "final_graduation_pct": 0.59,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 109,
     "graduated": 30,
-    "did_not_graduate": 45,
+    "did_not_graduate": 46,
     "buy_graduated": 26,
-    "buy_total": 61,
+    "buy_total": 62,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 40.0
+    "graduation_rate_pct": 39.5
   },
   "shadow_stats": {
     "tracked": 33,
