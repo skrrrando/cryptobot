@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-21T06:08:56.577257+00:00",
-  "balance": 235.32,
-  "positions_value": 30.14,
-  "net_worth": 265.46,
+  "timestamp": "2026-10-21T06:18:45.458956+00:00",
+  "balance": 255.3,
+  "positions_value": 10.84,
+  "net_worth": 266.14,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
-      "name": "KAIROS",
-      "symbol": "KAIROS",
-      "entry_ts": "2026-10-21T00:15:38.293198+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.3,
-      "pnl_pct": -3.5,
-      "entry_slippage_pct": 1.25,
-      "entry_graduation_pct": 55.75,
-      "graduation_pct": 55.66,
-      "graduated": false
-    },
     {
       "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
       "name": "The 8 Pillvengers",
@@ -33,26 +20,6 @@
     }
   ],
   "closed": [
-    {
-      "mint": "3713L9khq4uQuy8tJL44Bern4T2hcZjTD4EDHmUspump",
-      "name": "ghostdog",
-      "symbol": "ghostdog",
-      "bonding_curve_key": "cgymZQvSWBxnJzsUF2v2fcaB827WrxtU7GRPbR4VsTe",
-      "entry_ts": "2026-10-15T01:30:53.526599+00:00",
-      "entry_price_usd": 1.859302020141959e-05,
-      "entry_spot_price_usd": 1.8360869115751746e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 1075672.4718920588,
-      "entry_graduation_pct": 53.1,
-      "entry_score": 97.1,
-      "exit_ts": "2026-10-15T07:37:33.061838+00:00",
-      "exit_price_usd": 1.2923298523237796e-05,
-      "proceeds_usd": 13.9,
-      "pnl_usd": -6.1,
-      "pnl_pct": -30.49,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "GhxrSCgR1FPpDKqrLZrSF3zLwkjZTxg3QLq6E8jwpump",
       "name": "communist doge",
@@ -532,6 +499,26 @@
       "pnl_usd": 13.48,
       "pnl_pct": 67.4,
       "exit_reason": "take_profit"
+    },
+    {
+      "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
+      "name": "KAIROS",
+      "symbol": "KAIROS",
+      "bonding_curve_key": "4TDP8FM4pWypgSNjwY72DUD2ryuiKGRDyRXRMC2Vjija",
+      "entry_ts": "2026-10-21T00:15:38.293198+00:00",
+      "entry_price_usd": 2.0084387468616548e-05,
+      "entry_spot_price_usd": 1.9835940669548947e-05,
+      "entry_slippage_pct": 1.25,
+      "amount_usd": 20.0,
+      "qty": 995798.354878962,
+      "entry_graduation_pct": 55.75,
+      "entry_score": 91.5,
+      "exit_ts": "2026-10-21T06:18:45.458982+00:00",
+      "exit_price_usd": 2.0068562981578753e-05,
+      "proceeds_usd": 19.98,
+      "pnl_usd": -0.02,
+      "pnl_pct": -0.08,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -544,19 +531,22 @@
       "alert_score": 106.3,
       "alert_graduation_pct": 469.94,
       "graduation_pct": 150.45
-    },
+    }
+  ],
+  "history": [
     {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
       "name": "KAIROS",
       "symbol": "KAIROS",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
+      "recorded_ts": "2026-10-21T06:18:45.458956+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 55.66
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 57.3,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
       "name": "CVE-2026-109618",
@@ -1193,35 +1183,22 @@
       "alert_graduation_pct": 59.24,
       "final_graduation_pct": 0.91,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "2CJMw4LXWoTwT82PLyJ55WhMeKb1g931Ue2C3dzEpump",
-      "name": "Kimchi",
-      "symbol": "KIMCHI",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T02:46:14.191452+00:00",
-      "recorded_ts": "2026-09-14T08:50:35.336708+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 77.74,
-      "final_graduation_pct": 4.78,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 113,
     "graduated": 32,
-    "did_not_graduate": 46,
+    "did_not_graduate": 47,
     "buy_graduated": 28,
-    "buy_total": 64,
+    "buy_total": 65,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.0
+    "graduation_rate_pct": 40.5
   },
   "shadow_stats": {
-    "tracked": 25,
+    "tracked": 24,
     "graduated": 808,
-    "did_not_graduate": 5201,
+    "did_not_graduate": 5202,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
