@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T05:15:43.325635+00:00",
-  "balance": 201.84,
-  "positions_value": 61.8,
-  "net_worth": 263.64,
+  "timestamp": "2026-10-21T05:20:39.518268+00:00",
+  "balance": 235.32,
+  "positions_value": 29.64,
+  "net_worth": 264.96,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "KAIROS",
       "entry_ts": "2026-10-21T00:15:38.293198+00:00",
       "amount_usd": 20.0,
-      "value_usd": 18.94,
-      "pnl_pct": -5.3,
+      "value_usd": 18.78,
+      "pnl_pct": -6.1,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 54.73,
+      "graduation_pct": 54.34,
       "graduated": false
     },
     {
@@ -30,42 +30,9 @@
       "entry_graduation_pct": 469.94,
       "graduation_pct": 150.45,
       "graduated": false
-    },
-    {
-      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
-      "name": "CVE-2026-109618",
-      "symbol": "PHP-UP",
-      "entry_ts": "2026-10-21T04:10:37.423466+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 32.0,
-      "pnl_pct": 60.0,
-      "entry_slippage_pct": 1.27,
-      "entry_graduation_pct": 50.49,
-      "graduation_pct": 74.47,
-      "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "7LZ652SBoMtqM9pj1ds4M5s4Yc8p5sKfkU7YmbDhpump",
-      "name": "Millionaire In 30 Days",
-      "symbol": "ChatGBT",
-      "bonding_curve_key": "FZrxgxjYvkSjyxSxNn7FeECh6zydWf1paugkqXbBJCQy",
-      "entry_ts": "2026-10-15T00:42:27.856923+00:00",
-      "entry_price_usd": 2.456635276655147e-05,
-      "entry_spot_price_usd": 2.426746792935062e-05,
-      "entry_slippage_pct": 1.23,
-      "amount_usd": 20.0,
-      "qty": 814121.6642965078,
-      "entry_graduation_pct": 66.49,
-      "entry_score": 92.5,
-      "exit_ts": "2026-10-15T02:13:42.551945+00:00",
-      "exit_price_usd": 2.2997173146097246e-05,
-      "proceeds_usd": 18.72,
-      "pnl_usd": -1.28,
-      "pnl_pct": -6.39,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "3713L9khq4uQuy8tJL44Bern4T2hcZjTD4EDHmUspump",
       "name": "ghostdog",
@@ -545,6 +512,26 @@
       "pnl_usd": -0.44,
       "pnl_pct": -2.22,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
+      "name": "CVE-2026-109618",
+      "symbol": "PHP-UP",
+      "bonding_curve_key": "aBgHdPaTDuFsAjMa5CN8Tch5BKRtKsjyLxff44bB73x",
+      "entry_ts": "2026-10-21T04:10:37.423466+00:00",
+      "entry_price_usd": 1.7659420167390225e-05,
+      "entry_spot_price_usd": 1.7437972917288423e-05,
+      "entry_slippage_pct": 1.27,
+      "amount_usd": 20.0,
+      "qty": 1132540.0160607696,
+      "entry_graduation_pct": 50.49,
+      "entry_score": 101.0,
+      "exit_ts": "2026-10-21T05:20:39.518289+00:00",
+      "exit_price_usd": 2.956223911863807e-05,
+      "proceeds_usd": 33.48,
+      "pnl_usd": 13.48,
+      "pnl_pct": 67.4,
+      "exit_reason": "take_profit"
     }
   ],
   "watching": [
@@ -566,7 +553,7 @@
       "signal_ts": "2026-10-21T04:10:37.423466+00:00",
       "alert_score": 101.0,
       "alert_graduation_pct": 50.49,
-      "graduation_pct": 74.47
+      "graduation_pct": 77.01
     },
     {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
@@ -576,7 +563,7 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 54.73
+      "graduation_pct": 54.34
     }
   ],
   "history": [
@@ -1242,7 +1229,7 @@
     "graduation_rate_pct": 40.3
   },
   "shadow_stats": {
-    "tracked": 24,
+    "tracked": 25,
     "graduated": 808,
     "did_not_graduate": 5197,
     "graduation_rate_pct": 13.5
