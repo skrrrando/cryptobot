@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T04:01:05.613095+00:00",
-  "balance": 221.84,
-  "positions_value": 34.97,
-  "net_worth": 256.81,
+  "timestamp": "2026-10-21T04:10:37.423466+00:00",
+  "balance": 201.84,
+  "positions_value": 53.09,
+  "net_worth": 254.93,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "KAIROS",
       "entry_ts": "2026-10-21T00:15:38.293198+00:00",
       "amount_usd": 20.0,
-      "value_usd": 24.1,
-      "pnl_pct": 20.5,
+      "value_usd": 22.76,
+      "pnl_pct": 13.8,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 66.22,
+      "graduation_pct": 63.53,
       "graduated": false
     },
     {
@@ -24,11 +24,24 @@
       "symbol": "PILLVENGERS",
       "entry_ts": "2026-10-21T01:48:00.857953+00:00",
       "amount_usd": 20.0,
-      "value_usd": 10.87,
-      "pnl_pct": -45.65,
+      "value_usd": 10.83,
+      "pnl_pct": -45.85,
       "entry_slippage_pct": 1.03,
       "entry_graduation_pct": 469.94,
       "graduation_pct": 150.43,
+      "graduated": false
+    },
+    {
+      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
+      "name": "CVE-2026-109618",
+      "symbol": "PHP-UP",
+      "entry_ts": "2026-10-21T04:10:37.423466+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.27,
+      "entry_graduation_pct": 50.49,
+      "graduation_pct": 50.49,
       "graduated": false
     }
   ],
@@ -553,7 +566,17 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 66.22
+      "graduation_pct": 63.53
+    },
+    {
+      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
+      "name": "CVE-2026-109618",
+      "symbol": "PHP-UP",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T04:10:37.423466+00:00",
+      "alert_score": 101.0,
+      "alert_graduation_pct": 50.49,
+      "graduation_pct": 50.49
     }
   ],
   "history": [
@@ -1209,7 +1232,7 @@
     }
   ],
   "stats": {
-    "alerts": 112,
+    "alerts": 113,
     "graduated": 31,
     "did_not_graduate": 46,
     "buy_graduated": 27,
