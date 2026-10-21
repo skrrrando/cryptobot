@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T05:20:39.518268+00:00",
+  "timestamp": "2026-10-21T05:25:30.905391+00:00",
   "balance": 235.32,
-  "positions_value": 29.64,
-  "net_worth": 264.96,
+  "positions_value": 28.9,
+  "net_worth": 264.22,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "KAIROS",
       "entry_ts": "2026-10-21T00:15:38.293198+00:00",
       "amount_usd": 20.0,
-      "value_usd": 18.78,
-      "pnl_pct": -6.1,
+      "value_usd": 18.04,
+      "pnl_pct": -9.8,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 54.34,
+      "graduation_pct": 52.55,
       "graduated": false
     },
     {
@@ -546,16 +546,6 @@
       "graduation_pct": 150.45
     },
     {
-      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
-      "name": "CVE-2026-109618",
-      "symbol": "PHP-UP",
-      "decision": "buy",
-      "signal_ts": "2026-10-21T04:10:37.423466+00:00",
-      "alert_score": 101.0,
-      "alert_graduation_pct": 50.49,
-      "graduation_pct": 77.01
-    },
-    {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
       "name": "KAIROS",
       "symbol": "KAIROS",
@@ -563,10 +553,23 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 54.34
+      "graduation_pct": 52.55
     }
   ],
   "history": [
+    {
+      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
+      "name": "CVE-2026-109618",
+      "symbol": "PHP-UP",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T04:10:37.423466+00:00",
+      "recorded_ts": "2026-10-21T05:25:30.905391+00:00",
+      "alert_score": 101.0,
+      "alert_graduation_pct": 50.49,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 74.9
+    },
     {
       "mint": "8bBQP9ngcjyr7g1ytggodjaaQSHSyNcnxCrm8YN9pump",
       "name": "smol guy",
@@ -1203,33 +1206,20 @@
       "alert_graduation_pct": 77.74,
       "final_graduation_pct": 4.78,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "44QgL6gYRRMxS5KNAiTAHnqWA3hQ1USZAFfih1BKpump",
-      "name": "eminem",
-      "symbol": "m&m",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-14T01:58:10.682583+00:00",
-      "recorded_ts": "2026-09-14T08:01:05.233325+00:00",
-      "alert_score": 113.5,
-      "alert_graduation_pct": 72.17,
-      "final_graduation_pct": 12.99,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 113,
-    "graduated": 31,
+    "graduated": 32,
     "did_not_graduate": 46,
-    "buy_graduated": 27,
-    "buy_total": 63,
+    "buy_graduated": 28,
+    "buy_total": 64,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 40.3
+    "graduation_rate_pct": 41.0
   },
   "shadow_stats": {
-    "tracked": 25,
+    "tracked": 26,
     "graduated": 808,
     "did_not_graduate": 5197,
     "graduation_rate_pct": 13.5
