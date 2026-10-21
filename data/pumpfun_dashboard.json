@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-21T00:10:51.159947+00:00",
-  "balance": 262.28,
-  "positions_value": 0.0,
-  "net_worth": 262.28,
+  "timestamp": "2026-10-21T00:15:38.293198+00:00",
+  "balance": 242.28,
+  "positions_value": 19.51,
+  "net_worth": 261.79,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
+      "name": "KAIROS",
+      "symbol": "KAIROS",
+      "entry_ts": "2026-10-21T00:15:38.293198+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 55.75,
+      "graduation_pct": 55.75,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "HnQRcdnQ2Ta65kyqX6VXiS2PaoVaTexfDEBz6GAMpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
+      "name": "KAIROS",
+      "symbol": "KAIROS",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T00:15:38.293198+00:00",
+      "alert_score": 91.5,
+      "alert_graduation_pct": 55.75,
+      "graduation_pct": 55.75
+    }
+  ],
   "history": [
     {
       "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 109,
+    "alerts": 110,
     "graduated": 30,
     "did_not_graduate": 46,
     "buy_graduated": 26,
@@ -1171,7 +1196,7 @@
     "graduation_rate_pct": 39.5
   },
   "shadow_stats": {
-    "tracked": 43,
+    "tracked": 44,
     "graduated": 804,
     "did_not_graduate": 5158,
     "graduation_rate_pct": 13.5
