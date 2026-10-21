@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T04:15:36.563406+00:00",
+  "timestamp": "2026-10-21T04:20:42.978541+00:00",
   "balance": 201.84,
-  "positions_value": 62.54,
-  "net_worth": 264.38,
+  "positions_value": 48.84,
+  "net_worth": 250.68,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -15,7 +15,7 @@
       "pnl_pct": 4.6,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 59.45,
+      "graduation_pct": 59.31,
       "graduated": false
     },
     {
@@ -24,8 +24,8 @@
       "symbol": "PILLVENGERS",
       "entry_ts": "2026-10-21T01:48:00.857953+00:00",
       "amount_usd": 20.0,
-      "value_usd": 10.83,
-      "pnl_pct": -45.85,
+      "value_usd": 10.86,
+      "pnl_pct": -45.7,
       "entry_slippage_pct": 1.03,
       "entry_graduation_pct": 469.94,
       "graduation_pct": 150.43,
@@ -37,11 +37,11 @@
       "symbol": "PHP-UP",
       "entry_ts": "2026-10-21T04:10:37.423466+00:00",
       "amount_usd": 20.0,
-      "value_usd": 30.79,
-      "pnl_pct": 53.95,
+      "value_usd": 17.06,
+      "pnl_pct": -14.7,
       "entry_slippage_pct": 1.27,
       "entry_graduation_pct": 50.49,
-      "graduation_pct": 72.53,
+      "graduation_pct": 44.81,
       "graduated": false
     }
   ],
@@ -559,16 +559,6 @@
       "graduation_pct": 150.43
     },
     {
-      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
-      "name": "CVE-2026-109618",
-      "symbol": "PHP-UP",
-      "decision": "buy",
-      "signal_ts": "2026-10-21T04:10:37.423466+00:00",
-      "alert_score": 101.0,
-      "alert_graduation_pct": 50.49,
-      "graduation_pct": 72.53
-    },
-    {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
       "name": "KAIROS",
       "symbol": "KAIROS",
@@ -576,7 +566,17 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 59.45
+      "graduation_pct": 59.31
+    },
+    {
+      "mint": "E1FTwWrBi3tVQqYTmLVBJP36db3EfzbiiTpMFkD7Qsmh",
+      "name": "CVE-2026-109618",
+      "symbol": "PHP-UP",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T04:10:37.423466+00:00",
+      "alert_score": 101.0,
+      "alert_graduation_pct": 50.49,
+      "graduation_pct": 44.81
     }
   ],
   "history": [
@@ -1242,9 +1242,9 @@
     "graduation_rate_pct": 40.3
   },
   "shadow_stats": {
-    "tracked": 31,
-    "graduated": 806,
-    "did_not_graduate": 5184,
+    "tracked": 32,
+    "graduated": 807,
+    "did_not_graduate": 5185,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
