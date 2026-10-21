@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T01:38:29.600892+00:00",
-  "balance": 242.28,
-  "positions_value": 19.14,
-  "net_worth": 261.42,
+  "timestamp": "2026-10-21T01:48:00.857953+00:00",
+  "balance": 222.28,
+  "positions_value": 47.08,
+  "net_worth": 269.36,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "KAIROS",
       "entry_ts": "2026-10-21T00:15:38.293198+00:00",
       "amount_usd": 20.0,
-      "value_usd": 19.14,
-      "pnl_pct": -4.3,
+      "value_usd": 27.48,
+      "pnl_pct": 37.4,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 54.88,
+      "graduation_pct": 72.6,
+      "graduated": false
+    },
+    {
+      "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
+      "name": "The 8 Pillvengers",
+      "symbol": "PILLVENGERS",
+      "entry_ts": "2026-10-21T01:48:00.857953+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.6,
+      "pnl_pct": -2.0,
+      "entry_slippage_pct": 1.03,
+      "entry_graduation_pct": 469.94,
+      "graduation_pct": 469.94,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
+      "name": "The 8 Pillvengers",
+      "symbol": "PILLVENGERS",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T01:48:00.857953+00:00",
+      "alert_score": 106.3,
+      "alert_graduation_pct": 469.94,
+      "graduation_pct": 469.94
+    },
+    {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
       "name": "KAIROS",
       "symbol": "KAIROS",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 54.88
+      "graduation_pct": 72.6
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 110,
+    "alerts": 111,
     "graduated": 30,
     "did_not_graduate": 46,
     "buy_graduated": 26,
@@ -1198,7 +1221,7 @@
   "shadow_stats": {
     "tracked": 36,
     "graduated": 804,
-    "did_not_graduate": 5172,
+    "did_not_graduate": 5173,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
