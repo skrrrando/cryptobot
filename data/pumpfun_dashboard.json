@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-21T03:35:32.538470+00:00",
-  "balance": 222.28,
-  "positions_value": 28.61,
-  "net_worth": 250.89,
+  "timestamp": "2026-10-21T03:40:40.680758+00:00",
+  "balance": 202.28,
+  "positions_value": 49.66,
+  "net_worth": 251.94,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "KAIROS",
       "entry_ts": "2026-10-21T00:15:38.293198+00:00",
       "amount_usd": 20.0,
-      "value_usd": 17.62,
-      "pnl_pct": -11.9,
+      "value_usd": 19.17,
+      "pnl_pct": -4.15,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.75,
-      "graduation_pct": 51.45,
+      "graduation_pct": 55.13,
       "graduated": false
     },
     {
@@ -24,11 +24,24 @@
       "symbol": "PILLVENGERS",
       "entry_ts": "2026-10-21T01:48:00.857953+00:00",
       "amount_usd": 20.0,
-      "value_usd": 10.99,
-      "pnl_pct": -45.05,
+      "value_usd": 10.89,
+      "pnl_pct": -45.55,
       "entry_slippage_pct": 1.03,
       "entry_graduation_pct": 469.94,
-      "graduation_pct": 155.37,
+      "graduation_pct": 150.43,
+      "graduated": false
+    },
+    {
+      "mint": "8bBQP9ngcjyr7g1ytggodjaaQSHSyNcnxCrm8YN9pump",
+      "name": "smol guy",
+      "symbol": "smol",
+      "entry_ts": "2026-10-21T03:40:40.680758+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.6,
+      "pnl_pct": -2.0,
+      "entry_slippage_pct": 1.02,
+      "entry_graduation_pct": 1177.48,
+      "graduation_pct": 1177.48,
       "graduated": false
     }
   ],
@@ -536,6 +549,16 @@
   ],
   "watching": [
     {
+      "mint": "8bBQP9ngcjyr7g1ytggodjaaQSHSyNcnxCrm8YN9pump",
+      "name": "smol guy",
+      "symbol": "smol",
+      "decision": "buy",
+      "signal_ts": "2026-10-21T03:40:40.680758+00:00",
+      "alert_score": 111.7,
+      "alert_graduation_pct": 1177.48,
+      "graduation_pct": 1177.48
+    },
+    {
       "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
       "name": "The 8 Pillvengers",
       "symbol": "PILLVENGERS",
@@ -543,7 +566,7 @@
       "signal_ts": "2026-10-21T01:48:00.857953+00:00",
       "alert_score": 106.3,
       "alert_graduation_pct": 469.94,
-      "graduation_pct": 155.37
+      "graduation_pct": 150.43
     },
     {
       "mint": "WkmJN7MRvXFe8rVoSkQoHKXwVwuNDxpuL7UqY1Qpump",
@@ -553,7 +576,7 @@
       "signal_ts": "2026-10-21T00:15:38.293198+00:00",
       "alert_score": 91.5,
       "alert_graduation_pct": 55.75,
-      "graduation_pct": 51.45
+      "graduation_pct": 55.13
     }
   ],
   "history": [
@@ -1209,7 +1232,7 @@
     }
   ],
   "stats": {
-    "alerts": 111,
+    "alerts": 112,
     "graduated": 30,
     "did_not_graduate": 46,
     "buy_graduated": 26,
@@ -1219,9 +1242,9 @@
     "graduation_rate_pct": 39.5
   },
   "shadow_stats": {
-    "tracked": 30,
+    "tracked": 29,
     "graduated": 806,
-    "did_not_graduate": 5181,
+    "did_not_graduate": 5182,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
