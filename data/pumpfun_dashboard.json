@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-22T05:25:33.591414+00:00",
+  "timestamp": "2026-10-22T05:30:54.695399+00:00",
   "balance": 247.69,
   "positions_value": 21.81,
   "net_worth": 269.5,
@@ -11,11 +11,11 @@
       "symbol": "GUDI",
       "entry_ts": "2026-10-22T00:40:38.967095+00:00",
       "amount_usd": 20.0,
-      "value_usd": 7.82,
-      "pnl_pct": -60.9,
+      "value_usd": 7.84,
+      "pnl_pct": -60.8,
       "entry_slippage_pct": 1.25,
       "entry_graduation_pct": 55.13,
-      "graduation_pct": 22.43,
+      "graduation_pct": 22.56,
       "graduated": false
     },
     {
@@ -24,11 +24,11 @@
       "symbol": "Fairies",
       "entry_ts": "2026-10-22T00:40:38.967095+00:00",
       "amount_usd": 20.0,
-      "value_usd": 13.99,
-      "pnl_pct": -30.05,
+      "value_usd": 13.97,
+      "pnl_pct": -30.15,
       "entry_slippage_pct": 1.2,
       "entry_graduation_pct": 81.77,
-      "graduation_pct": 64.65,
+      "graduation_pct": 64.64,
       "graduated": false
     }
   ],
@@ -534,19 +534,21 @@
       "exit_reason": "take_profit"
     }
   ],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "fnqQzSJUKogUYaarpwWUTPhsZHy9S4cGgkXXiAjpump",
       "name": "Saviour of the Internet",
       "symbol": "Arnaud",
+      "outcome": "graduated",
       "decision": "buy",
       "signal_ts": "2026-10-22T04:40:35.340249+00:00",
+      "recorded_ts": "2026-10-22T05:30:54.695399+00:00",
       "alert_score": 95.5,
       "alert_graduation_pct": 35.91,
-      "graduation_pct": 86.29
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 50.3
+    },
     {
       "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
       "name": "The 8 Pillvengers",
@@ -1183,35 +1185,22 @@
       "alert_graduation_pct": 91.57,
       "final_graduation_pct": null,
       "minutes_to_graduate": 10.0
-    },
-    {
-      "mint": "6hQseiJs2sGcZ6bNxPNeZ2gH92kAvWCnKkwzpJoLpump",
-      "name": "Hybrid Memes",
-      "symbol": "HYBRID",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-09-15T00:10:36.987665+00:00",
-      "recorded_ts": "2026-09-15T00:15:36.295117+00:00",
-      "alert_score": 99.3,
-      "alert_graduation_pct": 93.75,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 5.0
     }
   ],
   "stats": {
     "alerts": 117,
-    "graduated": 32,
+    "graduated": 33,
     "did_not_graduate": 48,
-    "buy_graduated": 28,
-    "buy_total": 66,
+    "buy_graduated": 29,
+    "buy_total": 67,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 40.0
+    "graduation_rate_pct": 40.7
   },
   "shadow_stats": {
     "tracked": 26,
     "graduated": 830,
-    "did_not_graduate": 5345,
+    "did_not_graduate": 5346,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
