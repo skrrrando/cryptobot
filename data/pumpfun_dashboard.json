@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-23T01:00:06.969500+00:00",
-  "balance": 269.09,
-  "positions_value": 0.0,
-  "net_worth": 269.09,
+  "timestamp": "2026-10-23T01:09:55.848328+00:00",
+  "balance": 249.09,
+  "positions_value": 19.52,
+  "net_worth": 268.61,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
+      "name": "Luna Expeditions",
+      "symbol": "Lunars",
+      "entry_ts": "2026-10-23T01:09:55.848328+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 67.96,
+      "graduation_pct": 67.96,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "AyWFgRtAV2n3ibbptBecc9BcoV2xgSggxpCA1zgBpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
+      "name": "Luna Expeditions",
+      "symbol": "Lunars",
+      "decision": "buy",
+      "signal_ts": "2026-10-23T01:09:55.848328+00:00",
+      "alert_score": 93.8,
+      "alert_graduation_pct": 67.96,
+      "graduation_pct": 67.96
+    }
+  ],
   "history": [
     {
       "mint": "fnqQzSJUKogUYaarpwWUTPhsZHy9S4cGgkXXiAjpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 117,
+    "alerts": 118,
     "graduated": 33,
     "did_not_graduate": 48,
     "buy_graduated": 29,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 40.7
   },
   "shadow_stats": {
-    "tracked": 30,
-    "graduated": 845,
-    "did_not_graduate": 5435,
+    "tracked": 29,
+    "graduated": 846,
+    "did_not_graduate": 5436,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
