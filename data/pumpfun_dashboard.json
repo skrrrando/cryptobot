@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-23T01:29:21.241489+00:00",
-  "balance": 249.09,
-  "positions_value": 15.82,
-  "net_worth": 264.91,
+  "timestamp": "2026-10-23T01:39:13.967797+00:00",
+  "balance": 209.09,
+  "positions_value": 49.04,
+  "net_worth": 258.13,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,37 @@
       "symbol": "Lunars",
       "entry_ts": "2026-10-23T01:09:55.848328+00:00",
       "amount_usd": 20.0,
-      "value_usd": 15.82,
-      "pnl_pct": -20.9,
+      "value_usd": 9.99,
+      "pnl_pct": -50.05,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 67.96,
-      "graduation_pct": 57.69,
+      "graduation_pct": 38.52,
+      "graduated": false
+    },
+    {
+      "mint": "9sXzh7SxN77Ko8p5DrsgTXTRMsqBKxQo64qSKQf6pump",
+      "name": "cyberbucks",
+      "symbol": "cb",
+      "entry_ts": "2026-10-23T01:39:13.967797+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 73.85,
+      "graduation_pct": 73.85,
+      "graduated": false
+    },
+    {
+      "mint": "8CNZE5NVm78kZut1PKrLjQrnEgbzqwsLRqKrPe83NULL",
+      "name": "Nullcoin",
+      "symbol": "NULL",
+      "entry_ts": "2026-10-23T01:39:13.967797+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.53,
+      "pnl_pct": -2.35,
+      "entry_slippage_pct": 1.19,
+      "entry_graduation_pct": 88.18,
+      "graduation_pct": 88.18,
       "graduated": false
     }
   ],
@@ -523,6 +549,26 @@
   ],
   "watching": [
     {
+      "mint": "8CNZE5NVm78kZut1PKrLjQrnEgbzqwsLRqKrPe83NULL",
+      "name": "Nullcoin",
+      "symbol": "NULL",
+      "decision": "buy",
+      "signal_ts": "2026-10-23T01:39:13.967797+00:00",
+      "alert_score": 94.9,
+      "alert_graduation_pct": 88.18,
+      "graduation_pct": 88.18
+    },
+    {
+      "mint": "9sXzh7SxN77Ko8p5DrsgTXTRMsqBKxQo64qSKQf6pump",
+      "name": "cyberbucks",
+      "symbol": "cb",
+      "decision": "buy",
+      "signal_ts": "2026-10-23T01:39:13.967797+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 73.85,
+      "graduation_pct": 73.85
+    },
+    {
       "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
       "name": "Luna Expeditions",
       "symbol": "Lunars",
@@ -530,7 +576,7 @@
       "signal_ts": "2026-10-23T01:09:55.848328+00:00",
       "alert_score": 93.8,
       "alert_graduation_pct": 67.96,
-      "graduation_pct": 57.69
+      "graduation_pct": 38.52
     }
   ],
   "history": [
@@ -1186,7 +1232,7 @@
     }
   ],
   "stats": {
-    "alerts": 118,
+    "alerts": 120,
     "graduated": 33,
     "did_not_graduate": 48,
     "buy_graduated": 29,
@@ -1196,7 +1242,7 @@
     "graduation_rate_pct": 40.7
   },
   "shadow_stats": {
-    "tracked": 28,
+    "tracked": 29,
     "graduated": 846,
     "did_not_graduate": 5437,
     "graduation_rate_pct": 13.5
