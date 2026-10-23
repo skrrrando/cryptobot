@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-23T09:50:37.972902+00:00",
-  "balance": 241.63,
-  "positions_value": 2.59,
-  "net_worth": 244.22,
+  "timestamp": "2026-10-23T09:55:30.237989+00:00",
+  "balance": 244.18,
+  "positions_value": 0.0,
+  "net_worth": 244.18,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
-      "name": "purk",
-      "symbol": "PURK",
-      "entry_ts": "2026-10-23T03:55:28.608874+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.59,
-      "pnl_pct": -87.05,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 68.88,
-      "graduation_pct": 2.6,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
-      "name": "Max Leverage",
-      "symbol": "Max",
-      "bonding_curve_key": "C6xVbuDaQLAQ9DhqsFvwokvmeVAgoTenKnEWG9tphdGe",
-      "entry_ts": "2026-10-17T03:40:36.269555+00:00",
-      "entry_price_usd": 2.3195804081132546e-05,
-      "entry_spot_price_usd": 2.291988003426491e-05,
-      "entry_slippage_pct": 1.2,
-      "amount_usd": 20.0,
-      "qty": 862224.9062824249,
-      "entry_graduation_pct": 67.21,
-      "entry_score": 90.8,
-      "exit_ts": "2026-10-17T09:40:37.580911+00:00",
-      "exit_price_usd": 9.688892877309135e-06,
-      "proceeds_usd": 8.35,
-      "pnl_usd": -11.65,
-      "pnl_pct": -58.23,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
       "name": "The Anomaly",
@@ -519,21 +485,43 @@
       "pnl_usd": -6.6,
       "pnl_pct": -32.98,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
       "name": "purk",
       "symbol": "PURK",
-      "decision": "buy",
-      "signal_ts": "2026-10-23T03:55:28.608874+00:00",
-      "alert_score": 97.5,
-      "alert_graduation_pct": 68.88,
-      "graduation_pct": 2.6
+      "bonding_curve_key": "DakyEMy3QNHZ6kVVQNYyWTEX88dJhPZHM5qCj7ZCJBno",
+      "entry_ts": "2026-10-23T03:55:28.608874+00:00",
+      "entry_price_usd": 2.5716316108916477e-05,
+      "entry_spot_price_usd": 2.5404682932700726e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 777716.3694556355,
+      "entry_graduation_pct": 68.88,
+      "entry_score": 97.5,
+      "exit_ts": "2026-10-23T09:55:30.238007+00:00",
+      "exit_price_usd": 3.29076412207695e-06,
+      "proceeds_usd": 2.56,
+      "pnl_usd": -17.44,
+      "pnl_pct": -87.2,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
+      "name": "purk",
+      "symbol": "PURK",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-23T03:55:28.608874+00:00",
+      "recorded_ts": "2026-10-23T09:55:30.237989+00:00",
+      "alert_score": 97.5,
+      "alert_graduation_pct": 68.88,
+      "final_graduation_pct": 2.6,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
       "name": "Luna Expeditions",
@@ -1170,30 +1158,17 @@
       "alert_graduation_pct": 57.61,
       "final_graduation_pct": 14.23,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "8P4hKQ2Bg6DospeWyTxKM9A2eGRDjA28jxLX66yLUmzn",
-      "name": "ALXMONEY",
-      "symbol": "ALXMONEY",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-16T00:55:26.962784+00:00",
-      "recorded_ts": "2026-09-16T07:04:05.132121+00:00",
-      "alert_score": 92.7,
-      "alert_graduation_pct": 59.11,
-      "final_graduation_pct": 12.15,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 121,
     "graduated": 35,
-    "did_not_graduate": 49,
+    "did_not_graduate": 50,
     "buy_graduated": 31,
-    "buy_total": 70,
+    "buy_total": 71,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.7
+    "graduation_rate_pct": 41.2
   },
   "shadow_stats": {
     "tracked": 24,
