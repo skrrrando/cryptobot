@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-23T07:01:08.489565+00:00",
-  "balance": 228.22,
-  "positions_value": 16.18,
-  "net_worth": 244.4,
+  "timestamp": "2026-10-23T07:10:48.502041+00:00",
+  "balance": 241.63,
+  "positions_value": 2.65,
+  "net_worth": 244.28,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
-      "name": "Luna Expeditions",
-      "symbol": "Lunars",
-      "entry_ts": "2026-10-23T01:09:55.848328+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 13.53,
-      "pnl_pct": -32.35,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 67.96,
-      "graduation_pct": 50.33,
-      "graduated": false
-    },
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
       "name": "purk",
@@ -28,31 +15,11 @@
       "pnl_pct": -86.75,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 68.88,
-      "graduation_pct": 3.06,
+      "graduation_pct": 3.0,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "6U7QrPxAQXCFZMxHeQ6JPE1Y1HsqHtowawYj2Yd7pump",
-      "name": "Perpsguy",
-      "symbol": "Perpsguy",
-      "bonding_curve_key": "DmzsGdfoAPFNJdVF7jxPWbiwgv3A5YT9WsRsPseM9MWB",
-      "entry_ts": "2026-10-17T02:27:40.495195+00:00",
-      "entry_price_usd": 1.6036438017335243e-05,
-      "entry_spot_price_usd": 1.5833100127823126e-05,
-      "entry_slippage_pct": 1.28,
-      "amount_usd": 20.0,
-      "qty": 1247159.7482171655,
-      "entry_graduation_pct": 46.89,
-      "entry_score": 92.1,
-      "exit_ts": "2026-10-17T08:30:54.788324+00:00",
-      "exit_price_usd": 3.0275514822764576e-06,
-      "proceeds_usd": 3.78,
-      "pnl_usd": -16.22,
-      "pnl_pct": -81.12,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "22E2i2nxbCx1A7SNPnr5deFhunhCdLhDhP7qa3TUpurp",
       "name": "Max Leverage",
@@ -532,19 +499,29 @@
       "pnl_usd": -0.43,
       "pnl_pct": -2.15,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
       "name": "Luna Expeditions",
       "symbol": "Lunars",
-      "decision": "buy",
-      "signal_ts": "2026-10-23T01:09:55.848328+00:00",
-      "alert_score": 93.8,
-      "alert_graduation_pct": 67.96,
-      "graduation_pct": 50.33
-    },
+      "bonding_curve_key": "ENhndP3LNFvdvm4NAAaCgtymiQ9LB21BgJaKw9HhvniX",
+      "entry_ts": "2026-10-23T01:09:55.848328+00:00",
+      "entry_price_usd": 2.509650412567961e-05,
+      "entry_spot_price_usd": 2.4791550177491974e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 796923.7428385615,
+      "entry_graduation_pct": 67.96,
+      "entry_score": 93.8,
+      "exit_ts": "2026-10-23T07:10:48.502062+00:00",
+      "exit_price_usd": 1.6819600842852024e-05,
+      "proceeds_usd": 13.4,
+      "pnl_usd": -6.6,
+      "pnl_pct": -32.98,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
       "name": "purk",
@@ -553,10 +530,23 @@
       "signal_ts": "2026-10-23T03:55:28.608874+00:00",
       "alert_score": 97.5,
       "alert_graduation_pct": 68.88,
-      "graduation_pct": 3.06
+      "graduation_pct": 3.0
     }
   ],
   "history": [
+    {
+      "mint": "Bju7nRToGYP7BeBsKf9MDBZkhDGJmH3PkuH6KeeSpump",
+      "name": "Luna Expeditions",
+      "symbol": "Lunars",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-23T01:09:55.848328+00:00",
+      "recorded_ts": "2026-10-23T07:10:48.502041+00:00",
+      "alert_score": 93.8,
+      "alert_graduation_pct": 67.96,
+      "final_graduation_pct": 49.92,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "8CNZE5NVm78kZut1PKrLjQrnEgbzqwsLRqKrPe83NULL",
       "name": "Nullcoin",
@@ -1193,35 +1183,22 @@
       "alert_graduation_pct": 59.11,
       "final_graduation_pct": 12.15,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "EUgH18CQjrSHcguMVLv4cyybX5gdPVET7hoDujnmpump",
-      "name": "Culture Dog",
-      "symbol": "culture",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-16T00:50:35.770457+00:00",
-      "recorded_ts": "2026-09-16T06:54:42.221393+00:00",
-      "alert_score": 94.9,
-      "alert_graduation_pct": 73.25,
-      "final_graduation_pct": 0.03,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 121,
     "graduated": 35,
-    "did_not_graduate": 48,
+    "did_not_graduate": 49,
     "buy_graduated": 31,
-    "buy_total": 69,
+    "buy_total": 70,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 42.2
+    "graduation_rate_pct": 41.7
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 22,
     "graduated": 850,
-    "did_not_graduate": 5464,
+    "did_not_graduate": 5465,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
