@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-24T01:47:50.869942+00:00",
-  "balance": 244.18,
-  "positions_value": 0.0,
-  "net_worth": 244.18,
+  "timestamp": "2026-10-24T01:57:19.522462+00:00",
+  "balance": 224.18,
+  "positions_value": 19.51,
+  "net_worth": 243.69,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
+      "name": "Only Up",
+      "symbol": "HELIUM",
+      "entry_ts": "2026-10-24T01:57:19.522462+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 66.26,
+      "graduation_pct": 66.26,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "A3c24chX4WhsdmDZDi6anHoycT8tpT2upwhfLH78pump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
+      "name": "Only Up",
+      "symbol": "HELIUM",
+      "decision": "buy",
+      "signal_ts": "2026-10-24T01:57:19.522462+00:00",
+      "alert_score": 97.6,
+      "alert_graduation_pct": 66.26,
+      "graduation_pct": 66.26
+    }
+  ],
   "history": [
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 121,
+    "alerts": 122,
     "graduated": 35,
     "did_not_graduate": 50,
     "buy_graduated": 31,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 41.2
   },
   "shadow_stats": {
-    "tracked": 36,
+    "tracked": 33,
     "graduated": 870,
-    "did_not_graduate": 5564,
+    "did_not_graduate": 5567,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
