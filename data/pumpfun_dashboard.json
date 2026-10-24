@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-24T07:55:29.896326+00:00",
-  "balance": 198.34,
-  "positions_value": 10.38,
-  "net_worth": 208.72,
+  "timestamp": "2026-10-24T08:01:05.015215+00:00",
+  "balance": 201.21,
+  "positions_value": 7.29,
+  "net_worth": 208.5,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
-      "name": "Only Up",
-      "symbol": "HELIUM",
-      "entry_ts": "2026-10-24T01:57:19.522462+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 2.9,
-      "pnl_pct": -85.5,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 66.26,
-      "graduation_pct": 3.89,
-      "graduated": false
-    },
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
       "name": "Incatgnito",
@@ -37,35 +24,15 @@
       "symbol": "Satoshi",
       "entry_ts": "2026-10-24T06:35:30.735113+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.68,
-      "pnl_pct": -81.6,
+      "value_usd": 3.49,
+      "pnl_pct": -82.55,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 70.93,
-      "graduation_pct": 10.85,
+      "graduation_pct": 9.67,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "H416oBu1655KR9BnyxRmiYs7bjYUSrzetNqsfBFTpump",
-      "name": "Interim",
-      "symbol": "Interim",
-      "bonding_curve_key": "8ZNLiDMqMPxs6P1VnEBjmvPy269RxWwLXD3pnDquM1fY",
-      "entry_ts": "2026-10-18T00:10:39.013836+00:00",
-      "entry_price_usd": 3.546911202242208e-05,
-      "entry_spot_price_usd": 3.505007803993065e-05,
-      "entry_slippage_pct": 1.2,
-      "amount_usd": 20.0,
-      "qty": 563870.8966651559,
-      "entry_graduation_pct": 87.76,
-      "entry_score": 114.4,
-      "exit_ts": "2026-10-18T00:20:39.335593+00:00",
-      "exit_price_usd": 2.616037866569909e-05,
-      "proceeds_usd": 14.75,
-      "pnl_usd": -5.25,
-      "pnl_pct": -26.24,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "AApXjwpzNcadHm18cDSBtffd5hy1qNYHZh6njWASpump",
       "name": "inugrant",
@@ -545,19 +512,29 @@
       "pnl_usd": 14.15,
       "pnl_pct": 70.76,
       "exit_reason": "take_profit"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
       "name": "Only Up",
       "symbol": "HELIUM",
-      "decision": "buy",
-      "signal_ts": "2026-10-24T01:57:19.522462+00:00",
-      "alert_score": 97.6,
-      "alert_graduation_pct": 66.26,
-      "graduation_pct": 3.89
-    },
+      "bonding_curve_key": "DwW4yjsC8ktjrTKxRN9yZPtF4zRC2h4Kd8nKySQXyfYV",
+      "entry_ts": "2026-10-24T01:57:19.522462+00:00",
+      "entry_price_usd": 2.3988209763227677e-05,
+      "entry_spot_price_usd": 2.369522770122468e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 833742.9177669883,
+      "entry_graduation_pct": 66.26,
+      "entry_score": 97.6,
+      "exit_ts": "2026-10-24T08:01:05.015236+00:00",
+      "exit_price_usd": 3.4500637744295045e-06,
+      "proceeds_usd": 2.88,
+      "pnl_usd": -17.12,
+      "pnl_pct": -85.62,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
       "name": "Incatgnito",
@@ -570,6 +547,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
+      "name": "Only Up",
+      "symbol": "HELIUM",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-24T01:57:19.522462+00:00",
+      "recorded_ts": "2026-10-24T08:01:05.015215+00:00",
+      "alert_score": 97.6,
+      "alert_graduation_pct": 66.26,
+      "final_graduation_pct": 3.89,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "CACbKus5h8iEpncWfLafR2bPcYB8tvTyokPwA6CFpump",
       "name": "Shh",
@@ -1206,33 +1196,20 @@
       "alert_graduation_pct": 35.13,
       "final_graduation_pct": 0.02,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "FdWgweu4TULjE6Vx9UDt44FZfpeVV3ixVFpthwtmWCWg",
-      "name": "The Odyssean Bear",
-      "symbol": "Bear",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-09-23T12:01:06.961168+00:00",
-      "recorded_ts": "2026-09-23T12:15:40.098739+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 88.44,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 14.6
     }
   ],
   "stats": {
     "alerts": 125,
     "graduated": 36,
-    "did_not_graduate": 50,
+    "did_not_graduate": 51,
     "buy_graduated": 32,
-    "buy_total": 72,
+    "buy_total": 73,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.9
+    "graduation_rate_pct": 41.4
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 24,
     "graduated": 874,
     "did_not_graduate": 5598,
     "graduation_rate_pct": 13.5
