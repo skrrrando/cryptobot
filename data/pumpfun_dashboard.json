@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-24T06:10:39.694053+00:00",
-  "balance": 238.34,
-  "positions_value": 2.92,
-  "net_worth": 241.26,
+  "timestamp": "2026-10-24T06:15:40.921741+00:00",
+  "balance": 218.34,
+  "positions_value": 22.4,
+  "net_worth": 240.74,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "HELIUM",
       "entry_ts": "2026-10-24T01:57:19.522462+00:00",
       "amount_usd": 20.0,
-      "value_usd": 2.92,
-      "pnl_pct": -85.4,
+      "value_usd": 2.91,
+      "pnl_pct": -85.45,
       "entry_slippage_pct": 1.24,
       "entry_graduation_pct": 66.26,
-      "graduation_pct": 3.96,
+      "graduation_pct": 3.9,
+      "graduated": false
+    },
+    {
+      "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
+      "name": "Incatgnito",
+      "symbol": "INCATGNITO",
+      "entry_ts": "2026-10-24T06:15:40.921741+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.49,
+      "pnl_pct": -2.55,
+      "entry_slippage_pct": 1.29,
+      "entry_graduation_pct": 46.14,
+      "graduation_pct": 46.14,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
+      "name": "Incatgnito",
+      "symbol": "INCATGNITO",
+      "decision": "buy",
+      "signal_ts": "2026-10-24T06:15:40.921741+00:00",
+      "alert_score": 93.0,
+      "alert_graduation_pct": 46.14,
+      "graduation_pct": 46.14
+    },
+    {
       "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
       "name": "Only Up",
       "symbol": "HELIUM",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-10-24T01:57:19.522462+00:00",
       "alert_score": 97.6,
       "alert_graduation_pct": 66.26,
-      "graduation_pct": 3.96
+      "graduation_pct": 3.9
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 123,
+    "alerts": 124,
     "graduated": 36,
     "did_not_graduate": 50,
     "buy_graduated": 32,
@@ -1198,7 +1221,7 @@
   "shadow_stats": {
     "tracked": 19,
     "graduated": 873,
-    "did_not_graduate": 5592,
+    "did_not_graduate": 5593,
     "graduation_rate_pct": 13.5
   },
   "daily_cap": 4,
