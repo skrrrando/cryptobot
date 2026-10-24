@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-10-24T04:11:25.562754+00:00",
+  "timestamp": "2026-10-24T04:16:38.028127+00:00",
   "candidates": [
     {
       "id": "solana_Q2sPHPdUWFMg7M7wwrQKLrn619cAucfRsmhVJffodSp",
-      "timestamp": "2026-10-24T04:10:37.001489+00:00",
+      "timestamp": "2026-10-24T04:15:38.711127+00:00",
       "network": "solana",
       "name": "USELESS / SOL",
       "address": "Q2sPHPdUWFMg7M7wwrQKLrn619cAucfRsmhVJffodSp",
@@ -11,7 +11,7 @@
       "rank": 16,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 1.0010000000000001,
+        "h1_accel": 1.25,
         "history_len": 20
       },
       "security": {
@@ -26,30 +26,101 @@
         "checked_at": 1792815037.1666217
       },
       "price_change_pct": {
-        "m5": "-0.04",
-        "m15": "0.179",
-        "m30": "-0.766",
-        "h1": "0.226",
-        "h6": "0.402",
-        "h24": "3.188"
+        "m5": "0.179",
+        "m15": "0.096",
+        "m30": "-0.021",
+        "h1": "0.746",
+        "h6": "1.224",
+        "h24": "4.085"
       },
       "volume_usd": {
-        "m5": "1280.2022417635",
-        "m15": "5674.7698553584",
-        "m30": "13390.7222728364",
-        "h1": "27530.0538784671",
-        "h6": "267294.304786431",
-        "h24": "1167927.34275737"
+        "m5": "1878.3367146088",
+        "m15": "6923.4394509029",
+        "m30": "13271.2701964229",
+        "h1": "29280.3684529412",
+        "h6": "266320.91083801",
+        "h24": "1167555.96632978"
       },
-      "market_cap_usd": 162912250.762985,
+      "market_cap_usd": 163783264.11441,
       "transactions_h1": {
-        "buys": 121,
-        "sells": 68,
-        "buyers": 21,
+        "buys": 133,
+        "sells": 67,
+        "buyers": 22,
         "sellers": 22
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.454
+      "sol_h1": 0.025
+    },
+    {
+      "id": "bsc_0x0bd5ded695d61c2db15c703c345d57e039fd0b6d",
+      "timestamp": "2026-10-24T04:15:38.711127+00:00",
+      "network": "bsc",
+      "name": "GANG / WBNB",
+      "address": "0x0bd5ded695d61c2db15c703c345d57e039fd0b6d",
+      "base_token_address": "0x0c6302401aa5325c2e36f170f52c00b1d220b405",
+      "rank": 13,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 6.224,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 2963,
+        "whale_buyer_pct": 8.8,
+        "holder_count_history": [
+          {
+            "ts": 1792808739.9363198,
+            "holder_count": 2916
+          },
+          {
+            "ts": 1792810871.5341039,
+            "holder_count": 2935
+          },
+          {
+            "ts": 1792813243.1622288,
+            "holder_count": 2935
+          },
+          {
+            "ts": 1792815344.9477766,
+            "holder_count": 2963
+          }
+        ],
+        "holder_growth_pct": 1.6,
+        "checked_at": 1792815344.9477766
+      },
+      "price_change_pct": {
+        "m5": "5.093",
+        "m15": "-3.946",
+        "m30": "-5.597",
+        "h1": "9.132",
+        "h6": "65.011",
+        "h24": "127.628"
+      },
+      "volume_usd": {
+        "m5": "3227.0853864078",
+        "m15": "16459.9497488696",
+        "m30": "35230.9350583519",
+        "h1": "82900.1991734806",
+        "h6": "310610.418208734",
+        "h24": "3033508.04023081"
+      },
+      "market_cap_usd": 1665943.209,
+      "transactions_h1": {
+        "buys": 235,
+        "sells": 204,
+        "buyers": 135,
+        "sellers": 148
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": 0.025
     }
   ]
 }
