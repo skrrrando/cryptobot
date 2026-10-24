@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-24T04:50:36.909847+00:00",
+  "timestamp": "2026-10-24T04:55:32.629994+00:00",
   "balance": 238.34,
   "positions_value": 3.03,
   "net_worth": 241.37,
@@ -523,16 +523,6 @@
   ],
   "watching": [
     {
-      "mint": "CACbKus5h8iEpncWfLafR2bPcYB8tvTyokPwA6CFpump",
-      "name": "Shh",
-      "symbol": "Shh",
-      "decision": "buy",
-      "signal_ts": "2026-10-24T04:45:37.313965+00:00",
-      "alert_score": 110.3,
-      "alert_graduation_pct": 57.81,
-      "graduation_pct": 87.99
-    },
-    {
       "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
       "name": "Only Up",
       "symbol": "HELIUM",
@@ -544,6 +534,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "CACbKus5h8iEpncWfLafR2bPcYB8tvTyokPwA6CFpump",
+      "name": "Shh",
+      "symbol": "Shh",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-24T04:45:37.313965+00:00",
+      "recorded_ts": "2026-10-24T04:55:32.629994+00:00",
+      "alert_score": 110.3,
+      "alert_graduation_pct": 57.81,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.9
+    },
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
       "name": "purk",
@@ -1180,33 +1183,20 @@
       "alert_graduation_pct": 88.44,
       "final_graduation_pct": null,
       "minutes_to_graduate": 14.6
-    },
-    {
-      "mint": "6T1YJrNksBSs7vAeAnL7WpRzZmkiFxEqUuzWwhWzh1Qi",
-      "name": "xmonkey",
-      "symbol": "XMONKEY",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-16T01:00:59.025092+00:00",
-      "recorded_ts": "2026-09-16T07:04:05.132121+00:00",
-      "alert_score": 92.6,
-      "alert_graduation_pct": 57.61,
-      "final_graduation_pct": 14.23,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 123,
-    "graduated": 35,
+    "graduated": 36,
     "did_not_graduate": 50,
-    "buy_graduated": 31,
-    "buy_total": 71,
+    "buy_graduated": 32,
+    "buy_total": 72,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.2
+    "graduation_rate_pct": 41.9
   },
   "shadow_stats": {
-    "tracked": 16,
+    "tracked": 18,
     "graduated": 872,
     "did_not_graduate": 5590,
     "graduation_rate_pct": 13.5
