@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-25T01:35:28.760605+00:00",
-  "balance": 187.68,
-  "positions_value": 20.2,
-  "net_worth": 207.88,
+  "timestamp": "2026-10-25T01:44:52.356559+00:00",
+  "balance": 167.68,
+  "positions_value": 38.03,
+  "net_worth": 205.71,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "LLMWIKI",
       "entry_ts": "2026-10-25T00:55:29.016907+00:00",
       "amount_usd": 20.0,
-      "value_usd": 20.2,
-      "pnl_pct": 1.0,
+      "value_usd": 18.44,
+      "pnl_pct": -7.8,
       "entry_slippage_pct": 1.29,
       "entry_graduation_pct": 47.77,
-      "graduation_pct": 49.21,
+      "graduation_pct": 45.65,
+      "graduated": false
+    },
+    {
+      "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
+      "name": "Coinly Fans",
+      "symbol": "CF",
+      "entry_ts": "2026-10-25T01:44:52.356559+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.59,
+      "pnl_pct": -2.05,
+      "entry_slippage_pct": 1.04,
+      "entry_graduation_pct": 456.57,
+      "graduation_pct": 456.57,
       "graduated": false
     }
   ],
@@ -521,7 +534,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
+      "name": "Coinly Fans",
+      "symbol": "CF",
+      "decision": "buy",
+      "signal_ts": "2026-10-25T01:44:52.356559+00:00",
+      "alert_score": 92.0,
+      "alert_graduation_pct": 456.57,
+      "graduation_pct": 456.57
+    }
+  ],
   "history": [
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
@@ -1175,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 126,
+    "alerts": 127,
     "graduated": 36,
     "did_not_graduate": 52,
     "buy_graduated": 32,
@@ -1185,7 +1209,7 @@
     "graduation_rate_pct": 40.9
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 24,
     "graduated": 883,
     "did_not_graduate": 5696,
     "graduation_rate_pct": 13.4
