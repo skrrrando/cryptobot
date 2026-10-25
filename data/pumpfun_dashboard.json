@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-25T07:38:13.096467+00:00",
+  "timestamp": "2026-10-25T07:47:43.573795+00:00",
   "balance": 193.5,
-  "positions_value": 9.07,
-  "net_worth": 202.57,
+  "positions_value": 9.04,
+  "net_worth": 202.54,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,8 +11,8 @@
       "symbol": "CF",
       "entry_ts": "2026-10-25T03:35:27.851228+00:00",
       "amount_usd": 20.0,
-      "value_usd": 9.07,
-      "pnl_pct": -54.65,
+      "value_usd": 9.04,
+      "pnl_pct": -54.8,
       "entry_slippage_pct": 1.03,
       "entry_graduation_pct": 781.23,
       "graduation_pct": 387.82,
@@ -521,19 +521,21 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
       "name": "Coinly Fans",
       "symbol": "CF",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-25T01:44:52.356559+00:00",
+      "recorded_ts": "2026-10-25T07:47:43.573795+00:00",
       "alert_score": 92.0,
       "alert_graduation_pct": 456.57,
-      "graduation_pct": 387.82
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 387.82,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
       "name": "Incatgnito",
@@ -1170,35 +1172,22 @@
       "alert_graduation_pct": 57.58,
       "final_graduation_pct": null,
       "minutes_to_graduate": 22.4
-    },
-    {
-      "mint": "33VvNqipU1Yw9t7GySzD1KcAnw7dfcw6GyNdSBTPpump",
-      "name": "Afterpad",
-      "symbol": "afterpad",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-23T13:25:33.022144+00:00",
-      "recorded_ts": "2026-09-23T19:30:56.469819+00:00",
-      "alert_score": 90.2,
-      "alert_graduation_pct": 50.42,
-      "final_graduation_pct": 1.9,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 129,
     "graduated": 36,
-    "did_not_graduate": 52,
+    "did_not_graduate": 53,
     "buy_graduated": 32,
-    "buy_total": 74,
+    "buy_total": 75,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 40.9
+    "graduation_rate_pct": 40.4
   },
   "shadow_stats": {
-    "tracked": 19,
-    "graduated": 885,
-    "did_not_graduate": 5718,
+    "tracked": 17,
+    "graduated": 886,
+    "did_not_graduate": 5719,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
