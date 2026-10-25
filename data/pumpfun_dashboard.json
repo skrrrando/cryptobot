@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-25T03:30:52.485053+00:00",
-  "balance": 167.68,
-  "positions_value": 36.05,
-  "net_worth": 203.73,
+  "timestamp": "2026-10-25T03:35:27.851228+00:00",
+  "balance": 183.73,
+  "positions_value": 26.0,
+  "net_worth": 209.73,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,48 +11,28 @@
       "symbol": "LLMWIKI",
       "entry_ts": "2026-10-25T00:55:29.016907+00:00",
       "amount_usd": 20.0,
-      "value_usd": 6.58,
-      "pnl_pct": -67.1,
+      "value_usd": 6.41,
+      "pnl_pct": -67.95,
       "entry_slippage_pct": 1.29,
       "entry_graduation_pct": 47.77,
-      "graduation_pct": 12.93,
+      "graduation_pct": 12.27,
       "graduated": false
     },
     {
       "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
       "name": "Coinly Fans",
       "symbol": "CF",
-      "entry_ts": "2026-10-25T01:44:52.356559+00:00",
+      "entry_ts": "2026-10-25T03:35:27.851228+00:00",
       "amount_usd": 20.0,
-      "value_usd": 29.47,
-      "pnl_pct": 47.35,
-      "entry_slippage_pct": 1.04,
-      "entry_graduation_pct": 456.57,
-      "graduation_pct": 661.8,
+      "value_usd": 19.59,
+      "pnl_pct": -2.05,
+      "entry_slippage_pct": 1.03,
+      "entry_graduation_pct": 781.23,
+      "graduation_pct": 781.23,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "Gwh8Uc62cWWovpLCH3MTgKbUsY9rh8TjQRu3DH2fpump",
-      "name": "Excavate",
-      "symbol": "EXCAVATE",
-      "bonding_curve_key": "AWRZgXAkmC7LHNmMcBRHzXaZ7Bi7cPVPFxXaXHij9srg",
-      "entry_ts": "2026-10-18T01:18:55.061017+00:00",
-      "entry_price_usd": 1.9920052905441257e-05,
-      "entry_spot_price_usd": 1.9672750070042177e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 1004013.3977022171,
-      "entry_graduation_pct": 56.7,
-      "entry_score": 97.2,
-      "exit_ts": "2026-10-18T07:20:39.419598+00:00",
-      "exit_price_usd": 3.0370531263336235e-06,
-      "proceeds_usd": 3.05,
-      "pnl_usd": -16.95,
-      "pnl_pct": -84.75,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "mATfiBdZZBhws4hKiCjRqSuReM77rDo3QRagkX4pump",
       "name": "Ducky",
@@ -532,6 +512,26 @@
       "pnl_usd": -17.23,
       "pnl_pct": -86.17,
       "exit_reason": "timeout"
+    },
+    {
+      "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
+      "name": "Coinly Fans",
+      "symbol": "CF",
+      "bonding_curve_key": "A8tk1xD8k5cnV3ETjdsaPDmKLKx2fDkuK4jNWTLTYRmX",
+      "entry_ts": "2026-10-25T01:44:52.356559+00:00",
+      "entry_price_usd": 0.00014905370766063757,
+      "entry_spot_price_usd": 0.0001475264471192614,
+      "entry_slippage_pct": 1.04,
+      "amount_usd": 20.0,
+      "qty": 134179.8222526312,
+      "entry_graduation_pct": 456.57,
+      "entry_score": 92.0,
+      "exit_ts": "2026-10-25T03:35:27.851255+00:00",
+      "exit_price_usd": 0.0002687092928666154,
+      "proceeds_usd": 36.06,
+      "pnl_usd": 16.06,
+      "pnl_pct": 80.28,
+      "exit_reason": "take_profit"
     }
   ],
   "watching": [
@@ -543,7 +543,7 @@
       "signal_ts": "2026-10-25T01:44:52.356559+00:00",
       "alert_score": 92.0,
       "alert_graduation_pct": 456.57,
-      "graduation_pct": 661.8
+      "graduation_pct": 781.23
     }
   ],
   "history": [
@@ -1199,7 +1199,7 @@
     }
   ],
   "stats": {
-    "alerts": 127,
+    "alerts": 128,
     "graduated": 36,
     "did_not_graduate": 52,
     "buy_graduated": 32,
