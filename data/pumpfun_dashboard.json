@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-26T02:12:44.401146+00:00",
-  "balance": 201.33,
-  "positions_value": 0.0,
-  "net_worth": 201.33,
+  "timestamp": "2026-10-26T02:22:25.899184+00:00",
+  "balance": 181.33,
+  "positions_value": 19.5,
+  "net_worth": 200.83,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
+      "name": "mem0x",
+      "symbol": "mem0x",
+      "entry_ts": "2026-10-26T02:22:25.899184+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.5,
+      "pnl_pct": -2.5,
+      "entry_slippage_pct": 1.29,
+      "entry_graduation_pct": 48.94,
+      "graduation_pct": 48.94,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "CjG1h2wi73VQ6oaMXezmm1Kdt6i24RNfkBZ3jLarpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
+      "name": "mem0x",
+      "symbol": "mem0x",
+      "decision": "buy",
+      "signal_ts": "2026-10-26T02:22:25.899184+00:00",
+      "alert_score": 90.6,
+      "alert_graduation_pct": 48.94,
+      "graduation_pct": 48.94
+    }
+  ],
   "history": [
     {
       "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 129,
+    "alerts": 130,
     "graduated": 36,
     "did_not_graduate": 53,
     "buy_graduated": 32,
@@ -1171,9 +1196,9 @@
     "graduation_rate_pct": 40.4
   },
   "shadow_stats": {
-    "tracked": 22,
+    "tracked": 21,
     "graduated": 896,
-    "did_not_graduate": 5775,
+    "did_not_graduate": 5776,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
