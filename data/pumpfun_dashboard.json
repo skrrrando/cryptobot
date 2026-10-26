@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-26T03:01:59.399092+00:00",
-  "balance": 180.78,
-  "positions_value": 19.51,
-  "net_worth": 200.29,
+  "timestamp": "2026-10-26T03:11:36.579699+00:00",
+  "balance": 200.32,
+  "positions_value": 0.0,
+  "net_worth": 200.32,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
-      "name": "Rialto Market",
-      "symbol": "RIALTO",
-      "entry_ts": "2026-10-26T03:01:59.399092+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.51,
-      "pnl_pct": -2.45,
-      "entry_slippage_pct": 1.24,
-      "entry_graduation_pct": 64.27,
-      "graduation_pct": 64.27,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
-      "name": "little rocket man",
-      "symbol": "lilrocketman",
-      "bonding_curve_key": "Am41DL3TtQhyco3irsDLBf9Lvmvt8P6h8HqwAh3yygSR",
-      "entry_ts": "2026-10-20T01:01:07.528423+00:00",
-      "entry_price_usd": 2.3469406883094496e-05,
-      "entry_spot_price_usd": 2.3182736188682846e-05,
-      "entry_slippage_pct": 1.24,
-      "amount_usd": 20.0,
-      "qty": 852173.2185062766,
-      "entry_graduation_pct": 64.11,
-      "entry_score": 112.6,
-      "exit_ts": "2026-10-20T01:10:48.443778+00:00",
-      "exit_price_usd": 2.2726516537485106e-05,
-      "proceeds_usd": 19.37,
-      "pnl_usd": -0.63,
-      "pnl_pct": -3.17,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "DxrKhpjZT82HYa5k6iNfyEf5Z94wfAHo5b2pM9X2pump",
       "name": "Gacha",
@@ -519,21 +485,43 @@
       "pnl_usd": -0.55,
       "pnl_pct": -2.76,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
       "name": "Rialto Market",
       "symbol": "RIALTO",
-      "decision": "buy",
-      "signal_ts": "2026-10-26T03:01:59.399092+00:00",
-      "alert_score": 97.1,
-      "alert_graduation_pct": 64.27,
-      "graduation_pct": 64.27
+      "bonding_curve_key": "DU9QYokiZ1GMk7NdU64unZjdGLcTBCmp8ewPZxg9DRVk",
+      "entry_ts": "2026-10-26T03:01:59.399092+00:00",
+      "entry_price_usd": 2.2676433672077363e-05,
+      "entry_spot_price_usd": 2.2397612112217137e-05,
+      "entry_slippage_pct": 1.24,
+      "amount_usd": 20.0,
+      "qty": 881972.9014367461,
+      "entry_graduation_pct": 64.27,
+      "entry_score": 97.1,
+      "exit_ts": "2026-10-26T03:11:36.579726+00:00",
+      "exit_price_usd": 2.2160817217108205e-05,
+      "proceeds_usd": 19.55,
+      "pnl_usd": -0.45,
+      "pnl_pct": -2.27,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
+      "name": "Rialto Market",
+      "symbol": "RIALTO",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-26T03:01:59.399092+00:00",
+      "recorded_ts": "2026-10-26T03:11:36.579699+00:00",
+      "alert_score": 97.1,
+      "alert_graduation_pct": 64.27,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.6
+    },
     {
       "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
       "name": "mem0x",
@@ -1170,33 +1158,20 @@
       "alert_graduation_pct": 59.44,
       "final_graduation_pct": null,
       "minutes_to_graduate": 74.4
-    },
-    {
-      "mint": "JDK9PvS4CuK5sM64vb58h9hdJvthZ6VrbfY2ngwipump",
-      "name": "Orang",
-      "symbol": "ORANG",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-09-24T02:01:03.535846+00:00",
-      "recorded_ts": "2026-09-24T08:01:04.353848+00:00",
-      "alert_score": 91.1,
-      "alert_graduation_pct": 50.47,
-      "final_graduation_pct": 3.16,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 131,
-    "graduated": 37,
+    "graduated": 38,
     "did_not_graduate": 53,
-    "buy_graduated": 33,
-    "buy_total": 76,
+    "buy_graduated": 34,
+    "buy_total": 77,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.1
+    "graduation_rate_pct": 41.8
   },
   "shadow_stats": {
-    "tracked": 16,
+    "tracked": 18,
     "graduated": 896,
     "did_not_graduate": 5781,
     "graduation_rate_pct": 13.4
