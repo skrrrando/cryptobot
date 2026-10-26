@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-26T04:20:37.819295+00:00",
-  "balance": 200.32,
-  "positions_value": 0.0,
-  "net_worth": 200.32,
+  "timestamp": "2026-10-26T04:25:29.475485+00:00",
+  "balance": 180.32,
+  "positions_value": 19.48,
+  "net_worth": 199.8,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "FWxCMrHV5T3gVa7AU5338L8bpoRcxRYnarvoYNdxUTnz",
+      "name": "\u3059\u307f\u308c",
+      "symbol": "SMILE",
+      "entry_ts": "2026-10-26T04:25:29.475485+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.48,
+      "pnl_pct": -2.6,
+      "entry_slippage_pct": 1.34,
+      "entry_graduation_pct": 36.61,
+      "graduation_pct": 36.61,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "DxrKhpjZT82HYa5k6iNfyEf5Z94wfAHo5b2pM9X2pump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FWxCMrHV5T3gVa7AU5338L8bpoRcxRYnarvoYNdxUTnz",
+      "name": "\u3059\u307f\u308c",
+      "symbol": "SMILE",
+      "decision": "buy",
+      "signal_ts": "2026-10-26T04:25:29.475485+00:00",
+      "alert_score": 95.7,
+      "alert_graduation_pct": 36.61,
+      "graduation_pct": 36.61
+    }
+  ],
   "history": [
     {
       "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 131,
+    "alerts": 132,
     "graduated": 38,
     "did_not_graduate": 53,
     "buy_graduated": 34,
