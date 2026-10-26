@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-26T02:22:25.899184+00:00",
-  "balance": 181.33,
-  "positions_value": 19.5,
-  "net_worth": 200.83,
+  "timestamp": "2026-10-26T02:32:21.299743+00:00",
+  "balance": 200.78,
+  "positions_value": 0.0,
+  "net_worth": 200.78,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
-      "name": "mem0x",
-      "symbol": "mem0x",
-      "entry_ts": "2026-10-26T02:22:25.899184+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.5,
-      "pnl_pct": -2.5,
-      "entry_slippage_pct": 1.29,
-      "entry_graduation_pct": 48.94,
-      "graduation_pct": 48.94,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "CjG1h2wi73VQ6oaMXezmm1Kdt6i24RNfkBZ3jLarpump",
-      "name": "Justice For Mayor",
-      "symbol": "Mayor",
-      "bonding_curve_key": "F6r9i4jE1iThJdYCZ3j5gQ2EaoTPjmnJsrSWqeNFpsN6",
-      "entry_ts": "2026-10-19T11:30:58.893335+00:00",
-      "entry_price_usd": 1.1775726241538124e-05,
-      "entry_spot_price_usd": 1.1621155230711697e-05,
-      "entry_slippage_pct": 1.33,
-      "amount_usd": 20.0,
-      "qty": 1698409.0483906865,
-      "entry_graduation_pct": 35.11,
-      "entry_score": 92.4,
-      "exit_ts": "2026-10-19T17:40:49.010097+00:00",
-      "exit_price_usd": 2.8724661975253147e-06,
-      "proceeds_usd": 4.88,
-      "pnl_usd": -15.12,
-      "pnl_pct": -75.61,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
       "name": "little rocket man",
@@ -519,21 +485,43 @@
       "pnl_usd": -12.18,
       "pnl_pct": -60.88,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
       "name": "mem0x",
       "symbol": "mem0x",
-      "decision": "buy",
-      "signal_ts": "2026-10-26T02:22:25.899184+00:00",
-      "alert_score": 90.6,
-      "alert_graduation_pct": 48.94,
-      "graduation_pct": 48.94
+      "bonding_curve_key": "4vEScQD8LMmy6AqFSDzdyNbc5UUC7FyftMtscXG8LgRP",
+      "entry_ts": "2026-10-26T02:22:25.899184+00:00",
+      "entry_price_usd": 1.6278664944598893e-05,
+      "entry_spot_price_usd": 1.6071836869653798e-05,
+      "entry_slippage_pct": 1.29,
+      "amount_usd": 20.0,
+      "qty": 1228601.9810633063,
+      "entry_graduation_pct": 48.94,
+      "entry_score": 90.6,
+      "exit_ts": "2026-10-26T02:32:21.299769+00:00",
+      "exit_price_usd": 1.582929724116174e-05,
+      "proceeds_usd": 19.45,
+      "pnl_usd": -0.55,
+      "pnl_pct": -2.76,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
+      "name": "mem0x",
+      "symbol": "mem0x",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-10-26T02:22:25.899184+00:00",
+      "recorded_ts": "2026-10-26T02:32:21.299743+00:00",
+      "alert_score": 90.6,
+      "alert_graduation_pct": 48.94,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 9.9
+    },
     {
       "mint": "FEFEVFRRU3RzSaRhmgv9txwspMWpxvnx4QKhVxQLpump",
       "name": "Coinly Fans",
@@ -1170,35 +1158,22 @@
       "alert_graduation_pct": 50.47,
       "final_graduation_pct": 3.16,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "6CJ92jwMXTJsjmXdh5TZgPbbMwyWdSG44hRUQ7kwpump",
-      "name": "MINESTOCK",
-      "symbol": "MINESTOCK",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-09-24T02:10:35.830964+00:00",
-      "recorded_ts": "2026-09-24T02:32:58.223094+00:00",
-      "alert_score": 92.8,
-      "alert_graduation_pct": 57.58,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 22.4
     }
   ],
   "stats": {
     "alerts": 130,
-    "graduated": 36,
+    "graduated": 37,
     "did_not_graduate": 53,
-    "buy_graduated": 32,
-    "buy_total": 75,
+    "buy_graduated": 33,
+    "buy_total": 76,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 40.4
+    "graduation_rate_pct": 41.1
   },
   "shadow_stats": {
-    "tracked": 21,
+    "tracked": 18,
     "graduated": 896,
-    "did_not_graduate": 5776,
+    "did_not_graduate": 5779,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
