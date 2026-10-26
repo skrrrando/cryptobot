@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-26T02:52:33.057543+00:00",
-  "balance": 200.78,
-  "positions_value": 0.0,
-  "net_worth": 200.78,
+  "timestamp": "2026-10-26T03:01:59.399092+00:00",
+  "balance": 180.78,
+  "positions_value": 19.51,
+  "net_worth": 200.29,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
+      "name": "Rialto Market",
+      "symbol": "RIALTO",
+      "entry_ts": "2026-10-26T03:01:59.399092+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 64.27,
+      "graduation_pct": 64.27,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "6fzp9sPSJtwhTBr6gm2VRrAmKjW8ttd6AVWgH1S9pump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
+      "name": "Rialto Market",
+      "symbol": "RIALTO",
+      "decision": "buy",
+      "signal_ts": "2026-10-26T03:01:59.399092+00:00",
+      "alert_score": 97.1,
+      "alert_graduation_pct": 64.27,
+      "graduation_pct": 64.27
+    }
+  ],
   "history": [
     {
       "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 130,
+    "alerts": 131,
     "graduated": 37,
     "did_not_graduate": 53,
     "buy_graduated": 33,
