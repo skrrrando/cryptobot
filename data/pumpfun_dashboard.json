@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-27T00:27:05.154591+00:00",
-  "balance": 173.76,
-  "positions_value": 0.0,
-  "net_worth": 173.76,
+  "timestamp": "2026-10-27T00:36:36.353480+00:00",
+  "balance": 153.76,
+  "positions_value": 19.51,
+  "net_worth": 173.27,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "AgdDTJ1YAwKb8MDGPgr4KHtZpQQiFET8Fuui4TFZpump",
+      "name": "joe",
+      "symbol": "joe",
+      "entry_ts": "2026-10-27T00:36:36.353480+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 62.55,
+      "graduation_pct": 62.55,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "C4rJ9E2Z5zzNGVDSjE1V9GFbNz2RAiqg82Ra56bApump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "AgdDTJ1YAwKb8MDGPgr4KHtZpQQiFET8Fuui4TFZpump",
+      "name": "joe",
+      "symbol": "joe",
+      "decision": "buy",
+      "signal_ts": "2026-10-27T00:36:36.353480+00:00",
+      "alert_score": 92.3,
+      "alert_graduation_pct": 62.55,
+      "graduation_pct": 62.55
+    }
+  ],
   "history": [
     {
       "mint": "FWxCMrHV5T3gVa7AU5338L8bpoRcxRYnarvoYNdxUTnz",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 133,
+    "alerts": 134,
     "graduated": 38,
     "did_not_graduate": 54,
     "buy_graduated": 34,
