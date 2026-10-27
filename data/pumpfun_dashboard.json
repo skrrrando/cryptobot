@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-27T01:20:38.421401+00:00",
-  "balance": 168.02,
-  "positions_value": 0.0,
-  "net_worth": 168.02,
+  "timestamp": "2026-10-27T01:25:33.936911+00:00",
+  "balance": 148.02,
+  "positions_value": 19.52,
+  "net_worth": 167.54,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "6EsTwV3gsTqSPBxW5bPkzLjHNoDsM8XWK1PYkQkkpump",
+      "name": "Unlisted Labs",
+      "symbol": "UNLISTED",
+      "entry_ts": "2026-10-27T01:25:33.936911+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 70.01,
+      "graduation_pct": 70.01,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "8bBQP9ngcjyr7g1ytggodjaaQSHSyNcnxCrm8YN9pump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "6EsTwV3gsTqSPBxW5bPkzLjHNoDsM8XWK1PYkQkkpump",
+      "name": "Unlisted Labs",
+      "symbol": "UNLISTED",
+      "decision": "buy",
+      "signal_ts": "2026-10-27T01:25:33.936911+00:00",
+      "alert_score": 93.3,
+      "alert_graduation_pct": 70.01,
+      "graduation_pct": 70.01
+    }
+  ],
   "history": [
     {
       "mint": "AgdDTJ1YAwKb8MDGPgr4KHtZpQQiFET8Fuui4TFZpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 134,
+    "alerts": 135,
     "graduated": 39,
     "did_not_graduate": 54,
     "buy_graduated": 35,
@@ -1171,10 +1196,10 @@
     "graduation_rate_pct": 41.9
   },
   "shadow_stats": {
-    "tracked": 28,
+    "tracked": 26,
     "graduated": 904,
-    "did_not_graduate": 5867,
-    "graduation_rate_pct": 13.4
+    "did_not_graduate": 5870,
+    "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
   "min_score_to_alert": 90.0,
