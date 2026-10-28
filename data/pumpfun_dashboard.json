@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-28T00:30:56.630042+00:00",
-  "balance": 169.39,
-  "positions_value": 0.0,
-  "net_worth": 169.39,
+  "timestamp": "2026-10-28T00:35:33.023702+00:00",
+  "balance": 149.39,
+  "positions_value": 19.51,
+  "net_worth": 168.9,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "CZ9H4W4C3grNYj4JJPFS9SkYfEqoZmmFVLHJ1XmRpump",
+      "name": "pengi.xyz",
+      "symbol": "pengi",
+      "entry_ts": "2026-10-28T00:35:33.023702+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.24,
+      "entry_graduation_pct": 64.23,
+      "graduation_pct": 64.23,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "5B7SbTi58phb9asDXpUQH18uvXgywTX5uuaZiAz7pump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "CZ9H4W4C3grNYj4JJPFS9SkYfEqoZmmFVLHJ1XmRpump",
+      "name": "pengi.xyz",
+      "symbol": "pengi",
+      "decision": "buy",
+      "signal_ts": "2026-10-28T00:35:33.023702+00:00",
+      "alert_score": 90.3,
+      "alert_graduation_pct": 64.23,
+      "graduation_pct": 64.23
+    }
+  ],
   "history": [
     {
       "mint": "6EsTwV3gsTqSPBxW5bPkzLjHNoDsM8XWK1PYkQkkpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 137,
+    "alerts": 138,
     "graduated": 39,
     "did_not_graduate": 55,
     "buy_graduated": 35,
@@ -1173,7 +1198,7 @@
   "shadow_stats": {
     "tracked": 31,
     "graduated": 916,
-    "did_not_graduate": 5977,
+    "did_not_graduate": 5978,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
