@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-28T09:50:56.918981+00:00",
-  "balance": 112.92,
-  "positions_value": 1.91,
-  "net_worth": 114.83,
+  "timestamp": "2026-10-28T10:01:07.956979+00:00",
+  "balance": 114.81,
+  "positions_value": 0.0,
+  "net_worth": 114.81,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "eUX51Uc2So5Niq3jpXNPses4aXrHQ1hd27byG8Wpump",
-      "name": "AI Church",
-      "symbol": "Trinity",
-      "entry_ts": "2026-10-28T04:01:05.751048+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 1.91,
-      "pnl_pct": -90.45,
-      "entry_slippage_pct": 1.21,
-      "entry_graduation_pct": 78.5,
-      "graduation_pct": 0.14,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "A7FGohZDu2NnozAGMk5epygZ8RbGwa3uQGMHy9wmpump",
-      "name": "gudi eizenkoot",
-      "symbol": "GUDI",
-      "bonding_curve_key": "C6vSDkKUGUPr8rUB2Lq3JN7nydX3PDVRwgRiudUBVnJB",
-      "entry_ts": "2026-10-22T00:40:38.967095+00:00",
-      "entry_price_usd": 1.9930850910707513e-05,
-      "entry_spot_price_usd": 1.9684262289537698e-05,
-      "entry_slippage_pct": 1.25,
-      "amount_usd": 20.0,
-      "qty": 1003469.4499297738,
-      "entry_graduation_pct": 55.13,
-      "entry_score": 101.6,
-      "exit_ts": "2026-10-22T06:42:20.931724+00:00",
-      "exit_price_usd": 7.937596031134936e-06,
-      "proceeds_usd": 7.97,
-      "pnl_usd": -12.03,
-      "pnl_pct": -60.17,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "Dx27ajSKh6wRkQf7Y2EqrF29MWUcSjVghXyA5FGZpump",
       "name": "Bluti Fruti Fairies",
@@ -519,21 +485,43 @@
       "pnl_usd": -18.49,
       "pnl_pct": -92.45,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "eUX51Uc2So5Niq3jpXNPses4aXrHQ1hd27byG8Wpump",
       "name": "AI Church",
       "symbol": "Trinity",
-      "decision": "buy",
-      "signal_ts": "2026-10-28T04:01:05.751048+00:00",
-      "alert_score": 96.7,
-      "alert_graduation_pct": 78.5,
-      "graduation_pct": 0.14
+      "bonding_curve_key": "ARsHC2YMErFW63c5BSGYaSXCp2Jj5K1kn8CVhgVpUjX",
+      "entry_ts": "2026-10-28T04:01:05.751048+00:00",
+      "entry_price_usd": 3.002423214787744e-05,
+      "entry_spot_price_usd": 2.966448984153193e-05,
+      "entry_slippage_pct": 1.21,
+      "amount_usd": 20.0,
+      "qty": 666128.6091012955,
+      "entry_graduation_pct": 78.5,
+      "entry_score": 96.7,
+      "exit_ts": "2026-10-28T10:01:07.956997+00:00",
+      "exit_price_usd": 2.8343999608798997e-06,
+      "proceeds_usd": 1.89,
+      "pnl_usd": -18.11,
+      "pnl_pct": -90.56,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "eUX51Uc2So5Niq3jpXNPses4aXrHQ1hd27byG8Wpump",
+      "name": "AI Church",
+      "symbol": "Trinity",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-28T04:01:05.751048+00:00",
+      "recorded_ts": "2026-10-28T10:01:07.956979+00:00",
+      "alert_score": 96.7,
+      "alert_graduation_pct": 78.5,
+      "final_graduation_pct": 0.14,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "CZ9H4W4C3grNYj4JJPFS9SkYfEqoZmmFVLHJ1XmRpump",
       "name": "pengi.xyz",
@@ -1170,35 +1158,22 @@
       "alert_graduation_pct": 55.7,
       "final_graduation_pct": 0.51,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "F3Xr27etgJK76dgeEQPpjyWUN5C8EB6NauEHwsFjpump",
-      "name": "The Larp Cat",
-      "symbol": "Nyazsche",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-10-08T10:55:29.940036+00:00",
-      "recorded_ts": "2026-10-08T11:06:08.437207+00:00",
-      "alert_score": 99.1,
-      "alert_graduation_pct": 72.43,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 10.6
     }
   ],
   "stats": {
     "alerts": 141,
     "graduated": 39,
-    "did_not_graduate": 56,
+    "did_not_graduate": 57,
     "buy_graduated": 35,
-    "buy_total": 81,
+    "buy_total": 82,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 41.1
+    "graduation_rate_pct": 40.6
   },
   "shadow_stats": {
-    "tracked": 21,
+    "tracked": 20,
     "graduated": 922,
-    "did_not_graduate": 6018,
+    "did_not_graduate": 6020,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
