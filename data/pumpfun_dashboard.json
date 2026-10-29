@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-29T00:42:42.713184+00:00",
-  "balance": 114.81,
-  "positions_value": 0.0,
-  "net_worth": 114.81,
+  "timestamp": "2026-10-29T00:52:12.866852+00:00",
+  "balance": 94.81,
+  "positions_value": 19.52,
+  "net_worth": 114.33,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "FoRrGzHpDmi5M4EZDaBW2TkNFtj1ELMgQFDCMP3NwVFB",
+      "name": "Agentification",
+      "symbol": "AGENT",
+      "entry_ts": "2026-10-29T00:52:12.866852+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 72.75,
+      "graduation_pct": 72.75,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "Dx27ajSKh6wRkQf7Y2EqrF29MWUcSjVghXyA5FGZpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "FoRrGzHpDmi5M4EZDaBW2TkNFtj1ELMgQFDCMP3NwVFB",
+      "name": "Agentification",
+      "symbol": "AGENT",
+      "decision": "buy",
+      "signal_ts": "2026-10-29T00:52:12.866852+00:00",
+      "alert_score": 98.6,
+      "alert_graduation_pct": 72.75,
+      "graduation_pct": 72.75
+    }
+  ],
   "history": [
     {
       "mint": "eUX51Uc2So5Niq3jpXNPses4aXrHQ1hd27byG8Wpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 141,
+    "alerts": 142,
     "graduated": 39,
     "did_not_graduate": 57,
     "buy_graduated": 35,
@@ -1173,7 +1198,7 @@
   "shadow_stats": {
     "tracked": 26,
     "graduated": 937,
-    "did_not_graduate": 6076,
+    "did_not_graduate": 6077,
     "graduation_rate_pct": 13.4
   },
   "daily_cap": 4,
