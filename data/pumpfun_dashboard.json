@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-30T12:50:40.815272+00:00",
+  "timestamp": "2026-10-30T12:55:32.045967+00:00",
   "balance": 49.89,
   "positions_value": 0.0,
   "net_worth": 49.89,
@@ -507,19 +507,21 @@
       "exit_reason": "take_profit"
     }
   ],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "2xkczG594A3iYjpJdECVSZooukxu13GwRgGxVTJvpump",
       "name": "NiggaWifHat",
       "symbol": "NIG",
+      "outcome": "graduated",
       "decision": "buy",
       "signal_ts": "2026-10-30T11:50:41.756276+00:00",
+      "recorded_ts": "2026-10-30T12:55:32.045967+00:00",
       "alert_score": 90.8,
       "alert_graduation_pct": 60.76,
-      "graduation_pct": 111.47
-    }
-  ],
-  "history": [
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 64.8
+    },
     {
       "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
       "name": "hold this bag",
@@ -1156,33 +1158,20 @@
       "alert_graduation_pct": 65.43,
       "final_graduation_pct": 0.7,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "D5aHzSnjEyedsKVGWCUySC8eYUzgxNcUEj8yTrFhSUgS",
-      "name": "debpf",
-      "symbol": "DEBPF",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-10-12T01:01:03.217025+00:00",
-      "recorded_ts": "2026-10-12T02:20:47.766416+00:00",
-      "alert_score": 92.2,
-      "alert_graduation_pct": 57.11,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 79.7
     }
   ],
   "stats": {
     "alerts": 149,
-    "graduated": 39,
+    "graduated": 40,
     "did_not_graduate": 62,
-    "buy_graduated": 35,
-    "buy_total": 87,
+    "buy_graduated": 36,
+    "buy_total": 88,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.6
+    "graduation_rate_pct": 39.2
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 24,
     "graduated": 952,
     "did_not_graduate": 6223,
     "graduation_rate_pct": 13.3
