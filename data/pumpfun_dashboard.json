@@ -1,58 +1,25 @@
 {
-  "timestamp": "2026-10-30T11:11:21.879474+00:00",
-  "balance": 19.69,
-  "positions_value": 17.99,
-  "net_worth": 37.68,
+  "timestamp": "2026-10-30T11:20:59.689696+00:00",
+  "balance": 32.36,
+  "positions_value": 5.24,
+  "net_worth": 37.6,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
-      "name": "crypto is a joke",
-      "symbol": "jokecoin",
-      "entry_ts": "2026-10-30T05:20:40.106477+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 12.72,
-      "pnl_pct": -36.4,
-      "entry_slippage_pct": 1.02,
-      "entry_graduation_pct": 525.85,
-      "graduation_pct": 1.19,
-      "graduated": false
-    },
     {
       "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
       "name": "hold this bag",
       "symbol": "bag",
       "entry_ts": "2026-10-30T05:30:56.056757+00:00",
       "amount_usd": 20.0,
-      "value_usd": 5.27,
-      "pnl_pct": -73.65,
+      "value_usd": 5.24,
+      "pnl_pct": -73.8,
       "entry_slippage_pct": 1.29,
       "entry_graduation_pct": 51.51,
-      "graduation_pct": 10.01,
+      "graduation_pct": 9.91,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "CACbKus5h8iEpncWfLafR2bPcYB8tvTyokPwA6CFpump",
-      "name": "Shh",
-      "symbol": "Shh",
-      "bonding_curve_key": "6DXpdsk1ggrZaDq62rqtfyM4XirRpxztS5ifg4YEHpbu",
-      "entry_ts": "2026-10-24T04:45:37.313965+00:00",
-      "entry_price_usd": 2.021936451299603e-05,
-      "entry_spot_price_usd": 1.9968487908840502e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 989150.7711404562,
-      "entry_graduation_pct": 57.81,
-      "entry_score": 110.3,
-      "exit_ts": "2026-10-24T04:50:36.909872+00:00",
-      "exit_price_usd": 3.452719305181115e-05,
-      "proceeds_usd": 34.15,
-      "pnl_usd": 14.15,
-      "pnl_pct": 70.76,
-      "exit_reason": "take_profit"
-    },
     {
       "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
       "name": "Only Up",
@@ -532,6 +499,26 @@
       "pnl_usd": -10.9,
       "pnl_pct": -54.48,
       "exit_reason": "timeout"
+    },
+    {
+      "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
+      "name": "crypto is a joke",
+      "symbol": "jokecoin",
+      "bonding_curve_key": "37Bg5LtAc3bBdbYDut1m4vcD7JW3jtx3xURMWCd78jLE",
+      "entry_ts": "2026-10-30T05:20:40.106477+00:00",
+      "entry_price_usd": 0.00026501166762795563,
+      "entry_spot_price_usd": 0.0002623387145626747,
+      "entry_slippage_pct": 1.02,
+      "amount_usd": 20.0,
+      "qty": 75468.3753323555,
+      "entry_graduation_pct": 525.85,
+      "entry_score": 98.2,
+      "exit_ts": "2026-10-30T11:20:59.689717+00:00",
+      "exit_price_usd": 0.00016798242450462666,
+      "proceeds_usd": 12.68,
+      "pnl_usd": -7.32,
+      "pnl_pct": -36.61,
+      "exit_reason": "timeout"
     }
   ],
   "watching": [
@@ -543,20 +530,23 @@
       "signal_ts": "2026-10-30T05:30:56.056757+00:00",
       "alert_score": 94.2,
       "alert_graduation_pct": 51.51,
-      "graduation_pct": 10.01
-    },
+      "graduation_pct": 9.91
+    }
+  ],
+  "history": [
     {
       "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
       "name": "crypto is a joke",
       "symbol": "jokecoin",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-30T05:20:40.106477+00:00",
+      "recorded_ts": "2026-10-30T11:20:59.689696+00:00",
       "alert_score": 98.2,
       "alert_graduation_pct": 525.85,
-      "graduation_pct": 1.19
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.0,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
       "name": "Doxxd.io",
@@ -1193,35 +1183,22 @@
       "alert_graduation_pct": 66.86,
       "final_graduation_pct": 7.82,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "5QbpbvUufCgm5rjaoCeuQz2R2nkgPRMmQ4KViAyvXkcF",
-      "name": "BrewApp",
-      "symbol": "BrewApp",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-10-10T04:17:11.550556+00:00",
-      "recorded_ts": "2026-10-10T04:26:53.138566+00:00",
-      "alert_score": 91.1,
-      "alert_graduation_pct": 89.96,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 9.7
     }
   ],
   "stats": {
     "alerts": 148,
     "graduated": 39,
-    "did_not_graduate": 60,
+    "did_not_graduate": 61,
     "buy_graduated": 35,
-    "buy_total": 85,
+    "buy_total": 86,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.4
+    "graduation_rate_pct": 39.0
   },
   "shadow_stats": {
     "tracked": 21,
     "graduated": 952,
-    "did_not_graduate": 6218,
+    "did_not_graduate": 6219,
     "graduation_rate_pct": 13.3
   },
   "daily_cap": 4,
