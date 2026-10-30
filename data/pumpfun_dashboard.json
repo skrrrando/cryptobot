@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-10-30T11:20:59.689696+00:00",
-  "balance": 32.36,
-  "positions_value": 5.24,
-  "net_worth": 37.6,
+  "timestamp": "2026-10-30T11:31:05.712614+00:00",
+  "balance": 37.58,
+  "positions_value": 0.0,
+  "net_worth": 37.58,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
-      "name": "hold this bag",
-      "symbol": "bag",
-      "entry_ts": "2026-10-30T05:30:56.056757+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 5.24,
-      "pnl_pct": -73.8,
-      "entry_slippage_pct": 1.29,
-      "entry_graduation_pct": 51.51,
-      "graduation_pct": 9.91,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "AorAyRoTCvAa1fMNuUw4zcxGRNtyFNZxdumuVuSapump",
-      "name": "Only Up",
-      "symbol": "HELIUM",
-      "bonding_curve_key": "DwW4yjsC8ktjrTKxRN9yZPtF4zRC2h4Kd8nKySQXyfYV",
-      "entry_ts": "2026-10-24T01:57:19.522462+00:00",
-      "entry_price_usd": 2.3988209763227677e-05,
-      "entry_spot_price_usd": 2.369522770122468e-05,
-      "entry_slippage_pct": 1.24,
-      "amount_usd": 20.0,
-      "qty": 833742.9177669883,
-      "entry_graduation_pct": 66.26,
-      "entry_score": 97.6,
-      "exit_ts": "2026-10-24T08:01:05.015236+00:00",
-      "exit_price_usd": 3.4500637744295045e-06,
-      "proceeds_usd": 2.88,
-      "pnl_usd": -17.12,
-      "pnl_pct": -85.62,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
       "name": "Incatgnito",
@@ -519,21 +485,43 @@
       "pnl_usd": -7.32,
       "pnl_pct": -36.61,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
       "name": "hold this bag",
       "symbol": "bag",
-      "decision": "buy",
-      "signal_ts": "2026-10-30T05:30:56.056757+00:00",
-      "alert_score": 94.2,
-      "alert_graduation_pct": 51.51,
-      "graduation_pct": 9.91
+      "bonding_curve_key": "8wF1wLhNUBSJgLf67Ldj7iRJ7bE9EvrVmmsRaWBbS4hL",
+      "entry_ts": "2026-10-30T05:30:56.056757+00:00",
+      "entry_price_usd": 1.6772625612583383e-05,
+      "entry_spot_price_usd": 1.6559511033943297e-05,
+      "entry_slippage_pct": 1.29,
+      "amount_usd": 20.0,
+      "qty": 1192419.1514174938,
+      "entry_graduation_pct": 51.51,
+      "entry_score": 94.2,
+      "exit_ts": "2026-10-30T11:31:05.712639+00:00",
+      "exit_price_usd": 4.376616068933385e-06,
+      "proceeds_usd": 5.22,
+      "pnl_usd": -14.78,
+      "pnl_pct": -73.91,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
+      "name": "hold this bag",
+      "symbol": "bag",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-30T05:30:56.056757+00:00",
+      "recorded_ts": "2026-10-30T11:31:05.712614+00:00",
+      "alert_score": 94.2,
+      "alert_graduation_pct": 51.51,
+      "final_graduation_pct": 9.91,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
       "name": "crypto is a joke",
@@ -1170,33 +1158,20 @@
       "alert_graduation_pct": 57.11,
       "final_graduation_pct": null,
       "minutes_to_graduate": 79.7
-    },
-    {
-      "mint": "Fbyx5w9BFav9hSg2HgJVHZjofMgE3iVFrHRg5Mj9pump",
-      "name": "nami",
-      "symbol": "nami",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-10-10T01:20:46.393782+00:00",
-      "recorded_ts": "2026-10-10T07:25:32.531847+00:00",
-      "alert_score": 95.0,
-      "alert_graduation_pct": 66.86,
-      "final_graduation_pct": 7.82,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 148,
     "graduated": 39,
-    "did_not_graduate": 61,
+    "did_not_graduate": 62,
     "buy_graduated": 35,
-    "buy_total": 86,
+    "buy_total": 87,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.0
+    "graduation_rate_pct": 38.6
   },
   "shadow_stats": {
-    "tracked": 21,
+    "tracked": 23,
     "graduated": 952,
     "did_not_graduate": 6219,
     "graduation_rate_pct": 13.3
