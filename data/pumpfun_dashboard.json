@@ -1,23 +1,10 @@
 {
-  "timestamp": "2026-10-30T09:45:40.448422+00:00",
-  "balance": 10.58,
-  "positions_value": 27.09,
-  "net_worth": 37.67,
+  "timestamp": "2026-10-30T09:50:41.491007+00:00",
+  "balance": 19.69,
+  "positions_value": 17.96,
+  "net_worth": 37.65,
   "starting_balance": 1000.0,
   "positions": [
-    {
-      "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
-      "name": "Doxxd.io",
-      "symbol": "Doxxd",
-      "entry_ts": "2026-10-30T03:50:39.584171+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 9.13,
-      "pnl_pct": -54.35,
-      "entry_slippage_pct": 1.34,
-      "entry_graduation_pct": 39.18,
-      "graduation_pct": 15.63,
-      "graduated": false
-    },
     {
       "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
       "name": "crypto is a joke",
@@ -46,26 +33,6 @@
     }
   ],
   "closed": [
-    {
-      "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
-      "name": "purk",
-      "symbol": "PURK",
-      "bonding_curve_key": "DakyEMy3QNHZ6kVVQNYyWTEX88dJhPZHM5qCj7ZCJBno",
-      "entry_ts": "2026-10-23T03:55:28.608874+00:00",
-      "entry_price_usd": 2.5716316108916477e-05,
-      "entry_spot_price_usd": 2.5404682932700726e-05,
-      "entry_slippage_pct": 1.23,
-      "amount_usd": 20.0,
-      "qty": 777716.3694556355,
-      "entry_graduation_pct": 68.88,
-      "entry_score": 97.5,
-      "exit_ts": "2026-10-23T09:55:30.238007+00:00",
-      "exit_price_usd": 3.29076412207695e-06,
-      "proceeds_usd": 2.56,
-      "pnl_usd": -17.44,
-      "pnl_pct": -87.2,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "CACbKus5h8iEpncWfLafR2bPcYB8tvTyokPwA6CFpump",
       "name": "Shh",
@@ -545,19 +512,29 @@
       "pnl_usd": -16.06,
       "pnl_pct": -80.31,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
       "name": "Doxxd.io",
       "symbol": "Doxxd",
-      "decision": "buy",
-      "signal_ts": "2026-10-30T03:50:39.584171+00:00",
-      "alert_score": 96.1,
-      "alert_graduation_pct": 39.18,
-      "graduation_pct": 15.63
-    },
+      "bonding_curve_key": "CeuikfrepcVDYv3eRoxqHFXMGiJ29HCFjoUeQdWWHUj4",
+      "entry_ts": "2026-10-30T03:50:39.584171+00:00",
+      "entry_price_usd": 1.2206775524993743e-05,
+      "entry_spot_price_usd": 1.2045769773760256e-05,
+      "entry_slippage_pct": 1.34,
+      "amount_usd": 20.0,
+      "qty": 1638434.3235483766,
+      "entry_graduation_pct": 39.18,
+      "entry_score": 96.1,
+      "exit_ts": "2026-10-30T09:50:41.491028+00:00",
+      "exit_price_usd": 5.556928522394944e-06,
+      "proceeds_usd": 9.1,
+      "pnl_usd": -10.9,
+      "pnl_pct": -54.48,
+      "exit_reason": "timeout"
+    }
+  ],
+  "watching": [
     {
       "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
       "name": "hold this bag",
@@ -580,6 +557,19 @@
     }
   ],
   "history": [
+    {
+      "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
+      "name": "Doxxd.io",
+      "symbol": "Doxxd",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-10-30T03:50:39.584171+00:00",
+      "recorded_ts": "2026-10-30T09:50:41.491007+00:00",
+      "alert_score": 96.1,
+      "alert_graduation_pct": 39.18,
+      "final_graduation_pct": 15.63,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "GK46Bu1KrTJnGCvKuAyJu2tuaVZhwzN2otJpzGAtfart",
       "name": "Fartcoin",
@@ -1216,33 +1206,20 @@
       "alert_graduation_pct": 89.96,
       "final_graduation_pct": null,
       "minutes_to_graduate": 9.7
-    },
-    {
-      "mint": "5qfuipKsqMYXUGDUPx2aZqwYuSx8Kr4NLAYhkhhspump",
-      "name": "Qolony",
-      "symbol": "Qolony",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-10-10T03:58:15.756701+00:00",
-      "recorded_ts": "2026-10-10T04:07:47.997862+00:00",
-      "alert_score": 93.9,
-      "alert_graduation_pct": 58.13,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 9.5
     }
   ],
   "stats": {
     "alerts": 148,
     "graduated": 39,
-    "did_not_graduate": 59,
+    "did_not_graduate": 60,
     "buy_graduated": 35,
-    "buy_total": 84,
+    "buy_total": 85,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.8
+    "graduation_rate_pct": 39.4
   },
   "shadow_stats": {
-    "tracked": 20,
+    "tracked": 21,
     "graduated": 952,
     "did_not_graduate": 6215,
     "graduation_rate_pct": 13.3
