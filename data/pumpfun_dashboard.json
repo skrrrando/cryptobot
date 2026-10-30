@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-30T03:45:38.578631+00:00",
-  "balance": 70.58,
-  "positions_value": 0.0,
-  "net_worth": 70.58,
+  "timestamp": "2026-10-30T03:50:39.584171+00:00",
+  "balance": 50.58,
+  "positions_value": 19.48,
+  "net_worth": 70.06,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
+      "name": "Doxxd.io",
+      "symbol": "Doxxd",
+      "entry_ts": "2026-10-30T03:50:39.584171+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.48,
+      "pnl_pct": -2.6,
+      "entry_slippage_pct": 1.34,
+      "entry_graduation_pct": 39.18,
+      "graduation_pct": 39.18,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "G2B6z3qC8ht6rrzhKRaiQUG2zywDSnKK4rPccUfRpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
+      "name": "Doxxd.io",
+      "symbol": "Doxxd",
+      "decision": "buy",
+      "signal_ts": "2026-10-30T03:50:39.584171+00:00",
+      "alert_score": 96.1,
+      "alert_graduation_pct": 39.18,
+      "graduation_pct": 39.18
+    }
+  ],
   "history": [
     {
       "mint": "GK46Bu1KrTJnGCvKuAyJu2tuaVZhwzN2otJpzGAtfart",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 145,
+    "alerts": 146,
     "graduated": 39,
     "did_not_graduate": 59,
     "buy_graduated": 35,
@@ -1171,8 +1196,8 @@
     "graduation_rate_pct": 39.8
   },
   "shadow_stats": {
-    "tracked": 18,
-    "graduated": 948,
+    "tracked": 17,
+    "graduated": 949,
     "did_not_graduate": 6198,
     "graduation_rate_pct": 13.3
   },
