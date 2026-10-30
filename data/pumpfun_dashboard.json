@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-30T11:45:40.817058+00:00",
-  "balance": 37.58,
-  "positions_value": 0.0,
-  "net_worth": 37.58,
+  "timestamp": "2026-10-30T11:50:41.756276+00:00",
+  "balance": 17.58,
+  "positions_value": 19.51,
+  "net_worth": 37.09,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "2xkczG594A3iYjpJdECVSZooukxu13GwRgGxVTJvpump",
+      "name": "NiggaWifHat",
+      "symbol": "NIG",
+      "entry_ts": "2026-10-30T11:50:41.756276+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.25,
+      "entry_graduation_pct": 60.76,
+      "graduation_pct": 60.76,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "22QFzYnk4RNKZFWaBKE2xeVAkaHPboVTeeT3u5fRpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "2xkczG594A3iYjpJdECVSZooukxu13GwRgGxVTJvpump",
+      "name": "NiggaWifHat",
+      "symbol": "NIG",
+      "decision": "buy",
+      "signal_ts": "2026-10-30T11:50:41.756276+00:00",
+      "alert_score": 90.8,
+      "alert_graduation_pct": 60.76,
+      "graduation_pct": 60.76
+    }
+  ],
   "history": [
     {
       "mint": "4T6ymFL3w9X1QrXEJ51Jp6m4ePhSkQ2qZi1VvQ4Dpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 148,
+    "alerts": 149,
     "graduated": 39,
     "did_not_graduate": 62,
     "buy_graduated": 35,
@@ -1171,7 +1196,7 @@
     "graduation_rate_pct": 38.6
   },
   "shadow_stats": {
-    "tracked": 23,
+    "tracked": 24,
     "graduated": 952,
     "did_not_graduate": 6219,
     "graduation_rate_pct": 13.3
