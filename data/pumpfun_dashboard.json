@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-30T05:15:43.077300+00:00",
-  "balance": 50.58,
-  "positions_value": 7.58,
-  "net_worth": 58.16,
+  "timestamp": "2026-10-30T05:20:40.106477+00:00",
+  "balance": 30.58,
+  "positions_value": 27.19,
+  "net_worth": 57.77,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "Doxxd",
       "entry_ts": "2026-10-30T03:50:39.584171+00:00",
       "amount_usd": 20.0,
-      "value_usd": 7.58,
-      "pnl_pct": -62.1,
+      "value_usd": 7.59,
+      "pnl_pct": -62.05,
       "entry_slippage_pct": 1.34,
       "entry_graduation_pct": 39.18,
       "graduation_pct": 10.94,
+      "graduated": false
+    },
+    {
+      "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
+      "name": "crypto is a joke",
+      "symbol": "jokecoin",
+      "entry_ts": "2026-10-30T05:20:40.106477+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.6,
+      "pnl_pct": -2.0,
+      "entry_slippage_pct": 1.02,
+      "entry_graduation_pct": 525.85,
+      "graduation_pct": 525.85,
       "graduated": false
     }
   ],
@@ -522,6 +535,16 @@
     }
   ],
   "watching": [
+    {
+      "mint": "GrUAyQBspwaVizUNvGgXFswp89VvdV7Tft6HWur3pump",
+      "name": "crypto is a joke",
+      "symbol": "jokecoin",
+      "decision": "buy",
+      "signal_ts": "2026-10-30T05:20:40.106477+00:00",
+      "alert_score": 98.2,
+      "alert_graduation_pct": 525.85,
+      "graduation_pct": 525.85
+    },
     {
       "mint": "3Pk7Va5QJoFMTjNTHcTz7NMm7bqAFPNbdCg2vwfopump",
       "name": "Doxxd.io",
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 146,
+    "alerts": 147,
     "graduated": 39,
     "did_not_graduate": 59,
     "buy_graduated": 35,
@@ -1196,7 +1219,7 @@
     "graduation_rate_pct": 39.8
   },
   "shadow_stats": {
-    "tracked": 17,
+    "tracked": 18,
     "graduated": 949,
     "did_not_graduate": 6202,
     "graduation_rate_pct": 13.3
