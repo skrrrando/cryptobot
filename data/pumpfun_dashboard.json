@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-31T21:49:02.342229+00:00",
+  "timestamp": "2026-10-31T21:58:44.017685+00:00",
   "balance": 51.98,
   "positions_value": 0.0,
   "net_worth": 51.98,
@@ -507,19 +507,21 @@
       "exit_reason": "take_profit"
     }
   ],
-  "watching": [
+  "watching": [],
+  "history": [
     {
       "mint": "BJMS5hMpCoJN1PHBZDZN1quuodsp1j4oVMVURuDtpump",
       "name": "hyperlaunch",
       "symbol": "HyperLaunch",
+      "outcome": "did_not_graduate",
       "decision": "buy",
       "signal_ts": "2026-10-31T15:55:32.880532+00:00",
+      "recorded_ts": "2026-10-31T21:58:44.017685+00:00",
       "alert_score": 91.7,
       "alert_graduation_pct": 51.87,
-      "graduation_pct": 0.81
-    }
-  ],
-  "history": [
+      "final_graduation_pct": 0.81,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "2xkczG594A3iYjpJdECVSZooukxu13GwRgGxVTJvpump",
       "name": "NiggaWifHat",
@@ -1156,30 +1158,17 @@
       "alert_graduation_pct": 40.99,
       "final_graduation_pct": 3.36,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "8TrbQ5DfrcGdXW8tuMRb4HfwzDjJtgvpgbC6ebGCpump",
-      "name": "Self Made",
-      "symbol": "SELFMADE",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-10-12T00:50:38.007297+00:00",
-      "recorded_ts": "2026-10-12T06:50:47.712398+00:00",
-      "alert_score": 99.3,
-      "alert_graduation_pct": 65.43,
-      "final_graduation_pct": 0.7,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 153,
     "graduated": 40,
-    "did_not_graduate": 62,
+    "did_not_graduate": 63,
     "buy_graduated": 36,
-    "buy_total": 88,
+    "buy_total": 89,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.2
+    "graduation_rate_pct": 38.8
   },
   "shadow_stats": {
     "tracked": 20,
