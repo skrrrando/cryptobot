@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-10-31T07:26:15.902498+00:00",
+  "timestamp": "2026-10-31T07:32:16.175009+00:00",
   "candidates": [
     {
       "id": "base_0x83f3aca29bc79b048b99c56013475570acc97ccf",
-      "timestamp": "2026-10-31T07:25:31.194931+00:00",
+      "timestamp": "2026-10-31T07:30:54.222017+00:00",
       "network": "base",
       "name": "ELSA / USDC 0.01%",
       "address": "0x83f3aca29bc79b048b99c56013475570acc97ccf",
@@ -11,7 +11,7 @@
       "rank": 17,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 2.269,
+        "h1_accel": 1.978,
         "history_len": 20
       },
       "security": {
@@ -71,30 +71,184 @@
         "checked_at": 1793430645.082192
       },
       "price_change_pct": {
-        "m5": "0.409",
-        "m15": "1.12",
-        "m30": "1.216",
-        "h1": "0.33",
-        "h6": "3.303",
-        "h24": "6.738"
+        "m5": "0.364",
+        "m15": "1.103",
+        "m30": "1.736",
+        "h1": "0.708",
+        "h6": "3.504",
+        "h24": "7.398"
       },
       "volume_usd": {
-        "m5": "3906.153368163",
-        "m15": "7027.6542711535",
-        "m30": "14047.4863193963",
-        "h1": "30292.1596580251",
-        "h6": "504382.719180123",
-        "h24": "1202188.78179818"
+        "m5": "3659.1223142091",
+        "m15": "9102.3301759828",
+        "m30": "15938.3493435081",
+        "h1": "32851.4019358487",
+        "h6": "505933.474310338",
+        "h24": "1204316.52698367"
       },
-      "market_cap_usd": 16132494.4702846,
+      "market_cap_usd": 16205372.4592488,
       "transactions_h1": {
-        "buys": 221,
-        "sells": 189,
-        "buyers": 32,
-        "sellers": 26
+        "buys": 238,
+        "sells": 202,
+        "buyers": 34,
+        "sellers": 30
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": -0.025
+      "sol_h1": -0.041
+    },
+    {
+      "id": "bsc_0x4d3bf29ba30f8bfe4624e7678709afa195689c5d",
+      "timestamp": "2026-10-31T07:30:54.222017+00:00",
+      "network": "bsc",
+      "name": "AKE / WBNB 0.01%",
+      "address": "0x4d3bf29ba30f8bfe4624e7678709afa195689c5d",
+      "base_token_address": "0x2c3a8ee94ddd97244a93bc48298f97d2c412f7db",
+      "rank": 5,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 5.223,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 43618,
+        "whale_buyer_pct": 7.5,
+        "holder_count_history": [
+          {
+            "ts": 1792864535.8998895,
+            "holder_count": 43289
+          },
+          {
+            "ts": 1792884662.9419115,
+            "holder_count": 43285
+          },
+          {
+            "ts": 1792887041.9884048,
+            "holder_count": 43285
+          },
+          {
+            "ts": 1792889441.8327358,
+            "holder_count": 43284
+          },
+          {
+            "ts": 1792894243.3013313,
+            "holder_count": 43275
+          },
+          {
+            "ts": 1792896343.8348353,
+            "holder_count": 43275
+          },
+          {
+            "ts": 1793276447.2008939,
+            "holder_count": 43518
+          },
+          {
+            "ts": 1793326843.0019054,
+            "holder_count": 43491
+          },
+          {
+            "ts": 1793328934.983665,
+            "holder_count": 43491
+          },
+          {
+            "ts": 1793431861.6785116,
+            "holder_count": 43618
+          }
+        ],
+        "holder_growth_pct": 0.8,
+        "checked_at": 1793431861.6785116
+      },
+      "price_change_pct": {
+        "m5": "0.215",
+        "m15": "2.985",
+        "m30": "5.213",
+        "h1": "11.929",
+        "h6": "1.048",
+        "h24": "-32.006"
+      },
+      "volume_usd": {
+        "m5": "272594.514742005",
+        "m15": "859221.999079608",
+        "m30": "1740677.70406752",
+        "h1": "3745831.32564697",
+        "h6": "12396303.0208312",
+        "h24": "27648747.1806078"
+      },
+      "market_cap_usd": 296511719.414662,
+      "transactions_h1": {
+        "buys": 4177,
+        "sells": 3553,
+        "buyers": 317,
+        "sellers": 245
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.041
+    },
+    {
+      "id": "bsc_0x8dc5b82398decace63d15788314ab80f81d00529",
+      "timestamp": "2026-10-31T07:30:54.222017+00:00",
+      "network": "bsc",
+      "name": "SAFU / WBNB",
+      "address": "0x8dc5b82398decace63d15788314ab80f81d00529",
+      "base_token_address": "0x3433a5748bda2f7338bdc600be7bc716d5882b0c",
+      "rank": 15,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.5070000000000001,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 2601,
+        "whale_buyer_pct": 30.3,
+        "holder_count_history": [
+          {
+            "ts": 1793430947.7776153,
+            "holder_count": 2601
+          }
+        ],
+        "holder_growth_pct": null,
+        "checked_at": 1793430947.7776153
+      },
+      "price_change_pct": {
+        "m5": "0",
+        "m15": "0",
+        "m30": "2.84",
+        "h1": "3.277",
+        "h6": "21.696",
+        "h24": "94.54"
+      },
+      "volume_usd": {
+        "m5": "0.0",
+        "m15": "0.0",
+        "m30": "561.8303672836",
+        "h1": "567.8063148788",
+        "h6": "17490.631620137",
+        "h24": "103826.432478031"
+      },
+      "market_cap_usd": 89158.19427,
+      "transactions_h1": {
+        "buys": 9,
+        "sells": 5,
+        "buyers": 6,
+        "sellers": 4
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.041
     }
   ]
 }
