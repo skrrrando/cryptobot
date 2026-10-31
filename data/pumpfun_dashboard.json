@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-10-31T15:50:43.147760+00:00",
-  "balance": 39.38,
-  "positions_value": 0.0,
-  "net_worth": 39.38,
+  "timestamp": "2026-10-31T15:55:32.880532+00:00",
+  "balance": 19.38,
+  "positions_value": 19.49,
+  "net_worth": 38.87,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "BJMS5hMpCoJN1PHBZDZN1quuodsp1j4oVMVURuDtpump",
+      "name": "hyperlaunch",
+      "symbol": "HyperLaunch",
+      "entry_ts": "2026-10-31T15:55:32.880532+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.49,
+      "pnl_pct": -2.55,
+      "entry_slippage_pct": 1.29,
+      "entry_graduation_pct": 51.87,
+      "graduation_pct": 51.87,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "4MSF35Y2wzD76Mtsz7obHEC6SnqMhn61hJzTkkgHpump",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "BJMS5hMpCoJN1PHBZDZN1quuodsp1j4oVMVURuDtpump",
+      "name": "hyperlaunch",
+      "symbol": "HyperLaunch",
+      "decision": "buy",
+      "signal_ts": "2026-10-31T15:55:32.880532+00:00",
+      "alert_score": 91.7,
+      "alert_graduation_pct": 51.87,
+      "graduation_pct": 51.87
+    }
+  ],
   "history": [
     {
       "mint": "2xkczG594A3iYjpJdECVSZooukxu13GwRgGxVTJvpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 152,
+    "alerts": 153,
     "graduated": 40,
     "did_not_graduate": 62,
     "buy_graduated": 36,
