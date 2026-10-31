@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-10-31T05:26:16.319440+00:00",
+  "timestamp": "2026-10-31T05:31:23.082020+00:00",
   "candidates": [
     {
       "id": "base_0x83f3aca29bc79b048b99c56013475570acc97ccf",
-      "timestamp": "2026-10-31T05:25:30.005454+00:00",
+      "timestamp": "2026-10-31T05:30:54.852685+00:00",
       "network": "base",
       "name": "ELSA / USDC 0.01%",
       "address": "0x83f3aca29bc79b048b99c56013475570acc97ccf",
@@ -11,7 +11,7 @@
       "rank": 20,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.33000000000000007,
+        "h1_accel": 0.385,
         "history_len": 20
       },
       "security": {
@@ -71,30 +71,89 @@
         "checked_at": 1793423742.423893
       },
       "price_change_pct": {
-        "m5": "-0.562",
-        "m15": "-1.022",
-        "m30": "0.901",
-        "h1": "1.544",
-        "h6": "3.104",
-        "h24": "5.302"
+        "m5": "0.368",
+        "m15": "0.127",
+        "m30": "0.7",
+        "h1": "1.945",
+        "h6": "3.514",
+        "h24": "5.942"
       },
       "volume_usd": {
-        "m5": "3172.4978586539",
-        "m15": "11745.1097656814",
-        "m30": "31120.5943878306",
-        "h1": "73034.4550255375",
-        "h6": "472711.340625617",
-        "h24": "1182294.16638562"
+        "m5": "5004.3676119749",
+        "m15": "12383.0745296629",
+        "m30": "26803.014827416",
+        "h1": "72881.8838005317",
+        "h6": "476840.235517356",
+        "h24": "1185251.69147235"
       },
-      "market_cap_usd": 15997688.4510544,
+      "market_cap_usd": 16054114.382725,
       "transactions_h1": {
-        "buys": 451,
-        "sells": 365,
-        "buyers": 53,
+        "buys": 436,
+        "sells": 354,
+        "buyers": 54,
         "sellers": 57
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": -0.411
+      "sol_h1": -0.168
+    },
+    {
+      "id": "eth_0xfedc028df370a60e6df32a73d5f692dd2413b0fdf2d19c0a406202e10bc4ab4d",
+      "timestamp": "2026-10-31T05:30:54.852685+00:00",
+      "network": "eth",
+      "name": "HYPEPE / ETH",
+      "address": "0xfedc028df370a60e6df32a73d5f692dd2413b0fdf2d19c0a406202e10bc4ab4d",
+      "base_token_address": "0xa44a3a090e02f090d1b0918713beaea99b2d4ad2",
+      "rank": 16,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 23.124,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 206,
+        "whale_buyer_pct": null,
+        "holder_count_history": [
+          {
+            "ts": 1793423150.9176366,
+            "holder_count": 206
+          }
+        ],
+        "holder_growth_pct": null,
+        "checked_at": 1793423150.9176366
+      },
+      "price_change_pct": {
+        "m5": "21.263",
+        "m15": "21.749",
+        "m30": "3.043",
+        "h1": "20.462",
+        "h6": "54.911",
+        "h24": "3927.323"
+      },
+      "volume_usd": {
+        "m5": "9666.1074113446",
+        "m15": "34206.9662073636",
+        "m30": "65664.1255904688",
+        "h1": "129567.423946555",
+        "h6": "621567.258165689",
+        "h24": "1093016.53507503"
+      },
+      "market_cap_usd": 563499.4202,
+      "transactions_h1": {
+        "buys": 97,
+        "sells": 63,
+        "buyers": 87,
+        "sellers": 53
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.168
     }
   ]
 }
