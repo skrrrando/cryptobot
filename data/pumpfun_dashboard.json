@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-01T05:40:40.675192+00:00",
-  "balance": 11.48,
-  "positions_value": 30.16,
-  "net_worth": 41.64,
+  "timestamp": "2026-11-01T05:45:38.468558+00:00",
+  "balance": 34.8,
+  "positions_value": 23.09,
+  "net_worth": 57.89,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -19,40 +19,20 @@
       "graduated": false
     },
     {
-      "mint": "2cnLP7qGqdiwZJreswab2mzfdaNs6WWGFoG8Fv3FMBTC",
-      "name": "The WhitePaper",
-      "symbol": "PAPER",
-      "entry_ts": "2026-11-01T05:10:51.853956+00:00",
+      "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
+      "name": "Yumecoin",
+      "symbol": "YUME",
+      "entry_ts": "2026-11-01T05:45:38.468558+00:00",
       "amount_usd": 20.0,
-      "value_usd": 26.59,
-      "pnl_pct": 32.95,
-      "entry_slippage_pct": 1.01,
-      "entry_graduation_pct": 8341.75,
-      "graduation_pct": 11508.77,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 74.78,
+      "graduation_pct": 74.78,
       "graduated": false
     }
   ],
   "closed": [
-    {
-      "mint": "9qavhGwcNHiYgLeztWqHQtW6kVJqTtT5h3YYbsbtpump",
-      "name": "mem0x",
-      "symbol": "mem0x",
-      "bonding_curve_key": "4vEScQD8LMmy6AqFSDzdyNbc5UUC7FyftMtscXG8LgRP",
-      "entry_ts": "2026-10-26T02:22:25.899184+00:00",
-      "entry_price_usd": 1.6278664944598893e-05,
-      "entry_spot_price_usd": 1.6071836869653798e-05,
-      "entry_slippage_pct": 1.29,
-      "amount_usd": 20.0,
-      "qty": 1228601.9810633063,
-      "entry_graduation_pct": 48.94,
-      "entry_score": 90.6,
-      "exit_ts": "2026-10-26T02:32:21.299769+00:00",
-      "exit_price_usd": 1.582929724116174e-05,
-      "proceeds_usd": 19.45,
-      "pnl_usd": -0.55,
-      "pnl_pct": -2.76,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "Hi9rMGoyNz51rYdV2zyw5cRu5ra6LNP1a8RzdJadpump",
       "name": "Rialto Market",
@@ -532,9 +512,39 @@
       "pnl_usd": -0.5,
       "pnl_pct": -2.5,
       "exit_reason": "graduated"
+    },
+    {
+      "mint": "2cnLP7qGqdiwZJreswab2mzfdaNs6WWGFoG8Fv3FMBTC",
+      "name": "The WhitePaper",
+      "symbol": "PAPER",
+      "bonding_curve_key": "xqMHEytj2cbnm9PMmETHsyqikcLbFURk6BBHbwgK6Y7",
+      "entry_ts": "2026-11-01T05:10:51.853956+00:00",
+      "entry_price_usd": 0.0025923988745941685,
+      "entry_spot_price_usd": 0.0025664422829012657,
+      "entry_slippage_pct": 1.01,
+      "amount_usd": 20.0,
+      "qty": 7714.862167239189,
+      "entry_graduation_pct": 8341.75,
+      "entry_score": 93.9,
+      "exit_ts": "2026-11-01T05:45:38.468585+00:00",
+      "exit_price_usd": 0.005614943878413964,
+      "proceeds_usd": 43.32,
+      "pnl_usd": 23.32,
+      "pnl_pct": 116.59,
+      "exit_reason": "take_profit"
     }
   ],
   "watching": [
+    {
+      "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
+      "name": "Yumecoin",
+      "symbol": "YUME",
+      "decision": "buy",
+      "signal_ts": "2026-11-01T05:45:38.468558+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 74.78,
+      "graduation_pct": 74.78
+    },
     {
       "mint": "F2xAwqV7oA4GT3S1FSUcjNFDN8ENWY9B4mo3CdqRpump",
       "name": "kickback - launch your ETFs",
@@ -1199,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 156,
+    "alerts": 157,
     "graduated": 41,
     "did_not_graduate": 63,
     "buy_graduated": 37,
@@ -1209,9 +1219,9 @@
     "graduation_rate_pct": 39.4
   },
   "shadow_stats": {
-    "tracked": 20,
+    "tracked": 19,
     "graduated": 960,
-    "did_not_graduate": 6320,
+    "did_not_graduate": 6321,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
