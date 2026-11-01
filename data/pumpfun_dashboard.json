@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-01T07:45:40.908260+00:00",
+  "timestamp": "2026-11-01T08:27:09.711800+00:00",
   "balance": 34.8,
-  "positions_value": 7.17,
-  "net_worth": 41.97,
+  "positions_value": 5.73,
+  "net_worth": 40.53,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,11 @@
       "symbol": "KICK",
       "entry_ts": "2026-11-01T03:01:06.488226+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.76,
-      "pnl_pct": -81.2,
+      "value_usd": 3.26,
+      "pnl_pct": -83.7,
       "entry_slippage_pct": 1.27,
       "entry_graduation_pct": 61.23,
-      "graduation_pct": 7.02,
+      "graduation_pct": 4.13,
       "graduated": false
     },
     {
@@ -24,11 +24,11 @@
       "symbol": "YUME",
       "entry_ts": "2026-11-01T05:45:38.468558+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.41,
-      "pnl_pct": -82.95,
+      "value_usd": 2.47,
+      "pnl_pct": -87.65,
       "entry_slippage_pct": 1.23,
       "entry_graduation_pct": 74.78,
-      "graduation_pct": 10.69,
+      "graduation_pct": 3.86,
       "graduated": false
     }
   ],
@@ -536,16 +536,6 @@
   ],
   "watching": [
     {
-      "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
-      "name": "Yumecoin",
-      "symbol": "YUME",
-      "decision": "buy",
-      "signal_ts": "2026-11-01T05:45:38.468558+00:00",
-      "alert_score": 115.0,
-      "alert_graduation_pct": 74.78,
-      "graduation_pct": 10.69
-    },
-    {
       "mint": "F2xAwqV7oA4GT3S1FSUcjNFDN8ENWY9B4mo3CdqRpump",
       "name": "kickback - launch your ETFs",
       "symbol": "KICK",
@@ -553,7 +543,17 @@
       "signal_ts": "2026-11-01T03:01:06.488226+00:00",
       "alert_score": 93.4,
       "alert_graduation_pct": 61.23,
-      "graduation_pct": 7.02
+      "graduation_pct": 4.13
+    },
+    {
+      "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
+      "name": "Yumecoin",
+      "symbol": "YUME",
+      "decision": "buy",
+      "signal_ts": "2026-11-01T05:45:38.468558+00:00",
+      "alert_score": 115.0,
+      "alert_graduation_pct": 74.78,
+      "graduation_pct": 3.86
     }
   ],
   "history": [
@@ -1221,7 +1221,7 @@
   "shadow_stats": {
     "tracked": 21,
     "graduated": 960,
-    "did_not_graduate": 6324,
+    "did_not_graduate": 6325,
     "graduation_rate_pct": 13.2
   },
   "daily_cap": 4,
