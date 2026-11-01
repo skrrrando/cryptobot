@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-01T03:20:40.862767+00:00",
-  "balance": 31.98,
-  "positions_value": 3.61,
-  "net_worth": 35.59,
+  "timestamp": "2026-11-01T03:30:52.046149+00:00",
+  "balance": 11.98,
+  "positions_value": 22.97,
+  "net_worth": 34.95,
   "starting_balance": 1000.0,
   "positions": [
     {
@@ -11,11 +11,24 @@
       "symbol": "KICK",
       "entry_ts": "2026-11-01T03:01:06.488226+00:00",
       "amount_usd": 20.0,
-      "value_usd": 3.61,
-      "pnl_pct": -81.95,
+      "value_usd": 3.45,
+      "pnl_pct": -82.75,
       "entry_slippage_pct": 1.27,
       "entry_graduation_pct": 61.23,
-      "graduation_pct": 6.22,
+      "graduation_pct": 5.26,
+      "graduated": false
+    },
+    {
+      "mint": "3kRQDKPGqMWwBdGjiVPpPqVzFsnYG5PDqvrVz1D2pump",
+      "name": "tipr",
+      "symbol": "tipr",
+      "entry_ts": "2026-11-01T03:30:52.046149+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.22,
+      "entry_graduation_pct": 84.89,
+      "graduation_pct": 84.89,
       "graduated": false
     }
   ],
@@ -523,6 +536,16 @@
   ],
   "watching": [
     {
+      "mint": "3kRQDKPGqMWwBdGjiVPpPqVzFsnYG5PDqvrVz1D2pump",
+      "name": "tipr",
+      "symbol": "tipr",
+      "decision": "buy",
+      "signal_ts": "2026-11-01T03:30:52.046149+00:00",
+      "alert_score": 91.9,
+      "alert_graduation_pct": 84.89,
+      "graduation_pct": 84.89
+    },
+    {
       "mint": "F2xAwqV7oA4GT3S1FSUcjNFDN8ENWY9B4mo3CdqRpump",
       "name": "kickback - launch your ETFs",
       "symbol": "KICK",
@@ -530,7 +553,7 @@
       "signal_ts": "2026-11-01T03:01:06.488226+00:00",
       "alert_score": 93.4,
       "alert_graduation_pct": 61.23,
-      "graduation_pct": 6.22
+      "graduation_pct": 5.26
     }
   ],
   "history": [
@@ -1186,7 +1209,7 @@
     }
   ],
   "stats": {
-    "alerts": 154,
+    "alerts": 155,
     "graduated": 40,
     "did_not_graduate": 63,
     "buy_graduated": 36,
