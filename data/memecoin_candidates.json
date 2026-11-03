@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-03T19:06:36.941649+00:00",
+  "timestamp": "2026-11-03T19:11:33.911025+00:00",
   "candidates": [
     {
       "id": "base_0x5116773e18a9c7bb03ebb961b38678e45e238923",
-      "timestamp": "2026-11-03T19:05:33.807404+00:00",
+      "timestamp": "2026-11-03T19:10:55.759040+00:00",
       "network": "base",
       "name": "DRB / WETH 1%",
       "address": "0x5116773e18a9c7bb03ebb961b38678e45e238923",
@@ -11,7 +11,7 @@
       "rank": 4,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 0.8130000000000002,
+        "h1_accel": 1.0309999999999997,
         "history_len": 20
       },
       "security": {
@@ -71,30 +71,89 @@
         "checked_at": 1793732490.9148877
       },
       "price_change_pct": {
-        "m5": "0.277",
-        "m15": "1.224",
-        "m30": "2.682",
-        "h1": "4.035",
-        "h6": "7.401",
-        "h24": "10.371"
+        "m5": "0.445",
+        "m15": "1.504",
+        "m30": "2.723",
+        "h1": "4.765",
+        "h6": "7.342",
+        "h24": "10.942"
       },
       "volume_usd": {
-        "m5": "1317.0371266496",
-        "m15": "4847.0257221563",
-        "m30": "9746.4607722763",
-        "h1": "14335.8628163025",
-        "h6": "15997.2542850797",
-        "h24": "37266.9794260115"
+        "m5": "1712.5780771579",
+        "m15": "5711.2897829607",
+        "m30": "10054.5542151675",
+        "h1": "16190.3086680002",
+        "h6": "17872.381676347",
+        "h24": "39193.6171019611"
       },
-      "market_cap_usd": 10399355.42,
+      "market_cap_usd": 10455778.93,
       "transactions_h1": {
-        "buys": 174,
-        "sells": 8,
-        "buyers": 32,
-        "sellers": 4
+        "buys": 190,
+        "sells": 11,
+        "buyers": 34,
+        "sellers": 7
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.084
+      "sol_h1": -0.397
+    },
+    {
+      "id": "base_0x0143fc5189a7022aa0c4157677fe3fcdc0861885",
+      "timestamp": "2026-11-03T19:10:55.759040+00:00",
+      "network": "base",
+      "name": "Paper / USDC",
+      "address": "0x0143fc5189a7022aa0c4157677fe3fcdc0861885",
+      "base_token_address": "0x2fd3f789fe25984295c8fa032be2485c5c7e4276",
+      "rank": 18,
+      "features": {
+        "rank_velocity": 2,
+        "h1_accel": 0.259,
+        "history_len": 5
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 5619,
+        "whale_buyer_pct": null,
+        "holder_count_history": [
+          {
+            "ts": 1793733059.2503242,
+            "holder_count": 5619
+          }
+        ],
+        "holder_growth_pct": null,
+        "checked_at": 1793733059.2503242
+      },
+      "price_change_pct": {
+        "m5": "0.78",
+        "m15": "-0.134",
+        "m30": "-0.387",
+        "h1": "0.067",
+        "h6": "577.964",
+        "h24": "577.964"
+      },
+      "volume_usd": {
+        "m5": "2.4878480965",
+        "m15": "3.0893676592",
+        "m30": "14.808877983",
+        "h1": "17.4990650318",
+        "h6": "50994523.6426728",
+        "h24": "50994523.6426728"
+      },
+      "market_cap_usd": 10208403.14,
+      "transactions_h1": {
+        "buys": 118,
+        "sells": 116,
+        "buyers": 99,
+        "sellers": 88
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.397
     }
   ]
 }
