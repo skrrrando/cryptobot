@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-11-05T21:17:15.393766+00:00",
-  "balance": 40.02,
-  "positions_value": 0.0,
-  "net_worth": 40.02,
+  "timestamp": "2026-11-05T21:27:03.142685+00:00",
+  "balance": 20.02,
+  "positions_value": 19.52,
+  "net_worth": 39.54,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
+      "name": "Voice Cat",
+      "symbol": "VC",
+      "entry_ts": "2026-11-05T21:27:03.142685+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.52,
+      "pnl_pct": -2.4,
+      "entry_slippage_pct": 1.23,
+      "entry_graduation_pct": 84.66,
+      "graduation_pct": 84.66,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "HeWXStrFyUrH3HCpVJRfnYBL51xs9ttqqdTVBYhTEcQv",
@@ -507,7 +521,18 @@
       "exit_reason": "timeout"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
+      "name": "Voice Cat",
+      "symbol": "VC",
+      "decision": "buy",
+      "signal_ts": "2026-11-05T21:27:03.142685+00:00",
+      "alert_score": 96.7,
+      "alert_graduation_pct": 84.66,
+      "graduation_pct": 84.66
+    }
+  ],
   "history": [
     {
       "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 157,
+    "alerts": 158,
     "graduated": 41,
     "did_not_graduate": 65,
     "buy_graduated": 37,
