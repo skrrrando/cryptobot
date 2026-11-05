@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-11-05T22:55:33.080166+00:00",
-  "balance": 39.6,
-  "positions_value": 0.0,
-  "net_worth": 39.6,
+  "timestamp": "2026-11-05T23:01:13.495631+00:00",
+  "balance": 19.6,
+  "positions_value": 19.51,
+  "net_worth": 39.11,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "H3fGfvRUNyvoeE1HZKwAeNtsSFfyYytoHGjKfdoupump",
+      "name": "funhog",
+      "symbol": "funhog",
+      "entry_ts": "2026-11-05T23:01:13.495631+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.51,
+      "pnl_pct": -2.45,
+      "entry_slippage_pct": 1.26,
+      "entry_graduation_pct": 70.2,
+      "graduation_pct": 70.2,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "AgdDTJ1YAwKb8MDGPgr4KHtZpQQiFET8Fuui4TFZpump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "H3fGfvRUNyvoeE1HZKwAeNtsSFfyYytoHGjKfdoupump",
+      "name": "funhog",
+      "symbol": "funhog",
+      "decision": "buy",
+      "signal_ts": "2026-11-05T23:01:13.495631+00:00",
+      "alert_score": 99.4,
+      "alert_graduation_pct": 70.2,
+      "graduation_pct": 70.2
+    }
+  ],
   "history": [
     {
       "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 158,
+    "alerts": 159,
     "graduated": 42,
     "did_not_graduate": 65,
     "buy_graduated": 38,
