@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-05T19:31:31.340558+00:00",
+  "timestamp": "2026-11-05T19:36:03.151813+00:00",
   "candidates": [
     {
       "id": "base_0x67b6beb0ece9fc712d922780b41021c4d9ed79b5f460299ca9897dcad68e7cc9",
-      "timestamp": "2026-11-05T19:30:56.432171+00:00",
+      "timestamp": "2026-11-05T19:35:42.026932+00:00",
       "network": "base",
       "name": "Reboot / ETH",
       "address": "0x67b6beb0ece9fc712d922780b41021c4d9ed79b5f460299ca9897dcad68e7cc9",
@@ -11,7 +11,7 @@
       "rank": 3,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 2.1840000000000006,
+        "h1_accel": 3.842,
         "history_len": 20
       },
       "security": {
@@ -71,30 +71,97 @@
         "checked_at": 1793907059.7331798
       },
       "price_change_pct": {
-        "m5": "0.928",
-        "m15": "-4.004",
-        "m30": "0.971",
-        "h1": "4.871",
-        "h6": "3.9",
-        "h24": "214.165"
+        "m5": "-1.506",
+        "m15": "2.349",
+        "m30": "0.959",
+        "h1": "4.335",
+        "h6": "3.01",
+        "h24": "235.819"
       },
       "volume_usd": {
-        "m5": "11211.90325596",
-        "m15": "38137.5922825427",
-        "m30": "71472.7813720634",
-        "h1": "140557.389090822",
-        "h6": "880538.883033806",
-        "h24": "5331972.01412303"
+        "m5": "10693.5896885828",
+        "m15": "36116.3429628695",
+        "m30": "73495.728144249",
+        "h1": "141968.836275411",
+        "h6": "880370.284762807",
+        "h24": "5321319.22417047"
       },
-      "market_cap_usd": 15204425.11,
+      "market_cap_usd": 15385235.93,
       "transactions_h1": {
         "buys": 119,
-        "sells": 65,
-        "buyers": 98,
-        "sellers": 62
+        "sells": 66,
+        "buyers": 96,
+        "sellers": 64
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": 0.118
+      "sol_h1": 0.053
+    },
+    {
+      "id": "bsc_0xe015a78814ebadeb0f202446e64b970642f9b965",
+      "timestamp": "2026-11-05T19:35:42.026932+00:00",
+      "network": "bsc",
+      "name": "CORLA / WBNB",
+      "address": "0xe015a78814ebadeb0f202446e64b970642f9b965",
+      "base_token_address": "0xba300df4c929eb137e266d17d1fe6db058837777",
+      "rank": 14,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.44599999999999973,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 1.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 10240,
+        "whale_buyer_pct": 12.6,
+        "holder_count_history": [
+          {
+            "ts": 1793899247.4104085,
+            "holder_count": 9359
+          },
+          {
+            "ts": 1793903462.9518745,
+            "holder_count": 10240
+          },
+          {
+            "ts": 1793906154.5103247,
+            "holder_count": 10240
+          }
+        ],
+        "holder_growth_pct": 9.4,
+        "checked_at": 1793906154.5103247
+      },
+      "price_change_pct": {
+        "m5": "-2.72",
+        "m15": "5.78",
+        "m30": "11.2",
+        "h1": "5.81",
+        "h6": "118.121",
+        "h24": "841.71"
+      },
+      "volume_usd": {
+        "m5": "9180.3740630247",
+        "m15": "18853.0643255375",
+        "m30": "42102.9498933573",
+        "h1": "79499.3232390357",
+        "h6": "722144.805888728",
+        "h24": "5053751.52221424"
+      },
+      "market_cap_usd": 1262037.5083,
+      "transactions_h1": {
+        "buys": 402,
+        "sells": 345,
+        "buyers": 203,
+        "sellers": 187
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": 0.053
     }
   ]
 }
