@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-11-05T21:27:03.142685+00:00",
-  "balance": 20.02,
-  "positions_value": 19.52,
-  "net_worth": 39.54,
+  "timestamp": "2026-11-05T21:37:03.167411+00:00",
+  "balance": 39.6,
+  "positions_value": 0.0,
+  "net_worth": 39.6,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
-      "name": "Voice Cat",
-      "symbol": "VC",
-      "entry_ts": "2026-11-05T21:27:03.142685+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 19.52,
-      "pnl_pct": -2.4,
-      "entry_slippage_pct": 1.23,
-      "entry_graduation_pct": 84.66,
-      "graduation_pct": 84.66,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "HeWXStrFyUrH3HCpVJRfnYBL51xs9ttqqdTVBYhTEcQv",
-      "name": "Kimchi Squad",
-      "symbol": " KIMS",
-      "bonding_curve_key": "3MRgeYrf6yNe7kNKU1WASvKpYJ2H9gYHv6MbUg8wxh1V",
-      "entry_ts": "2026-10-26T06:01:05.473126+00:00",
-      "entry_price_usd": 2.140482461631688e-05,
-      "entry_spot_price_usd": 2.1140360901696265e-05,
-      "entry_slippage_pct": 1.25,
-      "amount_usd": 20.0,
-      "qty": 934368.7864068747,
-      "entry_graduation_pct": 61.13,
-      "entry_score": 97.1,
-      "exit_ts": "2026-10-26T12:01:18.699082+00:00",
-      "exit_price_usd": 9.295299340347174e-06,
-      "proceeds_usd": 8.69,
-      "pnl_usd": -11.31,
-      "pnl_pct": -56.57,
-      "exit_reason": "timeout"
-    },
     {
       "mint": "AgdDTJ1YAwKb8MDGPgr4KHtZpQQiFET8Fuui4TFZpump",
       "name": "joe",
@@ -519,21 +485,43 @@
       "pnl_usd": -17.43,
       "pnl_pct": -87.15,
       "exit_reason": "timeout"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
       "name": "Voice Cat",
       "symbol": "VC",
-      "decision": "buy",
-      "signal_ts": "2026-11-05T21:27:03.142685+00:00",
-      "alert_score": 96.7,
-      "alert_graduation_pct": 84.66,
-      "graduation_pct": 84.66
+      "bonding_curve_key": "H8uaL6rsKDCYtatkqeXEXGzYmADeVZyEYbd3raphv33R",
+      "entry_ts": "2026-11-05T21:27:03.142685+00:00",
+      "entry_price_usd": 2.9307055717327066e-05,
+      "entry_spot_price_usd": 2.8951264488956975e-05,
+      "entry_slippage_pct": 1.23,
+      "amount_usd": 20.0,
+      "qty": 682429.5211673379,
+      "entry_graduation_pct": 84.66,
+      "entry_score": 96.7,
+      "exit_ts": "2026-11-05T21:37:03.167432+00:00",
+      "exit_price_usd": 2.868236438091355e-05,
+      "proceeds_usd": 19.57,
+      "pnl_usd": -0.43,
+      "pnl_pct": -2.13,
+      "exit_reason": "graduated"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "BMsmKWguur3eDRNjMLAmajh6WXhDuobCZCavnEsbpump",
+      "name": "Voice Cat",
+      "symbol": "VC",
+      "outcome": "graduated",
+      "decision": "buy",
+      "signal_ts": "2026-11-05T21:27:03.142685+00:00",
+      "recorded_ts": "2026-11-05T21:37:03.167411+00:00",
+      "alert_score": 96.7,
+      "alert_graduation_pct": 84.66,
+      "final_graduation_pct": null,
+      "minutes_to_graduate": 10.0
+    },
     {
       "mint": "6ETGSfhRPkDiJpMmEgx5xdsYwoWdMcyrV9irdHS3pump",
       "name": "Yumecoin",
@@ -1170,33 +1158,20 @@
       "alert_graduation_pct": 44.29,
       "final_graduation_pct": 3.93,
       "minutes_to_graduate": null
-    },
-    {
-      "mint": "Co7pxWbXYw71G2bHWJiaxhNnXHBjvsWQJNSZrapfpump",
-      "name": "Fire crawler",
-      "symbol": "CRAWLY",
-      "outcome": "did_not_graduate",
-      "decision": "buy",
-      "signal_ts": "2026-10-13T00:11:12.570385+00:00",
-      "recorded_ts": "2026-10-13T06:20:58.123073+00:00",
-      "alert_score": 94.1,
-      "alert_graduation_pct": 72.03,
-      "final_graduation_pct": 0.03,
-      "minutes_to_graduate": null
     }
   ],
   "stats": {
     "alerts": 158,
-    "graduated": 41,
+    "graduated": 42,
     "did_not_graduate": 65,
-    "buy_graduated": 37,
-    "buy_total": 92,
+    "buy_graduated": 38,
+    "buy_total": 93,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 38.7
+    "graduation_rate_pct": 39.3
   },
   "shadow_stats": {
-    "tracked": 4,
+    "tracked": 6,
     "graduated": 960,
     "did_not_graduate": 6346,
     "graduation_rate_pct": 13.1
