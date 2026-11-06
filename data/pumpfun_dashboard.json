@@ -1,45 +1,11 @@
 {
-  "timestamp": "2026-11-06T11:15:36.178387+00:00",
-  "balance": 18.92,
-  "positions_value": 8.71,
-  "net_worth": 27.63,
+  "timestamp": "2026-11-06T11:25:14.906449+00:00",
+  "balance": 27.6,
+  "positions_value": 0.0,
+  "net_worth": 27.6,
   "starting_balance": 1000.0,
-  "positions": [
-    {
-      "mint": "BPuvYbyy9nVwM9GQuhqeJSqTSAaAPbRnrSDWYHdXpump",
-      "name": "bracket",
-      "symbol": "bracket",
-      "entry_ts": "2026-11-06T05:21:58.666227+00:00",
-      "amount_usd": 20.0,
-      "value_usd": 8.71,
-      "pnl_pct": -56.45,
-      "entry_slippage_pct": 1.03,
-      "entry_graduation_pct": 503.23,
-      "graduation_pct": 1.39,
-      "graduated": false
-    }
-  ],
+  "positions": [],
   "closed": [
-    {
-      "mint": "4KSx1MAyyDB47y42WRF2LHBFErt7iNFZd9TePmySpump",
-      "name": "ONC Agent",
-      "symbol": "ONC",
-      "bonding_curve_key": "E2mN2rtR2gE4UopBDnD9EzDzyce5EFzdsTzPf1m86q6y",
-      "entry_ts": "2026-10-27T06:01:06.961666+00:00",
-      "entry_price_usd": 2.0816715914750942e-05,
-      "entry_spot_price_usd": 2.0558509676398212e-05,
-      "entry_slippage_pct": 1.26,
-      "amount_usd": 20.0,
-      "qty": 960766.341910243,
-      "entry_graduation_pct": 60.41,
-      "entry_score": 91.5,
-      "exit_ts": "2026-10-27T06:10:41.712397+00:00",
-      "exit_price_usd": 2.028814025866689e-05,
-      "proceeds_usd": 19.49,
-      "pnl_usd": -0.51,
-      "pnl_pct": -2.54,
-      "exit_reason": "graduated"
-    },
     {
       "mint": "2KH3rv7PoDa3nwyzRqd7Tfq365aGRSzb8vEujRWrpump",
       "name": "nocat",
@@ -519,21 +485,43 @@
       "pnl_usd": -0.67,
       "pnl_pct": -3.37,
       "exit_reason": "graduated"
-    }
-  ],
-  "watching": [
+    },
     {
       "mint": "BPuvYbyy9nVwM9GQuhqeJSqTSAaAPbRnrSDWYHdXpump",
       "name": "bracket",
       "symbol": "bracket",
-      "decision": "buy",
-      "signal_ts": "2026-11-06T05:21:58.666227+00:00",
-      "alert_score": 91.3,
-      "alert_graduation_pct": 503.23,
-      "graduation_pct": 1.39
+      "bonding_curve_key": "89Jkdhvb7sVzL9gEwF5x7sUvGozqXGmhKmh8p3MHB9pU",
+      "entry_ts": "2026-11-06T05:21:58.666227+00:00",
+      "entry_price_usd": 0.00016073512116842673,
+      "entry_spot_price_usd": 0.0001590999307612846,
+      "entry_slippage_pct": 1.03,
+      "amount_usd": 20.0,
+      "qty": 124428.31320631504,
+      "entry_graduation_pct": 503.23,
+      "entry_score": 91.3,
+      "exit_ts": "2026-11-06T11:25:14.906468+00:00",
+      "exit_price_usd": 6.969460238743431e-05,
+      "proceeds_usd": 8.67,
+      "pnl_usd": -11.33,
+      "pnl_pct": -56.64,
+      "exit_reason": "timeout"
     }
   ],
+  "watching": [],
   "history": [
+    {
+      "mint": "BPuvYbyy9nVwM9GQuhqeJSqTSAaAPbRnrSDWYHdXpump",
+      "name": "bracket",
+      "symbol": "bracket",
+      "outcome": "did_not_graduate",
+      "decision": "buy",
+      "signal_ts": "2026-11-06T05:21:58.666227+00:00",
+      "recorded_ts": "2026-11-06T11:25:14.906449+00:00",
+      "alert_score": 91.3,
+      "alert_graduation_pct": 503.23,
+      "final_graduation_pct": 1.39,
+      "minutes_to_graduate": null
+    },
     {
       "mint": "H3fGfvRUNyvoeE1HZKwAeNtsSFfyYytoHGjKfdoupump",
       "name": "funhog",
@@ -1170,33 +1158,20 @@
       "alert_graduation_pct": 81.88,
       "final_graduation_pct": null,
       "minutes_to_graduate": 110.0
-    },
-    {
-      "mint": "Cpmh1RGTsidffX34pM8dLXSAHrY4FRbC3LAWWSGYpump",
-      "name": "SCASH",
-      "symbol": "SCASH",
-      "outcome": "graduated",
-      "decision": "buy",
-      "signal_ts": "2026-10-14T02:32:43.263401+00:00",
-      "recorded_ts": "2026-10-14T02:42:11.957605+00:00",
-      "alert_score": 90.8,
-      "alert_graduation_pct": 86.24,
-      "final_graduation_pct": null,
-      "minutes_to_graduate": 9.5
     }
   ],
   "stats": {
     "alerts": 160,
     "graduated": 43,
-    "did_not_graduate": 65,
+    "did_not_graduate": 66,
     "buy_graduated": 39,
-    "buy_total": 94,
+    "buy_total": 95,
     "ignore_graduated": 0,
     "ignore_total": 0,
-    "graduation_rate_pct": 39.8
+    "graduation_rate_pct": 39.4
   },
   "shadow_stats": {
-    "tracked": 18,
+    "tracked": 19,
     "graduated": 968,
     "did_not_graduate": 6364,
     "graduation_rate_pct": 13.2
