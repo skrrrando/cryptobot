@@ -1,10 +1,24 @@
 {
-  "timestamp": "2026-11-06T05:12:06.110104+00:00",
-  "balance": 38.92,
-  "positions_value": 0.0,
-  "net_worth": 38.92,
+  "timestamp": "2026-11-06T05:21:58.666227+00:00",
+  "balance": 18.92,
+  "positions_value": 19.6,
+  "net_worth": 38.52,
   "starting_balance": 1000.0,
-  "positions": [],
+  "positions": [
+    {
+      "mint": "BPuvYbyy9nVwM9GQuhqeJSqTSAaAPbRnrSDWYHdXpump",
+      "name": "bracket",
+      "symbol": "bracket",
+      "entry_ts": "2026-11-06T05:21:58.666227+00:00",
+      "amount_usd": 20.0,
+      "value_usd": 19.6,
+      "pnl_pct": -2.0,
+      "entry_slippage_pct": 1.03,
+      "entry_graduation_pct": 503.23,
+      "graduation_pct": 503.23,
+      "graduated": false
+    }
+  ],
   "closed": [
     {
       "mint": "4KSx1MAyyDB47y42WRF2LHBFErt7iNFZd9TePmySpump",
@@ -507,7 +521,18 @@
       "exit_reason": "graduated"
     }
   ],
-  "watching": [],
+  "watching": [
+    {
+      "mint": "BPuvYbyy9nVwM9GQuhqeJSqTSAaAPbRnrSDWYHdXpump",
+      "name": "bracket",
+      "symbol": "bracket",
+      "decision": "buy",
+      "signal_ts": "2026-11-06T05:21:58.666227+00:00",
+      "alert_score": 91.3,
+      "alert_graduation_pct": 503.23,
+      "graduation_pct": 503.23
+    }
+  ],
   "history": [
     {
       "mint": "H3fGfvRUNyvoeE1HZKwAeNtsSFfyYytoHGjKfdoupump",
@@ -1161,7 +1186,7 @@
     }
   ],
   "stats": {
-    "alerts": 159,
+    "alerts": 160,
     "graduated": 43,
     "did_not_graduate": 65,
     "buy_graduated": 39,
