@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-08T02:11:25.541233+00:00",
+  "timestamp": "2026-11-08T02:16:13.472297+00:00",
   "candidates": [
     {
       "id": "base_0x83f3aca29bc79b048b99c56013475570acc97ccf",
-      "timestamp": "2026-11-08T02:10:36.408166+00:00",
+      "timestamp": "2026-11-08T02:15:38.899347+00:00",
       "network": "base",
       "name": "ELSA / USDC 0.01%",
       "address": "0x83f3aca29bc79b048b99c56013475570acc97ccf",
@@ -11,7 +11,7 @@
       "rank": 18,
       "features": {
         "rank_velocity": 0,
-        "h1_accel": 3.0660000000000003,
+        "h1_accel": 1.729,
         "history_len": 20
       },
       "security": {
@@ -71,30 +71,125 @@
         "checked_at": 1794103839.6221256
       },
       "price_change_pct": {
-        "m5": "1.779",
-        "m15": "2.311",
-        "m30": "1.428",
-        "h1": "2.317",
-        "h6": "0.149",
-        "h24": "-4.711"
+        "m5": "0.089",
+        "m15": "2.979",
+        "m30": "2.914",
+        "h1": "2.466",
+        "h6": "0.229",
+        "h24": "-4.004"
       },
       "volume_usd": {
-        "m5": "38952.8964041419",
-        "m15": "48054.5802071561",
-        "m30": "55345.8427213644",
-        "h1": "122822.88214665",
-        "h6": "394299.0415187",
-        "h24": "2982674.25186806"
+        "m5": "19858.7942806907",
+        "m15": "59639.8021106716",
+        "m30": "67368.9571394744",
+        "h1": "128344.991643991",
+        "h6": "404860.182492251",
+        "h24": "2977256.26444311"
       },
-      "market_cap_usd": 17387669.2621872,
+      "market_cap_usd": 17436885.8409906,
       "transactions_h1": {
-        "buys": 699,
-        "sells": 497,
-        "buyers": 46,
-        "sellers": 42
+        "buys": 693,
+        "sells": 499,
+        "buyers": 51,
+        "sellers": 46
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": -0.5
+      "sol_h1": -0.499
+    },
+    {
+      "id": "bsc_0xfd55be774ea18067bd06a6aed49fb1cc4ad966e9",
+      "timestamp": "2026-11-08T02:15:38.899347+00:00",
+      "network": "bsc",
+      "name": "GM / B13B",
+      "address": "0xfd55be774ea18067bd06a6aed49fb1cc4ad966e9",
+      "base_token_address": "0x13920fe6467e9e3c852b8d365a036c995f0f7777",
+      "rank": 2,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 0.5169999999999995,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 7278,
+        "whale_buyer_pct": 24.4,
+        "holder_count_history": [
+          {
+            "ts": 1794034871.2797303,
+            "holder_count": 7231
+          },
+          {
+            "ts": 1794039646.0274956,
+            "holder_count": 7283
+          },
+          {
+            "ts": 1794042644.3101923,
+            "holder_count": 7312
+          },
+          {
+            "ts": 1794044445.753615,
+            "holder_count": 7312
+          },
+          {
+            "ts": 1794046845.7961519,
+            "holder_count": 7491
+          },
+          {
+            "ts": 1794054336.4031296,
+            "holder_count": 7511
+          },
+          {
+            "ts": 1794061566.9081337,
+            "holder_count": 7473
+          },
+          {
+            "ts": 1794100246.6814,
+            "holder_count": 7292
+          },
+          {
+            "ts": 1794102345.0673409,
+            "holder_count": 7292
+          },
+          {
+            "ts": 1794104145.5959003,
+            "holder_count": 7278
+          }
+        ],
+        "holder_growth_pct": 0.6,
+        "checked_at": 1794104145.5959003
+      },
+      "price_change_pct": {
+        "m5": "5.997",
+        "m15": "6.051",
+        "m30": "6.952",
+        "h1": "12.609",
+        "h6": "8.178",
+        "h24": "10.571"
+      },
+      "volume_usd": {
+        "m5": "4996.5995124436",
+        "m15": "11519.3340543727",
+        "m30": "20645.9332213372",
+        "h1": "34167.0464031382",
+        "h6": "160065.661014376",
+        "h24": "1801315.39792444"
+      },
+      "market_cap_usd": 5367718.943,
+      "transactions_h1": {
+        "buys": 106,
+        "sells": 97,
+        "buyers": 60,
+        "sellers": 70
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.499
     }
   ]
 }
