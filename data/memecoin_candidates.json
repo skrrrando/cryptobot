@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-11-27T12:11:24.867385+00:00",
+  "timestamp": "2026-11-27T12:16:36.373793+00:00",
   "candidates": [
     {
       "id": "eth_0xc027c6897dd4ee14145d01de9fb2dea75e8637c7",
-      "timestamp": "2026-11-27T12:10:40.688089+00:00",
+      "timestamp": "2026-11-27T12:15:39.732714+00:00",
       "network": "eth",
       "name": "POPO / WETH",
       "address": "0xc027c6897dd4ee14145d01de9fb2dea75e8637c7",
       "base_token_address": "0x7b43495c05581bd2d9326fe9c1c18c62c63dd2fc",
       "rank": 4,
       "features": {
-        "rank_velocity": 2,
-        "h1_accel": 7.771000000000001,
+        "rank_velocity": 0,
+        "h1_accel": 2.9570000000000007,
         "history_len": 20
       },
       "security": {
@@ -95,7 +95,87 @@
         "unique_traders": 15
       },
       "locked_liquidity_percentage": null,
-      "sol_h1": -0.308
+      "sol_h1": -0.176
+    },
+    {
+      "id": "eth_0x796b05002bdfa2aaa9f01fc0ce0ceedbd1e20e0e8e1d1e282e1bbade325646ba",
+      "timestamp": "2026-11-27T12:15:39.732714+00:00",
+      "network": "eth",
+      "name": "PEJAK / ETH",
+      "address": "0x796b05002bdfa2aaa9f01fc0ce0ceedbd1e20e0e8e1d1e282e1bbade325646ba",
+      "base_token_address": "0xe018d1e8747ac44d87d35197ba1e9a73a721097c",
+      "rank": 8,
+      "features": {
+        "rank_velocity": 0,
+        "h1_accel": 4.518,
+        "history_len": 20
+      },
+      "security": {
+        "passed": true,
+        "is_honeypot": false,
+        "is_mintable": false,
+        "is_blacklisted": false,
+        "owner_creator_pct": 0.0,
+        "buy_tax_pct": 0.0,
+        "sell_tax_pct": 0.0,
+        "honeypot_with_same_creator": false,
+        "holder_count": 926,
+        "whale_buyer_pct": null,
+        "holder_count_history": [
+          {
+            "ts": 1795737942.7653162,
+            "holder_count": 712
+          },
+          {
+            "ts": 1795739748.731776,
+            "holder_count": 712
+          },
+          {
+            "ts": 1795744256.111771,
+            "holder_count": 713
+          },
+          {
+            "ts": 1795746067.0309904,
+            "holder_count": 713
+          },
+          {
+            "ts": 1795775150.3668506,
+            "holder_count": 922
+          },
+          {
+            "ts": 1795781749.0932944,
+            "holder_count": 926
+          }
+        ],
+        "holder_growth_pct": 30.1,
+        "checked_at": 1795781749.0932944
+      },
+      "price_change_pct": {
+        "m5": "0.87",
+        "m15": "6.63",
+        "m30": "5.219",
+        "h1": "0.801",
+        "h6": "39.509",
+        "h24": "-0.171"
+      },
+      "volume_usd": {
+        "m5": "6456.6303074259",
+        "m15": "14914.4766465651",
+        "m30": "41510.007167986",
+        "h1": "91784.6201783823",
+        "h6": "421399.743200369",
+        "h24": "1998698.84170857"
+      },
+      "market_cap_usd": 13302285.88,
+      "transactions_h1": {
+        "buys": 51,
+        "sells": 21,
+        "buyers": 51,
+        "sellers": 15,
+        "unique_traders": 66
+      },
+      "locked_liquidity_percentage": null,
+      "sol_h1": -0.176
     }
   ]
 }
