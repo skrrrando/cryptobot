@@ -2,12 +2,6 @@
   "history": {
     "BTCUSD": [
       {
-        "ts": 1794594188.826507,
-        "price": 68841.12,
-        "change_24h": -0.0416,
-        "volume_value": 491482209.66
-      },
-      {
         "ts": 1794615056.038395,
         "price": 68375.18,
         "change_24h": -0.0409,
@@ -288,15 +282,15 @@
         "price": 59036.98,
         "change_24h": -0.0401,
         "volume_value": 335471967.45
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 59164.27,
+        "change_24h": -0.01,
+        "volume_value": 141528046.06
       }
     ],
     "ETHUSD": [
-      {
-        "ts": 1794594188.826507,
-        "price": 1937.6,
-        "change_24h": -0.0387,
-        "volume_value": 196937167.21
-      },
       {
         "ts": 1794615056.038395,
         "price": 1933.15,
@@ -578,15 +572,15 @@
         "price": 1638.63,
         "change_24h": -0.0506,
         "volume_value": 162129129.11
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 1638.73,
+        "change_24h": -0.0155,
+        "volume_value": 92799976.47
       }
     ],
     "SOLUSD": [
-      {
-        "ts": 1794594188.826507,
-        "price": 80.0,
-        "change_24h": -0.0201,
-        "volume_value": 21092084.06
-      },
       {
         "ts": 1794615056.038395,
         "price": 78.32,
@@ -868,15 +862,15 @@
         "price": 70.19,
         "change_24h": -0.0437,
         "volume_value": 15778677.96
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 70.09,
+        "change_24h": -0.0252,
+        "volume_value": 9223777.92
       }
     ],
     "XRPUSD": [
-      {
-        "ts": 1794594188.826507,
-        "price": 1.025,
-        "change_24h": -0.0025,
-        "volume_value": 16538329.61
-      },
       {
         "ts": 1794615056.038395,
         "price": 1.0115,
@@ -1158,15 +1152,15 @@
         "price": 0.9343,
         "change_24h": -0.0367,
         "volume_value": 12501450.71
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 0.9338,
+        "change_24h": -0.0148,
+        "volume_value": 5281785.44
       }
     ],
     "ADAUSD": [
-      {
-        "ts": 1794594188.826507,
-        "price": 0.17147,
-        "change_24h": -0.0002,
-        "volume_value": 2601722.72
-      },
       {
         "ts": 1794615056.038395,
         "price": 0.16868,
@@ -1448,15 +1442,15 @@
         "price": 0.14497,
         "change_24h": -0.0514,
         "volume_value": 1906175.17
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 0.14415,
+        "change_24h": -0.0333,
+        "volume_value": 1228537.01
       }
     ],
     "DOGEUSD": [
-      {
-        "ts": 1794594188.826507,
-        "price": 0.065519,
-        "change_24h": -0.0061,
-        "volume_value": 2144766.49
-      },
       {
         "ts": 1794615056.038395,
         "price": 0.064678,
@@ -1738,6 +1732,12 @@
         "price": 0.056244,
         "change_24h": -0.0445,
         "volume_value": 1477715.14
+      },
+      {
+        "ts": 1795901639.88066,
+        "price": 0.056272,
+        "change_24h": -0.0233,
+        "volume_value": 1182066.97
       }
     ],
     "AVAXUSD": [
@@ -13281,96 +13281,6 @@
     "screen_score_raise_streak": 3
   },
   "pending_followups": [
-    {
-      "id": 479,
-      "instrument": "ETHUSD",
-      "ts": 1795277089.717692,
-      "score": 45.2,
-      "risk": "green",
-      "why": "Momentum 55.1/100 (24h +2.8%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.75, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: high (maht $243,052,728). raamat tasakaalus (imbalance +0.04, spread 0.00%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 69% positiivne / 31% negatiivne, turu positsioon #2. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 23%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 1678.57,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.551,
-        "trend_bonus": 0.8928571428571429,
-        "liquidity": 1.0,
-        "is_meme": 0.0,
-        "volatility": 0.09300000000000001,
-        "hype_bonus": 0.7,
-        "alpha": 0.45840000000000003,
-        "book_imbalance": 0.519,
-        "market_fng": 0.12,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": false,
-      "result_24h": {
-        "price": 1712.41,
-        "return_pct": 2.02,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
-      "id": 480,
-      "instrument": "DOGEUSD",
-      "ts": 1795277089.717692,
-      "score": 42.4,
-      "risk": "green",
-      "why": "Momentum 55.4/100 (24h +3.0%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.87, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: medium (maht $5,105,269). raamat tasakaalus (imbalance +0.00, spread 0.02%). mainitud veebis, neutraalne toon: CoinGecko kogukonna h\u00e4\u00e4letus: 62% positiivne / 38% negatiivne, turu positsioon #13. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 23%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 0.05493,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.5539999999999999,
-        "trend_bonus": 0.9428571428571428,
-        "liquidity": 0.5,
-        "is_meme": 0.0,
-        "volatility": 0.10066666666666667,
-        "hype_bonus": 0.55,
-        "alpha": 0.46759999999999996,
-        "book_imbalance": 0.5,
-        "market_fng": 0.12,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": false,
-      "result_24h": {
-        "price": 0.055191,
-        "return_pct": 0.48,
-        "hit": false
-      },
-      "result_7d": null
-    },
-    {
-      "id": 481,
-      "instrument": "LINKUSD",
-      "ts": 1795277089.717692,
-      "score": 42.0,
-      "risk": "yellow",
-      "why": "Momentum 56.8/100 (24h +3.7%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.75, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: low (maht $532,851). raamat tasakaalus (imbalance +0.00, spread 0.01%). mainitud veebis, neutraalne toon: CoinGecko kogukonna h\u00e4\u00e4letus: 54% positiivne / 46% negatiivne, turu positsioon #16. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 22%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
-      "price_at_call": 8.567,
-      "features": {
-        "bias": 1.0,
-        "momentum": 0.568,
-        "trend_bonus": 0.8928571428571429,
-        "liquidity": 0.0,
-        "is_meme": 0.0,
-        "volatility": 0.12233333333333335,
-        "hype_bonus": 0.55,
-        "alpha": 0.4936,
-        "book_imbalance": 0.502,
-        "market_fng": 0.12,
-        "onchain_activity": 0.5
-      },
-      "exploration": true,
-      "traded": false,
-      "result_24h": {
-        "price": 8.823,
-        "return_pct": 2.99,
-        "hit": false
-      },
-      "result_7d": null
-    },
     {
       "id": 482,
       "instrument": "NEARUSD",
@@ -29487,18 +29397,111 @@
         "return_pct": -7.32,
         "hit": false
       }
+    },
+    {
+      "id": 479,
+      "instrument": "ETHUSD",
+      "ts": 1795277089.717692,
+      "score": 45.2,
+      "risk": "green",
+      "why": "Momentum 55.1/100 (24h +2.8%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.75, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: high (maht $243,052,728). raamat tasakaalus (imbalance +0.04, spread 0.00%). hype kinnitatud veebist: CoinGecko kogukonna h\u00e4\u00e4letus: 69% positiivne / 31% negatiivne, turu positsioon #2. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 23%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 1678.57,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.551,
+        "trend_bonus": 0.8928571428571429,
+        "liquidity": 1.0,
+        "is_meme": 0.0,
+        "volatility": 0.09300000000000001,
+        "hype_bonus": 0.7,
+        "alpha": 0.45840000000000003,
+        "book_imbalance": 0.519,
+        "market_fng": 0.12,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": false,
+      "result_24h": {
+        "price": 1712.41,
+        "return_pct": 2.02,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 1638.73,
+        "return_pct": -2.37,
+        "hit": false
+      }
+    },
+    {
+      "id": 480,
+      "instrument": "DOGEUSD",
+      "ts": 1795277089.717692,
+      "score": 42.4,
+      "risk": "green",
+      "why": "Momentum 55.4/100 (24h +3.0%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.87, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: medium (maht $5,105,269). raamat tasakaalus (imbalance +0.00, spread 0.02%). mainitud veebis, neutraalne toon: CoinGecko kogukonna h\u00e4\u00e4letus: 62% positiivne / 38% negatiivne, turu positsioon #13. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 23%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 0.05493,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.5539999999999999,
+        "trend_bonus": 0.9428571428571428,
+        "liquidity": 0.5,
+        "is_meme": 0.0,
+        "volatility": 0.10066666666666667,
+        "hype_bonus": 0.55,
+        "alpha": 0.46759999999999996,
+        "book_imbalance": 0.5,
+        "market_fng": 0.12,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": false,
+      "result_24h": {
+        "price": 0.055191,
+        "return_pct": 0.48,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 0.056272,
+        "return_pct": 2.44,
+        "hit": false
+      }
+    },
+    {
+      "id": 481,
+      "instrument": "LINKUSD",
+      "ts": 1795277089.717692,
+      "score": 42.0,
+      "risk": "yellow",
+      "why": "Momentum 56.8/100 (24h +3.7%), trend kinnitatud k\u00fc\u00fcnaldelt (OLS R\u00b2=0.75, 24\u00d715m punkti / 6h, hind+maht t\u00f5usuteel). liigub suuresti koos BTC-turuga (+1.3%), v\u00e4he oma alphat Likviidsus: low (maht $532,851). raamat tasakaalus (imbalance +0.00, spread 0.01%). mainitud veebis, neutraalne toon: CoinGecko kogukonna h\u00e4\u00e4letus: 54% positiivne / 46% negatiivne, turu positsioon #16. Mudel (treenitud 478 tulemuse pealt, praegu 65% kaaluga l\u00f5ppskooris) hindab tabamise t\u00f5en\u00e4osuseks 22%. [EKSPERIMENTAALNE - allpool taval\u00e4vendit, kogutakse andmeid \u00f5ppimiseks]",
+      "price_at_call": 8.567,
+      "features": {
+        "bias": 1.0,
+        "momentum": 0.568,
+        "trend_bonus": 0.8928571428571429,
+        "liquidity": 0.0,
+        "is_meme": 0.0,
+        "volatility": 0.12233333333333335,
+        "hype_bonus": 0.55,
+        "alpha": 0.4936,
+        "book_imbalance": 0.502,
+        "market_fng": 0.12,
+        "onchain_activity": 0.5
+      },
+      "exploration": true,
+      "traded": false,
+      "result_24h": {
+        "price": 8.823,
+        "return_pct": 2.99,
+        "hit": false
+      },
+      "result_7d": {
+        "price": 8.999,
+        "return_pct": 5.04,
+        "hit": false
+      }
     }
   ],
   "run_log": [
-    {
-      "ts": 1791717233.538366,
-      "n_candidates": 0,
-      "n_alerts": 0,
-      "followups_resolved": [
-        "SUIUSD 24h: -2.7%"
-      ],
-      "threshold_adjustments": []
-    },
     {
       "ts": 1791739345.206797,
       "n_candidates": 3,
@@ -31254,10 +31257,25 @@
       "n_alerts": 0,
       "followups_resolved": [],
       "threshold_adjustments": []
+    },
+    {
+      "ts": 1795901639.962486,
+      "n_candidates": 0,
+      "n_alerts": 0,
+      "followups_resolved": [
+        "ETHUSD 7d: -2.4%",
+        "DOGEUSD 7d: +2.4%",
+        "LINKUSD 7d: +5.0%"
+      ],
+      "threshold_adjustments": [
+        "green: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "yellow: tabamus 0% madal -> l\u00e4vi t\u00f5stetud 90",
+        "\u26a0\ufe0f DIAGNOSTIKA: screen_score on t\u00f5stetud 3 korda j\u00e4rjest (praegu 78), aga tabamus (0%) ei parane. Viga on t\u00f5en\u00e4oliselt SIGNAALIS endas, mitte l\u00e4vendis - t\u00e4iendav automaatne t\u00f5stmine peatatud. Vaja on strateegiat ennast \u00fcle vaadata."
+      ]
     }
   ],
   "next_id": 489,
-  "adjustment_checkpoint": 478,
+  "adjustment_checkpoint": 481,
   "model": {
     "weights": {
       "bias": -1.452036508518312,
@@ -32906,10 +32924,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1787549835.684893,
-        "balance": 984.9
-      },
       {
         "ts": 1787554543.867878,
         "balance": 984.9
@@ -34905,6 +34919,10 @@
       {
         "ts": 1795874072.957339,
         "balance": 984.9
+      },
+      {
+        "ts": 1795901639.962429,
+        "balance": 984.9
       }
     ],
     "mode": "paper"
@@ -35158,10 +35176,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1787549835.68492,
-        "balance": 221.06
-      },
       {
         "ts": 1787554543.8679,
         "balance": 221.07
@@ -37157,6 +37171,10 @@
       {
         "ts": 1795874072.957362,
         "balance": 294.88
+      },
+      {
+        "ts": 1795901639.962469,
+        "balance": 294.88
       }
     ],
     "next_id": 19
@@ -37415,10 +37433,6 @@
       }
     ],
     "balance_history": [
-      {
-        "ts": 1787549835.68493,
-        "balance": 290.47
-      },
       {
         "ts": 1787554543.867908,
         "balance": 290.47
@@ -39414,6 +39428,10 @@
       {
         "ts": 1795874072.957369,
         "balance": 290.47
+      },
+      {
+        "ts": 1795901639.962476,
+        "balance": 290.47
       }
     ],
     "next_id": 20
@@ -39424,10 +39442,6 @@
     "open_positions": [],
     "closed_trades": [],
     "balance_history": [
-      {
-        "ts": 1787549835.684939,
-        "balance": 200.0
-      },
       {
         "ts": 1787554543.867917,
         "balance": 200.0
@@ -41422,6 +41436,10 @@
       },
       {
         "ts": 1795874072.957376,
+        "balance": 200.0
+      },
+      {
+        "ts": 1795901639.962482,
         "balance": 200.0
       }
     ],
